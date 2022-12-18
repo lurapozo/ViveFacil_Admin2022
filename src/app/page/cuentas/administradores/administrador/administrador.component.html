@@ -1,0 +1,45 @@
+<app-main></app-main>
+<!-- <app-navbar></app-navbar> -->
+
+<h1 class="titulo" style="margin-Left: 2rem">Administradores</h1>
+<div class="d-grid gap-2 col-6 mx-auto">
+    <button class="btn btn-primary" type="button">Agregar Administradores</button>
+</div>
+
+
+<div>
+    <div style="display: flex; flex-direction: column; margin-right:1rem">
+        <h3 style="margin-Left:1.9rem"><strong>Total Administradores: </strong>42</h3>
+        <div style="display:flex; flex-direction:row; justify-content:end">
+            <Button type="primary" size="default">
+                Filtrar
+            </Button>
+
+        </div>
+
+
+    </div>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Nombres</th>
+                <th scope="col">Telefono</th>
+                <th scope="col">Fecha Creacion</th>
+                <th scope="col">Estado</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- | paginate: {itemsPerPage: 10, currentPage: page} -->
+            <tr *ngFor="let a of administradores ">
+
+                <td>{{a.user_datos.nombres}} {{a.user_datos.apellidos}} </td>
+                <td>{{a.user_datos.telefono}}</td>
+                <td>{{a.user_datos.fecha_creacion}}</td>
+                <td>{{a.estado}}</td>
+            </tr>
+
+        </tbody>
+    </table>
+
+</div>
+<!-- <pagination-controls (pageChange)="page = $event" previousLabel="Anterior" nextLabel="Siguiente"></pagination-controls> -->
