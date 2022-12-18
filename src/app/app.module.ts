@@ -8,10 +8,14 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatListModule} from '@angular/material/list';
 
 import {MatGridListModule} from '@angular/material/grid-list';
+import { NavbarComponent } from './navbar/navbar.component';
+import { PoliticasComponent } from './politicas/politicas.component';
 @NgModule({
   declarations: [
     AppComponent,
-    MainComponent
+    MainComponent,
+    NavbarComponent,
+    PoliticasComponent
   ],
   imports: [
     BrowserModule,
