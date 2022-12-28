@@ -2,11 +2,11 @@ body {
     min-height: 100vh;
     min-height: -webkit-fill-available;
   }
-  
+
   html {
     height: -webkit-fill-available;
   }
-  
+
   main {
     height: 100vh;
     height: -webkit-fill-available;
@@ -14,7 +14,7 @@ body {
     overflow-x: auto;
     overflow-y: hidden;
   }
-  
+
 
   .scrollarea {
     overflow-y: auto;
@@ -34,8 +34,8 @@ background-image: linear-gradient(
 p{
   color: white;
 }
-  
-  
+
+
 .rutaActiva {
   --background: var(--ion-color-secondary) !important;
   color: var(--ion-color-secondary-contrast) !important;
@@ -52,4 +52,8 @@ li:hover{
   height: 10vw;
   width: 10VW;
   margin: 16px;
+}
+
+.accordion-no-button::after {
+  display: none !important;
 }

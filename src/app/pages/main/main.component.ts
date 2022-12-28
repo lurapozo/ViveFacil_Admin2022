@@ -6,5 +6,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./main.component.css']
 })
 export class MainComponent {
+  selection: string = "";
 
+  setSelection(texto: string){
+    this.selection = texto;
+  }
 }

@@ -1,0 +1,109 @@
+<!-- Contenedor principal -->
+<div class="container-fluid m-0 p-0">
+  <div class="row">
+    <!-- Cabecera -->
+    <div class="col-12">
+      <nav class="navbar navbar-expand-sm" aria-label="Third navbar example">
+        <div class="container-fluid">
+          <img
+            src="../../assets/imagenes/logo-inicio.png"
+            style="width: 8%"
+            alt="Avatar"
+          />
+          <!-- <ul class="navbar-nav me-auto mb-2 mb-sm-0"> -->
+            <!-- <li class="d-flex nav-item"> -->
+              <p class="nav-link">Cerrar Sesión</p>
+            <!-- </li> -->
+          <!-- </ul> -->
+        </div>
+      </nav>
+    </div>
+
+    <!-- Aside -->
+    <div class="col-2">
+      <!-- Seccion de perfil -->
+      <div>
+
+      </div>
+      <!-- Seccion lista del menú -->
+      <div class="accordion" id="asideMenuAcordion">
+
+        <div class="accordion-item">
+          <h2 class="accordion-header m-0" id="">
+            <button class="accordion-button accordion-no-button collapsed" type="button">
+              Profesiones
+            </button>
+          </h2>
+        </div>
+
+        <div class="accordion-item">
+          <h2 class="accordion-header m-0" id="">
+            <button class="accordion-button accordion-no-button collapsed" type="button">
+              Planes de proveedores
+            </button>
+          </h2>
+        </div>
+
+        <div class="accordion-item">
+          <h2 class="accordion-header m-0" id="panelsStayOpen-headingOne">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="false" aria-controls="panelsStayOpen-collapseOne">
+              Accordion Item #1
+            </button>
+          </h2>
+          <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingOne">
+            <div class="accordion-body p-0">
+              <div class="list-group">
+                <a (click)="setSelection('admin')" class="list-group-item list-group-item-action">Administrador</a>
+                <a (click)="setSelection('politicas')" class="list-group-item list-group-item-action">Politicas</a>
+                <a href="#" class="list-group-item list-group-item-action">A fourth link item</a>
+                <a class="list-group-item list-group-item-action disabled">A disabled link item</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <h2 class="accordion-header m-0" id="panelsStayOpen-headingTwo">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
+              Accordion Item #2
+            </button>
+          </h2>
+          <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTwo">
+            <div class="accordion-body">
+              <strong>This is the second item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="panelsStayOpen-headingThree">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
+              Accordion Item #3
+            </button>
+          </h2>
+          <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingThree">
+            <div class="accordion-body">
+              <strong>This is the third item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Cuerpo -->
+    <div class="col-10">
+      <app-administrador *ngIf="selection === 'admin'" identificador="2" ></app-administrador>
+      <app-politicas *ngIf="selection === 'politicas'" ></app-politicas>
+      <app-administrador *ngIf="selection === 'servicios'" ></app-administrador>
+      <app-administrador *ngIf="selection === 'etc'" ></app-administrador>
+      <app-administrador *ngIf="selection === 'etc'" ></app-administrador>
+    </div>
+
+    <!-- Pie -->
+    <div class="col-12">
+
+    </div>
+  </div>
+</div>
+
