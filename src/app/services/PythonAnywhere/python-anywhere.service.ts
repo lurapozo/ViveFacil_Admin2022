@@ -957,4 +957,6 @@ export class PythonAnywhereService {
   delete_profesion_proveedo(id: any) {
     return this.http.delete(`${this.API_URL}/profesion_prov/${id}`);
   }
+
 }
+
