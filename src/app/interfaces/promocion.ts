@@ -13,3 +13,24 @@ export interface Promocion {
   tipo_categoria: string;
   cantidad: number;
 }
+
+export interface BodyPromocionActualizar {
+  codigo: string;
+  titulo: string;
+  descripcion: string;
+  fecha_iniciacion: string | null;
+  fecha_expiracion: string;
+  porcentaje: number;
+  cantidad: number;
+  participantes: string;
+  foto: File | null;
+  tipo_categoria: string;
+}
+
+export interface BodyResponsePromocionActualizar {
+  success: boolean;
+  code: number;
+  msg?: string;
+  error?: string;
+  promocion?: Promocion;
+}

@@ -1,13 +1,23 @@
-import { SolicitantePaginacion, Solicitante } from 'src/app/interfaces/solicitante';
+import {
+  SolicitantePaginacion,
+  Solicitante,
+} from 'src/app/interfaces/solicitante';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Administrador, AdministradorPaginacion, BodyActualizarAdministrador, BodyCrearAdministrador, BodyResponseCrearAdministrador } from 'src/app/interfaces/administrador';
+import { Administrador, AdministradorPaginacion, BodyActualizarAdministrador, BodyCrearAdministrador, BodyResponseCrearAdministrador,} from 'src/app/interfaces/administrador';
 import { map, Observable } from 'rxjs';
-import { Insignias } from 'src/app/interfaces/insignias';
-import { Cargo } from 'src/app/interfaces/cargo';
-import { Promocion } from 'src/app/interfaces/promocion';
-import { Cupon } from 'src/app/interfaces/cupon';
+import { BodyActualizarInsignia, Insignia } from 'src/app/interfaces/insignia';
+import { BodyActualizarCargo, Cargo } from 'src/app/interfaces/cargo';
+import { BodyPromocionActualizar, BodyResponsePromocionActualizar, Promocion } from 'src/app/interfaces/promocion';
+import { BodyCuponActualizar, BodyResponseCuponActualizar, Cupon } from 'src/app/interfaces/cupon';
 import { PaymentPaginacion } from 'src/app/interfaces/payment';
+import { BodyActualizarProveedor, BodyActualizarProveedorPendiente, BodyCrearProveedor, BodyCrearProveedorPendiente, BodyResponseCrearProveedorPendiente, Proveedor, ProveedorPaginacion, ProveedorPendiente, ProveedorProfesion } from 'src/app/interfaces/proveedor';
+import { Documento, DocumentoPendiente } from 'src/app/interfaces/documento';
+import { CuentaBancariaProveedor } from 'src/app/interfaces/cuenta-bancaria';
+import { BodyCrearProfesion, BodyResponseCrearProfesion, Profesion } from 'src/app/interfaces/profesion';
+import { BodyEmail, BodyResponseEmail } from 'src/app/interfaces/email';
+import { BodyActualizarCategoria, BodyCrearCategoria, BodyResponseCrearCategoria, Categoria } from 'src/app/interfaces/categoria';
+import { BodyActualizarServicio, Servicio } from 'src/app/interfaces/servicio';
 @Injectable({
   providedIn: 'root',
 })
@@ -37,63 +47,83 @@ export class PythonAnywhereService {
   //------------------------------------------------ SECCIÓN SOLICITANTES -------------------------------------------------
   /**
    * Obtiene todos los solicitantes, y los entrega en un formato con paginación.
-  *
-  * @author Kevin Chévez
-  * @param page (Opcional) Recibe un number con el número de la página a buscar info. Por defecto 1.
-  * @returns Devuelve un Observable con un objeto SolicitantePaginacion.
-  */
- obtener_solicitantes(page = 1): Observable<SolicitantePaginacion> {
-   return this.http.get(`${this.API_URL}/solicitantes/?page=${page}`) as Observable<SolicitantePaginacion>;
+   *
+   * @author Kevin Chévez
+   * @param page (Opcional) Recibe un number con el número de la página a buscar info. Por defecto 1.
+   * @returns Devuelve un Observable con un objeto SolicitantePaginacion.
+   */
+  obtener_solicitantes(page = 1): Observable<SolicitantePaginacion> {
+    return this.http.get(
+      `${this.API_URL}/solicitantes/?page=${page}`
+    ) as Observable<SolicitantePaginacion>;
   }
 
   /**
    * Obtene el solicitante desde la base de datos.
-  *
-  * @author Kevin Chévez
-  * @param user Recibe un string que pertenece al correo del solicitante a buscar en la base de datos.
-  * @returns Devuelve un Observable con un objeto Arreglo de Solicitante
-  */
- obtener_solicitante(user: string): Observable<Solicitante[]> {
-   return this.http.get(`${this.API_URL}/solicitante/${user}`) as Observable<Solicitante[]>;
+   *
+   * @author Kevin Chévez
+   * @param user Recibe un string que pertenece al correo del solicitante a buscar en la base de datos.
+   * @returns Devuelve un Observable con un objeto Arreglo de Solicitante
+   */
+  obtener_solicitante(user: string): Observable<Solicitante[]> {
+    return this.http.get(`${this.API_URL}/solicitante/${user}`) as Observable<
+      Solicitante[]
+    >;
   }
 
   /**
    * Obtiene los solicitantes que se encuentran registrados en un rango de fecha pasado por parámetro en un formato de paginación.
-  *
-  * @author Kevin Chévez
-  * @param fechaInicio Recibe un string de la fecha inicio con el formato AAAA-MM-DD para aplicar al filtro.
-  * @param fechaFin Recibe un string de la fecha fin con el formato AAAA-MM-DD para aplicar al filtro.
-  * @param page (Opcional) Recibe un number con el número de la página a obtener la infomación. Por defecto 1.
-  * @returns Devuelve un Observable con un objeto SolicitantePaginación.
-  */
- filtrar_solicitante(fechaInicio: string, fechaFin: string, page = 1): Observable<SolicitantePaginacion> {
-   return this.http.get(`${this.API_URL}/fechas-filtro/?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}&page=${page}`) as Observable<SolicitantePaginacion>;
+   *
+   * @author Kevin Chévez
+   * @param fechaInicio Recibe un string de la fecha inicio con el formato AAAA-MM-DD para aplicar al filtro.
+   * @param fechaFin Recibe un string de la fecha fin con el formato AAAA-MM-DD para aplicar al filtro.
+   * @param page (Opcional) Recibe un number con el número de la página a obtener la infomación. Por defecto 1.
+   * @returns Devuelve un Observable con un objeto SolicitantePaginación.
+   */
+  filtrar_solicitante(fechaInicio: string, fechaFin: string, page = 1): Observable<SolicitantePaginacion> {
+    return this.http.get(`${this.API_URL}/fechas-filtro/?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}&page=${page}`) as Observable<SolicitantePaginacion>;
   }
 
   /**
    * Función que busca un solicitante en la base de datos segun el string pasado como parametro.
-  *
-  * @param usuario Recibe un string con el que se realizará el filtro del usuario con respecto a su correo.
-  * @param page (Opcional) Recibe un number indicando el número de la página. Por defecto 1.
-  * @returns Devuelve un Observable con un objeto SolicitantePaginación.
-  */
- buscar_solicitante(usuario: string, page = 1): Observable<SolicitantePaginacion> {
-   return this.http.get(`${this.API_URL}/filtro-usuario/${usuario}?page=${page}`) as Observable<SolicitantePaginacion>;
+   *
+   * @author Kevin Chévez
+   * @param usuario Recibe un string con el que se realizará el filtro del usuario con respecto a su correo.
+   * @param page (Opcional) Recibe un number indicando el número de la página. Por defecto 1.
+   * @returns Devuelve un Observable con un objeto SolicitantePaginación.
+   */
+  buscar_solicitante(usuario: string, page = 1): Observable<SolicitantePaginacion> {
+    return this.http.get(`${this.API_URL}/filtro-usuario/${usuario}?page=${page}`) as Observable<SolicitantePaginacion>;
   }
 
   /**
+   * Función que cambia el estado del solicitante que se encuentra registrado en la base de datos.
    *
-   * @param estado
-   * @param id
-   * @returns
+   * @author Kevin Chévez
+   * @param estado Recibe un boolean indicando el estado del solicitante. (true - false).
+   * @param id Recibe un string indicando el ID del Solicitante (ID más externo de la tabla de solicitante).
+   * @returns Devuelve un Observable con el objeto Solicitante el cuál fue modificado.
    */
-  cambio_solicitante_estado(estado: any, id: any) {
-    console.log(estado, id);
-    return this.http.put(`${this.API_URL}/solicitante_estado/${id}`, estado);
+  cambio_solicitante_estado(
+    estado: boolean,
+    id: string
+  ): Observable<Solicitante> {
+    return this.http.put(`${this.API_URL}/solicitante_estado/${id}`, {
+      estado: estado,
+    }) as Observable<Solicitante>;
+  }
+
+  /**
+   * Función que elimina a un solicitante registrado en la base de datos según el ID pasado como parametro.
+   *
+   * @author Kevin Chévez
+   * @param id Recibe un string indicando el ID del Solicitante (ID más externo de la tabla de solicitante) a ser eliminado de la Base de datos.
+   * @returns Devuelve un Observable con una respuesta OK(205) or Error(500).
+   */
+  eliminar_solicitante(id: any) {
+    return this.http.delete(`${this.API_URL}/solicitante_delete/${id}`);
   }
   //-----------------------------------------------------------------------------------------------------------------------
-
-
 
   //-------------------------------------------------- SECCIÓN INSIGNIAS --------------------------------------------------
   /**
@@ -102,8 +132,8 @@ export class PythonAnywhereService {
    * @author Kevin Chévez
    * @returns Devuelve un observable con un arreglo de objeto Insignias
    */
-  obtener_insignias() : Observable<Insignias[]>{
-    return this.http.get(this.API_URL+'/insignias/') as Observable<Insignias[]>;
+  obtener_insignias(): Observable<Insignia[]> {
+    return this.http.get(this.API_URL + '/insignias/') as Observable<Insignia[]>;
   }
 
   /**
@@ -113,12 +143,59 @@ export class PythonAnywhereService {
    * @param id Recibe un string del ID de la insignia a traer de la base de datos.
    * @returns Devuelve un Observable con la insignia requerida.
    */
-  obtener_insignia(id: string) : Observable<Insignias>{
-    return this.http.get(`${this.API_URL}/insignias/${id}`) as Observable<Insignias>;
+  obtener_insignia(id: string): Observable<Insignia> {
+    return this.http.get(
+      `${this.API_URL}/insignias/${id}`
+    ) as Observable<Insignia>;
+  }
+
+  /**
+   * Función que cambia el estado de la insignia que se encuentra registrada en la base de datos.
+   *
+   * @author Kevin Chévez
+   * @param id Recibe un string indicando el ID de la insignia.
+   * @param estado Recibe un boolean indicando el estado de la insignia. (true - false).
+   * @returns Devuelve un Observable con la respuesta OK(200) o Error(500).
+   */
+  cambio_insignia_estado(id: string, estado: boolean): Observable<any> {
+    return this.http.put(`${this.API_URL}/insignia_estado/?id=${id}`, {
+      estado: estado,
+    }) as Observable<any>;
+  }
+
+  /**
+   * Función que actualiza el contenido de una Insignia registrada en la base de datos, segun los parametros pasados o por estado de insignia.
+   *
+   * @author Kevin Chévez
+   * @param bodyActualizar Recibe un objeto BodyActualizarInsignia con los parametros indicador para actualizar la insignia.
+   * @param id Recibe un string perteneciente al ID de la insignia la cual sera modificada.
+   * @returns Devuelve un Observable de un Objeto Insignia el cual fue modificado.
+   */
+  actualizar_insignia(bodyActualizar: BodyActualizarInsignia, id: string): Observable<Insignia> {
+    const dataUpdate = new FormData();
+    bodyActualizar.nombre? dataUpdate.append('nombre', bodyActualizar.nombre) : null;
+    bodyActualizar.imagen? dataUpdate.append('imagen', bodyActualizar.imagen) : null;
+    bodyActualizar.servicio? dataUpdate.append('servicio', bodyActualizar.servicio) : null;
+    bodyActualizar.tipo_usuario? dataUpdate.append('tipo_usuario', bodyActualizar.tipo_usuario) : null;
+    dataUpdate.append('estado', bodyActualizar.estado.toString());
+    bodyActualizar.pedidos? dataUpdate.append('pedidos', bodyActualizar.pedidos.toString()) : null;
+    bodyActualizar.descripcion? dataUpdate.append('descripcion', bodyActualizar.descripcion) : null;
+    bodyActualizar.tipo? dataUpdate.append('tipo', bodyActualizar.tipo) : null;
+
+    return this.http.put(`${this.API_URL}/insignia_update/${id}`, dataUpdate) as Observable<Insignia>;
+  }
+
+  /**
+   * Función que elimina una insignia registrada en la base de datos según el parametro pasado.
+   *
+   * @author Kevin Chévez
+   * @param id Recibe un string perteneciente al ID de la Insignia la cual sera eliminada.
+   * @returns Devuelve un Observable con una respuesta OK(204) or Error(500).
+   */
+  eliminar_insignia(id: string): Observable<any> {
+    return this.http.delete(`${this.API_URL}/insignia_delete/${id}`) as Observable<any>;
   }
   //-----------------------------------------------------------------------------------------------------------------------
-
-
 
   //---------------------------------------------------- SECCIÓN CARGOS ---------------------------------------------------
   /**
@@ -128,7 +205,7 @@ export class PythonAnywhereService {
    * @returns Devuelve un Observable con un arreglo de objeto Cargo
    */
   obtener_cargos(): Observable<Cargo[]> {
-    return this.http.get(this.API_URL+'/cargos/') as Observable<Cargo[]>;
+    return this.http.get(this.API_URL + '/cargos/') as Observable<Cargo[]>;
   }
 
   /**
@@ -141,8 +218,30 @@ export class PythonAnywhereService {
   obtener_cargo(id: string): Observable<Cargo> {
     return this.http.get(`${this.API_URL}/cargos/${id}`) as Observable<Cargo>;
   }
-  //-----------------------------------------------------------------------------------------------------------------------
 
+  /**
+   * Función que actualiza el contenido de un Cargo registrado en la base de datos, segun los parametros pasados.
+   *
+   * @author Kevin Chévez
+   * @param bodyActualizar Recibe un objeto BodyActualizarCargo con los parametros necesarios para actualizar el cargo.
+   * @param id Recibe un string perteneciente al ID del cargo el cual sera modificado.
+   * @returns Devuelve un Observable con un objeto Cargo actualizado.
+   */
+  actualizar_cargo(bodyActualizar: BodyActualizarCargo, id: string): Observable<Cargo> {
+    return this.http.put(`${this.API_URL}/cargo_update/${id}`, bodyActualizar) as Observable<Cargo>;
+  }
+
+  /**
+   * Función que elimina un cargo registrado en la base de datos según el parametro pasado.
+   *
+   * @author Kevin Chévez
+   * @param id Recibe un string perteneciente al ID del Cargo el cual sera eliminado.
+   * @returns Devuelve un Observable con una respuesta OK(204) or Error(500).
+   */
+  eliminar_cargo(id: string): Observable<any> {
+    return this.http.delete(`${this.API_URL}/cargo_delete/${id}`) as Observable<any>;
+  }
+  //-----------------------------------------------------------------------------------------------------------------------
 
   //---------------------------------------------------- SECCIÓN PROMOCIÓN ------------------------------------------------
   /**
@@ -155,9 +254,56 @@ export class PythonAnywhereService {
   obtener_promocion(id: string): Observable<Promocion[]> {
     return this.http.get(`${this.API_URL}/promociones/${id}`) as Observable<Promocion[]>;
   }
+
+  /**
+   * Función que cambia el estado de la promocion que se encuentra registrada en la base de datos.
+   *
+   * @author Kevin Chévez
+   * @param id Recibe un string indicando el ID de la promocion.
+   * @param estado Recibe un boolean indicando el estado de la promocion. (true - false).
+   * @returns Devuelve un Observable con la respuesta OK(200) o Error(500).
+   */
+  cambio_promocion_estado(id: string, estado: boolean): Observable<any> {
+    return this.http.put(`${this.API_URL}/promocion_estado/?id=${id}`, {
+      estado: estado,
+    });
+  }
+
+  /**
+   * Función que actualiza el contenido de una Promocion registrada en la base de datos, segun los parametros pasados.
+   *
+   * @author Kevin Chévez
+   * @param bodyActualizar Recibe un objeto BodyPromocionActualizar con los parametros necesarios para actualizar la promocion.
+   * @param id Recibe un string perteneciente al ID de la promocion la cual sera modificada.
+   * @returns Devuelve un Observable con un objeto BodyResponsePromocionActualizar.
+   */
+  actualizar_promocion(bodyActualizar: BodyPromocionActualizar, id: string): Observable<BodyResponsePromocionActualizar> {
+    const dataUpdate = new FormData();
+    dataUpdate.append("codigo", bodyActualizar.codigo);
+    dataUpdate.append("titulo", bodyActualizar.titulo);
+    dataUpdate.append("descripcion", bodyActualizar.descripcion);
+    bodyActualizar.fecha_iniciacion? dataUpdate.append("fecha_iniciacion", bodyActualizar.fecha_iniciacion) : null;
+    dataUpdate.append("fecha_expiracion", bodyActualizar.fecha_expiracion);
+    dataUpdate.append("porcentaje", bodyActualizar.porcentaje.toString());
+    dataUpdate.append("cantidad", bodyActualizar.cantidad.toString());
+    dataUpdate.append("participantes", bodyActualizar.participantes);
+    bodyActualizar.foto? dataUpdate.append("foto", bodyActualizar.foto) : null;
+    dataUpdate.append("tipo_categoria", bodyActualizar.tipo_categoria);
+
+    return this.http.put(`${this.API_URL}/promocion_update/${id}`, dataUpdate) as Observable<BodyResponsePromocionActualizar>;
+  }
+
+  /**
+   * Función que elimina una promocion registrada en la base de datos según el parametro pasado.
+   *
+   * @author Kevin Chévez
+   * @param id Recibe un string perteneciente al ID de la Promocion la cual sera eliminada.
+   * @returns Devuelve un Observable con una respuesta OK(204) or Error(500).
+   */
+  eliminar_promocion(id: string): Observable<any> {
+    return this.http.delete(`${this.API_URL}/promocion_delete/${id}`);
+  }
   //-----------------------------------------------------------------------------------------------------------------------
-
-
 
   //------------------------------------------------------ SECCIÓN CUPON --------------------------------------------------
   /**
@@ -170,9 +316,54 @@ export class PythonAnywhereService {
   obtener_cupon(id: string): Observable<Cupon> {
     return this.http.get(`${this.API_URL}/cupones/${id}`) as Observable<Cupon>;
   }
+
+  /**
+   * Función que cambia el estado del cupon que se encuentra registrada en la base de datos.
+   *
+   * @author Kevin Chévez
+   * @param id Recibe un string indicando el ID del cupon.
+   * @param estado Recibe un boolean indicando el estado del cupon. (true - false).
+   * @returns Devuelve un Observable con la respuesta OK(200) o Error(500).
+   */
+  cambio_cupon_estado(id: string, estado: boolean): Observable<any> {
+    return this.http.put(`${this.API_URL}/cupon_estado/?id=${id}`, {estado: estado,});
+  }
+
+  /**
+   * Función que actualiza el contenido de un Cupon registrado en la base de datos, segun los parametros pasados.
+   *
+   * @author Kevin Chévez
+   * @param bodyActualizar Recibe un objeto BodyCuponActualizar con los parametros necesarios para actualizar el cupon.
+   * @param id Recibe un string perteneciente al ID del cupon la cual sera modificada.
+   * @returns Devuelve un Observable con un objeto BodyResponseCuponActualizar.
+   */
+  actualizar_cupon(bodyActualizar: BodyCuponActualizar, id: string): Observable<BodyResponseCuponActualizar> {
+    const dataUpdate = new FormData();
+    dataUpdate.append("codigo", bodyActualizar.codigo);
+    dataUpdate.append("titulo", bodyActualizar.titulo);
+    dataUpdate.append("descripcion", bodyActualizar.descripcion);
+    bodyActualizar.fecha_iniciacion? dataUpdate.append("fecha_iniciacion", bodyActualizar.fecha_iniciacion) : null;
+    dataUpdate.append("fecha_expiracion", bodyActualizar.fecha_expiracion);
+    dataUpdate.append("porcentaje", bodyActualizar.porcentaje.toString());
+    dataUpdate.append("cantidad", bodyActualizar.cantidad.toString());
+    dataUpdate.append("puntos", bodyActualizar.puntos.toString());
+    bodyActualizar.foto? dataUpdate.append("foto", bodyActualizar.foto) : null;
+    dataUpdate.append("tipo_categoria", bodyActualizar.tipo_categoria);
+
+    return this.http.put(`${this.API_URL}/cupon_update/${id}`, dataUpdate) as Observable<BodyResponseCuponActualizar>;
+  }
+
+  /**
+   * Función que elimina un cupon registrado en la base de datos según el parametro pasado.
+   *
+   * @author Kevin Chévez
+   * @param id Recibe un string perteneciente al ID del Cupon el cual sera eliminado.
+   * @returns Devuelve un Observable con una respuesta OK(204) or Error(500).
+   */
+  eliminar_cupon(id: string): Observable<any> {
+    return this.http.delete(`${this.API_URL}/cupon_delete/${id}`) as Observable<any>;
+  }
   //-----------------------------------------------------------------------------------------------------------------------
-
-
 
   //------------------------------------------------------ SECCIÓN ADMIN --------------------------------------------------
   /**
@@ -182,7 +373,7 @@ export class PythonAnywhereService {
    * @param page (Opcional) Recibe un number indicando el número de la página. Por defecto 1.
    * @returns Devuelve un Obsevable del objeto AdministradorPaginacion
    */
-  obtener_administradores(page = 1) : Observable<AdministradorPaginacion> {
+  obtener_administradores(page = 1): Observable<AdministradorPaginacion> {
     return this.http.get(`${this.API_URL}/administradores/?page=${page}`) as Observable<AdministradorPaginacion>;
   }
 
@@ -244,9 +435,29 @@ export class PythonAnywhereService {
   filtrar_administrador(fechaInicio: string, fechaFin: string, page = 1): Observable<AdministradorPaginacion> {
     return this.http.get(`${this.API_URL}/fechas_admin/?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}&page=${page}`) as Observable<AdministradorPaginacion>;
   }
+
+  /**
+   * Función que elimina a un administrador registrado en la base de datos según el ID pasado como parametro.
+   *
+   * @author Kevin Chévez
+   * @param id Recibe un string indicando el ID del Administrador (ID más externo de la tabla de administrador) a ser eliminado de la Base de datos.
+   * @returns Devuelve un Observable con una respuesta OK(204) or Error(500).
+   */
+  eliminar_administrador(id: string): Observable<any> {
+    return this.http.delete(`${this.API_URL}/administrador_delete/${id}`);
+  }
+
+  /**
+   * Función que elimina a un administrador registrado en la base de datos según el ID pasado como parametro.
+   *
+   * @author Kevin Chévez
+   * @param id Recibe un string indicando el ID del Administrador (ID más externo de la tabla de administrador) a ser eliminado de la Base de datos.
+   * @returns Devuelve un Observable con una respuesta OK(204) or Error(500).
+   */
+  eliminar_admin(id: string): Observable<any> {
+    return this.http.delete(`${this.API_URL}/administrador/${id}`);
+  }
   //-----------------------------------------------------------------------------------------------------------------------
-
-
 
   //----------------------------------------------------- SECCIÓN PAYMENT -------------------------------------------------
   /**
@@ -259,8 +470,6 @@ export class PythonAnywhereService {
    * @returns Devuelve un Observable con un objeto PaymentPaginacion de todas las respuestas filtradas.
    */
   filtrar_efectivo(fechaInicio: string, fechaFin: string, page = 1): Observable<PaymentPaginacion> {
-    console.log(fechaInicio);
-    console.log(fechaFin);
     return this.http.get(`${this.API_URL}/fechas_efectivo/?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}&page=${page}`) as Observable<PaymentPaginacion>;
   }
 
@@ -274,339 +483,340 @@ export class PythonAnywhereService {
    * @returns Devuelve un Observable con un objeto PaymentPaginacion de todas las respuestas filtradas.
    */
   filtrar_tarjeta(fechaInicio: string, fechaFin: string, page = 1) {
-    console.log(fechaInicio);
-    console.log(fechaFin);
     return this.http.get(`${this.API_URL}/fechas_tarjeta/?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}&page=${page}`);
+  }
+
+  /**
+   * Función que cambia el estado del cupon que se encuentra registrada en la base de datos.
+   *
+   * @author Kevin Chévez
+   * @param id Recibe un string indicando el ID del cupon.
+   * @param estado Recibe un boolean indicando el estado del cupon. (true - false).
+   * @returns Devuelve un Observable con la respuesta OK(200) o Error(500).
+   */
+  cambio_pago_proveedor_estado(id: string, estado: boolean) {
+    return this.http.put(`${this.API_URL}/tarjeta_pago/?id=${id}`, {estado: estado,});
+  }
+  //-----------------------------------------------------------------------------------------------------------------------
+
+  //---------------------------------------------------- SECCIÓN PROVEEDOR ------------------------------------------------
+  /**
+   * Función que cambia el estado del proveedor que se encuentra registrado en la base de datos.
+   *
+   * @author Kevin Chévez
+   * @param estado Recibe un boolean indicando el estado del proveedor. (true - false).
+   * @param id Recibe un string indicando el ID del Proveedor (ID más externo de la tabla de Proveedor).
+   * @returns Devuelve un Observable con el objeto Proveedor el cual fue modificado.
+   */
+  cambio_proveedor_estado(estado: boolean, id: string): Observable<Proveedor> {
+    return this.http.put(`${this.API_URL}/proveedor_estado/${id}`, {estado: estado,}) as Observable<Proveedor>;
+  }
+
+  /**
+   * Función que obtiene los proveedores registrados en la base de datos con un formato de paginacion.
+   *
+   * @author Kevin Chévez
+   * @param page (Opcional) Recibe un number indicando el número de la página. Por defecto 1.
+   * @returns Devuelve un Obsevable del objeto ProveedorPaginacion
+   */
+  obtener_proveedores(page = 1): Observable<ProveedorPaginacion> {
+    return this.http.get(`${this.API_URL}/proveedores/?page=${page}`) as Observable<ProveedorPaginacion> ;
+  }
+
+  /**
+   * Función que obtiene todos los proveedores pendientes que se encuentran en la base de datos.
+   *
+   * @author Kevin Chévez
+   * @param page (Opcional) Recibe un number indicando el número de la página. Por defecto 1.
+   * @returns Devuelve un Obsevable del objeto ProveedorPaginacion
+   */
+  obtener_proveedores_pendientes(page = 1): Observable<ProveedorPaginacion> {
+    return this.http.get(`${this.API_URL}/proveedores_pendientes/?page=${page}`) as Observable<ProveedorPaginacion> ;
+  }
+
+  /**
+   * Función que obtiene al proveedor pendiente que se encuentra en la base de datos segun el ID pasado como parametro.
+   *
+   * @author Kevin Chévez
+   * @param id Recibe un string ID del proveedor pendiente objetivo a buscar en la Base de datos.
+   * @returns Devuelve un observable con el objeto ProveedorPendiente
+   */
+  obtener_proveedor_pendiente(id: string): Observable<ProveedorPendiente> {
+    return this.http.get(`${this.API_URL}/proveedores_pendientes/${id}`) as Observable<ProveedorPendiente>;
+  }
+
+  /**
+   * Función que elimina a un proveedor pendiente registrado en la base de datos según el ID pasado como parametro.
+   *
+   * @author Kevin Chévez
+   * @param id Recibe un string indicando el ID del ProveedorPendientea ser eliminado de la Base de datos.
+   * @returns Devuelve un Observable con una respuesta OK(204) or Error(500).
+  */
+  eliminar_proveedor_pendiente(id: string): Observable<any> {
+    return this.http.delete(`${this.API_URL}/proveedores_pendientes/${id}`);
+  }
+
+  /**
+   * Función que busca proveedores pendientes en la base de datos segun el string pasado como parametro.
+   *
+   * @author Kevin Chévez
+   * @param user Recibe un string con el que se realizará el filtro del usuario con respecto a su nombre y apellido.
+   * @param page (Opcional) Recibe un number indicando el número de la página. Por defecto 1.
+   * @returns Devuelve un Observable con un objeto ProveedorPaginacion.
+   */
+  buscar_proveedores_pendientes(user: string, page = 1): Observable<ProveedorPaginacion> {
+    return this.http.get(`${this.API_URL}/pendientes-search/${user}?page=${page}`) as Observable<ProveedorPaginacion>;
+  }
+
+  /**
+   * Función que filtra los proveedores pendientes en un rango de fechas.
+   *
+   * @author Kevin Chévez
+   * @param fechaInicio Recibe un string de la fecha inicio con el formato AAAA-MM-DD para aplicar al filtro.
+   * @param fechaFin Recibe un string de la fecha fin con el formato AAAA-MM-DD para aplicar al filtro.
+   * @param page (Opcional) Recibe un number indicando la pagina del filtro. Por defecto 1.
+   * @returns Devuelve un Observable con un objeto ProveedorPaginacion de todas las respuestas filtradas.
+   */
+  filtrar_fecha_proveedores_pendientes(fechaInicio: string, fechaFin: string, page = 1) {
+    return this.http.get(`${this.API_URL}/pendientes-filterDate/?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}&page=${page}` );
+  }
+
+  /**
+   * Función que crea un objeto ProveedorPendiente y lo registra en la base de datos.
+   *
+   * @author Kevin Chévez
+   * @param data Recibe un objeto BodyCrearProveedorPendiente con los parametros necesarios para crear el ProveedorPendiente
+   * @returns Devuelve Observable con un objeto BodyResponseCrearProveedorPendiente
+   */
+  crear_proveedor_pendiente(data: BodyCrearProveedorPendiente): Observable<BodyResponseCrearProveedorPendiente> {
+    return this.http.post(`${this.API_URL}/proveedor_pendiente/`, data) as Observable<BodyResponseCrearProveedorPendiente>;
+  }
+
+  /**
+   * Función que edita la información de un objeto ProveedorPendiente
+   *
+   * @author Kevin Chévez
+   * @param id Recibe un string ID del proveedor pendiente objetivo a editar.
+   * @param data Recibe un objeto BodyActualizarProveedorPendiente con los campos a actualizar/editar.
+   * @returns Devuelve un Observable con un objeto ProveedorPendiente el cual fue modificado.
+   */
+  editar_proveedor_pendiente(id: string, data: BodyActualizarProveedorPendiente): Observable<ProveedorPendiente> {
+    return this.http.put(`${this.API_URL}/proveedores_pendientes/${id}`, data) as Observable<ProveedorPendiente>;
+  }
+
+  /**
+   * Función que edita la información de un objeto Proveedor registrado en la base de datos.
+   *
+   * @author Kevin Chévez
+   * @param data Recibe un objeto BodyActualizarProveedor con los campos a actualizar/editar.
+   * @returns Devuelve un Observable con un objeto {"sucess": "Exito"} en caso de exito.
+   */
+  editar_proveedor(data: BodyActualizarProveedor): Observable<any> {
+    return this.http.put(`${this.API_URL}/edicion_proveedor/`, data);
+  }
+
+  /**
+   * Función que elimina a un proveedor registrado en la base de datos según el ID pasado como parametro.
+   *
+   * @author Kevin Chévez
+   * @param id Recibe un string indicando el ID del Proveedor (ID más externo de la tabla de proveedor) a ser eliminado de la Base de datos.
+   * @returns Devuelve un Observable con una respuesta OK(204) or Error(500).
+  */
+  eliminar_proveedor(id: string): Observable<any> {
+    return this.http.delete(`${this.API_URL}/proveedor_delete/${id}`);
+  }
+
+  //-----------------------------------------------------------------------------------------------------------------------
+
+
+
+  //--------------------------------------------------- SECCIÓN DOCUMENTOS ------------------------------------------------
+  /**
+   * Funcion que obtiene y presenta todos los documentos pendientes que se encuentra en la base de datos en la ruta /pendientes-documents.
+   *
+   * @author Kevin Chévez
+   * @returns Devuelve un Observable con un arreglo de objetos DocumentoPendiente
+   */
+  obtener_documentos_pendientes(): Observable<DocumentoPendiente[]>{
+    return this.http.get(`${this.API_URL}/documentos_pendientes/`) as Observable<DocumentoPendiente[]>;
+  }
+
+  /**
+   * Función que elimina el documento pendiente en la ruta /pendientes-documents que se encuentra registrado en la base de datos segun el ID.
+   *
+   * @author Kevin Chévez
+   * @param id Recibe un string ID del documento pendiente objetivo a eliminar de la base de datos.
+   * @returns Devuelve un Observable con una respuesta OK(204) or Error(500).
+  */
+ eliminar_documento_pendiente(id: string) {
+    return this.http.delete(`${this.API_URL}/documentos_pendientes/?id=${id}`);
+  }
+
+  /**
+   * Funcion que obtiene y presenta todos los documentos que se encuentra en la base de datos en la ruta /documents.
+   *
+   * @author Kevin Chévez
+   * @returns Devuelve un Observable con un arreglo de objetos Documento
+   */
+  obtener_documentos(): Observable<Documento[]>{
+    return this.http.get(`${this.API_URL}/documentos_proveedores/`) as Observable<Documento[]>;
+  }
+
+  /**
+   * Función que elimina el documento en la ruta /documents que se encuentra registrado en la base de datos segun el ID.
+   *
+   * @author Kevin Chévez
+   * @param id Recibe un string ID del documento objetivo a eliminar de la base de datos.
+   * @returns Devuelve un Observable con una respuesta OK(204) or Error(500).
+   */
+  eliminar_documento(id: string): Observable<any> {
+    return this.http.delete(`${this.API_URL}/documentos_proveedores/?id=${id}`);
   }
   //-----------------------------------------------------------------------------------------------------------------------
 
 
-  /*
-    eliminar_solicitante
-    autor: Axell
-    descripccion: Elimina un solicitante
-    parametros: int id
-  */
-  eliminar_solicitante(id: any) {
-    return this.http.delete(`${this.API_URL}/solicitante_delete/${id}`);
-  }
 
-  /*
-    cambio_proveedor_estado
-    autor: Axell
-    descripccion: Cambia estado de un proveedor
-    parametros: boolean estado, int id
-  */
-  cambio_proveedor_estado(estado: any, id: any) {
-    console.log(estado, id);
-    return this.http.put(`${this.API_URL}/proveedor_estado/${id}`, estado);
-  }
-
-  /*
-    cambio_administrador_estado
-    autor: Axell
-    descripccion: Cambia estado de un administrador
-    parametros: boolean estado, int id
-  */
-  cambio_administrador_estado(id: any, estado: any) {
-    return this.http.put(`${this.API_URL}/administrador_estado/?id=${id}`, estado);
-  }
-
-  cambio_insignia_estado(id: any, estado: any) {
-    return this.http.put(`${this.API_URL}/insignia_estado/?id=${id}`, estado);
-  }
-
-  cambio_promocion_estado(id: any, estado: any) {
-    return this.http.put(`${this.API_URL}/promocion_estado/?id=${id}`, estado);
-  }
-
-  cambio_cupon_estado(id: any, estado: any) {
-    return this.http.put(`${this.API_URL}/cupon_estado/?id=${id}`, estado);
-  }
-
-  cambio_pago_proveedor_estado(id: any, estado: any) {
-    return this.http.put(`${this.API_URL}/tarjeta_pago/?id=${id}`, estado);
-  }
-
-  /*
-    eliminar_proveedor
-    autor: Axell
-    descripccion: Elimina un proveedor
-    parametros: int id
-  */
-  eliminar_proveedor(id: any) {
-    return this.http.delete(`${this.API_URL}/proveedor_delete/${id}`);
-  }
-
-  /*
-    eliminar_administrador
-    autor: Axell
-    descripccion: Elimina un administrador
-    parametros: int id
-  */
-  eliminar_administrador(id: any) {
-    return this.http.delete(`${this.API_URL}/administrador_delete/${id}`);
-  }
-
-  eliminar_admin(id: any) {
-    return this.http.delete(`${this.API_URL}/administrador/${id}`);
-  }
-
-  /*
-    obtener_proveedores
-    autor: Kelly
-    descripccion: Obtiene todas las proveedores
-    parametros: None
-  */
-  obtener_proveedores() {
-    return this.http.get(this.API_URL+'/proveedores/');
-  }
-
-  obtener_providers(page: any) {
-    return this.http.get(`${this.API_URL}/proveedores/?page=${page}`);
-  }
-  /*
-    obtener_proveedores_pendientes
-    autor: Kelly
-    descripccion: Obtiene todas las proveedores pendientes
-    parametros: None
-  */
-  obtener_proveedores_pendientes() {
-    return this.http.get(this.API_URL+'/proveedores_pendientes/');
-  }
-
-  obtener_pendientes(page: any) {
-    return this.http.get(`${this.API_URL}/proveedor_pendiente/?page=${page}`);
-  }
-
-  obt_proveedor_pendiente(id: any) {
-    return this.http.get(`${this.API_URL}/proveedores_pendientes/${id}`);
-  }
-
-  filtrar_pendientesName(user: any, page: any) {
-    return this.http.get(`${this.API_URL}/pendientes-search/${user}?page=${page}`);
-  }
-
-  filtrar_pendienteDate(fechaInicio: any, fechaFin: any, page: any) {
-    return this.http.get(`${this.API_URL}pendientes-filterDate/?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}&page=${page}`);
-  }
-
-  editar_pendiente(id: any, data: any) {
-    return this.http.put(`${this.API_URL}/proveedores_pendientes/${id}`, data);
-  }
-
-  editar_proveedor(data: any) {
-    return this.http.put(`${this.API_URL}/edicion_proveedor/`, data);
-  }
-
-  eliminarDocPendiente(id: any) {
-    return this.http.delete(`${this.API_URL}/documentos_pendientes/?id=${id}`);
-  }
-
-  eliminarDocProveedor(id: any) {
-    return this.http.delete(`${this.API_URL}/documentos_proveedores/?id=${id}`);
-  }
-
-  eliminarPendiente(id: any) {
-    return this.http.delete(`${this.API_URL}/proveedores_pendientes/${id}`);
-  }
-
-  /*
-    obtener_cuenta_proveedor
-    autor: Kelly
-    descripccion: Obtiene las de los proveedores
-    parametros: el id del proveedor
-  */
-
-  obtener_cuenta_proveedor(proveedorID: any) {
-    return this.http.get(`${this.API_URL}/cuenta_proveedor/${proveedorID}`);
-  }
-
-  /*
-    register_proveedor
-    autor: Kelly
-    descripccion: Obtiene todas las proveedores
-    parametros: diccionario con los campos necesarios
-  */
-
-  register_proveedor(data: any) {
-    let url = this.API_URL+'/register_proveedor/';
-    return this.http.post(url, data);
-  }
-
-  obtener_proveedorInfo(id: any) {
-    return this.http.get(`${this.API_URL}/proveedor/${id}`);
-  }
-
-  crear_proveedor(data: any) {
-    return this.http.post(`${this.API_URL}/proveedores_registro/`, data);
-  }
-
-  filtrar_providersName(user: any, page: any) {
-    return this.http.get(`${this.API_URL}/providers-search/${user}?page=${page}`);
-  }
-
-  filtrar_providersDate(fechaInicio: any, fechaFin: any, page: any) {
-    return this.http.get(`${this.API_URL}/dates-providers/?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}&page=${page}`);
-  }
-
-  filtrar_planProvidersDate(fechaInicio: any, fechaFin: any, page: any) {
-    return this.http.get(`${this.API_URL}/dates-planproviders/?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}&page=${page}`);
-  }
-
-  filtrar_planprovidersNameDate(user: any, fechaInicio: any, fechaFin: any, page: any) {
-    return this.http.get(`${this.API_URL}/providersdate_search/?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}&page=${page}&user=${user}`);
-  }
-  /*
-    obtener_profesiones
-    autor: Kelly
-    descripccion: Obtiene todas las profesiones de los proveedores
-    parametros: usuario
-  */
-
-  obtener_profesiones(user: any) {
-    return this.http.get(`${this.API_URL}/proveedor_profesiones/${user}`);
-  }
-
-  get_profesiones() {
-    return this.http.get(`${this.API_URL}/profesiones/`);
-  }
-
-  filtrar_pendientes(user: any) {
-    return this.http.get(`${this.API_URL}/pendientes-search/${user}`);
-  }
-
-  /*
-    enviar_email
-    autor: Kelly
-    descripccion: envia email a los proveedores pendientes aceptados
-    parametros: data
-  */
-
-  enviar_email(data: any) {
-    return this.http.post(this.API_URL+'/email/', data)
-  }
-
-  obtener_todas_profesiones() {
-    return this.http.get(this.API_URL+'/profesiones/');
-  }
-
-  actualizar_pendiente(url: string, data: any) {
-    return this.http.post(url, data);
-  }
-
-  /*
-    obtener_categorias
-    autor: Lilibeth
-    descripccion: Obtiene todas las categorias
-    parametros: None
-  */
-  obtener_categorias() {
-    return this.http.get(this.API_URL+'/categorias/');
-  }
-  /*
-     cambio_categoria_estado
-     autor: Lilibeth
-     descripccion: Cambia estado de una categoria
-     parametros: boolean estado, int id
+  //----------------------------------------------------- SECCIÓN EMAIL ---------------------------------------------------
+  /**
+   * Función que envia un email de bienvenida a los usuarios Administradores o Proveedores.
+   *
+   * @author Kevin Chévez
+   * @param data Recibe como parametro un Objeto BodyEmail con el contenido necesario para enviar el correo.
+   * @returns Devuelve un Observable con un objeto BodyResponseEmail
    */
-  cambio_categoria_update(estado: any, id: any) {
-    console.log(estado, id);
-    return this.http.put(`${this.API_URL}/categoria_update/${id}`, estado);
+  enviar_email(data: BodyEmail): Observable<BodyResponseEmail> {
+    return this.http.post(this.API_URL + '/email/', data) as Observable<BodyResponseEmail>;
+  }
+  //-----------------------------------------------------------------------------------------------------------------------
+
+
+
+  //--------------------------------------------------- SECCIÓN CATEGORIAS ------------------------------------------------
+  /**
+   * Función que obtiene de la base de datos todas las categorias registradas.
+   *
+   * @author Kevin Chévez
+   * @returns Devuelve un Observable con un Arreglo de un Objeto Categoria
+   */
+  obtener_categorias(): Observable<Categoria[]> {
+    return this.http.get(this.API_URL + '/categorias/') as Observable<Categoria[]>;
   }
 
-  cambio_insignia(estado: any, id: any) {
-    console.log(estado, id);
-    return this.http.put(`${this.API_URL}/insignia_update/${id}`, estado);
+  /**
+   * Función que actualiza una categoria registrada en la base de datos, segun los parametros pasados o por estado de categoria.
+   *
+   * @author Kevin Chévez
+   * @param bodyActualizar Recibe un objeto BodyActualizarCategoria con los parametros indicador para actualizar la insignia.
+   * @param id Recibe un string del ID de la categoria a actualizar el estado.
+   * @returns Devuelve un Observable de un Objeto Categoria el cual fue modificado.
+   */
+  actualizar_categoria(bodyActualizar: BodyActualizarCategoria, id: string): Observable<Categoria> {
+    const dataUpdate = new FormData();
+    bodyActualizar.nombre? dataUpdate.append('nombre', bodyActualizar.nombre) : null;
+    bodyActualizar.descripcion? dataUpdate.append('descripcion', bodyActualizar.descripcion) : null;
+    dataUpdate.append('estado', bodyActualizar.estado.toString());
+    bodyActualizar.foto? dataUpdate.append('foto', bodyActualizar.foto) : null;
+    bodyActualizar.foto2? dataUpdate.append('foto2', bodyActualizar.foto2) : null;
+
+    return this.http.put(`${this.API_URL}/categoria_update/${id}`, dataUpdate) as Observable<Categoria>;
   }
 
-  cambio_promocion(estado: any, id: any) {
-    console.log(estado, id);
-    return this.http.put(`${this.API_URL}/promocion_update/${id}`, estado);
+  /**
+   * Función que elimina una categoria registrada en la base de datos según el parametro pasado.
+   *
+   * @author Kevin Chévez
+   * @param id Recibe un string perteneciente al ID de la Categorias la cual sera eliminada.
+   * @returns Devuelve un Observable con una respuesta OK(204) or Error(500).
+   */
+  eliminar_categoria(id: string): Observable<any> {
+    return this.http.delete(`${this.API_URL}/categoria_delete/${id}`) as Observable<any>;
   }
 
-  cambio_cupon(estado: any, id: any) {
-    console.log(estado, id);
-    return this.http.put(`${this.API_URL}/cupon_update/${id}`, estado);
+  /**
+   * Función que agrega en la base de datos una Categoria segun los datos pasados por parametros.
+   *
+   * @author Kevin Chévez
+   * @param bodyCrear Recibe un Objeto BodyCrearCategoria la cual se encarga de crear una categoria con los campos necesarios.
+   * @returns Devuelve un Observable con un objeto BodyResponseCrearCategoria
+   */
+  add_categoria(bodyCrear: BodyCrearCategoria): Observable<BodyResponseCrearCategoria> {
+    const dataCrear = new FormData();
+    dataCrear.append("nombre", bodyCrear.nombre);
+    dataCrear.append("descripcion", bodyCrear.descripcion);
+    bodyCrear.foto? dataCrear.append("foto", bodyCrear.foto) : null;
+    return this.http.post(`${this.API_URL}/categorias/`, bodyCrear) as Observable<BodyResponseCrearCategoria>;
+  }
+  //-----------------------------------------------------------------------------------------------------------------------
+
+
+  //--------------------------------------------------- SECCIÓN PROFESION------------------------------------------------
+  /**
+   * Función que obtiene de la base de datos todas las profesiones registradas
+   *
+   * @author Kevin Chévez
+   * @returns Devuelve un Observable con un objeto Arreglo Profesion.
+   */
+  obtener_profesiones(): Observable<Profesion[]> {
+    return this.http.get(`${this.API_URL}/profesiones/`) as Observable<Profesion[]>;
+  }
+  /**
+   * Función que agrega en la base de datos una promocion segun los datos pasados por parametros.
+   *
+   * @author Kevin Chévez
+   * @param bodyCrear Recibe un Objeto BodyCrearProfesion la cual se encarga de crear una profesion con los campos necesarios.
+   * @returns Devuelve un Observable con un objeto BodyResponseCrearProfesion
+   */
+  add_profesion(data: BodyCrearProfesion): Observable<BodyResponseCrearProfesion> {
+    return this.http.post(this.API_URL + '/profesiones/', data) as Observable<BodyResponseCrearProfesion>;
   }
 
-  cambio_cargo(estado: any, id: any) {
-    console.log(estado, id);
-    return this.http.put(`${this.API_URL}/cargo_update/${id}`, estado);
+  /**
+   * Función que elimina una profesion registrada en la base de datos según el parametro pasado.
+   *
+   * @author Kevin Chévez
+   * @param id Recibe un string perteneciente al ID de la Profesion la cual sera eliminada.
+   * @returns Devuelve un Observable con una respuesta OK(204) or Error(500).
+   */
+  delete_profesion(id: string): Observable<any> {
+    return this.http.delete(`${this.API_URL}/profesiones/${id}`) as Observable<any>;
+  }
+  //-----------------------------------------------------------------------------------------------------------------------
+
+
+  //----------------------------------------------------- SECCIÓN SERVICOS ------------------------------------------------
+  /**
+   * Función que obtiene los serivicos registrados en la base de datos.
+   *
+   * @author Kevin Chévez
+   * @returns Devuelve un Observable con un Array de un objeto Servicio
+   */
+  obtener_servicios(): Observable<Servicio> {
+    return this.http.get(this.API_URL + '/servicios/')as Observable<Servicio>;
   }
 
-  /*
-      eliminar_categoria
-      autor: lilibeth
-      descripccion: Elimina una categoria
-      parametros: int id
-    */
-  eliminar_categoria(id: any) {
-    return this.http.delete(`${this.API_URL}/categoria_delete/${id}`);
+  /**
+   * Función que actualiza el contenido de un Servicio registrado en la base de datos, segun los parametros pasados.
+   *
+   * @author Kevin Chévez
+   * @param bodyActualizar Recibe un objeto BodyActualizarServicio con los parametros necesarios para actualizar el servicio.
+   * @param id Recibe un string perteneciente al ID del Servicio el cual sera modificado.
+   * @returns Devuelve un Observable con un objeto Servicio actualizado.
+   */
+  actualizar_servicios(bodyActualizar: BodyActualizarServicio, id: string): Observable<Servicio> {
+    return this.http.put(`${this.API_URL}/servicios_update/${id}`, bodyActualizar) as Observable<Servicio>;
   }
 
-  eliminar_insignia(id: any) {
-    return this.http.delete(`${this.API_URL}/insignia_delete/${id}`);
+  /**
+   * Función que elimina un servicio registrada en la base de datos según el parametro pasado.
+   *
+   * @author Kevin Chévez
+   * @param id Recibe un string perteneciente al ID del Servicio el cual sera eliminado.
+   * @returns Devuelve un Observable con una respuesta OK(204) or Error(500).
+   */
+  eliminar_servicio(id: string): Observable<any> {
+    return this.http.delete(`${this.API_URL}/servicios_delete/${id}`) as Observable<any>;
   }
-
-  eliminar_cargo(id: any) {
-    return this.http.delete(`${this.API_URL}/cargo_delete/${id}`);
-  }
-
-  eliminar_promocion(id: any) {
-    return this.http.delete(`${this.API_URL}/promocion_delete/${id}`);
-  }
-
-  eliminar_cupon(id: any) {
-    return this.http.delete(`${this.API_URL}/cupon_delete/${id}`);
-  }
-
-  /*
-    obtener_Subcategorias
-    autor: Lilibeth
-    descripccion: Obtiene todas las sub-categorias
-    parametros: None
-  */
-  obtener_subcategorias() {
-    return this.http.get(this.API_URL+'/servicios/');
-  }
-
-  add_profesion(data: any) {
-    return this.http.post(this.API_URL+'/profesiones/', data);
-  }
-
-  delete_profesion(id: any) {
-    return this.http.delete(`${this.API_URL}/profesiones/${id}`);
-  }
-
-  /*
-    cambio_subcategoria_estado
-    autor: Lilibeth
-    descripccion: Cambia estado de una subcategoria
-    parametros: boolean estado, int id
-  */
-  cambio_subcategoria_update(estado: any, id: any) {
-    console.log(estado, id);
-    return this.http.put(`${this.API_URL}/servicios_update/${id}`, estado);
-  }
-  /*
-  eliminar_subcategoria
-  autor: lilibeth
-  descripccion: Elimina una subcategoria
-  parametros: int id
-  */
-  eliminar_subcategoria(id: any) {
-    return this.http.delete(`${this.API_URL}/servicios_delete/${id}`);
-  }
-  /*
-  crear_categoria
-  autor: lilibeth
-  descripccion: crear una categoria
-  parametros: none
-  */
- crear_categoria(data: any) {
-   return this.http.post(`${this.API_URL}/categorias/`, data);
-  }
+  //-----------------------------------------------------------------------------------------------------------------------
 
   //---------------------------------------------------------------- PEDRO! TE TOCA DOCUMENTAR ESTO ----------------------------------------------------------------
   crear_insignia(data: any) {
@@ -634,12 +844,8 @@ export class PythonAnywhereService {
     */
 
   crear_profesiones_proveedor(user: any, data: any) {
-    return this.http.post(`${this.API_URL}/proveedor_profesiones/${user}`, data);
+    return this.http.post(`${this.API_URL}/proveedor_profesiones/${user}`,data);
   }
-
-  // crear_profesion_proveedor(user, data) {
-  //   return this.http.post(`${this.API_URL}/proveedor_profesiones/${user}`, data)
-  // };
 
   /*
       eliminar proveedor pendiente
@@ -648,7 +854,9 @@ export class PythonAnywhereService {
       parametros: user
     */
   eliminar_proveedores_pendientes(user: any, data: any) {
-    return this.http.delete(`${this.API_URL}/proveedores_pendientes/${user}/${data}`);
+    return this.http.delete(
+      `${this.API_URL}/proveedores_pendientes/${user}/${data}`
+    );
   }
 
   update_pendiente_documento(data: any) {
@@ -663,15 +871,15 @@ export class PythonAnywhereService {
   */
 
   obtener_promociones() {
-    return this.http.get(this.API_URL+'/promociones/');
+    return this.http.get(this.API_URL + '/promociones/');
   }
 
   obtener_cupones() {
-    return this.http.get(this.API_URL+'/cupones/');
+    return this.http.get(this.API_URL + '/cupones/');
   }
 
   obtener_grupos() {
-    return this.http.get(this.API_URL+'/grupos/');
+    return this.http.get(this.API_URL + '/grupos/');
   }
 
   /*
@@ -682,23 +890,13 @@ export class PythonAnywhereService {
   */
 
   crear_promocion(data: any) {
-    return this.http.post(this.API_URL+'/promociones/', data);
+    return this.http.post(this.API_URL + '/promociones/', data);
   }
 
   crear_cupon(data: any) {
-    return this.http.post(this.API_URL+'/cupones/', data);
+    return this.http.post(this.API_URL + '/cupones/', data);
   }
 
-  /*
-    crear_promocion
-    autor: Kelly
-    descripccion: Crea una nueva promocion
-    parametros: data
-  */
-
-  actualizar_promocion(data: any) {
-    return this.http.put(this.API_URL+'/promociones/', data);
-  }
 
   obtener_ctgprom(promCode: any) {
     return this.http.get(`${this.API_URL}/promcategorias/${promCode}`);
@@ -712,7 +910,7 @@ export class PythonAnywhereService {
 */
 
   obtener_pagos_efectivo() {
-    return this.http.get(this.API_URL+'/pago_efectivos/');
+    return this.http.get(this.API_URL + '/pago_efectivos/');
   }
 
   obtener_pagos_efectivoP(page: any) {
@@ -739,7 +937,7 @@ export class PythonAnywhereService {
    *
    * @returns
    */
-  valor_total_banc_tarjeta(): Observable<any>{
+  valor_total_banc_tarjeta(): Observable<any> {
     return this.http.get(`${this.API_URL}/valor_total_banc_tarjeta/`);
   }
 
@@ -759,7 +957,7 @@ export class PythonAnywhereService {
   */
 
   obtener_pagos_tarjeta() {
-    return this.http.get(this.API_URL+'/pago_tarjetas/');
+    return this.http.get(this.API_URL + '/pago_tarjetas/');
   }
 
   obtener_pago_solE(pago_ID: any) {
@@ -771,7 +969,9 @@ export class PythonAnywhereService {
   }
 
   enviar_alerta(correo: any, asunto: any, texto: any) {
-    return this.http.get(`${this.API_URL}/enviaralerta/${correo}/${asunto}/${texto}`);
+    return this.http.get(
+      `${this.API_URL}/enviaralerta/${correo}/${asunto}/${texto}`
+    );
   }
 
   editar_sugerencia_estado(sugerencia: any, id: any) {
@@ -799,15 +999,15 @@ export class PythonAnywhereService {
   }
 
   obtener_planes() {
-    return this.http.get(this.API_URL+'/planes/');
+    return this.http.get(this.API_URL + '/planes/');
   }
 
   crear_plan(data: any) {
-    return this.http.post(this.API_URL+'/planes/', data);
+    return this.http.post(this.API_URL + '/planes/', data);
   }
 
   actualizar_plan(data: any) {
-    return this.http.put(this.API_URL+'/planes/', data);
+    return this.http.put(this.API_URL + '/planes/', data);
   }
 
   borrar_plan(id: any) {
@@ -819,15 +1019,17 @@ export class PythonAnywhereService {
   }
 
   filtrar_publicidadName(buscar: any, page: any) {
-    return this.http.get(`${this.API_URL}/publicidades_search/?page=${page}&buscar=${buscar}`);
+    return this.http.get(
+      `${this.API_URL}/publicidades_search/?page=${page}&buscar=${buscar}`
+    );
   }
 
   crear_publicidad(data: any) {
-    return this.http.post(this.API_URL+'/publicidades/', data);
+    return this.http.post(this.API_URL + '/publicidades/', data);
   }
 
   actualizar_publicidad(data: any) {
-    return this.http.put(this.API_URL+'/publicidades/', data);
+    return this.http.put(this.API_URL + '/publicidades/', data);
   }
 
   borrar_publicidad(id: any) {
@@ -858,15 +1060,15 @@ export class PythonAnywhereService {
   }
 
   obtener_plan_proveedor() {
-    return this.http.get(this.API_URL+'/planes/');
+    return this.http.get(this.API_URL + '/planes/');
   }
 
   crear_plan_proveedor(data: any) {
-    return this.http.post(this.API_URL+'/planProveedor/', data);
+    return this.http.post(this.API_URL + '/planProveedor/', data);
   }
 
   actualizar_plan_proveedor(data: any) {
-    return this.http.put(this.API_URL+'/planProveedor/', data);
+    return this.http.put(this.API_URL + '/planProveedor/', data);
   }
 
   borrar_plan_proveedor(id: any) {
@@ -874,31 +1076,36 @@ export class PythonAnywhereService {
   }
 
   obtener_planes_estado() {
-    return this.http.get(this.API_URL+'/planesEstado/');
+    return this.http.get(this.API_URL + '/planesEstado/');
   }
 
   obtener_roles() {
-    return this.http.get(this.API_URL+'/grupos/');
+    return this.http.get(this.API_URL + '/grupos/');
   }
 
   crear_rol = (data: any) => {
-    return this.http.post(this.API_URL+'/roles-permisos/', data);
+    return this.http.post(this.API_URL + '/roles-permisos/', data);
   };
 
   actualizar_rol = (data: any) => {
-    return this.http.put(this.API_URL+'/roles-permisos/', data);
+    return this.http.put(this.API_URL + '/roles-permisos/', data);
   };
 
   obtener_solicitudes(page: any) {
-    return this.http.get(`${this.API_URL}/solicitudes-proveedores/?page=${page}`);
+    return this.http.get(
+      `${this.API_URL}/solicitudes-proveedores/?page=${page}`
+    );
   }
 
   solicitudesByUser(usuario: any, page: any) {
-    return this.http.get(`${this.API_URL}/solicitudesUser_search/${usuario}?page=${page}`);
+    return this.http.get(
+      `${this.API_URL}/solicitudesUser_search/${usuario}?page=${page}`
+    );
   }
 
   solicitudesByDate(fechaInicio: any, fechaFin: any, page: any) {
-    return this.http.get(`${this.API_URL}/solicitudesDate_search/?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}&page=${page}`
+    return this.http.get(
+      `${this.API_URL}/solicitudesDate_search/?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}&page=${page}`
     );
   }
 
@@ -943,7 +1150,7 @@ export class PythonAnywhereService {
   }
 
   actualizar_profesio(data: any) {
-    return this.http.put(this.API_URL+'/profesiones/', data);
+    return this.http.put(this.API_URL + '/profesiones/', data);
   }
 
   profesionDetails(id: any) {

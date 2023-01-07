@@ -4,3 +4,9 @@ export interface Cargo {
   porcentaje: number;
   titulo: string;
 }
+
+export interface BodyActualizarCargo {
+  nombre?: string;
+  porcentaje?: number;
+  titulo?: string;
+}

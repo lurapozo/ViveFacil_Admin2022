@@ -5,3 +5,8 @@ export interface Servicio {
   categoria: number;
   estado: boolean;
 }
+
+export interface BodyActualizarServicio {
+  descripcion?: string;
+  estado?: boolean;
+}
