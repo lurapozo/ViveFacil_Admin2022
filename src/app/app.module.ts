@@ -14,6 +14,7 @@ import { NgxPaginationModule } from "ngx-pagination";
 import { AsideMenuComponent } from './components/aside-menu/aside-menu.component';
 import { MainComponent } from './pages/main/main.component';
 import { AdministradorComponent } from './pages/cuentas/administradores/administrador/administrador.component';
+import { ReactiveFormsModule } from '@angular/forms';
 @NgModule({
   declarations: [
     AppComponent,
@@ -32,6 +33,7 @@ import { AdministradorComponent } from './pages/cuentas/administradores/administ
     MatListModule,
     MatDatepickerModule,
     HttpClientModule,
+    ReactiveFormsModule,
     NgxPaginationModule
 
   ],
