@@ -396,7 +396,7 @@ export class PythonAnywhereService {
    * @param usuario Recibe un objeto BodyActualizarAdministrador con los campos necesario a actualizar.
    * @returns Devuelve un Observable para verificar si las respuesta es 200 (OK).
    */
-  actualizar_administrador(id: string, body: BodyActualizarAdministrador): Observable<any> {
+  actualizar_administrador(id: number, body: BodyActualizarAdministrador): Observable<any> {
     return this.http.put(`${this.API_URL}/administrador/${id}`, body);
   }
 

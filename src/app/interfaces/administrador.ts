@@ -37,6 +37,7 @@ export interface BodyCrearAdministrador {
   email: string;
   password: string;
   tipo: string | number;
+  ciudad:string,
   nombres: string;
   apellidos: string;
   cedula: string;

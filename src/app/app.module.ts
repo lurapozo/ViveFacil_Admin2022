@@ -11,6 +11,7 @@ import { PoliticasComponent } from './pages/politicas/politicas.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FiltroPipe } from './pages/cuentas/administradores/filtro/filtro.pipe';
 import { NgxPaginationModule } from "ngx-pagination";
+import {MatCardModule} from '@angular/material/card';
 import { AsideMenuComponent } from './components/aside-menu/aside-menu.component';
 import { MainComponent } from './pages/main/main.component';
 import { AdministradorComponent } from './pages/cuentas/administradores/administrador/administrador.component';
@@ -31,6 +32,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     BrowserAnimationsModule,
     MatGridListModule,
     MatListModule,
+    MatCardModule,
     MatDatepickerModule,
     HttpClientModule,
     ReactiveFormsModule,
