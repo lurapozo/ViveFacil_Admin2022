@@ -15,14 +15,23 @@ export class ProfesionesComponent {
   arr_filtered_profesiones: Profesion[] | undefined;
   arr_servicios: Servicio[] | undefined;
   profesion_seleccionada: Profesion | undefined;
-  fileImagen: File = {} as File;
-  imagen: string | undefined;
+  fileImagenActualizar: File = {} as File;
+  imagenActualizar: string | undefined;
+  fileImagenCrear: File = {} as File;
+  imagenCrear: string | undefined;
   mensajeAlerta: string = '';
   isCrear = false; isActualizar = false; isEliminar = false;
-  existImage = false;
+  existImageCrear = false; existImageActualizar = false;
 
   crearProfesionesForm = new FormGroup({
-    imagen: new FormControl(this.fileImagen),
+    imagen: new FormControl(this.fileImagenActualizar),
+    nombre: new FormControl('', [Validators.required]),
+    descripcion: new FormControl('', [Validators.required]),
+    servicio: new FormControl('', [Validators.required]),
+  }, []);
+
+  actualizarProfesionesForm = new FormGroup({
+    imagen: new FormControl(this.fileImagenCrear),
     nombre: new FormControl('', [Validators.required]),
     descripcion: new FormControl('', [Validators.required]),
     servicio: new FormControl('', [Validators.required]),
@@ -37,11 +46,13 @@ export class ProfesionesComponent {
       this.arr_servicios = resp;
     });
     // Validators
-    const imagenControl = this.crearProfesionesForm.get('imagen') as FormControl;
-    imagenControl.addValidators(this.createImageValidator(this.crearProfesionesForm.get('imagen') as AbstractControl));
+    const imagenCrearControl = this.crearProfesionesForm.get('imagen') as FormControl;
+    imagenCrearControl.addValidators(this.createImageValidator(this.crearProfesionesForm.get('imagen') as AbstractControl, 'crear'));
+    const imagenActualizarControl = this.actualizarProfesionesForm.get('imagen') as FormControl;
+    imagenActualizarControl.addValidators(this.createImageValidator(this.actualizarProfesionesForm.get('imagen') as AbstractControl, 'actualizar'));
   }
 
-  createImageValidator(controlImage: AbstractControl){
+  createImageValidator(controlImage: AbstractControl, tipo: string){
     return () => {
       const file = controlImage.value as File;
 
@@ -54,11 +65,23 @@ export class ProfesionesComponent {
           const imgExtension = tokensImgName[1];
           if(imgExtension !== 'jpg' && imgExtension !== 'jpeg' && imgExtension !== 'png' && imgExtension !== 'jfif'){
             console.log('Entra en error de imagen');
-            this.crearProfesionesForm.get('imagen')?.setValue(null);
+            if(tipo === 'crear'){
+              this.crearProfesionesForm.get('imagen')?.setValue(null);
+              this.existImageCrear = false;
+            }
+            else if(tipo === 'actualizar'){
+              this.actualizarProfesionesForm.get('imagen')?.setValue(null);
+              this.existImageActualizar = false;
+            }
             return { image_error: 'Solo imágenes con formato jpg, jpeg, png o jfif.' };
           }
           console.log('Formato de imagen correcto');
-          this.existImage = true;
+          if(tipo === 'crear'){
+            this.existImageCrear = true;
+          }
+          else if(tipo === 'actualizar'){
+            this.existImageActualizar = true;
+          }
         }
         return null;
       } else {
@@ -100,13 +123,54 @@ export class ProfesionesComponent {
 
   onCrear(){
     console.log('Crear');
-    // const bodyCrearProfesion: BodyCrearProfesion = {
-    //   servicio: '',
-    //   nombre: '',
-    //   descripcion: '',
-    //   foto: undefined
-    // };
-    // this.pythonAnywhereService.add_profesion(bodyCrearProfesion).subscribe(resp => {
+    const bodyCrearProfesion: BodyCrearProfesion = {
+      servicio: '',
+      nombre: '',
+      descripcion: ''
+    };
+    const servicio = this.crearProfesionesForm.get('servicio')?.value;
+    const nombre = this.crearProfesionesForm.get('nombre')?.value;
+    const descripcion = this.crearProfesionesForm.get('descripcion')?.value;
+    const foto = this.crearProfesionesForm.get('imagen')?.value;
+    if(nombre && servicio && descripcion) {
+      bodyCrearProfesion.servicio = servicio;
+      bodyCrearProfesion.nombre = nombre;
+      bodyCrearProfesion.descripcion = descripcion;
+      if(foto){
+        bodyCrearProfesion.foto = foto; // Si hay foto se le agrega al body.
+      }
+      this.pythonAnywhereService.add_profesion(bodyCrearProfesion).subscribe(resp => {
+        if(resp.success) {
+          console.log(resp.mensaje);
+          console.log('Profesion creada: ', resp.profesion);
+        }
+        else {
+          console.log(resp.mensaje);
+        }
+      });
+    } else {
+      console.error('Los campos principales para crear la profesion estan incompletos.');
+    }
+  }
+
+  onActualizar() {
+    console.log('Actualizar');
+    // const servicio = this.actualizarProfesionesForm.get('servicio')?.value;
+    // const nombre = this.actualizarProfesionesForm.get('nombre')?.value;
+    // const descripcion = this.actualizarProfesionesForm.get('descripcion')?.value;
+    // const foto = this.actualizarProfesionesForm.get('imagen')?.value;
+
+    // if(servicio && nombre && descripcion){
+    //   const bodyActualizarProfesion: BodyCrearProfesion = {
+    //     servicio: servicio,
+    //     nombre: nombre,
+    //     descripcion: descripcion
+    //   };
+    // // Si existe foto, subir la imagen
+    // if(foto){
+    //   bodyActualizarProfesion.foto = foto;
+    // }
+    // this.pythonAnywhereService.add_profesion(bodyActualizarProfesion).subscribe(resp => {
     //   if(resp.success) {
     //     console.log(resp.mensaje);
     //     console.log('Profesion creada: ', resp.profesion);
@@ -114,25 +178,34 @@ export class ProfesionesComponent {
     //   else {
     //     console.log(resp.mensaje);
     //   }
-    // })
-  }
-
-  onActualizar() {
-    console.log('Actuazlizar');
+    // });
+    // }
   }
 
   onDelete() {
     console.log('Eliminar');
+    if(this.profesion_seleccionada){
+      this.pythonAnywhereService.delete_profesion(this.profesion_seleccionada.id.toString()).subscribe(resp => {
+        console.log('Profesion eliminada correctamente: ', resp);
+      });
+    }
   }
 
-  loadImageFromDevice(event:any) {
+  loadImageFromDevice(event:any, tipo: string) {
     const file: File = event.target.files[0];
     if(file){
       this.extraerBase64(file)
       .then((imagen: any) => {
-        this.crearProfesionesForm.get('imagen')?.setValue(file);
-        this.fileImagen = file;
-        this.imagen = imagen.base;
+        if(tipo === 'crear'){
+          this.crearProfesionesForm.get('imagen')?.setValue(file);
+          this.fileImagenCrear = file;
+          this.imagenCrear = imagen.base;
+        }
+        else if(tipo === 'actualizar'){
+          this.actualizarProfesionesForm.get('imagen')?.setValue(file);
+          this.fileImagenActualizar = file;
+          this.imagenActualizar = imagen.base;
+        }
       })
       .catch(err => console.log(err));
     }

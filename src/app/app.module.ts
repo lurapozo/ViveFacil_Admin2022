@@ -33,6 +33,7 @@ import { SolicitantesComponent } from './components/cuentas/solicitantes/solicit
 import { AdministradoresComponent } from './components/cuentas/administradores/administradores.component';
 import { SugerenciasLeidasComponent } from './components/sugerencias/sugerencias-leidas/sugerencias-leidas.component';
 import { SugerenciasNoLeidasComponent } from './components/sugerencias/sugerencias-no-leidas/sugerencias-no-leidas.component';
+import { LoginComponent } from './pages/login/login.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -59,6 +60,7 @@ import { SugerenciasNoLeidasComponent } from './components/sugerencias/sugerenci
     AdministradoresComponent,
     SugerenciasLeidasComponent,
     SugerenciasNoLeidasComponent,
+    LoginComponent,
   ],
   imports: [
     BrowserModule,

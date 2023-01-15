@@ -766,8 +766,15 @@ export class PythonAnywhereService {
    * @param bodyCrear Recibe un Objeto BodyCrearProfesion la cual se encarga de crear una profesion con los campos necesarios.
    * @returns Devuelve un Observable con un objeto BodyResponseCrearProfesion
    */
-  add_profesion(data: BodyCrearProfesion): Observable<BodyResponseCrearProfesion> {
-    return this.http.post(this.API_URL + '/profesiones/', data) as Observable<BodyResponseCrearProfesion>;
+  add_profesion(bodyCrear: BodyCrearProfesion): Observable<BodyResponseCrearProfesion> {
+    const dataCrear = new FormData();
+    if(bodyCrear.nombre && bodyCrear.descripcion && bodyCrear.servicio){
+      dataCrear.append("nombre", bodyCrear.nombre);
+      dataCrear.append("descripcion", bodyCrear.descripcion);
+      dataCrear.append("servicio", bodyCrear.servicio);
+      bodyCrear.foto? dataCrear.append("foto", bodyCrear.foto) : null;
+    }
+    return this.http.post(this.API_URL + '/profesiones/', dataCrear) as Observable<BodyResponseCrearProfesion>;
   }
 
   /**

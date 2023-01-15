@@ -26,3 +26,8 @@ input[type=file]::file-selector-button {
 .centrar {
   text-align-last: center;
 }
+
+.icono {
+  text-align: center;
+  font-size: 200px;
+}
