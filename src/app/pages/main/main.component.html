@@ -2,103 +2,280 @@
 <div class="container-fluid m-0 p-0">
   <div class="row">
     <!-- Cabecera -->
-    <div class="col-12">
-      <nav class="navbar navbar-expand-sm" aria-label="Third navbar example">
+    <div class="col-12 p-0">
+      <header class="p-3 mb-0 border-bottom">
         <div class="container-fluid">
-          <img
-            src="../../assets/imagenes/logo-inicio.png"
-            style="width: 8%"
-            alt="Avatar"
-          />
-          <!-- <ul class="navbar-nav me-auto mb-2 mb-sm-0"> -->
-            <!-- <li class="d-flex nav-item"> -->
-              <p class="nav-link">Cerrar Sesión</p>
-            <!-- </li> -->
-          <!-- </ul> -->
+          <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+            <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-decoration-none">
+              <img src="../../assets/imagenes/logo-inicio.png" height="50vw" alt="Avatar"/>
+            </a>
+
+            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+              <!-- Spacer -->
+            </ul>
+
+            <div class="dropdown text-end">
+              <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                <img src="../../../assets/imagenes/Iconos vive fácil-03.png" alt="mdo" width="42" height="42" class="rounded-circle">
+              </a>
+              <ul class="dropdown-menu text-white hidden-arrow text-center" aria-labelledby="dropdownUser1">
+                <!-- Username del admin logged in -->
+                <li><a class="dropdown-item" href="#">correodeprueba98@hotmail.com</a></li>
+                <!-- Tipo de Admin -->
+                <li><a class="dropdown-item" href="#">Secretario</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="#">Cerrar Sesión</a></li>
+              </ul>
+            </div>
+          </div>
         </div>
-      </nav>
+      </header>
     </div>
 
     <!-- Aside -->
-    <div class="col-2">
-      <!-- Seccion de perfil -->
-      <div>
+    <div class="col-xl-2 col-lg-3 col-md-3 col-sm-3 p-0">
 
-      </div>
       <!-- Seccion lista del menú -->
       <div class="accordion" id="asideMenuAcordion">
 
+        <!-- Sección de profesiones -->
         <div class="accordion-item">
           <h2 class="accordion-header m-0" id="">
-            <button class="accordion-button accordion-no-button collapsed" type="button">
+            <button (click)="setSelection('profesion')" class="accordion-button pt-2 pb-2 accordion-no-button collapsed" type="button">
               Profesiones
             </button>
           </h2>
         </div>
 
+        <!-- Sección Planes de proveedores -->
         <div class="accordion-item">
           <h2 class="accordion-header m-0" id="">
-            <button class="accordion-button accordion-no-button collapsed" type="button">
+            <button (click)="setSelection('plan_proveedor')" class="accordion-button pt-2 pb-2 accordion-no-button collapsed" type="button">
               Planes de proveedores
             </button>
           </h2>
         </div>
 
+        <!-- Sección Roles -->
+        <div class="accordion-item">
+          <h2 class="accordion-header m-0" id="">
+            <button (click)="setSelection('rol')" class="accordion-button pt-2 pb-2 accordion-no-button collapsed" type="button">
+              Roles
+            </button>
+          </h2>
+        </div>
+
+        <!-- Sección Cuentas -->
         <div class="accordion-item">
           <h2 class="accordion-header m-0" id="panelsStayOpen-headingOne">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="false" aria-controls="panelsStayOpen-collapseOne">
-              Accordion Item #1
+            <button class="accordion-button pt-2 pb-2 collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="false" aria-controls="panelsStayOpen-collapseOne">
+              Cuentas
             </button>
           </h2>
           <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingOne">
             <div class="accordion-body p-0">
               <div class="list-group">
                 <a (click)="setSelection('admin')" class="list-group-item list-group-item-action">Administrador</a>
-                <a (click)="setSelection('politicas')" class="list-group-item list-group-item-action">Politicas</a>
-                <a href="#" class="list-group-item list-group-item-action">A fourth link item</a>
-                <a class="list-group-item list-group-item-action disabled">A disabled link item</a>
+                <a (click)="setSelection('pendiente')" class="list-group-item list-group-item-action">Pendientes</a>
+                <a (click)="setSelection('proveedor')" class="list-group-item list-group-item-action">Proveedores</a>
+                <a (click)="setSelection('solicitante')" class="list-group-item list-group-item-action">Solicitantes</a>
+                <!-- <a class="list-group-item list-group-item-action disabled">A disabled link item</a> -->
               </div>
             </div>
           </div>
         </div>
 
+        <!-- Sección servicios -->
         <div class="accordion-item">
           <h2 class="accordion-header m-0" id="panelsStayOpen-headingTwo">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
-              Accordion Item #2
+            <button class="accordion-button pt-2 pb-2 collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
+              Servicios
             </button>
           </h2>
           <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTwo">
-            <div class="accordion-body">
-              <strong>This is the second item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+            <div class="accordion-body p-0">
+              <div class="list-group">
+                <a (click)="setSelection('categoria')" class="list-group-item list-group-item-action">Categorias</a>
+                <a (click)="setSelection('sub_categoria')" class="list-group-item list-group-item-action">Sub-categorias</a>
+              </div>
             </div>
           </div>
         </div>
 
+        <!-- Sección de Pagos -->
         <div class="accordion-item">
-          <h2 class="accordion-header" id="panelsStayOpen-headingThree">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
-              Accordion Item #3
+          <h2 class="accordion-header m-0" id="panelsStayOpen-headingThree">
+            <button class="accordion-button pt-2 pb-2 collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
+              Pagos
             </button>
           </h2>
           <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingThree">
-            <div class="accordion-body">
-              <strong>This is the third item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+            <div class="accordion-body p-0">
+              <div class="list-group">
+                <a (click)="setSelection('cargo')" class="list-group-item list-group-item-action">Cargos</a>
+                <a (click)="setSelection('efectivo')" class="list-group-item list-group-item-action">Efectivo</a>
+                <a (click)="setSelection('tarjeta')" class="list-group-item list-group-item-action">Tarjeta</a>
+              </div>
             </div>
           </div>
+        </div>
+
+        <!-- Sección Publicidad -->
+        <div class="accordion-item">
+          <h2 class="accordion-header m-0" id="">
+            <button (click)="setSelection('publicidad')" class="accordion-button pt-2 pb-2 accordion-no-button collapsed" type="button">
+              Publicidad
+            </button>
+          </h2>
+        </div>
+
+        <!-- Sección Promoción -->
+        <div class="accordion-item">
+          <h2 class="accordion-header m-0" id="">
+            <button (click)="setSelection('promocion')" class="accordion-button pt-2 pb-2 accordion-no-button collapsed" type="button">
+              Promoción
+            </button>
+          </h2>
+        </div>
+
+        <!-- Sección Politicas -->
+        <div class="accordion-item">
+          <h2 class="accordion-header m-0" id="">
+            <button (click)="setSelection('politica')" class="accordion-button pt-2 pb-2 accordion-no-button collapsed" type="button">
+              Politicas
+            </button>
+          </h2>
+        </div>
+
+        <!-- Sección Planes -->
+        <div class="accordion-item">
+          <h2 class="accordion-header m-0" id="">
+            <button (click)="setSelection('plan')" class="accordion-button pt-2 pb-2 accordion-no-button collapsed" type="button">
+              Planes
+            </button>
+          </h2>
+        </div>
+
+        <!-- Sección Sugerencias -->
+        <div class="accordion-item">
+          <h2 class="accordion-header m-0" id="panelsStayOpen-headingFour">
+            <button class="accordion-button pt-2 pb-2 collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseFour" aria-expanded="false" aria-controls="panelsStayOpen-collapseFour">
+              Sugerencias
+            </button>
+          </h2>
+          <div id="panelsStayOpen-collapseFour" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingFour">
+            <div class="accordion-body p-0">
+              <div class="list-group">
+                <a (click)="setSelection('sugerencia_leida')" class="list-group-item list-group-item-action">Sugerencias leídas</a>
+                <a (click)="setSelection('sugerencia_no_leida')" class="list-group-item list-group-item-action">Sugerencias no leídas</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sección Insignias -->
+        <div class="accordion-item">
+          <h2 class="accordion-header m-0" id="">
+            <button (click)="setSelection('insignia')" class="accordion-button pt-2 pb-2 accordion-no-button collapsed" type="button">
+              Insignias
+            </button>
+          </h2>
+        </div>
+
+        <!-- Sección Cupones -->
+        <div class="accordion-item">
+          <h2 class="accordion-header m-0" id="">
+            <button (click)="setSelection('cupon')" class="accordion-button pt-2 pb-2 accordion-no-button collapsed" type="button">
+              Cupones
+            </button>
+          </h2>
+        </div>
+
+        <!-- Sección Notificaciones push -->
+        <div class="accordion-item">
+          <h2 class="accordion-header m-0" id="">
+            <button (click)="setSelection('notificacion_push')" class="accordion-button pt-2 pb-2 accordion-no-button collapsed" type="button">
+              Notificaciones Push
+            </button>
+          </h2>
+        </div>
+
+        <!-- Sección Solicitudes proveedores -->
+        <div class="accordion-item">
+          <h2 class="accordion-header m-0" id="">
+            <button (click)="setSelection('solicitud_proveedor')" class="accordion-button pt-2 pb-2 accordion-no-button collapsed" type="button">
+              Solicitudes proveedores
+            </button>
+          </h2>
         </div>
 
       </div>
     </div>
 
     <!-- Cuerpo -->
-    <div class="col-10">
-      
-      <!-- <app-administrador *ngIf="selection === 'admin'" identificador="2" ></app-administrador>
-      <app-politicas *ngIf="selection === 'politicas'" ></app-politicas>
-      <app-administrador *ngIf="selection === 'servicios'" ></app-administrador>
-      <app-administrador *ngIf="selection === 'etc'" ></app-administrador>
-      <app-administrador *ngIf="selection === 'etc'" ></app-administrador> -->
+    <div class="col-xl-10 col-lg-9 col-md-9 col-sm-9 p-0">
+      <!-- Inyeccion Vista PROFESIONES -->
+      <app-profesiones *ngIf="selection === 'profesion'"></app-profesiones>
+
+      <!-- Inyeccion Vista PLANES_PROVEEDORES -->
+      <app-planes-proveedores *ngIf="selection === 'plan_proveedor'"></app-planes-proveedores>
+
+      <!-- Inyeccion Vista ROLES -->
+      <app-roles *ngIf="selection === 'rol'"></app-roles>
+
+      <!-- Seccion CUENTAS -->
+        <!-- Inyeccion Vista ADMINISTRADORES -->
+        <app-administradores *ngIf="selection === 'admin'" identificador="2" ></app-administradores>
+        <!-- Inyeccion Vista PENDIENTES -->
+        <app-pendientes *ngIf="selection === 'pendiente'" identificador="2" ></app-pendientes>
+        <!-- Inyeccion Vista PROVEEDORES -->
+        <app-proveedores *ngIf="selection === 'proveedor'" identificador="2" ></app-proveedores>
+        <!-- Inyeccion Vista SOLICITANTES -->
+        <app-solicitantes *ngIf="selection === 'solicitante'" identificador="2" ></app-solicitantes>
+
+      <!-- Seccion SERVICIOS -->
+        <!-- Inyeccion Vista CATEGORIAS -->
+        <app-categorias *ngIf="selection === 'categoria'" ></app-categorias>
+        <!-- Inyeccion Vista SUB-CATEGORIAS -->
+        <app-sub-categorias *ngIf="selection === 'sub_categoria'" ></app-sub-categorias>
+
+      <!-- Seccion PAGOS -->
+        <!-- Inyeccion Vista CARGOS -->
+        <app-cargos *ngIf="selection === 'cargo'" ></app-cargos>
+        <!-- Inyeccion Vista EFECTIVO -->
+        <app-efectivo *ngIf="selection === 'efectivo'" ></app-efectivo>
+        <!-- Inyeccion Vista TARJETA -->
+        <app-tarjeta *ngIf="selection === 'tarjeta'" ></app-tarjeta>
+
+      <!-- Inyeccion Vista PUBLICIDAD -->
+      <app-publicidad *ngIf="selection === 'publicidad'"></app-publicidad>
+
+      <!-- Inyeccion Vista PROMOCION -->
+      <app-promocion *ngIf="selection === 'promocion'"></app-promocion>
+
+      <!-- Inyeccion Vista POLITICAS -->
+      <app-politicas *ngIf="selection === 'politica'" ></app-politicas>
+
+      <!-- Inyeccion Vista PLANES -->
+      <app-planes *ngIf="selection === 'plan'"></app-planes>
+
+      <!-- Seccion SUGERENCIAS -->
+        <!-- Inyeccion Vista SUGERENCIAS_LEIDAS -->
+        <app-sugerencias-leidas *ngIf="selection === 'sugerencia_leida'" identificador="2" ></app-sugerencias-leidas>
+        <!-- Inyeccion Vista SUGERENCIAS_NO_LEIDAS -->
+        <app-sugerencias-no-leidas *ngIf="selection === 'sugerencia_no_leida'" identificador="2" ></app-sugerencias-no-leidas>
+
+      <!-- Inyeccion Vista INSIGNIAS -->
+      <app-insignias *ngIf="selection === 'insignia'"></app-insignias>
+
+      <!-- Inyeccion Vista CUPONES -->
+      <app-cupones *ngIf="selection === 'cupon'"></app-cupones>
+
+      <!-- Inyeccion Vista NOTIFICACIONES_PUSH -->
+      <app-notificaciones-push *ngIf="selection === 'notificacion_push'"></app-notificaciones-push>
+
+      <!-- Inyeccion Vista SOLICITUDES_PROVEEDORES -->
+      <app-solicitudes-profesiones *ngIf="selection === 'solicitud_proveedor'"></app-solicitudes-profesiones>
     </div>
 
     <!-- Pie -->

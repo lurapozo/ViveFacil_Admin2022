@@ -12,7 +12,7 @@ export interface BodyCrearProfesion {
   servicio: string;
   nombre: string;
   descripcion: string;
-  foto: File;
+  foto?: File;
 }
 
 export interface BodyResponseCrearProfesion {
