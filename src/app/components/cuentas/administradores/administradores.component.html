@@ -1,0 +1,539 @@
+
+<h1 class="titulo" style="margin-Left: 2rem">Administradores {{identificador}}</h1>
+<div class="d-grid gap-2 col-6 mx-auto">
+    <button class="btn btn-primary" type="button" (click)="mostrar($event)">Agregar
+        Administradores</button>
+</div>
+
+
+<div>
+    <div style="display: flex; flex-direction: column; margin-right:1rem">
+        <h3 style="margin-Left:1.9rem"><strong>Total Administradores: </strong>42</h3>
+        <div style="display:flex; flex-direction:row; justify-content:end">
+            <Button type="primary" size="default">
+                Filtrar
+            </Button>
+
+        </div>
+
+
+    </div>
+    <mat-card *ngIf="show" class="example-card">
+        <mat-card-header>
+            <div mat-card-avatar class="example-header-image"></div>
+            <mat-card-title>Agregar administrador</mat-card-title>
+        </mat-card-header>
+
+        <mat-card-content>
+            <div class="register-form">
+                <form [formGroup]="form" (ngSubmit)="onSubmit()">
+                <!-- nombres -->
+                  <div class="form-group">
+                    <label>Nombres</label>
+                    <input
+                      type="text"
+                      formControlName="fullname"
+                      class="form-control"
+                      [ngClass]="{ 'is-invalid': submitted && f['fullname'].errors }"
+                    />
+                    <div *ngIf="submitted && f['fullname'].errors" class="invalid-feedback">
+                      <div *ngIf="f['fullname'].errors['required']">Fullname is required</div>
+                    </div>
+                  </div>
+                  <!-- apellidos -->
+                  <div class="form-group">
+                    <label>Apellidos</label>
+                    <input
+                      type="text"
+                      formControlName="lastname"
+                      class="form-control"
+                      [ngClass]="{ 'is-invalid': submitted && f['lastname'].errors }"
+                    />
+                    <div *ngIf="submitted && f['lastname'].errors" class="invalid-feedback">
+                      <div *ngIf="f['lastname'].errors['required']">El apellido es Obligatorio</div>
+                    </div>
+                  </div>
+                  <!-- telefono -->
+                  <div class="form-group">
+                    <label>Telefono</label>
+                    <input
+                      type="text"
+                      formControlName="telefono"
+                      class="form-control"
+                      [ngClass]="{ 'is-invalid': submitted && f['telefono'].errors }"
+                    />
+                    <div *ngIf="submitted && f['telefono'].errors" class="invalid-feedback">
+                      <div *ngIf="f['telefono'].errors['required']">El telefono es obligatorio</div>
+                      <div *ngIf="f['telefono'].errors['minlength']">
+                        deben ser 10 digitos
+                      </div>
+                      <div *ngIf="f['telefono'].errors['maxlength']">
+                        deben ser 10 digitos
+                      </div>
+                    </div>
+                  </div>
+                  <!-- cedula -->
+                  <div class="form-group">
+                    <label>Cedula</label>
+                    <input
+                      type="text"
+                      formControlName="cedula"
+                      class="form-control"
+                      [ngClass]="{ 'is-invalid': submitted && f['cedula'].errors }"
+                    />
+                    <div *ngIf="submitted && f['cedula'].errors" class="invalid-feedback">
+                      <div *ngIf="f['cedula'].errors['required']">El telefono es obligatorio</div>
+                      <div *ngIf="f['cedula'].errors['minlength']">
+                        deben ser 10 digitos
+                      </div>
+                      <div *ngIf="f['cedula'].errors['maxlength']">
+                        deben ser 10 digitos
+                      </div>
+                    </div>
+                  </div>
+                    <!-- ciudad -->
+                    <div class="form-group">
+                        <label>Ciudad</label>
+                        <br />
+                        <select name="size" required  formControlName="ciudad">
+                            <option *ngFor="let c of ciudades" value="{{c}}"> {{c}}</option>
+
+                          </select><br />
+                          <div *ngIf="submitted && f['ciudad'].errors" class="invalid-feedback">
+                            <div *ngIf="f['ciudad'].errors['ciudad']">Elija una ciudad</div>
+
+                          </div>
+
+                      </div>
+                  <div class="form-group">
+                    <!-- correo -->
+                    <label>correo</label>
+                    <input
+                      type="text"
+                      formControlName="email"
+                      class="form-control"
+                      [ngClass]="{ 'is-invalid': submitted && f['email'].errors }"
+                    />
+                    <div *ngIf="submitted && f['email'].errors" class="invalid-feedback">
+                      <div *ngIf="f['email'].errors['required']">Email is required</div>
+                      <div *ngIf="f['email'].errors['email']">Email is invalid</div>
+                    </div>
+                  </div>
+                <!-- genero -->
+
+                <div class="form-group">
+                    <label>Genero</label>
+                    <br />
+                    <select name="size" required  formControlName="genero">
+                        <option *ngFor="let g of generos" value="{{g}}"> {{g}}</option>
+
+                      </select><br />
+                      <div *ngIf="submitted && f['genero'].errors" class="invalid-feedback">
+                        <div *ngIf="f['genero'].errors['genero']">Elija un genero</div>
+
+                      </div>
+
+                  </div>
+
+                    <!-- genero -->
+
+                <div class="form-group">
+                    <label>Rol</label>
+                    <br />
+                    <select name="size" required  formControlName="rol">
+                        <option value="enfermito">enfermito</option>
+                        <option value="Hangaroa">Hangaroa</option>
+                        <option value="Secretario">Secretario</option>
+                        <option value="Secretario">administrador de publicidades</option>
+                      </select><br />
+                      <div *ngIf="submitted && f['rol'].errors" class="invalid-feedback">
+                        <div *ngIf="f['rol'].errors['rol']">Elija un rol</div>
+
+                      </div>
+
+                  </div>
+                  <div class="form-group">
+                    <label>Contrasena</label>
+                    <input
+                      type="password"
+                      formControlName="password"
+                      class="form-control"
+                      [ngClass]="{ 'is-invalid': submitted && f['password'].errors }"
+                    />
+                    <div *ngIf="submitted && f['password'].errors" class="invalid-feedback">
+                      <div *ngIf="f['password'].errors['required']">Password is required</div>
+
+                      <div *ngIf="f['password'].errors['maxlength']">
+                        Username must not exceed 40 characters
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label>Confirmar contrasena</label>
+                    <input
+                      type="password"
+                      formControlName="confirmPassword"
+                      class="form-control"
+                      [ngClass]="{ 'is-invalid': submitted && f['confirmPassword'].errors }"
+                    />
+                    <div
+                      *ngIf="submitted && f['confirmPassword'].errors"
+                      class="invalid-feedback"
+                    >
+                      <div *ngIf="f['confirmPassword'].errors['required']">
+                        Confirm Password is required
+                      </div>
+                      <div *ngIf="f['confirmPassword'].errors['matching']">
+                        Confirm Password does not match
+                      </div>
+                    </div>
+                  </div>
+
+
+
+                  <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                    <button
+                      type="button"
+                      (click)="onReset()"
+                      class="btn btn-warning float-right"
+                    >
+                      Vaciar
+                    </button>
+                  </div>
+                </form>
+              </div>
+        </mat-card-content>
+
+    </mat-card>
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Nombres</th>
+                <th scope="col">Telefono</th>
+                <th scope="col">Fecha Creacion</th>
+                <th scope="col">Estado</th>
+            </tr>
+        </thead>
+        <tbody >
+            <!-- | paginate: {itemsPerPage: 10, currentPage: page} -->
+            <tr *ngFor="let a of administradores " (click)="ver(a)" >
+
+                <td>{{a.user_datos.nombres}} {{a.user_datos.apellidos}} </td>
+                <td>{{a.user_datos.telefono}}</td>
+                <td>{{a.user_datos.fecha_creacion}}</td>
+                <td>{{a.estado}}</td>
+            </tr>
+
+        </tbody>
+    </table>
+    <div class="col-lg-8" *ngIf="showEdit">
+      <div class="card mb-4">
+        <div class="card-body">
+          <!-- nomnbres -->
+          <div class="row">
+            <div class="col-sm-3">
+              <p class="mb-0">Nombres</p>
+            </div>
+            <div class="col-sm-9">
+              <p class="text-muted mb-0">{{administradoSelected.user_datos.nombres}}</p>
+            </div>
+          </div>
+          <hr>
+          <div class="row">
+            <div class="col-sm-3">
+              <p class="mb-0">Apellidos</p>
+            </div>
+            <div class="col-sm-9">
+              <p class="text-muted mb-0">{{administradoSelected.user_datos.apellidos}}</p>
+            </div>
+          </div>
+          <hr>
+          <div class="row">
+            <div class="col-sm-3">
+              <p class="mb-0">Genero</p>
+            </div>
+            <div class="col-sm-9">
+              <p class="text-muted mb-0">{{administradoSelected.user_datos.genero}}</p>
+            </div>
+          </div>
+          <hr>
+          <div class="row">
+            <div class="col-sm-3">
+              <p class="mb-0">Cedula</p>
+            </div>
+            <div class="col-sm-9">
+              <p class="text-muted mb-0">{{administradoSelected.user_datos.cedula}}</p>
+            </div>
+          </div>
+          <hr>
+          <div class="row">
+            <div class="col-sm-3">
+              <p class="mb-0">Ciudad</p>
+            </div>
+            <div class="col-sm-9">
+              <p class="text-muted mb-0">{{administradoSelected.user_datos.ciudad}}</p>
+            </div>
+          </div>
+          <hr>
+          <div class="row">
+            <div class="col-sm-3">
+              <p class="mb-0">Telefono</p>
+            </div>
+            <div class="col-sm-9">
+              <p class="text-muted mb-0">{{admiEditar.telefono}} CA</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-3">
+              <p class="mb-0">Correo</p>
+            </div>
+            <div class="col-sm-9">
+              <p class="text-muted mb-0">{{administradoSelected.user_datos.user.email}}</p>
+            </div>
+          </div>
+          <hr>
+          <div class="row">
+            <div class="col-sm-3">
+              <p class="mb-0">Rol</p>
+            </div>
+            <div class="col-sm-9">
+              <p class="text-muted mb-0">{{administradoSelected.user_datos.user.groups[0].name}}</p>
+            </div>
+          </div>
+          <hr>
+          <div class="row">
+            <div class="col-sm-3">
+              <p class="mb-0">Estado</p>
+            </div>
+            <div class="col-sm-9">
+              <p class="text-muted mb-0">{{administradoSelected.user_datos.estado}} </p>
+            </div>
+          </div>
+          <hr>
+          <div class="row">
+            <div class="col-sm-3">
+              <p class="mb-0">Habilidar/Deshabilitar</p>
+            </div>
+            <div class="col-sm-9">
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <button (click)="cerrar()"> Cerrar</button>
+      <button (click)="editar()"> Editar</button>
+    </div>
+
+
+</div>
+<mat-card *ngIf="showFormEdit" class="example-card">
+  <mat-card-header>
+      <div mat-card-avatar class="example-header-image"></div>
+      <mat-card-title>Agregar administrador</mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+      <div class="register-form">
+          <form [formGroup]="formEdit" (ngSubmit)="save()">
+          <!-- nombres -->
+            <div class="form-group">
+              <label>Nombres</label>
+              <input
+              clearInput
+               value="{{administradoEdit.user_datos.nombres}}"
+                type="text"
+                formControlName="nombre"
+                class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && e['name'].errors }"
+              />
+              <div *ngIf="submitted && e['nombre'].errors" class="invalid-feedback">
+                <div *ngIf="e['nombre'].errors['required']">Fullname is required</div>
+              </div>
+            </div>
+            <!-- apellidos -->
+            <div class="form-group">
+              <label>Apellidos</label>
+              <input
+              value="{{administradoSelected.user_datos.apellidos}}"
+                type="text"
+                formControlName="apellido"
+                class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f['lastname'].errors }"
+              />
+              <div *ngIf="submitted && e['apellido'].errors" class="invalid-feedback">
+                <div *ngIf="e['apellido'].errors['required']">El apellido es Obligatorio</div>
+              </div>
+            </div>
+            <!-- telefono -->
+            <div class="form-group">
+              <label>Telefono</label>
+              <input
+              value="{{administradoSelected.user_datos.telefono}}"
+                type="text"
+                formControlName="cell"
+                class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && e['cell'].errors }"
+              />
+              <div *ngIf="submitted && e['cell'].errors" class="invalid-feedback">
+                <div *ngIf="e['cell'].errors['required']">El telefono es obligatorio</div>
+                <div *ngIf="e['cell'].errors['minlength']">
+                  deben ser 10 digitos
+                </div>
+                <div *ngIf="e['cell'].errors['maxlength']">
+                  deben ser 10 digitos
+                </div>
+              </div>
+            </div>
+            <!-- cedula -->
+            <div class="form-group">
+              <label>Cedula</label>
+              <input
+              value="{{administradoSelected.user_datos.cedula}}"
+                type="text"
+                formControlName="ced"
+                class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f['cedula'].errors }"
+              />
+              <div *ngIf="submitted && e['ced'].errors" class="invalid-feedback">
+                <div *ngIf="e['ced'].errors['required']">El telefono es obligatorio</div>
+                <div *ngIf="e['ced'].errors['minlength']">
+                  deben ser 10 digitos
+                </div>
+                <div *ngIf="e['ced'].errors['maxlength']">
+                  deben ser 10 digitos
+                </div>
+              </div>
+            </div>
+              <!-- ciudad -->
+              <div class="form-group">
+                  <label>Ciudad</label>
+                  <br />
+                  <select name="size" required  formControlName="city">
+                      <option *ngFor="let c of ciudades" value="{{c}}"> {{c}}</option>
+
+                    </select><br />
+                    <div *ngIf="submitted && e['city'].errors" class="invalid-feedback">
+                      <div *ngIf="e['city'].errors['city']">Elija una ciudad</div>
+
+                    </div>
+
+                </div>
+            <div class="form-group">
+              <!-- correo -->
+              <label>correo</label>
+              <input
+              value="{{administradoSelected.user_datos.user.email}}"
+                type="text"
+                formControlName="correo"
+                class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f['correo'].errors }"
+              />
+              <div *ngIf="submitted && e['correo'].errors" class="invalid-feedback">
+                <div *ngIf="e['correo'].errors['required']">Email is required</div>
+                <div *ngIf="e['correo'].errors['correo']">Email is invalid</div>
+              </div>
+            </div>
+          <!-- genero -->
+
+          <div class="form-group">
+              <label>Genero</label>
+              <br />
+              <select name="size" required  formControlName="sexo">
+                  <option *ngFor="let g of generos" value="{{g}}"> {{g}}</option>
+
+                </select><br />
+                <div *ngIf="submitted && e['sexo'].errors" class="invalid-feedback">
+                  <div *ngIf="e['sexo'].errors['sexo']">Elija un genero</div>
+
+                </div>
+
+            </div>
+
+              <!-- genero -->
+
+          <div class="form-group">
+              <label>Rol</label>
+              <br />
+              <select value='{{administradoSelected.user_datos.user.groups[0].name}}'name="size" required  formControlName="cargo">
+                  <option value="enfermito">enfermito</option>
+                  <option value="Hangaroa">Hangaroa</option>
+                  <option value="Secretario">Secretario</option>
+                  <option value="Secretario">administrador de publicidades</option>
+                </select><br />
+                <div *ngIf="submitted && e['cargo'].errors" class="invalid-feedback">
+                  <div *ngIf="e['cargo'].errors['cargo']">Elija un rol</div>
+
+                </div>
+
+            </div>
+            <div class="form-group">
+              <label>Contrasena</label>
+              <input
+              value="123456"
+                type="password"
+                formControlName="pass"
+                class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && e['pass'].errors }"
+              />
+              <div *ngIf="submitted && e['pass'].errors" class="invalid-feedback">
+                <div *ngIf="e['pass'].errors['required']">Password is required</div>
+
+                <div *ngIf="e['pass'].errors['maxlength']">
+                  Username must not exceed 40 characters
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Confirmar contrasena</label>
+              <input
+              value="123456"
+                type="password"
+                formControlName="confirmPass"
+                class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && e['confirmPas'].errors }"
+              />
+              <div
+                *ngIf="submitted && e['confirmPass'].errors"
+                class="invalid-feedback"
+              >
+                <div *ngIf="e['confirmPass'].errors['required']">
+                  Confirm Password is required
+                </div>
+                <div *ngIf="e['confirmPass'].errors['matching']">
+                  Confirm Password does not match
+                </div>
+              </div>
+            </div>
+
+
+
+            <div class="form-group">
+              <button type="submit" class="btn btn-primary">Guardar</button>
+              <button
+                type="button"
+                (click)="onReset()"
+                class="btn btn-warning float-right"
+              >
+                Vaciar
+              </button>
+            </div>
+          </form>
+        </div>
+  </mat-card-content>
+
+</mat-card>
+<nav aria-label="Page navigation example">
+    <ul class="pagination">
+        <li class="page-item"><a class="page-link" (click)="previous($event)">Previous</a></li>
+        <div *ngFor="let n of pageNumber; let i=index;">
+            <li class="page-item"><button class="page-link" value="{{n}}"
+                    (click)="iteracion($event)">{{n}}</button></li>
+        </div>
+
+        <li class="page-item"><a class="page-link" (click)="next($event)">Next</a></li>
+    </ul>
+</nav>

@@ -790,8 +790,8 @@ export class PythonAnywhereService {
    * @author Kevin Chévez
    * @returns Devuelve un Observable con un Array de un objeto Servicio
    */
-  obtener_servicios(): Observable<Servicio> {
-    return this.http.get(this.API_URL + '/servicios/')as Observable<Servicio>;
+  obtener_servicios(): Observable<Servicio[]> {
+    return this.http.get(this.API_URL + '/servicios/')as Observable<Servicio[]>;
   }
 
   /**
