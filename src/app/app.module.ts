@@ -36,8 +36,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     MatDatepickerModule,
     HttpClientModule,
     ReactiveFormsModule,
-    NgxPaginationModule
-
+    NgxPaginationModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

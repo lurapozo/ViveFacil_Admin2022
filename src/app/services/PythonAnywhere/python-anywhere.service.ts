@@ -4,20 +4,28 @@ import {
 } from 'src/app/interfaces/solicitante';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Administrador, AdministradorPaginacion, BodyActualizarAdministrador, BodyCrearAdministrador, BodyResponseCrearAdministrador,} from 'src/app/interfaces/administrador';
+import { Administrador, AdministradorPaginacion, BodyActualizarAdministrador, BodyCrearAdministrador, BodyResponseCrearAdministrador, } from 'src/app/interfaces/administrador';
 import { map, Observable } from 'rxjs';
-import { BodyActualizarInsignia, Insignia } from 'src/app/interfaces/insignia';
-import { BodyActualizarCargo, Cargo } from 'src/app/interfaces/cargo';
+import { BodyActualizarInsignia, BodyCrearInsignia, BodyResponseCrearInsignia, Insignia } from 'src/app/interfaces/insignia';
+import { BodyActualizarCargo, BodyCrearCargo, BodyResponseCrearCargo, Cargo } from 'src/app/interfaces/cargo';
 import { BodyPromocionActualizar, BodyResponsePromocionActualizar, Promocion } from 'src/app/interfaces/promocion';
 import { BodyCuponActualizar, BodyResponseCuponActualizar, Cupon } from 'src/app/interfaces/cupon';
 import { PaymentPaginacion } from 'src/app/interfaces/payment';
-import { BodyActualizarProveedor, BodyActualizarProveedorPendiente, BodyCrearProveedor, BodyCrearProveedorPendiente, BodyResponseCrearProveedorPendiente, Proveedor, ProveedorPaginacion, ProveedorPendiente, ProveedorProfesion } from 'src/app/interfaces/proveedor';
+import { BodyActualizarProveedor, BodyActualizarProveedorPendiente, BodyCrearProfesionesProveedor, BodyCrearProveedor, BodyCrearProveedorPendiente, BodyResponseCrearProveedorPendiente, Proveedor, ProveedorPaginacion, ProveedorPendiente, ProveedorProfesion } from 'src/app/interfaces/proveedor';
 import { Documento, DocumentoPendiente } from 'src/app/interfaces/documento';
 import { CuentaBancariaProveedor } from 'src/app/interfaces/cuenta-bancaria';
-import { BodyCrearProfesion, BodyResponseCrearProfesion, Profesion } from 'src/app/interfaces/profesion';
+import { BodyActualizarProfesion, BodyCrearProfesion, BodyResponseActualizarProfesion, BodyResponseCrearProfesion, Profesion } from 'src/app/interfaces/profesion';
 import { BodyEmail, BodyResponseEmail } from 'src/app/interfaces/email';
 import { BodyActualizarCategoria, BodyCrearCategoria, BodyResponseCrearCategoria, Categoria } from 'src/app/interfaces/categoria';
 import { BodyActualizarServicio, Servicio } from 'src/app/interfaces/servicio';
+import { BodyCrearSubCategoria, BodyResponseCrearSubCategoria } from 'src/app/interfaces/sub-categoria';
+import { BodyActualizarPlanProveedor, BodyCrearPlan, BodyCrearPlanProveedor, BodyResponseCrearPlan, Plan, PlanProveedor } from 'src/app/interfaces/plan';
+import { BodyCrearPublicidad, BodyResponseCrearPublicidad } from 'src/app/interfaces/publicidad';
+import { Ciudad } from 'src/app/interfaces/ciudad';
+import { AdminUserPass } from 'src/app/interfaces/admin-user-pass';
+import { NotificacionAnuncio } from 'src/app/interfaces/notificacion-anuncio';
+import { BodyActualizarGroup, BodyCrearGroup, Group, Permission } from 'src/app/interfaces/group';
+import { SolicitudProfesion } from 'src/app/interfaces/solicitud';
 @Injectable({
   providedIn: 'root',
 })
@@ -25,7 +33,7 @@ export class PythonAnywhereService {
   API_URL = `https://tomesoft1.pythonanywhere.com`;
   administradores = 'https://tomesoft1.pythonanywhere.com/administradores';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   // getAdministradores(): Observable<Administrador[]> {
   //   return this.http
@@ -173,14 +181,14 @@ export class PythonAnywhereService {
    */
   actualizar_insignia(bodyActualizar: BodyActualizarInsignia, id: string): Observable<Insignia> {
     const dataUpdate = new FormData();
-    bodyActualizar.nombre? dataUpdate.append('nombre', bodyActualizar.nombre) : null;
-    bodyActualizar.imagen? dataUpdate.append('imagen', bodyActualizar.imagen) : null;
-    bodyActualizar.servicio? dataUpdate.append('servicio', bodyActualizar.servicio) : null;
-    bodyActualizar.tipo_usuario? dataUpdate.append('tipo_usuario', bodyActualizar.tipo_usuario) : null;
+    bodyActualizar.nombre ? dataUpdate.append('nombre', bodyActualizar.nombre) : null;
+    bodyActualizar.imagen ? dataUpdate.append('imagen', bodyActualizar.imagen) : null;
+    bodyActualizar.servicio ? dataUpdate.append('servicio', bodyActualizar.servicio) : null;
+    bodyActualizar.tipo_usuario ? dataUpdate.append('tipo_usuario', bodyActualizar.tipo_usuario) : null;
     dataUpdate.append('estado', bodyActualizar.estado.toString());
-    bodyActualizar.pedidos? dataUpdate.append('pedidos', bodyActualizar.pedidos.toString()) : null;
-    bodyActualizar.descripcion? dataUpdate.append('descripcion', bodyActualizar.descripcion) : null;
-    bodyActualizar.tipo? dataUpdate.append('tipo', bodyActualizar.tipo) : null;
+    bodyActualizar.pedidos ? dataUpdate.append('pedidos', bodyActualizar.pedidos.toString()) : null;
+    bodyActualizar.descripcion ? dataUpdate.append('descripcion', bodyActualizar.descripcion) : null;
+    bodyActualizar.tipo ? dataUpdate.append('tipo', bodyActualizar.tipo) : null;
 
     return this.http.put(`${this.API_URL}/insignia_update/${id}`, dataUpdate) as Observable<Insignia>;
   }
@@ -282,12 +290,12 @@ export class PythonAnywhereService {
     dataUpdate.append("codigo", bodyActualizar.codigo);
     dataUpdate.append("titulo", bodyActualizar.titulo);
     dataUpdate.append("descripcion", bodyActualizar.descripcion);
-    bodyActualizar.fecha_iniciacion? dataUpdate.append("fecha_iniciacion", bodyActualizar.fecha_iniciacion) : null;
+    bodyActualizar.fecha_iniciacion ? dataUpdate.append("fecha_iniciacion", bodyActualizar.fecha_iniciacion) : null;
     dataUpdate.append("fecha_expiracion", bodyActualizar.fecha_expiracion);
     dataUpdate.append("porcentaje", bodyActualizar.porcentaje.toString());
     dataUpdate.append("cantidad", bodyActualizar.cantidad.toString());
     dataUpdate.append("participantes", bodyActualizar.participantes);
-    bodyActualizar.foto? dataUpdate.append("foto", bodyActualizar.foto) : null;
+    bodyActualizar.foto ? dataUpdate.append("foto", bodyActualizar.foto) : null;
     dataUpdate.append("tipo_categoria", bodyActualizar.tipo_categoria);
 
     return this.http.put(`${this.API_URL}/promocion_update/${id}`, dataUpdate) as Observable<BodyResponsePromocionActualizar>;
@@ -326,7 +334,7 @@ export class PythonAnywhereService {
    * @returns Devuelve un Observable con la respuesta OK(200) o Error(500).
    */
   cambio_cupon_estado(id: string, estado: boolean): Observable<any> {
-    return this.http.put(`${this.API_URL}/cupon_estado/?id=${id}`, {estado: estado,});
+    return this.http.put(`${this.API_URL}/cupon_estado/?id=${id}`, { estado: estado, });
   }
 
   /**
@@ -342,12 +350,12 @@ export class PythonAnywhereService {
     dataUpdate.append("codigo", bodyActualizar.codigo);
     dataUpdate.append("titulo", bodyActualizar.titulo);
     dataUpdate.append("descripcion", bodyActualizar.descripcion);
-    bodyActualizar.fecha_iniciacion? dataUpdate.append("fecha_iniciacion", bodyActualizar.fecha_iniciacion) : null;
+    bodyActualizar.fecha_iniciacion ? dataUpdate.append("fecha_iniciacion", bodyActualizar.fecha_iniciacion) : null;
     dataUpdate.append("fecha_expiracion", bodyActualizar.fecha_expiracion);
     dataUpdate.append("porcentaje", bodyActualizar.porcentaje.toString());
     dataUpdate.append("cantidad", bodyActualizar.cantidad.toString());
     dataUpdate.append("puntos", bodyActualizar.puntos.toString());
-    bodyActualizar.foto? dataUpdate.append("foto", bodyActualizar.foto) : null;
+    bodyActualizar.foto ? dataUpdate.append("foto", bodyActualizar.foto) : null;
     dataUpdate.append("tipo_categoria", bodyActualizar.tipo_categoria);
 
     return this.http.put(`${this.API_URL}/cupon_update/${id}`, dataUpdate) as Observable<BodyResponseCuponActualizar>;
@@ -495,7 +503,7 @@ export class PythonAnywhereService {
    * @returns Devuelve un Observable con la respuesta OK(200) o Error(500).
    */
   cambio_pago_proveedor_estado(id: string, estado: boolean) {
-    return this.http.put(`${this.API_URL}/tarjeta_pago/?id=${id}`, {estado: estado,});
+    return this.http.put(`${this.API_URL}/tarjeta_pago/?id=${id}`, { estado: estado, });
   }
   //-----------------------------------------------------------------------------------------------------------------------
 
@@ -509,7 +517,7 @@ export class PythonAnywhereService {
    * @returns Devuelve un Observable con el objeto Proveedor el cual fue modificado.
    */
   cambio_proveedor_estado(estado: boolean, id: string): Observable<Proveedor> {
-    return this.http.put(`${this.API_URL}/proveedor_estado/${id}`, {estado: estado,}) as Observable<Proveedor>;
+    return this.http.put(`${this.API_URL}/proveedor_estado/${id}`, { estado: estado, }) as Observable<Proveedor>;
   }
 
   /**
@@ -520,7 +528,7 @@ export class PythonAnywhereService {
    * @returns Devuelve un Obsevable del objeto ProveedorPaginacion
    */
   obtener_proveedores(page = 1): Observable<ProveedorPaginacion> {
-    return this.http.get(`${this.API_URL}/proveedores/?page=${page}`) as Observable<ProveedorPaginacion> ;
+    return this.http.get(`${this.API_URL}/proveedores/?page=${page}`) as Observable<ProveedorPaginacion>;
   }
 
   /**
@@ -531,7 +539,7 @@ export class PythonAnywhereService {
    * @returns Devuelve un Obsevable del objeto ProveedorPaginacion
    */
   obtener_proveedores_pendientes(page = 1): Observable<ProveedorPaginacion> {
-    return this.http.get(`${this.API_URL}/proveedores_pendientes/?page=${page}`) as Observable<ProveedorPaginacion> ;
+    return this.http.get(`${this.API_URL}/proveedores_pendientes/?page=${page}`) as Observable<ProveedorPaginacion>;
   }
 
   /**
@@ -578,7 +586,7 @@ export class PythonAnywhereService {
    * @returns Devuelve un Observable con un objeto ProveedorPaginacion de todas las respuestas filtradas.
    */
   filtrar_fecha_proveedores_pendientes(fechaInicio: string, fechaFin: string, page = 1) {
-    return this.http.get(`${this.API_URL}/pendientes-filterDate/?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}&page=${page}` );
+    return this.http.get(`${this.API_URL}/pendientes-filterDate/?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}&page=${page}`);
   }
 
   /**
@@ -637,7 +645,7 @@ export class PythonAnywhereService {
    * @author Kevin Chévez
    * @returns Devuelve un Observable con un arreglo de objetos DocumentoPendiente
    */
-  obtener_documentos_pendientes(): Observable<DocumentoPendiente[]>{
+  obtener_documentos_pendientes(): Observable<DocumentoPendiente[]> {
     return this.http.get(`${this.API_URL}/documentos_pendientes/`) as Observable<DocumentoPendiente[]>;
   }
 
@@ -648,7 +656,7 @@ export class PythonAnywhereService {
    * @param id Recibe un string ID del documento pendiente objetivo a eliminar de la base de datos.
    * @returns Devuelve un Observable con una respuesta OK(204) or Error(500).
   */
- eliminar_documento_pendiente(id: string) {
+  eliminar_documento_pendiente(id: string) {
     return this.http.delete(`${this.API_URL}/documentos_pendientes/?id=${id}`);
   }
 
@@ -658,7 +666,7 @@ export class PythonAnywhereService {
    * @author Kevin Chévez
    * @returns Devuelve un Observable con un arreglo de objetos Documento
    */
-  obtener_documentos(): Observable<Documento[]>{
+  obtener_documentos(): Observable<Documento[]> {
     return this.http.get(`${this.API_URL}/documentos_proveedores/`) as Observable<Documento[]>;
   }
 
@@ -712,11 +720,11 @@ export class PythonAnywhereService {
    */
   actualizar_categoria(bodyActualizar: BodyActualizarCategoria, id: string): Observable<Categoria> {
     const dataUpdate = new FormData();
-    bodyActualizar.nombre? dataUpdate.append('nombre', bodyActualizar.nombre) : null;
-    bodyActualizar.descripcion? dataUpdate.append('descripcion', bodyActualizar.descripcion) : null;
+    bodyActualizar.nombre ? dataUpdate.append('nombre', bodyActualizar.nombre) : null;
+    bodyActualizar.descripcion ? dataUpdate.append('descripcion', bodyActualizar.descripcion) : null;
     dataUpdate.append('estado', bodyActualizar.estado.toString());
-    bodyActualizar.foto? dataUpdate.append('foto', bodyActualizar.foto) : null;
-    bodyActualizar.foto2? dataUpdate.append('foto2', bodyActualizar.foto2) : null;
+    bodyActualizar.foto ? dataUpdate.append('foto', bodyActualizar.foto) : null;
+    bodyActualizar.foto2 ? dataUpdate.append('foto2', bodyActualizar.foto2) : null;
 
     return this.http.put(`${this.API_URL}/categoria_update/${id}`, dataUpdate) as Observable<Categoria>;
   }
@@ -743,7 +751,7 @@ export class PythonAnywhereService {
     const dataCrear = new FormData();
     dataCrear.append("nombre", bodyCrear.nombre);
     dataCrear.append("descripcion", bodyCrear.descripcion);
-    bodyCrear.foto? dataCrear.append("foto", bodyCrear.foto) : null;
+    bodyCrear.foto ? dataCrear.append("foto", bodyCrear.foto) : null;
     return this.http.post(`${this.API_URL}/categorias/`, bodyCrear) as Observable<BodyResponseCrearCategoria>;
   }
   //-----------------------------------------------------------------------------------------------------------------------
@@ -791,7 +799,7 @@ export class PythonAnywhereService {
    * @returns Devuelve un Observable con un Array de un objeto Servicio
    */
   obtener_servicios(): Observable<Servicio> {
-    return this.http.get(this.API_URL + '/servicios/')as Observable<Servicio>;
+    return this.http.get(this.API_URL + '/servicios/') as Observable<Servicio>;
   }
 
   /**
@@ -818,42 +826,72 @@ export class PythonAnywhereService {
   }
   //-----------------------------------------------------------------------------------------------------------------------
 
-  //---------------------------------------------------------------- PEDRO! TE TOCA DOCUMENTAR ESTO ----------------------------------------------------------------
-  crear_insignia(data: any) {
-    return this.http.post(`${this.API_URL}/insignias/`, data);
+  //---------------------------------------------------------------- Margarita  ----------------------------------------------------------------
+
+  /**
+   * Funcion que crea insignias en la base de datos según el parametro pasado.
+   * 
+   * @author Margarita Mawyin
+   * @param bodyCrear  Recibe un Objeto BodyCrearInsignia la cual se encarga de crear una insignia con los campos necesarios.
+   * @returns Devuelve un Observable con un objeto BodyResponseCrearInsignia
+   */
+  crear_insignia(bodyCrear: BodyCrearInsignia): Observable<BodyResponseCrearInsignia> {
+    const dataCrear = new FormData();
+    dataCrear.append("nombre", bodyCrear.nombre);
+    bodyCrear.imagen ? dataCrear.append("imagen", bodyCrear.imagen) : null;
+    dataCrear.append("servicio", bodyCrear.servicio);
+    dataCrear.append("tipoUsuario", bodyCrear.tipoUsuario);
+    dataCrear.append("pedidos", bodyCrear.nombre);
+    dataCrear.append("imagen", bodyCrear.pedidos.toString());
+    dataCrear.append("descripcion", bodyCrear.descripcion);
+    return this.http.post(`${this.API_URL}/insignias/`, dataCrear) as Observable<BodyResponseCrearInsignia>;
   }
 
-  crear_cargo(data: any) {
-    return this.http.post(`${this.API_URL}/cargos/`, data);
+  /**
+   * Funcion que crea cargo en la base de datos según el parametro pasado.
+   * 
+   * @author Margarita Mawyin
+   * @param bodyCrear Recibe un Objeto BodyCrearCargo la cual se encarga de crear un cargo con los campos necesarios.
+   * @returns Devuelve un Observable con un objeto BodyResponseCrearCargo
+   */
+  crear_cargo(bodyCrear: BodyCrearCargo): Observable<BodyResponseCrearCargo> {
+    const dataCrear = new FormData();
+    dataCrear.append("nombre", bodyCrear.nombre);
+    dataCrear.append("porcentaje", bodyCrear.porcentaje.toString());
+    dataCrear.append("titulo", bodyCrear.titulo);
+    return this.http.post(`${this.API_URL}/cargos/`, dataCrear) as Observable<BodyResponseCrearCargo>;
   }
 
-  /*
-      crear_subcategoria
-      autor: lilibeth
-      descripccion: crea una subcategoria
-      parametros: none
-    */
-  crear_subcategoria(data: any) {
-    return this.http.post(`${this.API_URL}/servicios/`, data);
-  }
-  /*
-      crear_profesiones_proveedor
-      autor: lilibeth
-      descripccion: crea una profesion a un proveedor
-      parametros: user
-    */
-
-  crear_profesiones_proveedor(user: any, data: any) {
-    return this.http.post(`${this.API_URL}/proveedor_profesiones/${user}`,data);
+  /**
+   * Funcion que crea subcategoria en la base de datos según el parametro pasado.
+   * 
+   * @author Margarita Mawyin
+   * @param bodyCrear Recibe un Objeto BodyCrearSubCategoria la cual se encarga de crear un cargo con los campos necesarios.
+   * @returns Devuelve un Observable con un objeto BodyResponseCrearSubCategoria
+   */
+  crear_servicios(bodyCrear: BodyCrearSubCategoria): Observable<BodyResponseCrearSubCategoria> {
+    const dataCrear = new FormData();
+    dataCrear.append("nombre", bodyCrear.nombre);
+    dataCrear.append("categoria", bodyCrear.descripcion);
+    dataCrear.append("titulo", bodyCrear.categoria.toString());
+    return this.http.post(`${this.API_URL}/servicios/`, dataCrear) as Observable<BodyResponseCrearSubCategoria>;
   }
 
-  /*
-      eliminar proveedor pendiente
-      autor: lilibeth
-      descripccion: elimina proveedor pendiente
-      parametros: user
-    */
-  eliminar_proveedores_pendientes(user: any, data: any) {
+  /**
+   * Funcion que crea profesion de un proveedor en la base de datos según el parametro pasado.
+   * 
+   * @author Margarita Mawyin
+   * @param user correo del proveedor
+   * @param data profesion y ano_experiencia. EJ: data = {"profesion": "Jardinero", ano_experiencia: 5 }
+   * @returns Devuelve status 200ok y un Observable con un objeto any
+   */
+  crear_profesiones_proveedor(user: string, data: BodyCrearProfesionesProveedor) : Observable<Array<ProveedorProfesion>> {
+    return this.http.post(`${this.API_URL}/proveedor_profesiones/${user}`, data) as Observable<Array<ProveedorProfesion>>;
+  }
+
+  
+  //https://tomesoft1.pythonanywhere.com/proveedor_profesiones/melquinto20@gmail.com/128&Jardinero,Pintor|true
+  eliminar_proveedores_pendientes(user: any, data: any) {//FALTA
     return this.http.delete(
       `${this.API_URL}/proveedores_pendientes/${user}/${data}`
     );
@@ -863,304 +901,712 @@ export class PythonAnywhereService {
     return this.http.put(`${this.API_URL}/proveedores_pendientes/`, data);
   }
 
-  /*
-    obtener_promociones
-    autor: Kelly
-    descripccion: Obtiene todas las promociones registradas en la base de datos
-    parametros: None
-  */
 
+  /**
+   * Funcion que traer todas las promociones
+   * 
+   * @author Margarita Mawyin
+   * @returns Devuelve un Observable con un objeto Promociones
+     */
   obtener_promociones() {
     return this.http.get(this.API_URL + '/promociones/');
   }
 
+  /**
+ * Funcion que traer todos los cupones
+ * 
+ * @author Margarita Mawyin
+ * @returns Devuelve un Observable con un objeto Cupones
+   */
   obtener_cupones() {
     return this.http.get(this.API_URL + '/cupones/');
   }
 
+  /**
+* Funcion que traer todos los cupones
+* 
+* @author Margarita Mawyin
+* @returns Devuelve un Observable con un objeto Grupos
+ */
   obtener_grupos() {
     return this.http.get(this.API_URL + '/grupos/');
   }
 
+  /**
+   * Funcion que agrega las promociones
+   * @author Margarita Mawyin
+   * @param data 
+   * @returns  Devuelve un Observable con succes: boolean, msg : string, promocion: Obejct<Promocion>
+   */
   /*
-    crear_promocion
-    autor: Kelly
-    descripccion: Crea una nueva promocion
-    parametros: data
+  data = {
+    "codigo": "Margarita",
+    "titulo": "Codigo Margarita",
+    "descripcion": "Sin valor",
+    "porcentaje": 0,
+    "fecha_iniciacion": "2023-01-13T23:42:06-05:00",
+    "fecha_expiracion": "2023-01-31T23:42:06-05:00",
+    "participantes": "Solicitante",
+    "foto": null,
+    "tipo_categoria": "Plomería",
+    "cantidad": 1
+      }
   */
-
   crear_promocion(data: any) {
     return this.http.post(this.API_URL + '/promociones/', data);
   }
 
+  /**
+   *  Funcion que agrega los cupones
+   * @author Margarita Mawyin
+   * @param data 
+   * @returns Devuelve un Observable con succes: boolean, msg : string, promocion: Obejct<Cupon>
+   */
+  /*
+  {
+    "codigo": "margaritam",
+    "titulo": "codigoMargarita",
+    "foto": "null",
+    "descripcion": "bla bla",
+    "porcentaje": 0.25,
+    "cantidad": 1,
+    "fecha_iniciacion": "2023-01-13T23:42:06-05:00",
+    "fecha_expiracion": "2023-01-31T23:42:06-05:00",
+    "puntos": 10,
+    "tipo_categoria": "Jardineria"
+}
+  */
   crear_cupon(data: any) {
     return this.http.post(this.API_URL + '/cupones/', data);
   }
 
-
+  //NO SE LO USABA EN LA ANTERIOR APP
   obtener_ctgprom(promCode: any) {
     return this.http.get(`${this.API_URL}/promcategorias/${promCode}`);
   }
 
-  /*
-  obtener_pagos_efectivo
-  autor: Kelly
-  descripccion: Retorna todas los pagos en efectivo
-  parametros: none
-*/
 
+  /**
+   * Funcion que trae los pagos en efectivo
+   * 
+   * @author Margarita Mawyin
+   * @returns Devuelve un Observable con un objeto Pagos Efectivo User
+   */
   obtener_pagos_efectivo() {
     return this.http.get(this.API_URL + '/pago_efectivos/');
   }
 
+  /**
+   * Funcion que trae los pagos en efectivo por pagina
+   * 
+   * @author Margarita Mawyin
+   * @returns Devuelve un Observable con un objeto Pagos Efectivo User P
+   */
   obtener_pagos_efectivoP(page: any) {
     return this.http.get(`${this.API_URL}/pago_efectivosP/?page=${page}`);
   }
 
+  /**
+ * Funcion que trae los pagos con tarjeta por pagina
+ * 
+ * @author Margarita Mawyin
+ * @returns Devuelve un Observable con un objeto Pagos Tarjeta User P
+ */
   obtener_pagos_tarjetaP(page: any) {
     return this.http.get(`${this.API_URL}/pago_tarjetasP/?page=${page}`);
   }
 
+  /**
+* Funcion que trae el objeto { "valor__sum": 2955.63 }
+* 
+* @author Margarita Mawyin
+* @returns Devuelve un Observable con un objeto Valor Total Efectivo
+*/
   valor_total_efectivo() {
     return this.http.get(`${this.API_URL}/valor_total_efectivo/`);
   }
 
+  /**
+* Funcion que trae el objeto { "valor__sum": 2017.0 }
+* 
+* @author Margarita Mawyin
+* @returns Devuelve un Observable con un objeto Valor Total Tarjeta
+*/
   valor_total_tarjeta() {
     return this.http.get(`${this.API_URL}/valor_total_tarjeta/`);
   }
 
+  /**
+* Funcion que trae el objeto { "cargo_paymentez__sum": 6.825 }
+* 
+* @author Margarita Mawyin
+* @returns Devuelve un Observable con un objeto Valor Total Pay Tarjeta
+*/
   valor_total_pay_tarjeta() {
     return this.http.get(`${this.API_URL}/valor_total_pay_tarjeta/`);
   }
 
   /**
-   *
-   * @returns
-   */
+* Funcion que trae el objeto { "cargo_banco__sum": 20.475 }
+* 
+* @author Margarita Mawyin
+* @returns Devuelve un Observable con un objeto Valor Total Banc Tarjeta
+*/
   valor_total_banc_tarjeta(): Observable<any> {
     return this.http.get(`${this.API_URL}/valor_total_banc_tarjeta/`);
   }
 
+  /**
+* Funcion que trae el objeto { "cargo_sistema__sum": 9.099999999999998 }
+* 
+* @author Margarita Mawyin
+* @returns Devuelve un Observable con un objeto Valor Total Sis Tarjeta
+*/
   valor_total_sis_tarjeta() {
     return this.http.get(`${this.API_URL}/valor_total_sis_tarjeta/`);
   }
 
+  /**
+* Funcion que trae 4972.63 
+* 
+* @author Margarita Mawyin
+* @returns 4972.63
+*/
   valor_total() {
     return this.http.get(`${this.API_URL}/valor_total/`);
   }
 
-  /*
-    obtener_pagos_tarjeta
-    autor: Kelly
-    descripccion: Retorna todas los pagos con tarjeta
-    parametros: none
-  */
 
+  /**
+ * Funcion que trae los pagos con tarjeta del usuario
+ * 
+ * @author Margarita Mawyin
+ * @returns Devuelve un Observable con un objeto Pagos Tarjeta User
+ */
   obtener_pagos_tarjeta() {
     return this.http.get(this.API_URL + '/pago_tarjetas/');
   }
 
+  //NO SE LO USABA EN LA ANTERIOR APP
   obtener_pago_solE(pago_ID: any) {
     return this.http.get(`${this.API_URL}/pagosol_efectivo/${pago_ID}`);
   }
-
+  //FALTA
   obtener_pago_solT(pago_ID: any) {
     return this.http.get(`${this.API_URL}/pagosol_tarjeta/${pago_ID}`);
   }
-
+  //CONSULTAR KEVIN 
   enviar_alerta(correo: any, asunto: any, texto: any) {
     return this.http.get(
       `${this.API_URL}/enviaralerta/${correo}/${asunto}/${texto}`
     );
   }
-
+  /**
+   * Funcion que cambia el estado de una sugerencia. si cambio a false sale 400, si cambio a true sale 200
+   *
+   *  @author Margarita Mawyin
+   * @param sugerencia 
+   * @param id id de la sugerencia
+   * @returns  retorna un status 200=OK o 400=BAD_REQUEST
+   */
+  /*
+    {"estado": true}
+  */
   editar_sugerencia_estado(sugerencia: any, id: any) {
     return this.http.put(`${this.API_URL}/suggestion/${id}`, sugerencia);
   }
-
+  /**
+   * Funcion que trae la sugerencia por ID especificado
+   * 
+   * @author Margarita Mawyin
+   * @param id 
+   * @returns Retorna un objeto Sugerencia
+   */
   obtener_sugerencia(id: any) {
     return this.http.get(`${this.API_URL}/suggestion/${id}`);
   }
 
+  /**
+  * Funcion que trae las sugerencias leidas por pagina especificada
+  * 
+  * @author Margarita Mawyin
+  * @param id 
+  * @returns Retorna objetos de Sugerencia
+  */
   obtener_sugerenciasLeidas(page: any) {
     return this.http.get(`${this.API_URL}/read-suggestions/?page=${page}`);
   }
 
+  /**
+  * Funcion que trae las sugerencias NO leidas por pagina especificada
+  * 
+  * @author Margarita Mawyin
+  * @param id 
+  * @returns Retorna objetos de Sugerencia
+  */
   obtener_sugerenciasNoLeidas(page: any) {
     return this.http.get(`${this.API_URL}/unread-suggestions/?page= ${page}`);
   }
 
+  /**
+  * Funcion que trae las ciudades 
+  * 
+  * @author Margarita Mawyin
+  * @param id 
+  * @returns Retorna 5 objetos de Ciudades
+  */
   getCiudades() {
     return this.http.get(`${this.API_URL}/ciudades/`);
   }
-
-  crear_Ciudades(ciudad: any) {
+  //NO SE USA EN LA ANTERIOR APP
+  crear_Ciudades(ciudad: Ciudad) {
     return this.http.put(`${this.API_URL}/ciudades/`, ciudad);
   }
 
+  /**
+  * Funcion que trae los planes 
+  * 
+  * @author Margarita Mawyin 
+  * @returns Retorna objetos de Planes
+  */
   obtener_planes() {
     return this.http.get(this.API_URL + '/planes/');
   }
 
-  crear_plan(data: any) {
-    return this.http.post(this.API_URL + '/planes/', data);
+
+  /**
+   * Funcion que crea plan en la base de datos según el parametro pasado.
+   * 
+   * @author Margarita Mawyin
+   * @param bodyCrear  Recibe un Objeto BodyCrearPlan la cual se encarga de crear una insignia con los campos necesarios.
+   * @returns Devuelve un Observable con un objeto BodyResponseCrearPlan
+   */
+  crear_plan(bodyCrear: BodyCrearPlan): Observable<BodyResponseCrearPlan> {
+    const dataCrear = new FormData();
+    dataCrear.append("nombre", bodyCrear.nombre);
+    dataCrear.append("descripcion", bodyCrear.descripcion);
+    bodyCrear.imagen ? dataCrear.append("imagen", bodyCrear.imagen) : null;
+    dataCrear.append("precio", bodyCrear.precio.toString());
+    dataCrear.append("duracion", bodyCrear.duracion.toString());
+
+    return this.http.post(this.API_URL + '/planes/', dataCrear) as Observable<BodyResponseCrearPlan>;
   }
 
+  /** Plan matching query does not exist.
+   * 
+   * @param data 
+   * @returns 
+   */
   actualizar_plan(data: any) {
     return this.http.put(this.API_URL + '/planes/', data);
   }
 
+
+  /**
+   * Funcion que elimina un plan por ID
+   * 
+   * @author Margarita Mawyin
+   * @param id Recibe el id del plan
+   * @returns Retorna un objeto Plan
+   */
   borrar_plan(id: any) {
     return this.http.delete(`${this.API_URL}/planes/${id}`);
   }
 
+
+  /**
+   * Funcion que trae las publicidades por numero de pagina
+   * 
+   * @author Margarita Mawyin
+   * @param page 
+   * @returns 
+   */
   obtener_publicidades(page: any) {
     return this.http.get(`${this.API_URL}/publicidades/?page=${page}`);
   }
 
+  ///FALTA
   filtrar_publicidadName(buscar: any, page: any) {
     return this.http.get(
       `${this.API_URL}/publicidades_search/?page=${page}&buscar=${buscar}`
     );
   }
-
-  crear_publicidad(data: any) {
-    return this.http.post(this.API_URL + '/publicidades/', data);
+  //YYYY-MM-DDThh:mm[:ss[.uuuuuu]][+HH:MM|-HH:MM|Z]
+  /*{
+      "id": 15,
+      "titulo": "publicidad Margarita",
+      "descripcion": "prueba de imagen",
+      "fecha_creacion": "13-01-2023 22:24:18",
+      "fecha_inicio": "13-01-2023 23:42:06",
+      "fecha_expiracion": "31-01-2023 23:42:06",
+      "imagen": null,
+      "url": "https://www.google.com"
+  }
+  */
+  /**
+   * Funcion que crea publicidad en la base de datos según el parametro pasado.
+   * 
+   * @author Margarita Mawyin
+   * @param bodyCrear  Recibe un Objeto BodyCrearPublicidad la cual se encarga de crear una publicidad con los campos necesarios.
+   * @returns Devuelve un Observable con un objeto BodyResponseCrearPublicidad
+   */
+  crear_publicidad(bodyCrear: BodyCrearPublicidad): Observable<BodyResponseCrearPublicidad> {
+    const dataCrear = new FormData();
+    dataCrear.append("titulo", bodyCrear.titulo);
+    dataCrear.append("descripcion", bodyCrear.descripcion);
+    dataCrear.append("fecha_inicio", bodyCrear.fecha_inicio);
+    dataCrear.append("fecha_expiracion", bodyCrear.fecha_expiracion);
+    bodyCrear.imagen ? dataCrear.append("imagen", bodyCrear.imagen) : null;
+    dataCrear.append("url", bodyCrear.url);
+    return this.http.post(this.API_URL + '/publicidades/', dataCrear) as Observable<BodyResponseCrearPublicidad>;
   }
 
+
+
+  //Publicidad matching query does not exist.
   actualizar_publicidad(data: any) {
     return this.http.put(this.API_URL + '/publicidades/', data);
   }
 
+  /**
+   * Funcion que elimna la publicidad por ID especificado
+   * 
+   * @author Margarita Mawyin
+   * @param id Recibe el ID de la publicidad
+   * @returns Retorna el objeto Publicidad
+   */
   borrar_publicidad(id: any) {
     return this.http.delete(`${this.API_URL}/publicidades/${id}`);
   }
 
+  /**
+   * Funcion que obtiene la informacion de un administrador dado su correo
+   * 
+   * @author Margarita Mawyin
+   * @param user Recibe un correo de admin
+   * @returns Retorna el objeto Administrador
+   */
   obtener_admin_user(user: any) {
     return this.http.get(`${this.API_URL}/adminUser/${user}`);
   }
-
-  obtener_admin_user_pass(user: any, passw: any) {
+  /**
+   * Funcion que srive para inicia sesion como admin
+   * 
+   * @param user correo del admin
+   * @param passw contraseña del admin
+   * @returns Retorna un objeto admin_user_pass
+   */
+  obtener_admin_user_pass(user: string, passw: string): Observable<AdminUserPass> {
     return this.http.post(`${this.API_URL}/adminUserPass/`, {
       username: user,
       password: passw,
-    });
+    }) as Observable<AdminUserPass>;
   }
 
-  logout(token: any) {
+  /**
+   * Funcion que destruye la sesion , mediante la eliminacion de un token
+   * 
+   * @param token Recibe un token que se crea con login() o obtener_admin_user_pass(*)
+   * @returns Un status 200 OK o un error 400 bad request 
+   */
+  logout(token: string) {
     return this.http.get(`${this.API_URL}/logout/${token}`);
   }
 
-  get_notificacion(page: any) {
-    return this.http.get(`${this.API_URL}/notificacion-anuncio/`);
+
+  //{"token":"022c571608c2bb1f268cdc4dbff0fb569a74798e","active":true}
+  /**
+   * Funcion que inicia sesion como proveedor o solicitante
+   * 
+   * @returns 
+   */
+  login() {
+    return this.http.get(`${this.API_URL}/login/`);
   }
 
-  send_notificacion(data: any) {
-    return this.http.post(`${this.API_URL}/notificacion-anuncio/`, data);
+  /**
+   * Funcion que trae las notificaciones/anuncios
+   * 
+   * @returns Retorna un objeto NotificacionAnuncio
+   */
+  get_notificacion(): Observable<NotificacionAnuncio> {
+    return this.http.get(`${this.API_URL}/notificacion-anuncio/`) as Observable<NotificacionAnuncio>;
   }
 
+
+  /**
+   * Funcion que agrega una notificacion/anuncio
+   * 
+   * @author Margarita Mawyin
+   * @param bodyCrear 
+   * @returns Retorna un obejto con un estado OK 200 {"sucess": true}
+   */
+  send_notificacion(bodyCrear: NotificacionAnuncio) {
+    const dataCrear = new FormData();
+    dataCrear.append("titulo", bodyCrear.titulo);
+    dataCrear.append("mensaje", bodyCrear.mensaje);
+    dataCrear.append("descripcion", bodyCrear.descripcion);
+    dataCrear.append("ruta", bodyCrear.ruta);
+    bodyCrear.imagen ? dataCrear.append("imagen", bodyCrear.imagen) : null;
+    return this.http.post(`${this.API_URL}/notificacion-anuncio/`, dataCrear);
+  }
+
+  //REPETIDO, LO MISMO QUE  obtener_planes()
   obtener_plan_proveedor() {
     return this.http.get(this.API_URL + '/planes/');
   }
 
-  crear_plan_proveedor(data: any) {
-    return this.http.post(this.API_URL + '/planProveedor/', data);
+
+
+  /**
+   * Funcion que crea un plan en la base de datos según el parametro pasado.
+   * 
+   * YYYY-MM-DDThh:mm[:ss[.uuuuuu]][+HH:MM|-HH:MM|Z]
+   * @author Margarita Mawyin
+   * @param bodyCrear ecibe un Objeto BodyCrearPlanProveedor la cual se encarga de crear un plan con los campos necesarios.
+   * @returns Devuelve un Observable con un objeto PlanProveedor
+   *  
+   */
+  crear_plan_proveedor(bodyCrear: BodyCrearPlanProveedor): Observable<PlanProveedor> {
+    const dataCrear = new FormData();
+    dataCrear.append("planProveedor", bodyCrear.planProveedor.toString());
+    dataCrear.append("proveedor", bodyCrear.proveedor.toString());
+    dataCrear.append("fecha_inicio", bodyCrear.fecha_inicio);
+    dataCrear.append("fecha_expiracion", bodyCrear.fecha_expiracion);
+    return this.http.post(this.API_URL + '/planProveedor/', dataCrear) as Observable<PlanProveedor>;
   }
 
-  actualizar_plan_proveedor(data: any) {
-    return this.http.put(this.API_URL + '/planProveedor/', data);
+
+  //error 400 bad request {"planProveedor":["Clave primaria \"15\" inválida - objeto no existe."]}
+  //status 200 OK Objeto PlanProveedor
+  /**
+   * Funcion que actualiza un plan dado un ID y un numero de planProveedor existente
+   * 
+   * @author Margarita Mawyin
+   * @param bodyCrear  Recibe un Objeto BodyActualizarPlanProveedor la cual se encarga de actualizar un plan con los campos necesarios
+   * @returns Devuelve un Observable con un objeto PlanProveedor
+   */
+  actualizar_plan_proveedor(bodyCrear: BodyActualizarPlanProveedor): Observable<PlanProveedor> {
+    const dataCrear = new FormData();
+    dataCrear.append("id", bodyCrear.id.toString());
+    dataCrear.append("planProveedor", bodyCrear.planProveedor.toString());
+    dataCrear.append("fecha_inicio", bodyCrear.fecha_inicio);
+    dataCrear.append("fecha_expiracion", bodyCrear.fecha_expiracion);
+    return this.http.put(this.API_URL + '/planProveedor/', dataCrear) as Observable<PlanProveedor>;
   }
 
+  // No reconoce ningun ID, parece endopoint muerto, en la anterior app no se usa
   borrar_plan_proveedor(id: any) {
     return this.http.delete(`${this.API_URL}/planProveedor/${id}`);
   }
-
-  obtener_planes_estado() {
-    return this.http.get(this.API_URL + '/planesEstado/');
+  /**
+   * 
+   * @author Margarita Mawyin
+   * @returns Devuelve un Observable arreglo s con un objetos Plan
+   */
+  obtener_planes_estado(): Observable<Plan> {
+    return this.http.get(this.API_URL + '/planesEstado/') as Observable<Plan>;
   }
 
+  //Funcion que trae lo mismo que  obtener_grupos
   obtener_roles() {
     return this.http.get(this.API_URL + '/grupos/');
   }
 
-  crear_rol = (data: any) => {
-    return this.http.post(this.API_URL + '/roles-permisos/', data);
+
+  /** REVISAR POR LO DE PERSMISSIONS
+   * Funcion que crea un rol nuevo en la base de datos según el parametro pasado.
+   * 
+   * @author Margarita Mawyin
+   * @param bodyCrear Recibe un Objeto BodyCrearGroup la cual se encarga de crear un rol con los campos necesarios
+   * @returns Devuelve un Observable con un objeto Group
+   */
+  crear_rol = (bodyCrear: BodyCrearGroup): Observable<Group> => {
+    const dataCrear = new FormData();
+    dataCrear.append("nombre", bodyCrear.nombre);
+    dataCrear.append("permisos", bodyCrear.permisos);
+    return this.http.post(this.API_URL + 'https://tomesoft1.pythonanywhere.com/planesEstado/', dataCrear) as Observable<Group>;
   };
 
-  actualizar_rol = (data: any) => {
-    return this.http.put(this.API_URL + '/roles-permisos/', data);
+
+  actualizar_rol = (bodyCrear: BodyActualizarGroup): Observable<Group> => {
+    const dataCrear = new FormData();
+    dataCrear.append("id", bodyCrear.id.toString());
+    dataCrear.append("nombre", bodyCrear.nombre);
+    dataCrear.append("permisos", bodyCrear.permisos.toString());
+    return this.http.put(this.API_URL + '/roles-permisos/', dataCrear) as Observable<Group>;
   };
 
+
+  /**
+   * @author Margarita Mawyin
+   * @param page El numero de pagina. ! Solo he visto pagina con page=1, mas haya salen invalidas
+   * @returns // { "page_size": 10, "total_objects": 0, "total_pages": 1, "current_page_number": 1,  "next": null, "previous": null,  "results": [ SolicitudProfesion ] }
+   */
   obtener_solicitudes(page: any) {
-    return this.http.get(
-      `${this.API_URL}/solicitudes-proveedores/?page=${page}`
-    );
+    return this.http.get(`${this.API_URL}/solicitudes-proveedores/?page=${page}`);
   }
 
+
+  /**
+   * 
+   * @author Margarita Mawyin
+   * @param usuario Correo del usuario soliciante, proveedor o admin
+   * @param page El numero de pagina. ! Solo he visto pagina con page=1, mas haya salen invalidas
+   * @returns // { "page_size": 10, "total_objects": 0, "total_pages": 1, "current_page_number": 1,  "next": null, "previous": null,  "results": [] }
+   */
   solicitudesByUser(usuario: any, page: any) {
-    return this.http.get(
-      `${this.API_URL}/solicitudesUser_search/${usuario}?page=${page}`
-    );
+    return this.http.get(`${this.API_URL}/solicitudesUser_search/${usuario}?page=${page}`);
   }
-
+  //no se usa en la otra app
   solicitudesByDate(fechaInicio: any, fechaFin: any, page: any) {
-    return this.http.get(
-      `${this.API_URL}/solicitudesDate_search/?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}&page=${page}`
-    );
+    return this.http.get(`${this.API_URL}/solicitudesDate_search/?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}&page=${page}`);
   }
 
-  solicitudDetail(id: any) {
-    return this.http.get(`${this.API_URL}/solicitud-profesion/${id}`);
+
+
+  /**
+   * Funcion que trae las solicitudes-profesion
+   * 
+   * @author Margarita Mawyin
+   * @param id el id de la solicitud **
+   * @returns Retorna un Observable SolicitudProfesion
+   */
+  solicitudDetail(id: any): Observable<SolicitudProfesion> {
+    return this.http.get(`${this.API_URL}/solicitud-profesion/${id}`) as Observable<SolicitudProfesion>;
   }
 
-  solicitudChange(id: any, data: any) {
-    return this.http.put(`${this.API_URL}/change-solicitud/${id}`, data);
-  }
 
+  /**
+   * Funcion que cambia el estado (True/False) 
+   * 
+   * @param id el id de la solicitud **
+   * @param data Recibe un estado {estado:False}
+   * @returns Devuelve un Observable SolicitudProfesion
+   */
+  solicitudChange(id: any, data: any): Observable<SolicitudProfesion> {
+    return this.http.put(`${this.API_URL}/change-solicitud/${id}`, data) as Observable<SolicitudProfesion>;
+  }
+  //no se usa en la otra app
   solicitudDelet(id: any) {
     return this.http.delete(`${this.API_URL}/change-solicitud/${id}`);
   }
-
+  //FALTA
   editarProfesionProveedor(id: any, data: any) {
     return this.http.put(`${this.API_URL}/proveedor/${id}`, data);
   }
 
+  //no se usa en la app
   correoSolicitud(data: any) {
     return this.http.post(`${this.API_URL}/correo-solicitud/`, data);
   }
 
+
+  /**
+   * Funcion que borra un rol especificando el ID del rol
+   * 
+   * @author Margarita Mawyin
+   * @param id Recibe el id del rol (obtenido de /grupos/)
+   * @returns Retorna un status HTTP_204_NO_CONTENT en caso de exito
+   */
   borrar_rol = (id: any) => {
     return this.http.delete(`${this.API_URL}/roles-permisos/${id}`);
   };
 
+  //no se usa en la anterior app
   obtener_rol(name: any) {
     return this.http.get(`${this.API_URL}/roles-permisos/${name}`);
   }
 
-  obtener_permisos() {
-    return this.http.get(`${this.API_URL}/permisos`);
+  /**
+   * 
+   * @authr Margarita Mawyin
+   * @returns Retorna un arreglo de Objeto Permission
+   */
+  obtener_permisos(): Observable<Array<Permission>> {
+    return this.http.get(`${this.API_URL}/permisos`) as Observable<Array<Permission>>;
   }
 
+
+  /**
+   * 
+   * @author Margarita Mawyin
+   * @returns //{ "totalPendientes": 29, "totalProveedores": 115}
+   */
   valor_total_proveedo() {
     return this.http.get(`${this.API_URL}/valor_total_provider/`);
   }
 
-  getProfesionProveedo(id: any) {
+  //FALTA
+  getProfesionProveedor(id: any) {
     return this.http.get(`${this.API_URL}/profesion_proveedor/${id}`);
   }
-
-  actualizar_profesio(data: any) {
-    return this.http.put(this.API_URL + '/profesiones/', data);
+  /**
+   * Funcion que actualiza una profesion en la base de datos según el parametro pasado.
+   * 
+   * @author Margarita Mawyin
+   * @param bodyCrear Recibe un Objeto BodyActualizarProfesion el cual se ectualiza una profesion con los campos necesarios.
+   * @returns 
+   */
+  actualizar_profesion(bodyCrear: BodyActualizarProfesion) : Observable<BodyResponseActualizarProfesion>{
+    const dataCrear = new FormData();
+    dataCrear.append("id", bodyCrear.id.toString());
+    bodyCrear.nombre ? dataCrear.append("nombre", bodyCrear.nombre) : null;
+    bodyCrear.foto ? dataCrear.append("foto", bodyCrear.foto) : null;
+    bodyCrear.descripcion ? dataCrear.append("descripcion", bodyCrear.descripcion) : null;
+    dataCrear.append("servicio", bodyCrear.servicio);
+    bodyCrear.estado ? dataCrear.append("estado", bodyCrear.estado.toString()) : null;
+    return this.http.put(this.API_URL + '/profesiones/', dataCrear) as Observable<BodyResponseActualizarProfesion>;
   }
 
-  profesionDetails(id: any) {
-    return this.http.get(`${this.API_URL}/profesion/${id}`);
+  //----------------------------------------------
+  /**
+    * Funcion que crea insignias en la base de datos según el parametro pasado.
+    * 
+    * @author Margarita Mawyin
+    * @param bodyCrear  Recibe un Objeto BodyCrearInsignia la cual se encarga de crear una insignia con los campos necesarios.
+    * @returns Devuelve un Observable con un objeto BodyResponseCrearInsignia
+    */
+  crear_insignia2(bodyCrear: BodyCrearInsignia): Observable<BodyResponseCrearInsignia> {
+    const dataCrear = new FormData();
+    dataCrear.append("nombre", bodyCrear.nombre);
+    bodyCrear.imagen ? dataCrear.append("imagen", bodyCrear.imagen) : null;
+    dataCrear.append("servicio", bodyCrear.servicio);
+    dataCrear.append("tipoUsuario", bodyCrear.tipoUsuario);
+    dataCrear.append("pedidos", bodyCrear.nombre);
+    dataCrear.append("imagen", bodyCrear.pedidos.toString());
+    dataCrear.append("descripcion", bodyCrear.descripcion);
+    return this.http.post(`${this.API_URL}/insignias/`, dataCrear) as Observable<BodyResponseCrearInsignia>;
+  }
+  //----------------------------------------------
+
+
+  /**
+   * Funcion que traer profesion por id (se puede ver los ids en /profesiones/)
+   * 
+   * @author Margarita Mawyin
+   * @param id Recibe el id de la profesion
+   * @returns Retorna Objeto Profesion
+   */
+  profesionDetails(id: string): Observable<Profesion> {
+    return this.http.get(`${this.API_URL}/profesion/${id}`) as Observable<Profesion>;
   }
 
-  actualizar_profesion_proveedo(id: any, data: any) {
-    return this.http.put(`${this.API_URL}/profesion_prov/${id}`, data);
+
+  /**
+   * Funcion que cambia años de experiencia por id especificado
+   * 
+   * @author Margarita Mawyin
+   * @param id  El id se puede obtener de /proveedor_profesiones/
+   * @param data Recibe un objeto con año y opcionalmente id (es redundante ya que se especifica en la ruta){"ano_experiencia": 4}
+   * @returns Retorna un Objeto ProveedorProfesion
+   */
+  // Cambia años de experiencia por id (id obtener de /proveedor_profesiones/)
+  actualizar_profesion_proveedor(id: number, data: any): Observable<ProveedorProfesion> {
+    return this.http.put(`${this.API_URL}/profesion_prov/${id}`, data) as Observable<ProveedorProfesion>;
   }
 
+  //no se usa en la app anterior
   delete_profesion_proveedo(id: any) {
     return this.http.delete(`${this.API_URL}/profesion_prov/${id}`);
   }

@@ -21,3 +21,13 @@ export interface Solicitud {
   rating: number;
   descripcion_rating: string;
 }
+export interface SolicitudProfesion {
+  id: number;
+  proveedor: Proveedor
+  profesion: string;
+  anio_experiencia: number;
+  fecha_solicitud: string;
+  documento: string;
+  estado: boolean;
+  fecha: string;
+}

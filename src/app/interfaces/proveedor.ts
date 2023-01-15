@@ -193,3 +193,8 @@ export interface ProveedorProfesion {
   ano_experiencia: number;
   estado: boolean;
 }
+
+export interface BodyCrearProfesionesProveedor {
+  profesion: string,
+  ano_experiencia: number
+}

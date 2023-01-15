@@ -20,3 +20,20 @@ export interface BodyResponseCrearProfesion {
   mensaje: string;
   profesion?: Profesion;
 }
+
+export interface BodyActualizarProfesion {
+  id: number,
+  servicio: string;
+  nombre?: string;
+  descripcion?: string;
+  foto?: File;
+  estado?: boolean;
+}
+export interface BodyResponseActualizarProfesion {
+  id: number,
+  servicio: Array<Servicio>;
+  nombre: string;
+  descripcion: string;
+  foto: File;
+  estado: boolean;
+}
