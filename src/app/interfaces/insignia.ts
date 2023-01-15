@@ -21,3 +21,17 @@ export interface BodyActualizarInsignia {
   descripcion?: string;
   tipo?: string;
 }
+
+export interface BodyCrearInsignia {
+  nombre: string;
+  imagen?: File;
+  servicio: string;
+  tipoUsuario: string;
+  pedidos: number;
+  descripcion: string;
+  tipo: string;
+}
+
+export interface BodyResponseCrearInsignia {
+  insignia: Insignia;
+}

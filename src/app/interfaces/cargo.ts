@@ -10,3 +10,12 @@ export interface BodyActualizarCargo {
   porcentaje?: number;
   titulo?: string;
 }
+
+export interface BodyCrearCargo {
+  nombre: string;
+  porcentaje: number;
+  titulo: string;
+}
+export interface BodyResponseCrearCargo {
+  cargo: Cargo;
+}
