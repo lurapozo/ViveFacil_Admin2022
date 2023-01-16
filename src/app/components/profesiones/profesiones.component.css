@@ -31,3 +31,8 @@ input[type=file]::file-selector-button {
   text-align: center;
   font-size: 200px;
 }
+
+.image_modal {
+  max-height: 30vh !important;
+  object-fit: contain !important;
+}
