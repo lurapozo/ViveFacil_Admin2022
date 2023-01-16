@@ -7,10 +7,6 @@
   background-color: var(--bs-gray-300) !important ;
 }
 
-.img_info_profesion {
-
-}
-
 input[type=file]::file-selector-button {
   color: transparent;
   background-color: transparent;
