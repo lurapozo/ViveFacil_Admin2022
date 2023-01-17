@@ -6,7 +6,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatListModule } from '@angular/material/list';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatGridListModule } from '@angular/material/grid-list';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { MatCardModule } from '@angular/material/card';
 import { MainComponent } from './pages/main/main.component';
@@ -34,6 +34,8 @@ import { AdministradoresComponent } from './components/cuentas/administradores/a
 import { SugerenciasLeidasComponent } from './components/sugerencias/sugerencias-leidas/sugerencias-leidas.component';
 import { SugerenciasNoLeidasComponent } from './components/sugerencias/sugerencias-no-leidas/sugerencias-no-leidas.component';
 import { LoginComponent } from './pages/login/login.component';
+import { SpinnerComponent } from './components/spinner/spinner/spinner.component';
+import { SpinnerInterceptor } from './interceptor/spinner.interceptor';
 @NgModule({
   declarations: [
     AppComponent,
@@ -61,6 +63,7 @@ import { LoginComponent } from './pages/login/login.component';
     SugerenciasLeidasComponent,
     SugerenciasNoLeidasComponent,
     LoginComponent,
+    SpinnerComponent,
   ],
   imports: [
     BrowserModule,
@@ -74,7 +77,7 @@ import { LoginComponent } from './pages/login/login.component';
     ReactiveFormsModule,
     NgxPaginationModule,
   ],
-  providers: [],
+  providers: [ {provide: HTTP_INTERCEPTORS,useClass:SpinnerInterceptor,multi:true}],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

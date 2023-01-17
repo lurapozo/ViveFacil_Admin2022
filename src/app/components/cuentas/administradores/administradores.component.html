@@ -53,7 +53,7 @@
                   class="w-100 centrar form-control"
                   [ngClass]="admiCrear.get('imagen')?.hasError('image_error') ? 'is-invalid' : '' || (existImageCrear)? 'is-valid' : ''"
                   type="file"
-                  id="file_input"
+             
                   accept="image/png, image/jpeg"
                   (change)="loadImageFromDevice($event, 'crear')"
                 >
@@ -120,7 +120,7 @@
                   class="form-control"
                   formControlName="cedula"
                   [ngClass]="isInvalidForm('cedula', 'crear') ? 'is-invalid' : ''"
-                  id="tel"
+                 
                   placeholder="0960044508"
                 ></textarea>
                 <div class="invalid-feedback"> {{getErrorMessage(admiCrear, 'cedula')}} </div>
@@ -173,7 +173,7 @@
                   class="form-select"
                   [ngClass]="isInvalidForm('genero', 'crear') ? 'is-invalid' : ''"
                   formControlName="genero"
-                  id="ge"
+                  
                   aria-describedby="selectorServicioCrearFeedback"
                 >
                   <option selected disabled value="">Elija una genero...</option>
@@ -291,7 +291,7 @@
         </div>
 
         <div class="col-2 align-self-center">
-          <h4 class="p-0 m-0">{{a.user_datos.email}}</h4>
+          <h4 class="p-0 m-0">{{a.user_datos.user.username}}</h4>
         </div>
 
         <div class="col-2 align-self-center">
@@ -314,7 +314,7 @@
   <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header align-items-center">
-        <h1 class="modal-title fs-5 m-0 p-0 fw-bold" id="modalInformacionProfesionLabel">Información de profesión</h1>
+        <h1 class="modal-title fs-5 m-0 p-0 fw-bold" id="modalInformacionProfesionLabel">Información de Administradores</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body mb-0">
@@ -342,14 +342,7 @@
           </div>
         </div>
 
-        <div class="row p-2 align-items-center">
-          <div class="col-5">
-            <h3 class="m-0 p-0 fw-bold">Genero</h3>
-          </div>
-          <div class="col-7">
-            {{admi_seleccionada?.user_datos.genero}}
-          </div>
-        </div>
+
 
         <div class="row p-2 align-items-center">
           <div class="col-5">
@@ -374,7 +367,7 @@
             <h3 class="m-0 p-0 fw-bold">Genero</h3>
           </div>
           <div class="col-7">
-            {{admi_seleccionada?.user_datos.email}}
+            {{admi_seleccionada?.user_datos.genero}}
           </div>
         </div>
 
@@ -383,7 +376,7 @@
             <h3 class="m-0 p-0 fw-bold">Rol</h3>
           </div>
           <div class="col-7">
-            {{admi_seleccionada?.user_datos.tipo}}
+            {{admi_seleccionada?.user_datos.user.groups[0].name}}
           </div>
         </div>
 
@@ -423,7 +416,240 @@
     </div>
   </div>
 </div>
+<div class="modal fade" id="modalInformacionEdicionProfesion" aria-hidden="true" aria-labelledby="modalInformacionEdicionProfesionLabel" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header align-items-center">
+        <h1 class="modal-title fs-5 m-0 p-0 fw-bold" id="modalInformacionEdicionProfesionLabel">Edición de Administradores</h1>
 
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body mb-0">
+        <form [formGroup]="formEdit" class="">
+          <div class="row">
+            <div class="col d-flex justify-content-center">
+              <img *ngIf="existImageActualizar" class="image_modal rounded mx-auto d-block img-fluid w-50" [src]="imagenActualizar" alt="Archivo incorrecto">
+              <img *ngIf="!existImageActualizar && admi_seleccionada?.user_datos.foto?.foto" class="image_modal rounded mx-auto d-block img-fluid w-50" [src]="'https://tomesoft1.pythonanywhere.com'+admi_seleccionada?.user_datos.foto?.foto" alt="Archivo incorrecto">
+              <i *ngIf="!existImageActualizar && !admi_seleccionada?.user_datos.foto?.foto" class="rounded mx-auto d-block img-fluid w-50 bi bi-upload icono"></i>
+            </div>
+            <div class="p-2">
+              <input
+                class="w-100 centrar form-control"
+                [ngClass]="formEdit.get('imagen')?.hasError('image_error') ? 'is-invalid' : '' || (existImageActualizar)? 'is-valid' : ''"
+                type="file"
+                id="file_input"
+                accept="image/png, image/jpeg"
+                (change)="loadImageFromDevice($event, 'actualizar')"
+              >
+              <div class="invalid-feedback">{{getErrorMessage(formEdit, 'imagen')}}</div>
+            </div>
+          </div>
+
+          <div class="row p-2 align-items-center">
+            <div class="col-5">
+              <label for="inputNombre" class="form-label"><h3 class="m-0 p-0 fw-bold">Nombre:</h3></label>
+            </div>
+            <div class="col-7">
+              <input
+                type="text"
+                formControlName="nombre"
+                class="form-control"
+                [ngClass]="isInvalidForm('nombre', 'actualizar') ? 'is-invalid' : ''"
+          
+                [placeholder]="admi_seleccionada?.user_datos.nombres"
+                [value]="admi_seleccionada?.user_datos.nombres"
+              >
+              <div class="invalid-feedback"> {{getErrorMessage(formEdit, 'nombre')}} </div>
+            </div>
+          </div>
+
+          <div class="row p-2 align-items-center">
+            <div class="col-5">
+              <label for="textareaDescripcion" class="form-label"><h3 class="m-0 p-0 fw-bold">Apellidos:</h3></label>
+            </div>
+            <div class="col-7">
+              <textarea
+                class="form-control"
+                formControlName="apellidos"
+                [ngClass]="isInvalidForm('apellidos', 'actualizar') ? 'is-invalid' : ''"
+                id="textareaDescripcion"
+                [placeholder]="admi_seleccionada?.user_datos.apellidos"
+                [value]="admi_seleccionada?.user_datos.apellidos"
+              ></textarea>
+            <div class="invalid-feedback"> {{getErrorMessage(formEdit, 'apellidos')}} </div>
+            </div>
+          </div>
+
+          <div class="row p-2 align-items-center">
+            <div class="col-5">
+              <label for="textareaDescripcion" class="form-label"><h3 class="m-0 p-0 fw-bold">Telefono:</h3></label>
+            </div>
+            <div class="col-7">
+              <textarea
+                class="form-control"
+                formControlName="telefono"
+                [ngClass]="isInvalidForm('telefono', 'actualizar') ? 'is-invalid' : ''"
+                
+                [placeholder]="admi_seleccionada?.user_datos.telefono"
+                [value]="admi_seleccionada?.user_datos.telefono"
+              ></textarea>
+              <div class="invalid-feedback"> {{getErrorMessage(formEdit, 'telefono')}} </div>
+            </div>
+          </div>
+
+          <div class="row p-2 align-items-center">
+            <div class="col-5">
+              <label for="textareaDescripcion" class="form-label"><h3 class="m-0 p-0 fw-bold">Cedula:</h3></label>
+            </div>
+            <div class="col-7">
+              <textarea
+                class="form-control"
+                formControlName="cedula"
+                [ngClass]="isInvalidForm('cedula', 'actualizar') ? 'is-invalid' : ''"
+                [placeholder]="admi_seleccionada?.user_datos.cedula"
+                [value]="admi_seleccionada?.user_datos.cedula"
+              ></textarea>
+              <div class="invalid-feedback"> {{getErrorMessage(formEdit, 'cedula')}} </div>
+            </div>
+          </div>
+
+          <div class="row p-2 align-items-center">
+            <div class="col-5">
+              <label for="textareaDescripcion" class="form-label"><h3 class="m-0 p-0 fw-bold">Correo:</h3></label>
+            </div>
+            <div class="col-7">
+              <input
+            type="email"
+                class="form-control"
+                formControlName="correo"
+                [ngClass]="isInvalidForm('correo', 'actualizar') ? 'is-invalid' : ''"
+                [placeholder]="admi_seleccionada?.user_datos.user.email"
+                [value]="admi_seleccionada?.user_datos.user.email"
+              >
+              <div class="invalid-feedback"> {{getErrorMessage(formEdit, 'correo')}} </div>
+            </div>
+          </div>
+         
+          
+          <div class="row p-2 align-items-center">
+            <div class="col-5">
+              <label for="selectorServicioCrear" class="form-label"><h3 class="m-0 p-0 fw-bold">Ciudad:</h3></label>
+            </div>
+            <div class="col-7">
+              <select
+                class="form-select"
+                [ngClass]="isInvalidForm('ciudad', 'actualizar') ? 'is-invalid' : ''"
+                formControlName="ciudad"
+              
+                [value]="admi_seleccionada?.user_datos.ciudad"
+                aria-describedby="selectorServicioCrearFeedback"
+              >
+                <option selected disabled value="">Elija una ciudad...</option>
+                <option *ngFor="let c of ciudades" [id]="c" [value]="c"> {{c}} </option>
+              </select>
+              <div id="selectorServicioCrearFeedback" class="invalid-feedback"> {{getErrorMessage(formEdit, 'ciudad')}} </div>
+            </div>
+          </div>
+
+          <div class="row p-2 align-items-center">
+            <div class="col-5">
+              <label for="selectorServicioCrear" class="form-label"><h3 class="m-0 p-0 fw-bold">Genero:</h3></label>
+            </div>
+            <div class="col-7">
+              <select
+                class="form-select"
+                [ngClass]="isInvalidForm('genero', 'actualizar') ? 'is-invalid' : ''"
+                formControlName="genero"
+                id="ge"
+                [value]="admi_seleccionada?.user_datos.genero"
+                aria-describedby="selectorServicioCrearFeedback"
+              >
+                <option selected disabled value="">Elija una genero...</option>
+                <option *ngFor="let c of generos" [id]="c" [value]="c"> {{c}} </option>
+              </select>
+              <div id="selectorServicioCrearFeedback" class="invalid-feedback"> {{getErrorMessage(formEdit, 'genero')}} </div>
+            </div>
+          </div>
+
+          <div class="row p-2 align-items-center">
+            <div class="col-5">
+              <label for="selectorServicioCrear" class="form-label"><h3 class="m-0 p-0 fw-bold">Rol:</h3></label>
+            </div>
+            <div class="col-7">
+              <select
+                class="form-select"
+                [ngClass]="isInvalidForm('rol', 'actualizar') ? 'is-invalid' : ''"
+                formControlName="rol"
+               
+                aria-describedby="selectorServicioCrearFeedback"
+              >
+                <option selected disabled value="">Elija una rol...</option>
+                <option *ngFor="let c of roles" [id]="c" [value]="c"> {{c}} </option>
+              </select>
+              <div id="selectorServicioCrearFeedback" class="invalid-feedback"> {{getErrorMessage(formEdit, 'rol')}} </div>
+            </div>
+          </div>
+
+          <div class="row p-2 align-items-center">
+            <div class="col-5">
+              <label for="textareaDescripcion" class="form-label"><h3 class="m-0 p-0 fw-bold">Contrasena:</h3></label>
+            </div>
+            <div class="col-7">
+              <input
+              type="password"
+                class="form-control"
+                formControlName="password"
+                [ngClass]="isInvalidForm('password', 'actualizar') ? 'is-invalid' : ''"
+            
+                [placeholder]="admi_seleccionada?.user_datos.password"
+                [value]="admi_seleccionada?.user_datos.password"
+              >
+              <div class="invalid-feedback"> {{getErrorMessage(formEdit, 'password')}} </div>
+            </div>
+          </div>
+
+          <div class="row p-2 align-items-center">
+            <div class="col-5">
+              <label for="textareaDescripcion" class="form-label"><h3 class="m-0 p-0 fw-bold"> Confirmar Contrasena:</h3></label>
+            </div>
+            <div class="col-7">
+              <input
+              type="password"
+                class="form-control"
+                formControlName="confirmPassword"
+                [ngClass]="isInvalidForm('confirmPassword', 'actualizar') ? 'is-invalid' : ''"
+                [placeholder]="admi_seleccionada?.user_datos.password"
+                [value]="admi_seleccionada?.user_datos.password"
+              >
+              <div class="invalid-feedback"> {{getErrorMessage(formEdit, 'confirmPassword')}} </div>
+            </div>
+          </div>
+     
+
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-danger" data-bs-target="#modalInformacionProfesion" data-bs-toggle="modal">Regresar</button>
+        <button
+          
+          data-bs-target="#modalConfirmacion"
+          data-bs-toggle="modal"
+          class="btn btn-success"
+          (click)="establecerMensaje('Está seguro que desea actualizar la información?', 'actualizar')"
+        >Actualizar</button>
+      </div>
+
+      <!-- <pre>
+        {{actualizarProfesionesForm.value | json}}
+      </pre> -->
+    </div>
+  </div>
+</div>
 <div class="modal fade" id="modalConfirmacion" tabindex="-1" aria-labelledby="modalConfirmacionLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -448,243 +674,7 @@
     </div>
   </div>
 
-  <div class="modal fade" id="modalInformacionEdicionProfesion" aria-hidden="true" aria-labelledby="modalInformacionEdicionProfesionLabel" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header align-items-center">
-          <h1 class="modal-title fs-5 m-0 p-0 fw-bold" id="modalInformacionEdicionProfesionLabel">Edición de Administradores</h1>
-          <!-- (click)="limpiarForm('actualizar')" -->
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-          ></button>
-        </div>
-        <div class="modal-body mb-0">
-          <form [formGroup]="formEdit" class="">
-            <div class="row">
-              <div class="col d-flex justify-content-center">
-                <img *ngIf="existImageActualizar" class="image_modal rounded mx-auto d-block img-fluid w-50" [src]="imagenActualizar" alt="Archivo incorrecto">
-                <img *ngIf="!existImageActualizar && admi_seleccionada?.user_datos.foto?.foto" class="image_modal rounded mx-auto d-block img-fluid w-50" [src]="'https://tomesoft1.pythonanywhere.com'+admi_seleccionada?.user_datos.foto?.foto" alt="Archivo incorrecto">
-                <i *ngIf="!existImageActualizar && !admi_seleccionada?.user_datos.foto?.foto" class="rounded mx-auto d-block img-fluid w-50 bi bi-upload icono"></i>
-              </div>
-              <div class="p-2">
-                <input
-                  class="w-100 centrar form-control"
-                  [ngClass]="formEdit.get('imagen')?.hasError('image_error') ? 'is-invalid' : '' || (existImageActualizar)? 'is-valid' : ''"
-                  type="file"
-                  id="file_input"
-                  accept="image/png, image/jpeg"
-                  (change)="loadImageFromDevice($event, 'actualizar')"
-                >
-                <div class="invalid-feedback">{{getErrorMessage(formEdit, 'imagen')}}</div>
-              </div>
-            </div>
-  
-            <div class="row p-2 align-items-center">
-              <div class="col-5">
-                <label for="inputNombre" class="form-label"><h3 class="m-0 p-0 fw-bold">Nombre:</h3></label>
-              </div>
-              <div class="col-7">
-                <input
-                  type="text"
-                  formControlName="nombre"
-                  class="form-control"
-                  [ngClass]="isInvalidForm('nombre', 'actualizar') ? 'is-invalid' : ''"
-                  id="inputNombre"
-                  value="Mark"
-                  [placeholder]="admi_seleccionada?.user_datos.nombres"
-                  [value]="admi_seleccionada?.user_datos.nombres"
-                >
-                <div class="invalid-feedback"> {{getErrorMessage(formEdit, 'nombre')}} </div>
-              </div>
-            </div>
-  
-            <div class="row p-2 align-items-center">
-              <div class="col-5">
-                <label for="textareaDescripcion" class="form-label"><h3 class="m-0 p-0 fw-bold">Apellidos:</h3></label>
-              </div>
-              <div class="col-7">
-                <textarea
-                  class="form-control"
-                  formControlName="apellidos"
-                  [ngClass]="isInvalidForm('apellidos', 'actualizar') ? 'is-invalid' : ''"
-                  id="textareaDescripcion"
-                  [placeholder]="admi_seleccionada?.user_datos.apellidos"
-                  [value]="admi_seleccionada?.user_datos.apellidos"
-                ></textarea>
-              <div class="invalid-feedback"> {{getErrorMessage(formEdit, 'apellidos')}} </div>
-              </div>
-            </div>
-  
-            <div class="row p-2 align-items-center">
-              <div class="col-5">
-                <label for="textareaDescripcion" class="form-label"><h3 class="m-0 p-0 fw-bold">Telefono:</h3></label>
-              </div>
-              <div class="col-7">
-                <textarea
-                  class="form-control"
-                  formControlName="telefono"
-                  [ngClass]="isInvalidForm('telefono', 'crear') ? 'is-invalid' : ''"
-                  id="tel"
-                  [placeholder]="admi_seleccionada?.user_datos.telefono"
-                  [value]="admi_seleccionada?.user_datos.telefono"
-                ></textarea>
-                <div class="invalid-feedback"> {{getErrorMessage(formEdit, 'telefono')}} </div>
-              </div>
-            </div>
-
-            <div class="row p-2 align-items-center">
-              <div class="col-5">
-                <label for="textareaDescripcion" class="form-label"><h3 class="m-0 p-0 fw-bold">Cedula:</h3></label>
-              </div>
-              <div class="col-7">
-                <textarea
-                  class="form-control"
-                  formControlName="cedula"
-                  [ngClass]="isInvalidForm('cedula', 'crear') ? 'is-invalid' : ''"
-                  [placeholder]="admi_seleccionada?.user_datos.cedula"
-                  [value]="admi_seleccionada?.user_datos.cedula"
-                ></textarea>
-                <div class="invalid-feedback"> {{getErrorMessage(formEdit, 'cedula')}} </div>
-              </div>
-            </div>
-  
-            <div class="row p-2 align-items-center">
-              <div class="col-5">
-                <label for="textareaDescripcion" class="form-label"><h3 class="m-0 p-0 fw-bold">Correo:</h3></label>
-              </div>
-              <div class="col-7">
-                <input
-              type="email"
-                  class="form-control"
-                  formControlName="correo"
-                  [ngClass]="isInvalidForm('correo', 'crear') ? 'is-invalid' : ''"
-                  [placeholder]="admi_seleccionada?.user_datos.email"
-                  [value]="admi_seleccionada?.user_datos.email"
-                >
-                <div class="invalid-feedback"> {{getErrorMessage(formEdit, 'correo')}} </div>
-              </div>
-            </div>
-           
-            
-            <div class="row p-2 align-items-center">
-              <div class="col-5">
-                <label for="selectorServicioCrear" class="form-label"><h3 class="m-0 p-0 fw-bold">Ciudad:</h3></label>
-              </div>
-              <div class="col-7">
-                <select
-                  class="form-select"
-                  [ngClass]="isInvalidForm('ciudad', 'crear') ? 'is-invalid' : ''"
-                  formControlName="ciudad"
-                  id="ciu"
-                   
-                  [value]="admi_seleccionada?.user_datos.ciudad"
-                  aria-describedby="selectorServicioCrearFeedback"
-                >
-                  <option selected disabled value="">Elija una ciudad...</option>
-                  <option *ngFor="let c of ciudades" [id]="c" [value]="c"> {{c}} </option>
-                </select>
-                <div id="selectorServicioCrearFeedback" class="invalid-feedback"> {{getErrorMessage(formEdit, 'ciudad')}} </div>
-              </div>
-            </div>
-
-            <div class="row p-2 align-items-center">
-              <div class="col-5">
-                <label for="selectorServicioCrear" class="form-label"><h3 class="m-0 p-0 fw-bold">Genero:</h3></label>
-              </div>
-              <div class="col-7">
-                <select
-                  class="form-select"
-                  [ngClass]="isInvalidForm('genero', 'crear') ? 'is-invalid' : ''"
-                  formControlName="genero"
-                  id="ge"
-                  [value]="admi_seleccionada?.user_datos.genero"
-                  aria-describedby="selectorServicioCrearFeedback"
-                >
-                  <option selected disabled value="">Elija una genero...</option>
-                  <option *ngFor="let c of generos" [id]="c" [value]="c"> {{c}} </option>
-                </select>
-                <div id="selectorServicioCrearFeedback" class="invalid-feedback"> {{getErrorMessage(formEdit, 'genero')}} </div>
-              </div>
-            </div>
-
-            <div class="row p-2 align-items-center">
-              <div class="col-5">
-                <label for="selectorServicioCrear" class="form-label"><h3 class="m-0 p-0 fw-bold">Rol:</h3></label>
-              </div>
-              <div class="col-7">
-                <select
-                  class="form-select"
-                  [ngClass]="isInvalidForm('rol', 'crear') ? 'is-invalid' : ''"
-                  formControlName="rol"
-                  id="ro"
-                  [value]="admi_seleccionada?.user_datos.rol"
-                  aria-describedby="selectorServicioCrearFeedback"
-                >
-                  <option selected disabled value="">Elija una rol...</option>
-                  <option *ngFor="let c of roles" [id]="c" [value]="c"> {{c}} </option>
-                </select>
-                <div id="selectorServicioCrearFeedback" class="invalid-feedback"> {{getErrorMessage(formEdit, 'rol')}} </div>
-              </div>
-            </div>
-
-            <div class="row p-2 align-items-center">
-              <div class="col-5">
-                <label for="textareaDescripcion" class="form-label"><h3 class="m-0 p-0 fw-bold">Contrasena:</h3></label>
-              </div>
-              <div class="col-7">
-                <input
-                type="password"
-                  class="form-control"
-                  formControlName="password"
-                  [ngClass]="isInvalidForm('password', 'crear') ? 'is-invalid' : ''"
-                  id="pw"
-                  [placeholder]="admi_seleccionada?.user_datos.password"
-                  [value]="admi_seleccionada?.user_datos.password"
-                >
-                <div class="invalid-feedback"> {{getErrorMessage(formEdit, 'password')}} </div>
-              </div>
-            </div>
-
-            <div class="row p-2 align-items-center">
-              <div class="col-5">
-                <label for="textareaDescripcion" class="form-label"><h3 class="m-0 p-0 fw-bold"> Confirmar Contrasena:</h3></label>
-              </div>
-              <div class="col-7">
-                <input
-                type="password"
-                  class="form-control"
-                  formControlName="confirmPassword"
-                  [ngClass]="isInvalidForm('confirmPassword', 'crear') ? 'is-invalid' : ''"
-                  [placeholder]="admi_seleccionada?.user_datos.password"
-                  [value]="admi_seleccionada?.user_datos.password"
-                >
-                <div class="invalid-feedback"> {{getErrorMessage(formEdit, 'confirmPassword')}} </div>
-              </div>
-            </div>
-       
-  
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button class="btn btn-danger" data-bs-target="#modalInformacionProfesion" data-bs-toggle="modal">Regresar</button>
-          <button
-            [disabled]="formEdit.invalid? true : false"
-            data-bs-target="#modalConfirmacion"
-            data-bs-toggle="modal"
-            class="btn btn-success"
-            (click)="establecerMensaje('Está seguro que desea actualizar la información?', 'actualizar')"
-          >Actualizar</button>
-        </div>
-  
-        <!-- <pre>
-          {{actualizarProfesionesForm.value | json}}
-        </pre> -->
-      </div>
-    </div>
-  </div>
+ 
 <nav aria-label="Page navigation example">
     <ul class="pagination">
         <li class="page-item"><a class="page-link" (click)="previous($event)">Previous</a></li>
