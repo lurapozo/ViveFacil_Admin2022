@@ -29,7 +29,7 @@ export interface BodyActualizarAdministrador {
   telefono: string;
   genero: string;
   emailNuevo: string;
-  foto: File | null;
+  foto: String | null;
 }
 
 export interface BodyCrearAdministrador {
@@ -44,7 +44,7 @@ export interface BodyCrearAdministrador {
   telefono: string;
   genero: string;
   rol: string;
-  foto: File | null;
+  foto: String | null;
 }
 
 export interface BodyResponseCrearAdministrador {
