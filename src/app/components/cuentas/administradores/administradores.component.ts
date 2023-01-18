@@ -12,7 +12,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 })
 export class AdministradoresComponent {
 
-
+total=0
   arr_admi!: any[];
   arr_filtered_admi!: any[];
   ciudades = ['Guayaquil', 'Quito', 'Cuenca', 'Sto. Domingo', 'Ibarra'];
@@ -49,6 +49,7 @@ export class AdministradoresComponent {
 
   formEdit: FormGroup = new FormGroup({
     nombre: new FormControl('', [Validators.required]),
+    estado: new FormControl(''),
     apellidos: new FormControl('', [Validators.required]),
     correo: new FormControl('', [Validators.required, Validators.email]),
     cedula: new FormControl('',
@@ -97,6 +98,7 @@ export class AdministradoresComponent {
   });
   constructor(private pythonAnywhereService: PythonAnywhereService, private sanitizer: DomSanitizer) {
     this.pythonAnywhereService.obtener_administradores().subscribe(resp => {
+      this.total = resp.total_objects
       this.arr_admi = resp.results;
       this.arr_filtered_admi = this.arr_admi;
       if (resp.next != null) {
@@ -369,13 +371,15 @@ export class AdministradoresComponent {
       telefono: '',
       genero: '',
       emailNuevo: '',
-      foto: null
+      foto: '',
+      estado:true
     }
     const id = this.admi_seleccionada.id
+    admiEditar.id = this.admi_seleccionada.id
     admiEditar.nombres = this.formEdit.get('nombre')?.value;
     admiEditar.username = this.formEdit.get('correo')?.value;
     admiEditar.email = this.formEdit.get('correo')?.value;
-    admiEditar.password = this.formEdit.get('password')?.value;
+    // admiEditar.password = this.formEdit.get('password')?.value;
     admiEditar.tipo = this.formEdit.get('rol')?.value;
     admiEditar.apellidos = this.formEdit.get('apellidos')?.value;
     admiEditar.cedula = this.formEdit.get('cedula')?.value;
@@ -383,15 +387,60 @@ export class AdministradoresComponent {
     admiEditar.emailNuevo = this.formEdit.get('correo')?.value;
     admiEditar.genero = this.formEdit.get('genero')?.value;
     admiEditar.telefono = this.formEdit.get('telefono')?.value;
-
-    console.log(this.admi_seleccionada)
+    admiEditar.estado = this.formEdit.get('estado')?.value;
      console.log( this.formEdit)
     if (this.formEdit.status == "INVALID") {
-
+      this.pythonAnywhereService.actualizar_administrador(id, admiEditar).subscribe(resp => console.log(resp)
+      )
       return;
     } else {
       this.pythonAnywhereService.actualizar_administrador(id, admiEditar).subscribe(resp => console.log(resp)
       )
+    }
+  }
+
+  limpiarForm(tipo: string) {
+    if(tipo === 'crear') {
+      this.existImageCrear = false;
+      this.admiCrear.get('nombre')?.reset();
+      this.admiCrear.get('apellidos')?.reset();
+      this.admiCrear.get('ciudad')?.reset();
+      this.admiCrear.get('telefono')?.setValue('');
+      this.admiCrear.get('genero')?.setValue('');
+      this.admiCrear.get('rol')?.setValue('');
+      this.admiCrear.get('correo')?.setValue('');
+      this.admiCrear.get('password')?.setValue('');
+      this.admiCrear.get('confirmPassword')?.setValue('');
+      this.admiCrear.get('imagen')?.setValue('');
+
+    } else if(tipo === 'actualizar') {
+      // console.log(this.profesion_seleccionada);
+      // console.log('Servicio de la profesion seleccionada: ', this.profesion_seleccionada?.servicio[0].nombre);
+      const nombre = this.admi_seleccionada?.user_datos.nombres;
+      const apellidos = this.admi_seleccionada?.user_datos.apellidos;
+      const telefono = this.admi_seleccionada?.user_datos.telefono;
+      const cedula = this.admi_seleccionada?.user_datos.cedula;
+      const correo = this.admi_seleccionada?.user_datos.user.email;
+      const genero = this.admi_seleccionada?.user_datos.genero;
+      const ciudad = this.admi_seleccionada?.user_datos.ciudad;
+      const rol = this.admi_seleccionada?.user_datos.user.groups[0].name;
+      const foto = this.admi_seleccionada?.user_datos.foto;
+      // const contra = this.admi_seleccionada?.user_datos.password;
+      const estado = this.admi_seleccionada?.user_datos.estado;
+      this.existImageActualizar = false;
+      this.formEdit.get('imagen')?.reset();
+      nombre? this.formEdit.get('nombre')?.setValue(nombre) : this.formEdit.get('nombre')?.reset();
+      apellidos? this.formEdit.get('apellidos')?.setValue(apellidos) : this.formEdit.get('apellidos')?.reset();
+      telefono? this.formEdit.get('telefono')?.setValue(telefono) : this.formEdit.get('telefono')?.reset();
+      cedula? this.formEdit.get('cedula')?.setValue(cedula) : this.formEdit.get('cedula')?.reset();
+      correo? this.formEdit.get('correo')?.setValue(correo) : this.formEdit.get('correo')?.reset();
+      genero? this.formEdit.get('genero')?.setValue(genero) : this.formEdit.get('genero')?.reset();
+      ciudad? this.formEdit.get('ciudad')?.setValue(ciudad) : this.formEdit.get('ciudad')?.reset();
+      // contra? this.formEdit.get('password')?.setValue(contra) : this.formEdit.get('password')?.reset();
+      rol? this.formEdit.get('rol')?.setValue(rol) : this.formEdit.get('rol')?.reset();
+      if(estado != undefined) this.formEdit.get('estado')?.setValue(estado)
+    } else {
+      console.log('Se paso algo erroneo en limpiar form');
     }
   }
 }

@@ -30,6 +30,7 @@ export interface BodyActualizarAdministrador {
   genero: string;
   emailNuevo: string;
   foto: String | null;
+  estado?: boolean;
 }
 
 export interface BodyCrearAdministrador {

@@ -319,4 +319,6 @@ export class ProfesionesComponent {
     // console.log('Nombre de servicio retornado: ', profesion.servicio[0].nombre);
     return profesion.servicio[0].nombre;
   }
+
+  
 }

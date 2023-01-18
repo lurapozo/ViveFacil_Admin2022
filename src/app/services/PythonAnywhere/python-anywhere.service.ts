@@ -35,22 +35,7 @@ export class PythonAnywhereService {
 
   constructor(private http: HttpClient) { }
 
-  // getAdministradores(): Observable<Administrador[]> {
-  //   return this.http
-  //     .get<fetchAllAdmi>(this.administradores)
-  //     .pipe(map(this.getAdmiDatos));
-  // }
 
-  // private getAdmiDatos(resp: fetchAllAdmi) {
-  //   const admiList: Administrador[] = resp.results.map((admi) => {
-  //     return {
-  //       id: admi.id,
-  //       user_datos: admi.user_datos,
-  //       estado: admi.estado,
-  //     };
-  //   });
-  //   return admiList;
-  // }
 
   //------------------------------------------------ SECCIÓN SOLICITANTES -------------------------------------------------
   /**
@@ -112,10 +97,7 @@ export class PythonAnywhereService {
    * @param id Recibe un string indicando el ID del Solicitante (ID más externo de la tabla de solicitante).
    * @returns Devuelve un Observable con el objeto Solicitante el cuál fue modificado.
    */
-  cambio_solicitante_estado(
-    estado: boolean,
-    id: string
-  ): Observable<Solicitante> {
+  cambio_solicitante_estado( estado: boolean, id: string ): Observable<Solicitante> {
     return this.http.put(`${this.API_URL}/solicitante_estado/${id}`, {
       estado: estado,
     }) as Observable<Solicitante>;
