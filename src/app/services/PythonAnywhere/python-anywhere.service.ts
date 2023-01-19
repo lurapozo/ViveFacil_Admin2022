@@ -1122,7 +1122,7 @@ export class PythonAnywhereService {
   * @param id
   * @returns Retorna objetos de Sugerencia
   */
-  obtener_sugerenciasLeidas(page: any) {
+  obtener_sugerenciasLeidas(page= 1) {
     return this.http.get(`${this.API_URL}/read-suggestions/?page=${page}`);
   }
 
@@ -1133,7 +1133,7 @@ export class PythonAnywhereService {
   * @param id
   * @returns Retorna objetos de Sugerencia
   */
-  obtener_sugerenciasNoLeidas(page: any) {
+  obtener_sugerenciasNoLeidas(page=1) {
     return this.http.get(`${this.API_URL}/unread-suggestions/?page= ${page}`);
   }
 
