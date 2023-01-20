@@ -529,7 +529,7 @@ export class PythonAnywhereService {
    *
    * @author Kevin Chévez
    * @param id Recibe un string ID del proveedor pendiente objetivo a buscar en la Base de datos.
-   * @returns Devuelve un observable con el objeto ProveedorPendiente
+   * @returns Devuelve un observable con objeto ProveedorPendiente
    */
   obtener_proveedor_pendiente(id: string): Observable<ProveedorPendiente> {
     return this.http.get(`${this.API_URL}/proveedores_pendientes/${id}`) as Observable<ProveedorPendiente>;
@@ -880,9 +880,9 @@ export class PythonAnywhereService {
 
 
   //https://tomesoft1.pythonanywhere.com/proveedor_profesiones/melquinto20@gmail.com/128&Jardinero,Pintor|true
-  eliminar_proveedores_pendientes(user: any, data: any) {//FALTA
+  eliminar_proveedores_pendientes(id: any) {//FALTA
     return this.http.delete(
-      `${this.API_URL}/proveedores_pendientes/${user}/${data}`
+      `${this.API_URL}/proveedores_pendientes/${id}`
     );
   }
 

@@ -150,7 +150,7 @@ export interface BodyResponseCrearProveedorPendiente {
   serializer: SerializerCrearProveedorPendiente;
 }
 
-interface SerializerCrearProveedorPendiente {
+export interface SerializerCrearProveedorPendiente {
   id: number;
   nombres: string;
   apellidos: string;

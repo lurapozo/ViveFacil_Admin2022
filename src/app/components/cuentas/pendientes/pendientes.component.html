@@ -1,1 +1,260 @@
-<p>pendientes works!</p>
+<div class="container-fluid">
+    <!-- Titulo principal -->
+      <div class="row p-2 justify-content-center align-items-center">
+           <div class="col text-center">
+                <h2 class="p-0 m-0">Pendientes</h2>
+                <h2 class="p-0 m-0">Total de Pendientes: {{total}}</h2>
+           </div>
+      </div>
+  
+      <!-- Buscar y agregar admi -->
+      <div class="row p-2 justify-content-center align-items-center">
+        <div class="col-xl-7 col-lg-5"></div>
+        <div class="col-xl-3 col-lg-4">
+          <div class="input-group">
+            <input type="text" class="form-control" placeholder="Buscar"
+              aria-label="Buscar" aria-describedby="basic-addon1" (input)="search($event)">
+            <button class="input-group-text" id="basic-addon1"> <i class="bi
+                bi-search" ></i> </button>
+          </div>
+        </div>
+    
+      </div>
+      <!-- Contenedor de admi -->
+      <div class="row justify-content-center align-items-center p-0">
+        <div class="col-10 text-center">
+          <!-- Titulo -->
+          <div class="row p-2 bg-primary text-white">
+            <div class="col-2 align-self-center">
+              <h3 class="p-0 m-0">Nombres</h3>
+            </div>
+  
+            <div class="col-2 align-self-center">
+              <h3 class="p-0 m-0">Cedula</h3>
+            </div>
+  
+            <div class="col-4 align-self-center">
+              <h3 class="p-0 m-0">Correo Electronico</h3>
+            </div>
+  
+            <div class="col-2 align-self-center">
+              <h3 class="p-0 m-0">Telefono</h3>
+            </div>
+            <div class="col-2 align-self-center">
+              <h3 class="p-0 m-0">Fecha Registro</h3>
+            </div>
+  
+          </div>
+  
+          <!-- Profesion -->
+          <div (click)=" pendiente_seleccionada=a" *ngFor="let a of arr_filtered_pendiente"
+            class="row p-2 bg-light fila_info_profesion" data-bs-toggle="modal"
+            href="#modalInformacionProfesion" role="button">
+            <div class="col-2 align-self-center">
+              <h4 class="p-0 m-0"> {{a.nombres}}
+                {{a.apellidos}}</h4>
+            </div>
+            
+            <div class="col-2 align-self-center">
+              <h4 class="p-0 m-0"> {{a.cedula}} </h4>
+            </div>
+  
+            <div class="col-4 align-self-center">
+              <h4 class="p-0 m-0">{{a.email}}</h4>
+            </div>
+  
+            <div class="col-2 align-self-center">
+              <h4 class="p-0 m-0"> {{a.telefono}}</h4>
+            </div>
+            <div class="col-2 align-self-center">
+              <h4 class="p-0 m-0"> {{a.fecha_registro}}</h4>
+            </div>
+
+          </div>
+        </div>
+      </div>
+  
+</div>
+<div class="modal fade" id="modalInformacionProfesion" aria-hidden="true"
+aria-labelledby="modalInformacionProfesionLabel" tabindex="-1">
+<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+  <div class="modal-content">
+    <div class="modal-header align-items-center">
+      <h1 class="modal-title fs-5 m-0 p-0 fw-bold"
+        id="modalInformacionProfesionLabel">Información de Proveedores pendientes</h1>
+      <button type="button" class="btn-close" data-bs-dismiss="modal"
+        aria-label="Close"></button>
+    </div>
+    <div class="modal-body mb-0">
+   
+      <div class="row p-2 align-items-center">
+        <div class="col-5">
+          <h3 class="m-0 p-0 fw-bold">Nombres:</h3>
+        </div>
+        <div class="col-7">
+          {{pendiente_seleccionada?.nombres}}
+        </div>
+      </div>
+
+      <div class="row p-2 align-items-center">
+        <div class="col-5">
+          <h3 class="m-0 p-0 fw-bold">Apellidos:</h3>
+        </div>
+        <div class="col-7">
+          {{pendiente_seleccionada?.nombres}}
+        </div>
+      </div>
+
+      <div class="row p-2 align-items-center">
+        <div class="col-5">
+          <h3 class="m-0 p-0 fw-bold">Cedula:</h3>
+        </div>
+        <div class="col-7">
+          {{pendiente_seleccionada?.cedula}}
+        </div>
+      </div>
+
+
+      <div class="row p-2 align-items-center">
+        <div class="col-5">
+          <h3 class="m-0 p-0 fw-bold">Documento cedula:</h3>
+        </div>
+        <div class="col-7">
+          
+        </div>
+      </div>
+
+      <div class="row p-2 align-items-center">
+        <div class="col-5">
+          <h3 class="m-0 p-0 fw-bold">Ciudad:</h3>
+        </div>
+        <div class="col-7">
+            {{pendiente_seleccionada?.ciudad}}
+        </div>
+      </div>
+
+      <div class="row p-2 align-items-center">
+        <div class="col-5">
+          <h3 class="m-0 p-0 fw-bold">Direccion:</h3>
+        </div>
+        <div class="col-7">
+            {{pendiente_seleccionada?.direccion}}
+        </div>
+      </div>
+
+      <div class="row p-2 align-items-center">
+        <div class="col-5">
+          <h3 class="m-0 p-0 fw-bold">Telefono:</h3>
+        </div>
+        <div class="col-7">
+            {{pendiente_seleccionada?.telefono}}
+        </div>
+      </div>
+
+      <div class="row p-2 align-items-center">
+        <div class="col-5">
+          <h3 class="m-0 p-0 fw-bold">Genero:</h3>
+        </div>
+        <div class="col-7">
+            {{pendiente_seleccionada?.genero}}
+        </div>
+      </div>
+
+      <div class="row p-2 align-items-center">
+        <div class="col-5">
+          <h3 class="m-0 p-0 fw-bold">Fecha Registro:</h3>
+        </div>
+        <div class="col-7">
+            {{pendiente_seleccionada?.fecha_registro}}
+        </div>
+      </div>
+
+      <div class="row p-2 align-items-center">
+        <div class="col-5">
+          <h3 class="m-0 p-0 fw-bold">Correo:</h3>
+        </div>
+        <div class="col-7">
+            {{pendiente_seleccionada?.email}}
+        </div>
+      </div>
+
+      <div class="row p-2 align-items-center">
+        <div class="col-5">
+          <h3 class="m-0 p-0 fw-bold">Descripcion:</h3>
+        </div>
+        <div class="col-7">
+            {{pendiente_seleccionada?.descripcion}}
+        </div>
+      </div>
+
+      <div class="row p-2 align-items-center">
+        <div class="col-5">
+          <h3 class="m-0 p-0 fw-bold">Licencia:</h3>
+        </div>
+        <div class="col-7">
+            {{pendiente_seleccionada?.licencia}}
+        </div>
+      </div>
+      <div class="row p-2 align-items-center">
+        <div class="col-5">
+          <h3 class="m-0 p-0 fw-bold">Documentacion Licenciada:</h3>
+        </div>
+        <div class="col-7">
+            
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button
+        class="btn btn-warning"
+        data-bs-target="#modalConfirmacion"
+        data-bs-toggle="modal">Cerrar</button>
+        <button
+
+        data-bs-target="#modalConfirmacion"
+        data-bs-toggle="modal"
+        class="btn btn-success"
+        (click)="establecerMensaje('Está seguro que desea Aceptar la solicitud?', 'aceptar')" >Aceptar</button>
+
+        <button
+
+        data-bs-target="#modalConfirmacion"
+        data-bs-toggle="modal"
+        class="btn btn-danger"
+        (click)="establecerMensaje('Está seguro que desea Negar la información?', 'negar')" >Negar</button>
+        
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="modal fade" id="modalConfirmacion" tabindex="-1"
+aria-labelledby="modalConfirmacionLabel" aria-hidden="true">
+<div class="modal-dialog">
+  <div class="modal-content">
+    <!-- Titulo del modal confirmacion -->
+    <div class="modal-header">
+      <h1 class="modal-title fs-5 m-0 p-0 fw-bold"
+        id="modalConfirmacionLabel">Confirmar selección</h1>
+      <button type="button" class="btn-close" data-bs-dismiss="modal"
+        aria-label="Close"></button>
+    </div>
+
+    <!-- Cuerpo del modal confirmacion -->
+    <div class="modal-body">
+      {{mensajeAlerta}}
+    </div>
+
+    <!-- Footer del modal confirmacion -->
+    <div class="modal-footer">
+      <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+      <button *ngIf="isNegar" type="button" class="btn btn-success"
+        (click)="onNegar()" data-bs-dismiss="modal">Confirmar</button>
+      <button *ngIf="isAceptar" type="button" class="btn btn-success"
+        (click)="onAceptar()" data-bs-dismiss="modal">Confirmar</button>
+      <!-- <button *ngIf="isEliminar" type="button" class="btn btn-success" (click)="onDelete()" data-bs-dismiss="modal">Confirmar</button> -->
+    </div>
+  </div>
+
+</div>
+</div>
