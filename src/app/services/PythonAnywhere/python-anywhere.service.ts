@@ -1432,7 +1432,7 @@ export class PythonAnywhereService {
    * @param page El numero de pagina. ! Solo he visto pagina con page=1, mas haya salen invalidas
    * @returns // { "page_size": 10, "total_objects": 0, "total_pages": 1, "current_page_number": 1,  "next": null, "previous": null,  "results": [ SolicitudProfesion ] }
    */
-  obtener_solicitudes(page: any) {
+  obtener_solicitudes(page=1) {
     return this.http.get(`${this.API_URL}/solicitudes-proveedores/?page=${page}`);
   }
 

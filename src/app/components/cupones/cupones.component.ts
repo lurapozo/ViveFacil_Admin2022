@@ -62,7 +62,7 @@ export class CuponesComponent {
   });
 
   formEdit: FormGroup = new FormGroup({
-    codigo: new FormControl(),
+
     titulo: new FormControl('', [Validators.required]),
     descripcion: new FormControl('', [Validators.required]),
     descuento: new FormControl('', [Validators.required]),
@@ -107,14 +107,13 @@ export class CuponesComponent {
    
 
     } else if(tipo === 'actualizar') {
-      // console.log(this.profesion_seleccionada);
-      // console.log('Servicio de la profesion seleccionada: ', this.profesion_seleccionada?.servicio[0].nombre);
+
       const titulo = this.cupon_seleccionada?.titulo;
       const descripcion = this.cupon_seleccionada?.descripcion;
       const descuento = this.cupon_seleccionada?.porcentaje;
       const cantidad = this.cupon_seleccionada?.cantidad;
       const punto = this.cupon_seleccionada?.puntos;
-      const categoria = this.cupon_seleccionada?.categoria;
+      const categoria = this.cupon_seleccionada?.tipo_categoria;
       const inicio = this.cupon_seleccionada?.fecha_iniciacion;
       const fin = this.cupon_seleccionada?.fecha_expiracion;
       const foto = this.cupon_seleccionada?.foto;
@@ -276,10 +275,10 @@ export class CuponesComponent {
               this.cuponCrear.get('imagen')?.setValue(null);
               this.existImageCrear = false;
             }
-            // else if(tipo === 'actualizar'){
-            //   this.actualizarProfesionesForm.get('imagen')?.setValue(null);
-            //   this.existImageActualizar = false;
-            // }
+            else if(tipo === 'actualizar'){
+              this.formEdit.get('imagen')?.setValue(null);
+              this.existImageActualizar = false;
+            }
             return { image_error: 'Solo imágenes con formato jpg, jpeg, png o jfif.' };
           }
           console.log('Formato de imagen correcto');
@@ -307,11 +306,11 @@ export class CuponesComponent {
             this.fileImagenCrear = file;
             this.imagenCrear = imagen.base;
           }
-          // else if(tipo === 'actualizar'){
-          //   this.actualizarProfesionesForm.get('imagen')?.setValue(file);
-          //   this.fileImagenActualizar = file;
-          //   this.imagenActualizar = imagen.base;
-          // }
+          else if(tipo === 'actualizar'){
+            this.formEdit.get('imagen')?.setValue(file);
+            this.fileImagenActualizar = file;
+            this.imagenActualizar = imagen.base;
+          }
         })
         .catch(err => console.log(err));
     }
@@ -338,20 +337,33 @@ export class CuponesComponent {
   }
   onActualizar(){
     let cupon :BodyCuponActualizar ={
-      codigo: "hola",
-      titulo:  this.formEdit.get('titulo')?.value,
-      descripcion:  this.formEdit.get('descripcion')?.value,
-      fecha_iniciacion: this.formEdit.get('inicio')?.value,
-      fecha_expiracion: this.formEdit.get('fin')?.value,
-      porcentaje: this.formEdit.get('descuento')?.value,
-      cantidad: this.formEdit.get('cantidad')?.value,
-      puntos: this.formEdit.get('punto')?.value,
-      foto: this.formEdit.get('imagen')?.value,
-      tipo_categoria: "Jardineria"
+      codigo: '',
+      titulo: '',
+      descripcion: '',
+      fecha_iniciacion: null,
+      fecha_expiracion: '',
+      porcentaje: 0,
+      cantidad: 0,
+      puntos: 0,
+      foto: null,
+      tipo_categoria: ''
     }
+
+    cupon.codigo = this.formEdit.get('titulo')?.value;
+    cupon.titulo = this.formEdit.get('titulo')?.value;
+    cupon.descripcion = this.formEdit.get('descripcion')?.value;
+    cupon.fecha_iniciacion = this.formEdit.get('inicio')?.value;
+    cupon.fecha_expiracion = this.formEdit.get('fin')?.value;
+    cupon.porcentaje = this.formEdit.get('descuento')?.value;
+    cupon.cantidad = this.formEdit.get('cantidad')?.value;
+    cupon.puntos = this.formEdit.get('punto')?.value;
+    cupon.foto = this.formEdit.get('imagen')?.value;
+    cupon.tipo_categoria = this.formEdit.get('categoria')?.value;
+    
     console.log(cupon)
     const id = this.cupon_seleccionada.id
-    this.pythonAnywhereService.actualizar_cupon( cupon,id).subscribe(resp=>{console.log(resp);})
+    console.log(this.formEdit)
+    this.pythonAnywhereService.actualizar_cupon(cupon,id).subscribe(resp=>{console.log(resp);})
   ;
 
   }
