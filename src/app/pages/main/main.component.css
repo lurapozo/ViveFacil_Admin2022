@@ -59,3 +59,10 @@ li:hover {
 .dropdown-toggle::after {
   color: white;
 }
+
+.img {
+  height: 20vh;
+  width: 20vh;
+  object-fit: cover;
+}
+

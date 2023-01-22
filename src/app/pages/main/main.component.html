@@ -36,49 +36,39 @@
     <div class="col-xl-2 col-lg-3 col-md-3 col-sm-3 p-0">
 
       <!-- Seccion lista del menú -->
-      <div class="accordion" id="asideMenuAcordion">
+      <div class="accordion rounded-0" id="asideMenuAcordion">
 
-        <!-- Sección de profesiones -->
-        <div class="accordion-item">
-          <h2 class="accordion-header m-0" id="">
-            <button (click)="setSelection('profesion')" class="accordion-button pt-2 pb-2 accordion-no-button collapsed" type="button">
-              Profesiones
+        <!-- Sección Profesiones -->
+        <div class="accordion-item rounded-0">
+          <h2 class="accordion-header m-0" id="panelsStayOpen-headingSix">
+            <button class="accordion-button pt-2 pb-2 collapsed rounded-0" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseSix" aria-expanded="false" aria-controls="panelsStayOpen-collapseSix">
+              <i class="bi bi-mortarboard fs-5 ps-2 pe-3"></i> Profesiones
             </button>
           </h2>
-        </div>
-
-        <!-- Sección Planes de proveedores -->
-        <div class="accordion-item">
-          <h2 class="accordion-header m-0" id="">
-            <button (click)="setSelection('plan_proveedor')" class="accordion-button pt-2 pb-2 accordion-no-button collapsed" type="button">
-              Planes de proveedores
-            </button>
-          </h2>
-        </div>
-
-        <!-- Sección Roles -->
-        <div class="accordion-item">
-          <h2 class="accordion-header m-0" id="">
-            <button (click)="setSelection('rol')" class="accordion-button pt-2 pb-2 accordion-no-button collapsed" type="button">
-              Roles
-            </button>
-          </h2>
+          <div id="panelsStayOpen-collapseSix" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingSix">
+            <div class="accordion-body p-0">
+              <div class="list-group rounded-0">
+                <a (click)="setSelection('profesion')" [ngClass]="selection==='profesion'? 'active':''" class="list-group-item list-group-item-action ps-4">Profesiones disponibles</a>
+                <a (click)="setSelection('solicitud_profesion')" [ngClass]="selection==='solicitud_profesion'? 'active':''" class="list-group-item list-group-item-action ps-4">Solicitud de profesiones</a>
+              </div>
+            </div>
+          </div>
         </div>
 
         <!-- Sección Cuentas -->
         <div class="accordion-item">
           <h2 class="accordion-header m-0" id="panelsStayOpen-headingOne">
             <button class="accordion-button pt-2 pb-2 collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="false" aria-controls="panelsStayOpen-collapseOne">
-              Cuentas
+              <i class="bi bi-people fs-5 ps-2 pe-3"></i> Cuentas
             </button>
           </h2>
           <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingOne">
             <div class="accordion-body p-0">
-              <div class="list-group">
-                <a (click)="setSelection('admin')" class="list-group-item list-group-item-action">Administrador</a>
-                <a (click)="setSelection('pendiente')" class="list-group-item list-group-item-action">Pendientes</a>
-                <a (click)="setSelection('proveedor')" class="list-group-item list-group-item-action">Proveedores</a>
-                <a (click)="setSelection('solicitante')" class="list-group-item list-group-item-action">Solicitantes</a>
+              <div class="list-group rounded-0">
+                <a (click)="setSelection('admin')" [ngClass]="selection==='admin'? 'active':''" class="list-group-item list-group-item-action ps-4">Administrador</a>
+                <a (click)="setSelection('pendiente')" [ngClass]="selection==='pendiente'? 'active':''" class="list-group-item list-group-item-action ps-4">Pendientes</a>
+                <a (click)="setSelection('proveedor')" [ngClass]="selection==='proveedor'? 'active':''" class="list-group-item list-group-item-action ps-4">Proveedores</a>
+                <a (click)="setSelection('solicitante')" [ngClass]="selection==='solicitante'? 'active':''" class="list-group-item list-group-item-action ps-4">Solicitantes</a>
                 <!-- <a class="list-group-item list-group-item-action disabled">A disabled link item</a> -->
               </div>
             </div>
@@ -89,14 +79,14 @@
         <div class="accordion-item">
           <h2 class="accordion-header m-0" id="panelsStayOpen-headingTwo">
             <button class="accordion-button pt-2 pb-2 collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
-              Servicios
+              <i class="bi bi-tools fs-5 ps-2 pe-3"></i> Servicios
             </button>
           </h2>
           <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTwo">
             <div class="accordion-body p-0">
-              <div class="list-group">
-                <a (click)="setSelection('categoria')" class="list-group-item list-group-item-action">Categorias</a>
-                <a (click)="setSelection('sub_categoria')" class="list-group-item list-group-item-action">Sub-categorias</a>
+              <div class="list-group rounded-0">
+                <a (click)="setSelection('categoria')" [ngClass]="selection==='categoria'? 'active':''" class="list-group-item list-group-item-action ps-4">Categorias</a>
+                <a (click)="setSelection('sub_categoria')" [ngClass]="selection==='sub_categoria'? 'active':''" class="list-group-item list-group-item-action ps-4">Sub-categorias</a>
               </div>
             </div>
           </div>
@@ -106,25 +96,68 @@
         <div class="accordion-item">
           <h2 class="accordion-header m-0" id="panelsStayOpen-headingThree">
             <button class="accordion-button pt-2 pb-2 collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
-              Pagos
+              <i class="bi bi-piggy-bank fs-5 ps-2 pe-3"></i> Pagos
             </button>
           </h2>
           <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingThree">
             <div class="accordion-body p-0">
-              <div class="list-group">
-                <a (click)="setSelection('cargo')" class="list-group-item list-group-item-action">Cargos</a>
-                <a (click)="setSelection('efectivo')" class="list-group-item list-group-item-action">Efectivo</a>
-                <a (click)="setSelection('tarjeta')" class="list-group-item list-group-item-action">Tarjeta</a>
+              <div class="list-group rounded-0">
+                <a (click)="setSelection('cargo')" [ngClass]="selection==='cargo'? 'active':''" class="list-group-item list-group-item-action ps-4">Cargos</a>
+                <a (click)="setSelection('efectivo')" [ngClass]="selection==='efectivo'? 'active':''" class="list-group-item list-group-item-action ps-4">Efectivo</a>
+                <a (click)="setSelection('tarjeta')" [ngClass]="selection==='tarjeta'? 'active':''" class="list-group-item list-group-item-action ps-4">Tarjeta</a>
               </div>
             </div>
           </div>
         </div>
 
+        <!-- Sección Planes -->
+        <div class="accordion-item">
+          <h2 class="accordion-header m-0" id="panelsStayOpen-headingFour">
+            <button class="accordion-button pt-2 pb-2 collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseFour" aria-expanded="false" aria-controls="panelsStayOpen-collapseFour">
+              <i class="bi bi-calendar-plus fs-5 ps-2 pe-3"></i> Planes
+            </button>
+          </h2>
+          <div id="panelsStayOpen-collapseFour" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingFour">
+            <div class="accordion-body p-0">
+              <div class="list-group rounded-0">
+                <a (click)="setSelection('plan_general')" [ngClass]="selection==='plan_general'? 'active':''" class="list-group-item list-group-item-action ps-4">Planes generales</a>
+                <a (click)="setSelection('plan_proveedor')" [ngClass]="selection==='plan_proveedor'? 'active':''" class="list-group-item list-group-item-action ps-4">Planes de proveedores</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sección Sugerencias -->
+        <div class="accordion-item">
+          <h2 class="accordion-header m-0" id="panelsStayOpen-headingFive">
+            <button class="accordion-button pt-2 pb-2 collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseFive" aria-expanded="false" aria-controls="panelsStayOpen-collapseFive">
+              <i class="bi bi-chat-right-quote fs-5 ps-2 pe-3"></i>Sugerencias
+            </button>
+          </h2>
+          <div id="panelsStayOpen-collapseFive" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingFive">
+            <div class="accordion-body p-0">
+              <div class="list-group rounded-0">
+                <a (click)="setSelection('sugerencia_leida')" [ngClass]="selection==='sugerencia_leida'? 'active':''" class="list-group-item list-group-item-action ps-4">Sugerencias leídas</a>
+                <a (click)="setSelection('sugerencia_no_leida')" [ngClass]="selection==='sugerencia_no_leida'? 'active':''" class="list-group-item list-group-item-action ps-4">Sugerencias no leídas</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sección Roles -->
+        <div class="accordion-item rounded-0">
+          <h2 class="accordion-header m-0" id="">
+            <button [ngClass]="selection==='rol'? '':'collapsed'" (click)="setSelection('rol')" class="accordion-button pt-2 pb-2 accordion-no-button rounded-0" type="button">
+              <i class="bi bi-person-gear fs-5 ps-2 pe-3"></i> Roles
+            </button>
+          </h2>
+        </div>
+
         <!-- Sección Publicidad -->
         <div class="accordion-item">
           <h2 class="accordion-header m-0" id="">
-            <button (click)="setSelection('publicidad')" class="accordion-button pt-2 pb-2 accordion-no-button collapsed" type="button">
-              Publicidad
+            <button [ngClass]="selection==='publicidad'? '':'collapsed'" (click)="setSelection('publicidad')" class="accordion-button pt-2 pb-2 accordion-no-button" type="button">
+              <i class="bi bi-megaphone fs-5 ps-2 pe-3"></i> Publicidad
             </button>
           </h2>
         </div>
@@ -132,8 +165,8 @@
         <!-- Sección Promoción -->
         <div class="accordion-item">
           <h2 class="accordion-header m-0" id="">
-            <button (click)="setSelection('promocion')" class="accordion-button pt-2 pb-2 accordion-no-button collapsed" type="button">
-              Promoción
+            <button [ngClass]="selection==='promocion'? '':'collapsed'" (click)="setSelection('promocion')" class="accordion-button pt-2 pb-2 accordion-no-button" type="button">
+              <i class="bi bi-tags fs-5 ps-2 pe-3"></i> Promoción
             </button>
           </h2>
         </div>
@@ -141,43 +174,17 @@
         <!-- Sección Politicas -->
         <div class="accordion-item">
           <h2 class="accordion-header m-0" id="">
-            <button (click)="setSelection('politica')" class="accordion-button pt-2 pb-2 accordion-no-button collapsed" type="button">
-              Politicas
+            <button [ngClass]="selection==='politica'? '':'collapsed'" (click)="setSelection('politica')" class="accordion-button pt-2 pb-2 accordion-no-button" type="button">
+              <i class="bi bi-shield-exclamation fs-5 ps-2 pe-3"></i> Politicas
             </button>
           </h2>
-        </div>
-
-        <!-- Sección Planes -->
-        <div class="accordion-item">
-          <h2 class="accordion-header m-0" id="">
-            <button (click)="setSelection('plan')" class="accordion-button pt-2 pb-2 accordion-no-button collapsed" type="button">
-              Planes
-            </button>
-          </h2>
-        </div>
-
-        <!-- Sección Sugerencias -->
-        <div class="accordion-item">
-          <h2 class="accordion-header m-0" id="panelsStayOpen-headingFour">
-            <button class="accordion-button pt-2 pb-2 collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseFour" aria-expanded="false" aria-controls="panelsStayOpen-collapseFour">
-              Sugerencias
-            </button>
-          </h2>
-          <div id="panelsStayOpen-collapseFour" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingFour">
-            <div class="accordion-body p-0">
-              <div class="list-group">
-                <a (click)="setSelection('sugerencia_leida')" class="list-group-item list-group-item-action">Sugerencias leídas</a>
-                <a (click)="setSelection('sugerencia_no_leida')" class="list-group-item list-group-item-action">Sugerencias no leídas</a>
-              </div>
-            </div>
-          </div>
         </div>
 
         <!-- Sección Insignias -->
         <div class="accordion-item">
           <h2 class="accordion-header m-0" id="">
-            <button (click)="setSelection('insignia')" class="accordion-button pt-2 pb-2 accordion-no-button collapsed" type="button">
-              Insignias
+            <button [ngClass]="selection==='insignia'? '':'collapsed'" (click)="setSelection('insignia')" class="accordion-button pt-2 pb-2 accordion-no-button" type="button">
+              <i class="bi bi-award fs-5 ps-2 pe-3"></i> Insignias
             </button>
           </h2>
         </div>
@@ -185,8 +192,8 @@
         <!-- Sección Cupones -->
         <div class="accordion-item">
           <h2 class="accordion-header m-0" id="">
-            <button (click)="setSelection('cupon')" class="accordion-button pt-2 pb-2 accordion-no-button collapsed" type="button">
-              Cupones
+            <button [ngClass]="selection==='cupon'? '':'collapsed'" (click)="setSelection('cupon')" class="accordion-button pt-2 pb-2 accordion-no-button" type="button">
+              <i class="bi bi-ticket-perforated fs-5 ps-2 pe-3"></i> Cupones
             </button>
           </h2>
         </div>
@@ -194,34 +201,45 @@
         <!-- Sección Notificaciones push -->
         <div class="accordion-item">
           <h2 class="accordion-header m-0" id="">
-            <button (click)="setSelection('notificacion_push')" class="accordion-button pt-2 pb-2 accordion-no-button collapsed" type="button">
-              Notificaciones Push
+            <button [ngClass]="selection==='notificacion_push'? '':'collapsed'" (click)="setSelection('notificacion_push')" class="accordion-button pt-2 pb-2 accordion-no-button" type="button">
+              <i class="bi bi-bell fs-5 ps-2 pe-3"></i> Notificaciones Push
             </button>
           </h2>
         </div>
 
-        <!-- Sección Solicitudes proveedores -->
-        <div class="accordion-item">
-          <h2 class="accordion-header m-0" id="">
-            <button (click)="setSelection('solicitud_proveedor')" class="accordion-button pt-2 pb-2 accordion-no-button collapsed" type="button">
-              Solicitudes proveedores
-            </button>
-          </h2>
-        </div>
 
       </div>
     </div>
 
     <!-- Cuerpo -->
     <div class="col-xl-10 col-lg-9 col-md-9 col-sm-9 p-0">
-      <!-- Inyeccion Vista PROFESIONES -->
-      <app-profesiones *ngIf="selection === 'profesion'"></app-profesiones>
 
-      <!-- Inyeccion Vista PLANES_PROVEEDORES -->
-      <app-planes-proveedores *ngIf="selection === 'plan_proveedor'"></app-planes-proveedores>
+      <!-- Vista por defecto -->
+      <div *ngIf="!selection" class="row justify-content-center align-items-center p-0 h-100">
+        <div class="col-8">
+          <div class="card text-center">
+            <div class="card-header">
+              <h1>Bienvenido!</h1>
+            </div>
+            <div class="card-body">
+              <h2 class="card-title">Juenito Perez</h2>
+              <img src="../../../assets/imagenes/Iconos vive fácil-03.png" class="card-img-top img mb-3 rounded-circle" alt="...">
+              <p class="card-text text-black fs-6">
+                Para comenzar a utilizar la plataforma, seleccione alguna opción del menú que se encuentra al lado izquierdo.
+              </p>
+            </div>
+            <div class="card-footer text-muted">
+              proveedor@gmail.com
+            </div>
+          </div>
+        </div>
+      </div>
 
-      <!-- Inyeccion Vista ROLES -->
-      <app-roles *ngIf="selection === 'rol'"></app-roles>
+      <!-- Seccion PROFESIONES -->
+        <!-- Inyeccion Vista PROFESIONES -->
+        <app-profesiones *ngIf="selection === 'profesion'"></app-profesiones>
+        <!-- Inyeccion Vista SOLICITUDES_PROFESIONES -->
+        <app-solicitudes-profesiones *ngIf="selection === 'solicitud_profesion'"></app-solicitudes-profesiones>
 
       <!-- Seccion CUENTAS -->
         <!-- Inyeccion Vista ADMINISTRADORES -->
@@ -247,6 +265,21 @@
         <!-- Inyeccion Vista TARJETA -->
         <app-tarjeta *ngIf="selection === 'tarjeta'" ></app-tarjeta>
 
+      <!-- Seccion PLANES -->
+        <!-- Inyeccion Vista PLANES GENERALES -->
+        <app-planes *ngIf="selection === 'plan_general'"></app-planes>
+        <!-- Inyeccion Vista PLANES_PROVEEDORES -->
+        <app-planes-proveedores *ngIf="selection === 'plan_proveedor'"></app-planes-proveedores>
+
+      <!-- Seccion SUGERENCIAS -->
+        <!-- Inyeccion Vista SUGERENCIAS_LEIDAS -->
+        <app-sugerencias-leidas *ngIf="selection === 'sugerencia_leida'" identificador="2" ></app-sugerencias-leidas>
+        <!-- Inyeccion Vista SUGERENCIAS_NO_LEIDAS -->
+        <app-sugerencias-no-leidas *ngIf="selection === 'sugerencia_no_leida'" identificador="2" ></app-sugerencias-no-leidas>
+
+      <!-- Inyeccion Vista ROLES -->
+      <app-roles *ngIf="selection === 'rol'"></app-roles>
+
       <!-- Inyeccion Vista PUBLICIDAD -->
       <app-publicidad *ngIf="selection === 'publicidad'"></app-publicidad>
 
@@ -255,15 +288,6 @@
 
       <!-- Inyeccion Vista POLITICAS -->
       <app-politicas *ngIf="selection === 'politica'" ></app-politicas>
-
-      <!-- Inyeccion Vista PLANES -->
-      <app-planes *ngIf="selection === 'plan'"></app-planes>
-
-      <!-- Seccion SUGERENCIAS -->
-        <!-- Inyeccion Vista SUGERENCIAS_LEIDAS -->
-        <app-sugerencias-leidas *ngIf="selection === 'sugerencia_leida'" identificador="2" ></app-sugerencias-leidas>
-        <!-- Inyeccion Vista SUGERENCIAS_NO_LEIDAS -->
-        <app-sugerencias-no-leidas *ngIf="selection === 'sugerencia_no_leida'" identificador="2" ></app-sugerencias-no-leidas>
 
       <!-- Inyeccion Vista INSIGNIAS -->
       <app-insignias *ngIf="selection === 'insignia'"></app-insignias>
@@ -274,8 +298,6 @@
       <!-- Inyeccion Vista NOTIFICACIONES_PUSH -->
       <app-notificaciones-push *ngIf="selection === 'notificacion_push'"></app-notificaciones-push>
 
-      <!-- Inyeccion Vista SOLICITUDES_PROVEEDORES -->
-      <app-solicitudes-profesiones *ngIf="selection === 'solicitud_proveedor'"></app-solicitudes-profesiones>
     </div>
 
     <!-- Pie -->
