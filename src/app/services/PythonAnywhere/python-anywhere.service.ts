@@ -10,7 +10,7 @@ import { BodyActualizarInsignia, BodyCrearInsignia, BodyResponseCrearInsignia, I
 import { BodyActualizarCargo, BodyCrearCargo, BodyResponseCrearCargo, Cargo } from 'src/app/interfaces/cargo';
 import { BodyPromocionActualizar, BodyResponsePromocionActualizar, Promocion } from 'src/app/interfaces/promocion';
 import { BodyCuponActualizar, BodyResponseCuponActualizar, Cupon } from 'src/app/interfaces/cupon';
-import { PaymentPaginacion } from 'src/app/interfaces/payment';
+import { PaymentEfectivo, PaymentPaginacion, PaymentTarjeta } from 'src/app/interfaces/payment';
 import { BodyActualizarProveedor, BodyActualizarProveedorPendiente, BodyCrearProfesionesProveedor, BodyCrearProveedor, BodyCrearProveedorPendiente, BodyResponseCrearProveedorPendiente, Proveedor, ProveedorPaginacion, ProveedorPendiente, ProveedorProfesion } from 'src/app/interfaces/proveedor';
 import { Documento, DocumentoPendiente } from 'src/app/interfaces/documento';
 import { CuentaBancariaProveedor } from 'src/app/interfaces/cuenta-bancaria';
@@ -19,13 +19,15 @@ import { BodyEmail, BodyResponseEmail } from 'src/app/interfaces/email';
 import { BodyActualizarCategoria, BodyCrearCategoria, BodyResponseCrearCategoria, Categoria } from 'src/app/interfaces/categoria';
 import { BodyActualizarServicio, Servicio } from 'src/app/interfaces/servicio';
 import { BodyCrearSubCategoria, BodyResponseCrearSubCategoria } from 'src/app/interfaces/sub-categoria';
-import { BodyActualizarPlanProveedor, BodyCrearPlan, BodyCrearPlanProveedor, BodyResponseCrearPlan, Plan, PlanProveedor } from 'src/app/interfaces/plan';
+import { BodyActualizarPlan, BodyActualizarPlanProveedor, BodyCrearPlan, BodyCrearPlanProveedor, BodyResponseCrearPlan, Plan, PlanProveedor } from 'src/app/interfaces/plan';
 import { BodyCrearPublicidad, BodyResponseCrearPublicidad } from 'src/app/interfaces/publicidad';
 import { Ciudad } from 'src/app/interfaces/ciudad';
 import { AdminUserPass } from 'src/app/interfaces/admin-user-pass';
 import { NotificacionAnuncio } from 'src/app/interfaces/notificacion-anuncio';
 import { BodyActualizarGroup, BodyCrearGroup, Group, Permission } from 'src/app/interfaces/group';
 import { SolicitudProfesion } from 'src/app/interfaces/solicitud';
+import { PagosTarjetaUser } from 'src/app/interfaces/tarjeta';
+import { Sugerencia } from 'src/app/interfaces/sugerencia';
 @Injectable({
   providedIn: 'root',
 })
@@ -990,30 +992,30 @@ export class PythonAnywhereService {
    * Funcion que trae los pagos en efectivo
    * 
    * @author Margarita Mawyin
-   * @returns Devuelve un Observable con un objeto Pagos Efectivo User
+   * @returns Devuelve un Observable con un arreglo de objetos PaymentEfectivo
    */
-  obtener_pagos_efectivo() {
-    return this.http.get(this.API_URL + '/pago_efectivos/');
+  obtener_pagos_efectivo() : Observable<Array<PaymentEfectivo>> {
+    return this.http.get(this.API_URL + '/pago_efectivos/') as Observable<Array<PaymentEfectivo>>;
   }
 
   /**
    * Funcion que trae los pagos en efectivo por pagina
    * 
    * @author Margarita Mawyin
-   * @returns Devuelve un Observable con un objeto Pagos Efectivo User P
+   * @returns Devuelve un Observable con un objeto ProveedorPaginacion
    */
-  obtener_pagos_efectivoP(page: any) {
-    return this.http.get(`${this.API_URL}/pago_efectivosP/?page=${page}`);
+  obtener_pagos_efectivoP(page: any) : Observable<ProveedorPaginacion> {
+    return this.http.get(`${this.API_URL}/pago_efectivosP/?page=${page}`) as Observable<ProveedorPaginacion>;
   }
 
   /**
  * Funcion que trae los pagos con tarjeta por pagina
  * 
  * @author Margarita Mawyin
- * @returns Devuelve un Observable con un objeto Pagos Tarjeta User P
+ * @returns Devuelve un Observable con un objeto ProveedorPaginacion
  */
-  obtener_pagos_tarjetaP(page: any) {
-    return this.http.get(`${this.API_URL}/pago_tarjetasP/?page=${page}`);
+  obtener_pagos_tarjetaP(page: any) :  Observable<ProveedorPaginacion>{
+    return this.http.get(`${this.API_URL}/pago_tarjetasP/?page=${page}`) as  Observable<ProveedorPaginacion>;
   }
 
   /**
@@ -1081,22 +1083,28 @@ export class PythonAnywhereService {
  * Funcion que trae los pagos con tarjeta del usuario
  * 
  * @author Margarita Mawyin
- * @returns Devuelve un Observable con un objeto Pagos Tarjeta User
+ * @returns Devuelve un Observable con un arreglo de objetos PaymentTarjeta
  */
-  obtener_pagos_tarjeta() {
-    return this.http.get(this.API_URL + '/pago_tarjetas/');
+  obtener_pagos_tarjeta() : Observable<Array<PaymentTarjeta>>{
+    return this.http.get(this.API_URL + '/pago_tarjetas/') as Observable<Array<PaymentTarjeta>>;
   }
 
   //NO SE LO USABA EN LA ANTERIOR APP
+  //NO reconoce el id sacado de obtener_pagos_efectivo()
   obtener_pago_solE(pago_ID: any) {
     return this.http.get(`${this.API_URL}/pagosol_efectivo/${pago_ID}`);
   }
-  //FALTA
-  obtener_pago_solT(pago_ID: any) {
-    return this.http.get(`${this.API_URL}/pagosol_tarjeta/${pago_ID}`);
+  /**
+   * 
+   * @author Margarita Mawyin
+   * @param pago_ID un id de  obtener_pagos_tarjeta()
+   * @returns Devuelve un Observable con un objeto PagosTarjetaUser
+   */
+  obtener_pago_solT(pago_ID: any) : Observable<PagosTarjetaUser> {
+    return this.http.get(`${this.API_URL}/pagosol_tarjeta/${pago_ID}`)  as Observable<PagosTarjetaUser>;
   }
-  //CONSULTAR KEVIN 
-  enviar_alerta(correo: any, asunto: any, texto: any) {
+  //FALTA 
+  enviar_correo_alerta(correo: any, asunto: any, texto: any) {
     return this.http.get(
       `${this.API_URL}/enviaralerta/${correo}/${asunto}/${texto}`
     );
@@ -1104,14 +1112,12 @@ export class PythonAnywhereService {
   /**
    * Funcion que cambia el estado de una sugerencia. si cambio a false sale 400, si cambio a true sale 200
    *
-   *  @author Margarita Mawyin
-   * @param sugerencia 
+   * @author Margarita Mawyin
+   * @param sugerencia Recibe un objeto con el estado. EJ: {"estado": true}
    * @param id id de la sugerencia
-   * @returns  retorna un status 200=OK o 400=BAD_REQUEST
+   * @returns  retorna un status 200=OK o 400=BAD_REQUEST  
    */
-  /*
-    {"estado": true}
-  */
+  
   editar_sugerencia_estado(sugerencia: any, id: any) {
     return this.http.put(`${this.API_URL}/suggestion/${id}`, sugerencia);
   }
@@ -1122,8 +1128,8 @@ export class PythonAnywhereService {
    * @param id 
    * @returns Retorna un objeto Sugerencia
    */
-  obtener_sugerencia(id: any) {
-    return this.http.get(`${this.API_URL}/suggestion/${id}`);
+  obtener_sugerencia(id: any): Observable<Sugerencia>{
+    return this.http.get(`${this.API_URL}/suggestion/${id}`) as Observable<Sugerencia>;
   }
 
   /**
@@ -1131,10 +1137,10 @@ export class PythonAnywhereService {
   * 
   * @author Margarita Mawyin
   * @param id 
-  * @returns Retorna objetos de Sugerencia
+  * @returns Retorna objetos de ProveedorPaginacion
   */
-  obtener_sugerenciasLeidas(page: any) {
-    return this.http.get(`${this.API_URL}/read-suggestions/?page=${page}`);
+  obtener_sugerenciasLeidas(page: any) : Observable<ProveedorPaginacion>{
+    return this.http.get(`${this.API_URL}/read-suggestions/?page=${page}`) as Observable<ProveedorPaginacion>;
   }
 
   /**
@@ -1142,10 +1148,10 @@ export class PythonAnywhereService {
   * 
   * @author Margarita Mawyin
   * @param id 
-  * @returns Retorna objetos de Sugerencia
+  * @returns Retorna objetos de ProveedorPaginacion
   */
-  obtener_sugerenciasNoLeidas(page: any) {
-    return this.http.get(`${this.API_URL}/unread-suggestions/?page= ${page}`);
+  obtener_sugerenciasNoLeidas(page: any) : Observable<ProveedorPaginacion> {
+    return this.http.get(`${this.API_URL}/unread-suggestions/?page=${page}`) as Observable<ProveedorPaginacion>;
   }
 
   /**
@@ -1155,22 +1161,23 @@ export class PythonAnywhereService {
   * @param id 
   * @returns Retorna 5 objetos de Ciudades
   */
-  getCiudades() {
-    return this.http.get(`${this.API_URL}/ciudades/`);
+  getCiudades() : Observable<Ciudad> {
+    return this.http.get(`${this.API_URL}/ciudades/`) as Observable<Ciudad>;
   }
-  //NO SE USA EN LA ANTERIOR APP
-  crear_Ciudades(ciudad: Ciudad) {
-    return this.http.put(`${this.API_URL}/ciudades/`, ciudad);
+
+  //NO hay metodo put ciudades en la BD
+  crear_Ciudades(ciudad: Ciudad)  {
+    return this.http.put(`${this.API_URL}/ciudades/`, ciudad) ;
   }
 
   /**
   * Funcion que trae los planes 
   * 
   * @author Margarita Mawyin 
-  * @returns Retorna objetos de Planes
+  * @returns Retorna arreglo de objetos  Plan
   */
-  obtener_planes() {
-    return this.http.get(this.API_URL + '/planes/');
+  obtener_planes() : Observable<Array<Plan>> {
+    return this.http.get(this.API_URL + '/planes/') as Observable<Array<Plan>>;
   }
 
 
@@ -1188,17 +1195,25 @@ export class PythonAnywhereService {
     bodyCrear.imagen ? dataCrear.append("imagen", bodyCrear.imagen) : null;
     dataCrear.append("precio", bodyCrear.precio.toString());
     dataCrear.append("duracion", bodyCrear.duracion.toString());
-
     return this.http.post(this.API_URL + '/planes/', dataCrear) as Observable<BodyResponseCrearPlan>;
   }
 
-  /** Plan matching query does not exist.
+  /** 
+   * Funcion que actualiza un plan en la base de datos según el parametro pasado.
    * 
-   * @param data 
-   * @returns 
+   * @author Margarita Mawyin
+   * @param bodyCrear Recibe un Objeto BodyActualizarPlan la cual se encarga de actualizar un plan con los campos necesarios.
+   * @returns Devuelve un Observable con un objeto Plan
    */
-  actualizar_plan(data: any) {
-    return this.http.put(this.API_URL + '/planes/', data);
+  actualizar_plan(bodyCrear: BodyActualizarPlan) : Observable<Plan> {
+    const dataCrear = new FormData();
+    dataCrear.append("id", bodyCrear.id.toString());
+    bodyCrear.descripcion ? dataCrear.append("descripcion", bodyCrear.descripcion) : null;
+    bodyCrear.imagen ? dataCrear.append("imagen", bodyCrear.imagen) : null;
+    bodyCrear.precio ? dataCrear.append("precio", bodyCrear.precio.toString()) : null;
+    bodyCrear.duracion ? dataCrear.append("duracion", bodyCrear.duracion.toString()) : null;
+    bodyCrear.estado ? dataCrear.append("estado", bodyCrear.estado.toString()) : null;
+    return this.http.put(this.API_URL + '/planes/', dataCrear) as Observable<Plan>;
   }
 
 
@@ -1206,11 +1221,11 @@ export class PythonAnywhereService {
    * Funcion que elimina un plan por ID
    * 
    * @author Margarita Mawyin
-   * @param id Recibe el id del plan
+   * @param id Recibe el id del plan . ID se puede sacar de obtener_planes()
    * @returns Retorna un objeto Plan
    */
-  borrar_plan(id: any) {
-    return this.http.delete(`${this.API_URL}/planes/${id}`);
+  borrar_plan(id: any) : Observable<Plan>{
+    return this.http.delete(`${this.API_URL}/planes/${id}`) as Observable<Plan>;
   }
 
 
@@ -1218,19 +1233,28 @@ export class PythonAnywhereService {
    * Funcion que trae las publicidades por numero de pagina
    * 
    * @author Margarita Mawyin
-   * @param page 
-   * @returns 
+   * @param page Recibe un numero de pagina. 1
+   * @returns Retorna un objeto ProveedorPaginacion
    */
-  obtener_publicidades(page: any) {
-    return this.http.get(`${this.API_URL}/publicidades/?page=${page}`);
+  obtener_publicidades(page: string) : Observable<ProveedorPaginacion> {
+    return this.http.get(`${this.API_URL}/publicidades/?page=${page}`) as Observable<ProveedorPaginacion>;
   }
 
-  ///FALTA
-  filtrar_publicidadName(buscar: any, page: any) {
+  /**
+   * 
+   * Funcion que filtra por titulo las publicidades
+   * 
+   * @author Margarita Mawyin
+   * @param buscar Recibe el titulo , que se puede obtener de obtener_publicidades()
+   * @param page Recive un numero de pagina
+   * @returns Retorna un objeto ProveedorPaginacion
+   */
+  filtrar_publicidadName(buscar: string, page: string) : Observable<ProveedorPaginacion>{
     return this.http.get(
       `${this.API_URL}/publicidades_search/?page=${page}&buscar=${buscar}`
-    );
+    ) as Observable<ProveedorPaginacion>;
   }
+
   //YYYY-MM-DDThh:mm[:ss[.uuuuuu]][+HH:MM|-HH:MM|Z]
   /*{
       "id": 15,
@@ -1263,9 +1287,15 @@ export class PythonAnywhereService {
 
 
 
-  //Publicidad matching query does not exist.
-  actualizar_publicidad(data: any) {
-    return this.http.put(this.API_URL + '/publicidades/', data);
+/**
+ * 
+ * @param bodyActualizar 
+ * @returns 
+ */
+  actualizar_publicidad(bodyActualizar: any) {
+    const dataCrear = new FormData();
+
+    return this.http.put(this.API_URL + '/publicidades/', dataCrear);
   }
 
   /**

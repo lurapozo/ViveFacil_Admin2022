@@ -1,4 +1,6 @@
+import { PaymentTarjeta } from './payment';
 import { Solicitante } from './solicitante';
+import { Solicitud } from './solicitud';
 
 export interface Tarjeta {
   id: number;
@@ -14,3 +16,13 @@ export interface Tarjeta {
   token: string;
   tipo: string;
 }
+
+export interface PagosTarjetaUser {
+  id: number;
+  pago_tarjeta: PaymentTarjeta,
+  pago_efectivo: string;
+  solicitud: Solicitud;
+  estado: boolean;
+  fecha_creacion: string;
+}
+

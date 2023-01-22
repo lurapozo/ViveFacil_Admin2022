@@ -26,7 +26,7 @@ export interface BodyResponseCrearPlan {
 export interface PlanProveedor {
   id?: number;
   planProveedor: number;
-  plan: Plan,
+  plan: Plan;
   proveedor: number;
   fecha_inicio: string;
   fecha_expiracion: string;
@@ -46,5 +46,14 @@ export interface BodyActualizarPlanProveedor {
   planProveedor: number;
   fecha_inicio: string;
   fecha_expiracion: string;
+}
 
+export interface BodyActualizarPlan {
+  id: number;
+  nombre?: string;
+  descripcion?: string;
+  imagen?: File;
+  precio?: number;
+  duracion?: number;
+  estado?: boolean;
 }
