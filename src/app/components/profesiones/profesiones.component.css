@@ -7,10 +7,6 @@
   background-color: var(--bs-gray-300) !important ;
 }
 
-.img_info_profesion {
-
-}
-
 input[type=file]::file-selector-button {
   color: transparent;
   background-color: transparent;
@@ -25,4 +21,14 @@ input[type=file]::file-selector-button {
 
 .centrar {
   text-align-last: center;
+}
+
+.icono {
+  text-align: center;
+  font-size: 200px;
+}
+
+.image_modal {
+  max-height: 30vh !important;
+  object-fit: contain !important;
 }

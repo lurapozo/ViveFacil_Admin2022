@@ -16,7 +16,13 @@
       </div>
     </div>
     <div class="col-xl-2 col-lg-3">
-      <button type="button" class="btn btn-primary">Agregar profesión</button>
+      <button
+        type="button"
+        class="btn btn-primary"
+        data-bs-toggle="modal"
+        href="#modalCrearProfesion"
+        (click)="limpiarForm('crear')"
+      >Agregar profesión</button>
     </div>
   </div>
 
@@ -45,7 +51,7 @@
       <!-- Profesion -->
       <div (click)="profesion_seleccionada=profesion" *ngFor="let profesion of arr_filtered_profesiones" class="row p-2 bg-light fila_info_profesion" data-bs-toggle="modal" href="#modalInformacionProfesion" role="button">
         <div class="col-3 align-self-center">
-          <img [src]="'https://tomesoft1.pythonanywhere.com'+profesion.foto" class="rounded mx-auto d-block img-fluid img_profesion" alt="...">
+          <img [src]="profesion.foto? 'https://tomesoft1.pythonanywhere.com'+profesion.foto : '../../../assets/imagenes/ProfesionDefault.png'" class="rounded mx-auto d-block img-fluid img_profesion" alt="...">
         </div>
 
         <div class="col-3 align-self-center">
@@ -74,7 +80,7 @@
       </div>
       <div class="modal-body mb-0">
         <div class="row p-2">
-          <img [src]="profesion_seleccionada?'https://tomesoft1.pythonanywhere.com'+profesion_seleccionada.foto:''" class="rounded mx-auto d-block img-fluid w-50" alt="...">
+          <img [src]="profesion_seleccionada?.foto? 'https://tomesoft1.pythonanywhere.com'+profesion_seleccionada?.foto : 'assets/imagenes/ProfesionDefault.png'" class="rounded mx-auto d-block img-fluid w-50 image_modal" alt="...">
         </div>
 
         <div class="row p-2 align-items-center">
@@ -100,13 +106,23 @@
             <h3 class="m-0 p-0 fw-bold">Servicio asignado:</h3>
           </div>
           <div class="col-7">
-            {{profesion_seleccionada?.nombre}}
+            {{profesion_seleccionada? getNameServicio(profesion_seleccionada) : ''}}
           </div>
         </div>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-success" data-bs-target="#modalInformacionEdicionProfesion" data-bs-toggle="modal">Editar</button>
-        <button class="btn btn-danger" data-bs-target="#modalInformacionEdicionProfesion" data-bs-toggle="modal">Eliminar</button>
+        <button
+          class="btn btn-success"
+          data-bs-target="#modalInformacionEdicionProfesion"
+          data-bs-toggle="modal"
+          (click)="limpiarForm('actualizar')"
+        >Editar</button>
+        <button
+          class="btn btn-danger"
+          data-bs-target="#modalConfirmacion"
+          data-bs-toggle="modal"
+          (click)="establecerMensaje('Está seguro que desea eliminar la profesión?', 'eliminar')"
+        >Eliminar</button>
       </div>
     </div>
   </div>
@@ -117,24 +133,32 @@
     <div class="modal-content">
       <div class="modal-header align-items-center">
         <h1 class="modal-title fs-5 m-0 p-0 fw-bold" id="modalInformacionEdicionProfesionLabel">Edición de profesión</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <!-- (click)="limpiarForm('actualizar')" -->
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
       </div>
       <div class="modal-body mb-0">
-        <form [formGroup]="crearProfesionesForm" class="">
+        <form [formGroup]="actualizarProfesionesForm" class="">
           <div class="row">
             <div class="col d-flex justify-content-center">
-              <img class="rounded mx-auto d-block img-fluid w-50" [src]="imagen? imagen : profesion_seleccionada?'https://tomesoft1.pythonanywhere.com'+profesion_seleccionada.foto:''">
+              <img *ngIf="existImageActualizar" class="image_modal rounded mx-auto d-block img-fluid w-50" [src]="imagenActualizar" alt="Archivo incorrecto">
+              <img *ngIf="!existImageActualizar && profesion_seleccionada?.foto" class="image_modal rounded mx-auto d-block img-fluid w-50" [src]="'https://tomesoft1.pythonanywhere.com'+profesion_seleccionada?.foto" alt="Archivo incorrecto">
+              <i *ngIf="!existImageActualizar && !profesion_seleccionada?.foto" class="rounded mx-auto d-block img-fluid w-50 bi bi-upload icono"></i>
             </div>
             <div class="p-2">
               <input
                 class="w-100 centrar form-control"
-                [ngClass]="crearProfesionesForm.get('imagen')?.hasError('image_error') ? 'is-invalid' : '' || (existImage)? 'is-valid' : ''"
+                [ngClass]="actualizarProfesionesForm.get('imagen')?.hasError('image_error') ? 'is-invalid' : '' || (existImageActualizar)? 'is-valid' : ''"
                 type="file"
                 id="file_input"
                 accept="image/png, image/jpeg"
-                (change)="loadImageFromDevice($event)"
+                (change)="loadImageFromDevice($event, 'actualizar')"
               >
-              <div class="invalid-feedback">{{getErrorMessage(crearProfesionesForm, 'imagen')}}</div>
+              <div class="invalid-feedback">{{getErrorMessage(actualizarProfesionesForm, 'imagen')}}</div>
             </div>
           </div>
 
@@ -147,12 +171,13 @@
                 type="text"
                 formControlName="nombre"
                 class="form-control"
-                [ngClass]="isInvalidForm('nombre') ? 'is-invalid' : ''"
+                [ngClass]="isInvalidForm('nombre', 'actualizar') ? 'is-invalid' : ''"
                 id="inputNombre"
                 value="Mark"
                 [placeholder]="profesion_seleccionada?.nombre"
+                [value]="profesion_seleccionada?.nombre"
               >
-              <div class="invalid-feedback"> {{getErrorMessage(crearProfesionesForm, 'nombre')}} </div>
+              <div class="invalid-feedback"> {{getErrorMessage(actualizarProfesionesForm, 'nombre')}} </div>
             </div>
           </div>
 
@@ -164,11 +189,12 @@
               <textarea
                 class="form-control"
                 formControlName="descripcion"
-                [ngClass]="isInvalidForm('descripcion') ? 'is-invalid' : ''"
+                [ngClass]="isInvalidForm('descripcion', 'actualizar') ? 'is-invalid' : ''"
                 id="textareaDescripcion"
                 [placeholder]="profesion_seleccionada?.descripcion"
+                [value]="profesion_seleccionada?.descripcion"
               ></textarea>
-            <div class="invalid-feedback"> {{getErrorMessage(crearProfesionesForm, 'descripcion')}} </div>
+            <div class="invalid-feedback"> {{getErrorMessage(actualizarProfesionesForm, 'descripcion')}} </div>
             </div>
           </div>
 
@@ -179,28 +205,155 @@
             <div class="col-7">
               <select
                 class="form-select"
-                [ngClass]="isInvalidForm('servicio') ? 'is-invalid' : ''"
+                [ngClass]="isInvalidForm('servicio', 'actualizar')? 'is-invalid' : ''"
                 formControlName="servicio"
                 id="selectorServicio"
                 aria-describedby="selectorServicioFeedback"
+                [value]="profesion_seleccionada? getNameServicio(profesion_seleccionada) : ''"
               >
                 <option selected disabled value="">Elija un servicio...</option>
                 <option *ngFor="let servicio of arr_servicios" [id]="servicio.id" [value]="servicio.nombre"> {{servicio.nombre}} </option>
               </select>
-              <div id="selectorServicioFeedback" class="invalid-feedback"> {{getErrorMessage(crearProfesionesForm, 'servicio')}} </div>
+              <div id="selectorServicioFeedback" class="invalid-feedback"> {{getErrorMessage(actualizarProfesionesForm, 'servicio')}} </div>
+            </div>
+          </div>
+
+          <div class="row p-2 align-items-center">
+            <div class="col-5">
+              <label for="switchEstado" class="form-check-label"><h3 class="m-0 p-0 fw-bold">Estado de la profesión:</h3></label>
+            </div>
+            <div class="col-7 form-check form-switch d-flex justify-content-end fs-6">
+              <input
+                class="form-check-input"
+                [ngClass]="isInvalidForm('estado', 'actualizar')? 'is-invalid' : ''"
+                formControlName="estado"
+                id="switchEstado"
+                type="checkbox"
+                role="switch"
+                aria-describedby="switchEstadoFeedback"
+              >
+              <div id="switchEstadoFeedback" class="invalid-feedback"> {{getErrorMessage(actualizarProfesionesForm, 'estado')}} </div>
             </div>
           </div>
         </form>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-success" data-bs-target="#modalInformacionProfesion" data-bs-toggle="modal">Regresar</button>
+        <button class="btn btn-danger" data-bs-target="#modalInformacionProfesion" data-bs-toggle="modal">Regresar</button>
+        <button
+          [disabled]="actualizarProfesionesForm.invalid? true : false"
+          data-bs-target="#modalConfirmacion"
+          data-bs-toggle="modal"
+          class="btn btn-success"
+          (click)="establecerMensaje('Está seguro que desea actualizar la información?', 'actualizar')"
+        >Actualizar</button>
+      </div>
+
+      <!-- <pre>
+        {{actualizarProfesionesForm.value | json}}
+      </pre> -->
+    </div>
+  </div>
+</div>
+
+  <!-- Modal crear profesion -->
+<div class="modal fade" id="modalCrearProfesion" aria-hidden="true" aria-labelledby="modalCrearProfesionLabel" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header align-items-center">
+        <h1 class="modal-title fs-5 m-0 p-0 fw-bold" id="modalCrearProfesionLabel">Crear profesión</h1>
+        <!-- (click)="limpiarForm('crear')" -->
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body mb-0">
+        <form [formGroup]="crearProfesionesForm" class="">
+          <!-- Seccion de imagen -->
+          <div class="row">
+            <div class="col d-flex justify-content-center">
+              <img *ngIf="existImageCrear" class="rounded mx-auto d-block img-fluid w-50 image_modal" [src]="imagenCrear" alt="Archivo incorrecto">
+              <i *ngIf="!existImageCrear" class="rounded mx-auto d-block img-fluid w-50 bi bi-upload icono"></i>
+            </div>
+            <div class="p-2">
+              <input
+                class="w-100 centrar form-control"
+                [ngClass]="crearProfesionesForm.get('imagen')?.hasError('image_error') ? 'is-invalid' : '' || (existImageCrear)? 'is-valid' : ''"
+                type="file"
+                id="file_input"
+                accept="image/png, image/jpeg"
+                (change)="loadImageFromDevice($event, 'crear')"
+              >
+              <div class="invalid-feedback">{{getErrorMessage(crearProfesionesForm, 'imagen')}}</div>
+            </div>
+          </div>
+
+          <!-- Seccion Nombre -->
+          <div class="row p-2 align-items-center">
+            <div class="col-5">
+              <label for="inputNombre" class="form-label"><h3 class="m-0 p-0 fw-bold">Nombre:</h3></label>
+            </div>
+            <div class="col-7">
+              <input
+                type="text"
+                formControlName="nombre"
+                class="form-control"
+                [ngClass]="isInvalidForm('nombre', 'crear') ? 'is-invalid' : crearProfesionesForm.get('nombre')?.touched || crearProfesionesForm.get('nombre')?.dirty && !crearProfesionesForm.get('nombre')?.invalid ? 'is-valid' : ''"
+                id="inputNombre"
+                placeholder="Nombre de la profesión"
+              >
+              <div class="invalid-feedback"> {{getErrorMessage(crearProfesionesForm, 'nombre')}} </div>
+            </div>
+          </div>
+
+          <!-- Seccion descripcion -->
+          <div class="row p-2 align-items-center">
+            <div class="col-5">
+              <label for="textareaDescripcion" class="form-label"><h3 class="m-0 p-0 fw-bold">Descripción:</h3></label>
+            </div>
+            <div class="col-7">
+              <textarea
+                class="form-control"
+                formControlName="descripcion"
+                [ngClass]="isInvalidForm('descripcion', 'crear') ? 'is-invalid' : ''"
+                id="textareaDescripcion"
+                placeholder="Descripción de la profesión"
+              ></textarea>
+              <div class="invalid-feedback"> {{getErrorMessage(crearProfesionesForm, 'descripcion')}} </div>
+            </div>
+          </div>
+
+          <!-- Seccion del selector -->
+          <div class="row p-2 align-items-center">
+            <div class="col-5">
+              <label for="selectorServicioCrear" class="form-label"><h3 class="m-0 p-0 fw-bold">Servicio asignado:</h3></label>
+            </div>
+            <div class="col-7">
+              <select
+                class="form-select"
+                [ngClass]="isInvalidForm('servicio', 'crear') ? 'is-invalid' : ''"
+                formControlName="servicio"
+                id="selectorServicioCrear"
+                aria-describedby="selectorServicioCrearFeedback"
+              >
+                <option selected disabled value="">Elija un servicio...</option>
+                <option *ngFor="let servicio of arr_servicios" [id]="servicio.id" [value]="servicio.nombre"> {{servicio.nombre}} </option>
+              </select>
+              <div id="selectorServicioCrearFeedback" class="invalid-feedback"> {{getErrorMessage(crearProfesionesForm, 'servicio')}} </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
         <button
           [disabled]="crearProfesionesForm.invalid? true : false"
           data-bs-target="#modalConfirmacion"
           data-bs-toggle="modal"
-          class="btn btn-warning"
-          (click)="establecerMensaje('Está seguro que desea actualizar la información?', 'actualizar')"
-        >Actualizar</button>
+          class="btn btn-success"
+          (click)="establecerMensaje('Está seguro que desea crear la profesión?', 'crear')"
+        >Crear</button>
       </div>
 
       <!-- <pre>
@@ -214,13 +367,18 @@
 <div class="modal fade" id="modalConfirmacion" tabindex="-1" aria-labelledby="modalConfirmacionLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
+      <!-- Titulo del modal confirmacion -->
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="modalConfirmacionLabel">Confirmar selección</h1>
+        <h1 class="modal-title fs-5 m-0 p-0 fw-bold" id="modalConfirmacionLabel">Confirmar selección</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
+
+      <!-- Cuerpo del modal confirmacion -->
       <div class="modal-body">
         {{mensajeAlerta}}
       </div>
+
+      <!-- Footer del modal confirmacion -->
       <div class="modal-footer">
         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
         <button *ngIf="isCrear" type="button" class="btn btn-success" (click)="onCrear()" data-bs-dismiss="modal">Confirmar</button>

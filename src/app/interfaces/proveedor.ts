@@ -63,7 +63,7 @@ export interface BodyActualizarProveedorPendiente {
   direccion: string;
   genero: string;
   licencia: string;
-  copiaLicencia: File | null; //Required
+  copiaLicencia: File | null; 
   copiaCedula: File; //Required
   filesDocuments: File[]; //Required
   cedula: string;
@@ -150,7 +150,7 @@ export interface BodyResponseCrearProveedorPendiente {
   serializer: SerializerCrearProveedorPendiente;
 }
 
-interface SerializerCrearProveedorPendiente {
+export interface SerializerCrearProveedorPendiente {
   id: number;
   nombres: string;
   apellidos: string;

@@ -37,22 +37,7 @@ export class PythonAnywhereService {
 
   constructor(private http: HttpClient) { }
 
-  // getAdministradores(): Observable<Administrador[]> {
-  //   return this.http
-  //     .get<fetchAllAdmi>(this.administradores)
-  //     .pipe(map(this.getAdmiDatos));
-  // }
 
-  // private getAdmiDatos(resp: fetchAllAdmi) {
-  //   const admiList: Administrador[] = resp.results.map((admi) => {
-  //     return {
-  //       id: admi.id,
-  //       user_datos: admi.user_datos,
-  //       estado: admi.estado,
-  //     };
-  //   });
-  //   return admiList;
-  // }
 
   //------------------------------------------------ SECCIÓN SOLICITANTES -------------------------------------------------
   /**
@@ -114,10 +99,7 @@ export class PythonAnywhereService {
    * @param id Recibe un string indicando el ID del Solicitante (ID más externo de la tabla de solicitante).
    * @returns Devuelve un Observable con el objeto Solicitante el cuál fue modificado.
    */
-  cambio_solicitante_estado(
-    estado: boolean,
-    id: string
-  ): Observable<Solicitante> {
+  cambio_solicitante_estado( estado: boolean, id: string ): Observable<Solicitante> {
     return this.http.put(`${this.API_URL}/solicitante_estado/${id}`, {
       estado: estado,
     }) as Observable<Solicitante>;
@@ -549,7 +531,7 @@ export class PythonAnywhereService {
    *
    * @author Kevin Chévez
    * @param id Recibe un string ID del proveedor pendiente objetivo a buscar en la Base de datos.
-   * @returns Devuelve un observable con el objeto ProveedorPendiente
+   * @returns Devuelve un observable con objeto ProveedorPendiente
    */
   obtener_proveedor_pendiente(id: string): Observable<ProveedorPendiente> {
     return this.http.get(`${this.API_URL}/proveedores_pendientes/${id}`) as Observable<ProveedorPendiente>;
@@ -776,8 +758,15 @@ export class PythonAnywhereService {
    * @param bodyCrear Recibe un Objeto BodyCrearProfesion la cual se encarga de crear una profesion con los campos necesarios.
    * @returns Devuelve un Observable con un objeto BodyResponseCrearProfesion
    */
-  add_profesion(data: BodyCrearProfesion): Observable<BodyResponseCrearProfesion> {
-    return this.http.post(this.API_URL + '/profesiones/', data) as Observable<BodyResponseCrearProfesion>;
+  add_profesion(bodyCrear: BodyCrearProfesion): Observable<BodyResponseCrearProfesion> {
+    const dataCrear = new FormData();
+    if(bodyCrear.nombre && bodyCrear.descripcion && bodyCrear.servicio){
+      dataCrear.append("nombre", bodyCrear.nombre);
+      dataCrear.append("descripcion", bodyCrear.descripcion);
+      dataCrear.append("servicio", bodyCrear.servicio);
+      bodyCrear.foto? dataCrear.append("foto", bodyCrear.foto) : null;
+    }
+    return this.http.post(this.API_URL + '/profesiones/', dataCrear) as Observable<BodyResponseCrearProfesion>;
   }
 
   /**
@@ -832,7 +821,7 @@ export class PythonAnywhereService {
 
   /**
    * Funcion que crea insignias en la base de datos según el parametro pasado.
-   * 
+   *
    * @author Margarita Mawyin
    * @param bodyCrear  Recibe un Objeto BodyCrearInsignia la cual se encarga de crear una insignia con los campos necesarios.
    * @returns Devuelve un Observable con un objeto BodyResponseCrearInsignia
@@ -851,7 +840,7 @@ export class PythonAnywhereService {
 
   /**
    * Funcion que crea cargo en la base de datos según el parametro pasado.
-   * 
+   *
    * @author Margarita Mawyin
    * @param bodyCrear Recibe un Objeto BodyCrearCargo la cual se encarga de crear un cargo con los campos necesarios.
    * @returns Devuelve un Observable con un objeto BodyResponseCrearCargo
@@ -866,7 +855,7 @@ export class PythonAnywhereService {
 
   /**
    * Funcion que crea subcategoria en la base de datos según el parametro pasado.
-   * 
+   *
    * @author Margarita Mawyin
    * @param bodyCrear Recibe un Objeto BodyCrearSubCategoria la cual se encarga de crear un cargo con los campos necesarios.
    * @returns Devuelve un Observable con un objeto BodyResponseCrearSubCategoria
@@ -881,7 +870,7 @@ export class PythonAnywhereService {
 
   /**
    * Funcion que crea profesion de un proveedor en la base de datos según el parametro pasado.
-   * 
+   *
    * @author Margarita Mawyin
    * @param user correo del proveedor
    * @param data profesion y ano_experiencia. EJ: data = {"profesion": "Jardinero", ano_experiencia: 5 }
@@ -891,11 +880,11 @@ export class PythonAnywhereService {
     return this.http.post(`${this.API_URL}/proveedor_profesiones/${user}`, data) as Observable<Array<ProveedorProfesion>>;
   }
 
-  
+
   //https://tomesoft1.pythonanywhere.com/proveedor_profesiones/melquinto20@gmail.com/128&Jardinero,Pintor|true
-  eliminar_proveedores_pendientes(user: any, data: any) {//FALTA
+  eliminar_proveedores_pendientes(id: any) {//FALTA
     return this.http.delete(
-      `${this.API_URL}/proveedores_pendientes/${user}/${data}`
+      `${this.API_URL}/proveedores_pendientes/${id}`
     );
   }
 
@@ -906,7 +895,7 @@ export class PythonAnywhereService {
 
   /**
    * Funcion que traer todas las promociones
-   * 
+   *
    * @author Margarita Mawyin
    * @returns Devuelve un Observable con un objeto Promociones
      */
@@ -916,7 +905,7 @@ export class PythonAnywhereService {
 
   /**
  * Funcion que traer todos los cupones
- * 
+ *
  * @author Margarita Mawyin
  * @returns Devuelve un Observable con un objeto Cupones
    */
@@ -926,7 +915,7 @@ export class PythonAnywhereService {
 
   /**
 * Funcion que traer todos los cupones
-* 
+*
 * @author Margarita Mawyin
 * @returns Devuelve un Observable con un objeto Grupos
  */
@@ -937,7 +926,7 @@ export class PythonAnywhereService {
   /**
    * Funcion que agrega las promociones
    * @author Margarita Mawyin
-   * @param data 
+   * @param data
    * @returns  Devuelve un Observable con succes: boolean, msg : string, promocion: Obejct<Promocion>
    */
   /*
@@ -961,7 +950,7 @@ export class PythonAnywhereService {
   /**
    *  Funcion que agrega los cupones
    * @author Margarita Mawyin
-   * @param data 
+   * @param data
    * @returns Devuelve un Observable con succes: boolean, msg : string, promocion: Obejct<Cupon>
    */
   /*
@@ -990,7 +979,7 @@ export class PythonAnywhereService {
 
   /**
    * Funcion que trae los pagos en efectivo
-   * 
+   *
    * @author Margarita Mawyin
    * @returns Devuelve un Observable con un arreglo de objetos PaymentEfectivo
    */
@@ -1000,7 +989,7 @@ export class PythonAnywhereService {
 
   /**
    * Funcion que trae los pagos en efectivo por pagina
-   * 
+   *
    * @author Margarita Mawyin
    * @returns Devuelve un Observable con un objeto ProveedorPaginacion
    */
@@ -1010,7 +999,7 @@ export class PythonAnywhereService {
 
   /**
  * Funcion que trae los pagos con tarjeta por pagina
- * 
+ *
  * @author Margarita Mawyin
  * @returns Devuelve un Observable con un objeto ProveedorPaginacion
  */
@@ -1020,7 +1009,7 @@ export class PythonAnywhereService {
 
   /**
 * Funcion que trae el objeto { "valor__sum": 2955.63 }
-* 
+*
 * @author Margarita Mawyin
 * @returns Devuelve un Observable con un objeto Valor Total Efectivo
 */
@@ -1030,7 +1019,7 @@ export class PythonAnywhereService {
 
   /**
 * Funcion que trae el objeto { "valor__sum": 2017.0 }
-* 
+*
 * @author Margarita Mawyin
 * @returns Devuelve un Observable con un objeto Valor Total Tarjeta
 */
@@ -1040,7 +1029,7 @@ export class PythonAnywhereService {
 
   /**
 * Funcion que trae el objeto { "cargo_paymentez__sum": 6.825 }
-* 
+*
 * @author Margarita Mawyin
 * @returns Devuelve un Observable con un objeto Valor Total Pay Tarjeta
 */
@@ -1050,7 +1039,7 @@ export class PythonAnywhereService {
 
   /**
 * Funcion que trae el objeto { "cargo_banco__sum": 20.475 }
-* 
+*
 * @author Margarita Mawyin
 * @returns Devuelve un Observable con un objeto Valor Total Banc Tarjeta
 */
@@ -1060,7 +1049,7 @@ export class PythonAnywhereService {
 
   /**
 * Funcion que trae el objeto { "cargo_sistema__sum": 9.099999999999998 }
-* 
+*
 * @author Margarita Mawyin
 * @returns Devuelve un Observable con un objeto Valor Total Sis Tarjeta
 */
@@ -1069,8 +1058,8 @@ export class PythonAnywhereService {
   }
 
   /**
-* Funcion que trae 4972.63 
-* 
+* Funcion que trae 4972.63
+*
 * @author Margarita Mawyin
 * @returns 4972.63
 */
@@ -1081,7 +1070,7 @@ export class PythonAnywhereService {
 
   /**
  * Funcion que trae los pagos con tarjeta del usuario
- * 
+ *
  * @author Margarita Mawyin
  * @returns Devuelve un Observable con un arreglo de objetos PaymentTarjeta
  */
@@ -1123,9 +1112,9 @@ export class PythonAnywhereService {
   }
   /**
    * Funcion que trae la sugerencia por ID especificado
-   * 
+   *
    * @author Margarita Mawyin
-   * @param id 
+   * @param id
    * @returns Retorna un objeto Sugerencia
    */
   obtener_sugerencia(id: any): Observable<Sugerencia>{
@@ -1134,7 +1123,7 @@ export class PythonAnywhereService {
 
   /**
   * Funcion que trae las sugerencias leidas por pagina especificada
-  * 
+  *
   * @author Margarita Mawyin
   * @param id 
   * @returns Retorna objetos de ProveedorPaginacion
@@ -1145,7 +1134,7 @@ export class PythonAnywhereService {
 
   /**
   * Funcion que trae las sugerencias NO leidas por pagina especificada
-  * 
+  *
   * @author Margarita Mawyin
   * @param id 
   * @returns Retorna objetos de ProveedorPaginacion
@@ -1155,10 +1144,10 @@ export class PythonAnywhereService {
   }
 
   /**
-  * Funcion que trae las ciudades 
-  * 
+  * Funcion que trae las ciudades
+  *
   * @author Margarita Mawyin
-  * @param id 
+  * @param id
   * @returns Retorna 5 objetos de Ciudades
   */
   getCiudades() : Observable<Ciudad> {
@@ -1183,7 +1172,7 @@ export class PythonAnywhereService {
 
   /**
    * Funcion que crea plan en la base de datos según el parametro pasado.
-   * 
+   *
    * @author Margarita Mawyin
    * @param bodyCrear  Recibe un Objeto BodyCrearPlan la cual se encarga de crear una insignia con los campos necesarios.
    * @returns Devuelve un Observable con un objeto BodyResponseCrearPlan
@@ -1219,7 +1208,7 @@ export class PythonAnywhereService {
 
   /**
    * Funcion que elimina un plan por ID
-   * 
+   *
    * @author Margarita Mawyin
    * @param id Recibe el id del plan . ID se puede sacar de obtener_planes()
    * @returns Retorna un objeto Plan
@@ -1231,7 +1220,7 @@ export class PythonAnywhereService {
 
   /**
    * Funcion que trae las publicidades por numero de pagina
-   * 
+   *
    * @author Margarita Mawyin
    * @param page Recibe un numero de pagina. 1
    * @returns Retorna un objeto ProveedorPaginacion
@@ -1269,7 +1258,7 @@ export class PythonAnywhereService {
   */
   /**
    * Funcion que crea publicidad en la base de datos según el parametro pasado.
-   * 
+   *
    * @author Margarita Mawyin
    * @param bodyCrear  Recibe un Objeto BodyCrearPublicidad la cual se encarga de crear una publicidad con los campos necesarios.
    * @returns Devuelve un Observable con un objeto BodyResponseCrearPublicidad
@@ -1300,7 +1289,7 @@ export class PythonAnywhereService {
 
   /**
    * Funcion que elimna la publicidad por ID especificado
-   * 
+   *
    * @author Margarita Mawyin
    * @param id Recibe el ID de la publicidad
    * @returns Retorna el objeto Publicidad
@@ -1311,7 +1300,7 @@ export class PythonAnywhereService {
 
   /**
    * Funcion que obtiene la informacion de un administrador dado su correo
-   * 
+   *
    * @author Margarita Mawyin
    * @param user Recibe un correo de admin
    * @returns Retorna el objeto Administrador
@@ -1321,7 +1310,7 @@ export class PythonAnywhereService {
   }
   /**
    * Funcion que srive para inicia sesion como admin
-   * 
+   *
    * @param user correo del admin
    * @param passw contraseña del admin
    * @returns Retorna un objeto admin_user_pass
@@ -1335,9 +1324,9 @@ export class PythonAnywhereService {
 
   /**
    * Funcion que destruye la sesion , mediante la eliminacion de un token
-   * 
+   *
    * @param token Recibe un token que se crea con login() o obtener_admin_user_pass(*)
-   * @returns Un status 200 OK o un error 400 bad request 
+   * @returns Un status 200 OK o un error 400 bad request
    */
   logout(token: string) {
     return this.http.get(`${this.API_URL}/logout/${token}`);
@@ -1347,8 +1336,8 @@ export class PythonAnywhereService {
   //{"token":"022c571608c2bb1f268cdc4dbff0fb569a74798e","active":true}
   /**
    * Funcion que inicia sesion como proveedor o solicitante
-   * 
-   * @returns 
+   *
+   * @returns
    */
   login() {
     return this.http.get(`${this.API_URL}/login/`);
@@ -1356,7 +1345,7 @@ export class PythonAnywhereService {
 
   /**
    * Funcion que trae las notificaciones/anuncios
-   * 
+   *
    * @returns Retorna un objeto NotificacionAnuncio
    */
   get_notificacion(): Observable<NotificacionAnuncio> {
@@ -1366,9 +1355,9 @@ export class PythonAnywhereService {
 
   /**
    * Funcion que agrega una notificacion/anuncio
-   * 
+   *
    * @author Margarita Mawyin
-   * @param bodyCrear 
+   * @param bodyCrear
    * @returns Retorna un obejto con un estado OK 200 {"sucess": true}
    */
   send_notificacion(bodyCrear: NotificacionAnuncio) {
@@ -1390,12 +1379,12 @@ export class PythonAnywhereService {
 
   /**
    * Funcion que crea un plan en la base de datos según el parametro pasado.
-   * 
+   *
    * YYYY-MM-DDThh:mm[:ss[.uuuuuu]][+HH:MM|-HH:MM|Z]
    * @author Margarita Mawyin
    * @param bodyCrear ecibe un Objeto BodyCrearPlanProveedor la cual se encarga de crear un plan con los campos necesarios.
    * @returns Devuelve un Observable con un objeto PlanProveedor
-   *  
+   *
    */
   crear_plan_proveedor(bodyCrear: BodyCrearPlanProveedor): Observable<PlanProveedor> {
     const dataCrear = new FormData();
@@ -1411,7 +1400,7 @@ export class PythonAnywhereService {
   //status 200 OK Objeto PlanProveedor
   /**
    * Funcion que actualiza un plan dado un ID y un numero de planProveedor existente
-   * 
+   *
    * @author Margarita Mawyin
    * @param bodyCrear  Recibe un Objeto BodyActualizarPlanProveedor la cual se encarga de actualizar un plan con los campos necesarios
    * @returns Devuelve un Observable con un objeto PlanProveedor
@@ -1430,7 +1419,7 @@ export class PythonAnywhereService {
     return this.http.delete(`${this.API_URL}/planProveedor/${id}`);
   }
   /**
-   * 
+   *
    * @author Margarita Mawyin
    * @returns Devuelve un Observable arreglo s con un objetos Plan
    */
@@ -1446,7 +1435,7 @@ export class PythonAnywhereService {
 
   /** REVISAR POR LO DE PERSMISSIONS
    * Funcion que crea un rol nuevo en la base de datos según el parametro pasado.
-   * 
+   *
    * @author Margarita Mawyin
    * @param bodyCrear Recibe un Objeto BodyCrearGroup la cual se encarga de crear un rol con los campos necesarios
    * @returns Devuelve un Observable con un objeto Group
@@ -1473,13 +1462,13 @@ export class PythonAnywhereService {
    * @param page El numero de pagina. ! Solo he visto pagina con page=1, mas haya salen invalidas
    * @returns // { "page_size": 10, "total_objects": 0, "total_pages": 1, "current_page_number": 1,  "next": null, "previous": null,  "results": [ SolicitudProfesion ] }
    */
-  obtener_solicitudes(page: any) {
+  obtener_solicitudes(page=1) {
     return this.http.get(`${this.API_URL}/solicitudes-proveedores/?page=${page}`);
   }
 
 
   /**
-   * 
+   *
    * @author Margarita Mawyin
    * @param usuario Correo del usuario soliciante, proveedor o admin
    * @param page El numero de pagina. ! Solo he visto pagina con page=1, mas haya salen invalidas
@@ -1497,7 +1486,7 @@ export class PythonAnywhereService {
 
   /**
    * Funcion que trae las solicitudes-profesion
-   * 
+   *
    * @author Margarita Mawyin
    * @param id el id de la solicitud **
    * @returns Retorna un Observable SolicitudProfesion
@@ -1508,8 +1497,8 @@ export class PythonAnywhereService {
 
 
   /**
-   * Funcion que cambia el estado (True/False) 
-   * 
+   * Funcion que cambia el estado (True/False)
+   *
    * @param id el id de la solicitud **
    * @param data Recibe un estado {estado:False}
    * @returns Devuelve un Observable SolicitudProfesion
@@ -1534,7 +1523,7 @@ export class PythonAnywhereService {
 
   /**
    * Funcion que borra un rol especificando el ID del rol
-   * 
+   *
    * @author Margarita Mawyin
    * @param id Recibe el id del rol (obtenido de /grupos/)
    * @returns Retorna un status HTTP_204_NO_CONTENT en caso de exito
@@ -1549,7 +1538,7 @@ export class PythonAnywhereService {
   }
 
   /**
-   * 
+   *
    * @authr Margarita Mawyin
    * @returns Retorna un arreglo de Objeto Permission
    */
@@ -1559,7 +1548,7 @@ export class PythonAnywhereService {
 
 
   /**
-   * 
+   *
    * @author Margarita Mawyin
    * @returns //{ "totalPendientes": 29, "totalProveedores": 115}
    */
@@ -1573,12 +1562,15 @@ export class PythonAnywhereService {
   }
   /**
    * Funcion que actualiza una profesion en la base de datos según el parametro pasado.
-   * 
+   *
    * @author Margarita Mawyin
    * @param bodyCrear Recibe un Objeto BodyActualizarProfesion el cual se ectualiza una profesion con los campos necesarios.
-   * @returns 
+   * @returns
    */
   actualizar_profesion(bodyCrear: BodyActualizarProfesion) : Observable<BodyResponseActualizarProfesion>{
+    if(bodyCrear.foto) {
+      console.log('Hay un File (foto): ', bodyCrear.foto);
+    }
     const dataCrear = new FormData();
     dataCrear.append("id", bodyCrear.id.toString());
     bodyCrear.nombre ? dataCrear.append("nombre", bodyCrear.nombre) : null;
@@ -1592,7 +1584,7 @@ export class PythonAnywhereService {
   //----------------------------------------------
   /**
     * Funcion que crea insignias en la base de datos según el parametro pasado.
-    * 
+    *
     * @author Margarita Mawyin
     * @param bodyCrear  Recibe un Objeto BodyCrearInsignia la cual se encarga de crear una insignia con los campos necesarios.
     * @returns Devuelve un Observable con un objeto BodyResponseCrearInsignia
@@ -1613,7 +1605,7 @@ export class PythonAnywhereService {
 
   /**
    * Funcion que traer profesion por id (se puede ver los ids en /profesiones/)
-   * 
+   *
    * @author Margarita Mawyin
    * @param id Recibe el id de la profesion
    * @returns Retorna Objeto Profesion
@@ -1625,7 +1617,7 @@ export class PythonAnywhereService {
 
   /**
    * Funcion que cambia años de experiencia por id especificado
-   * 
+   *
    * @author Margarita Mawyin
    * @param id  El id se puede obtener de /proveedor_profesiones/
    * @param data Recibe un objeto con año y opcionalmente id (es redundante ya que se especifica en la ruta){"ano_experiencia": 4}

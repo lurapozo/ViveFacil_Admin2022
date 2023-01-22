@@ -1,5 +1,5 @@
-import { Component, Input, OnInit,ViewChild } from '@angular/core';
-import { FormControl, FormGroup, Validators ,FormBuilder, AbstractControl} from '@angular/forms';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { FormControl, FormGroup, Validators, FormBuilder, AbstractControl } from '@angular/forms';
 import { Administrador, BodyActualizarAdministrador, BodyCrearAdministrador } from 'src/app/interfaces/administrador';
 import { Cargo } from 'src/app/interfaces/cargo';
 import { PythonAnywhereService } from 'src/app/services/PythonAnywhere/python-anywhere.service';
@@ -11,351 +11,446 @@ import { DomSanitizer } from '@angular/platform-browser';
   styleUrls: ['./administradores.component.css']
 })
 export class AdministradoresComponent {
-  @Input() identificador: string = "";
-  administradores: Administrador[]=[]
-  submitted = false;
-  cargos: Cargo[]=[]
-  pageNumber :number []=[];
-  datos= new FormData()
-  condicionNext=false
-  currentPage =1
-  show =false
-  showEdit =false
-  showFormEdit =false
-  administradoSelected!: Administrador;
-  administradoEdit!: Administrador;
-  hidePassword = true;
-  hideConfirmPassword = true;
-  isRegistered = false;
+
+total=0
+  arr_admi!: any[];
+  arr_filtered_admi!: any[];
   ciudades = ['Guayaquil', 'Quito', 'Cuenca', 'Sto. Domingo', 'Ibarra'];
   generos = ['Masculino', 'Femenino', 'Otro'];
-  sexoSelected = '';
-  admiEditar:BodyActualizarAdministrador={
-    id: 0,
-    username: '',
-    email: '',
-    password: '',
-    tipo: '',
-    nombres: '',
-    apellidos: '',
-    ciudad: '',
-    cedula: '',
-    telefono: '',
-    genero: '',
-    emailNuevo: '',
-    foto: null
-  }
-  admi: BodyCrearAdministrador={
-    username:"",
-    email:"",
-    password:"",
-    ciudad:"",
-    tipo:"",
-    nombres:"",
-    apellidos:"",
-    cedula:"",
-    telefono:"",
-    genero:"",
-    rol:"",
-    foto:null,
+  roles = ['Hangaroa', 'Secretario', 'administrador de publicidades', 'enfermito'];
+  imagenCrear: any
+  condicionNext = false
+  currentPage = 1
+  pageNumber: number[] = [];
+  admi_seleccionada: any
+  fileImagenActualizar: File = {} as File
+  imagenActualizar: any
+  fileImagenCrear: any
+  existImageCrear = false; existImageActualizar = false;
 
-  }
-  registerForm = new FormGroup({
-    email: new FormControl('', [Validators.required, Validators.email]),
-    password: new FormControl('', [Validators.required, Validators.minLength(6)]),
-    passwordConfirm: new FormControl('', [Validators.required, Validators.minLength(6)]),
-    nombres: new FormControl('', [Validators.required]),
-    apellidos: new FormControl('', [Validators.required]),
-    ciudad: new FormControl('', [Validators.required]),
-    genero: new FormControl('', [Validators.required]),
-    rol: new FormControl('', [Validators.required]),
-    telefono: new FormControl('', [Validators.required]),
-    cedula: new FormControl('', [Validators.required, Validators.minLength(10)]),
-  }, []);
+  mensajeAlerta: string = '';
+  isCrear = false; isActualizar = false; isEliminar = false;
 
-  constructor(   private pythonAnyWhereService: PythonAnywhereService,private sanitizer: DomSanitizer,private formBuilder: FormBuilder){
+  admi: BodyCrearAdministrador = {
+    username: "",
+    email: "",
+    password: "",
+    ciudad: "",
+    tipo: "",
+    nombres: "",
+    apellidos: "",
+    cedula: "",
+    telefono: "",
+    genero: "",
+    rol: "",
+    foto: null,
 
-    const passwordControl = this.registerForm.get('password') as FormControl;
-    passwordControl.addValidators(this.sendUpdateToCompareValidator(this.registerForm.get('passwordConfirm') as AbstractControl));
-
-    const passwordConfControl = this.registerForm.get('passwordConfirm') as FormControl;
-    passwordConfControl.addValidators(this.createCompareValidator(this.registerForm.get('password') as AbstractControl, this.registerForm.get('passwordConfirm') as AbstractControl));
-
-    const telefonoControl = this.registerForm.get('telefono') as FormControl;
-    telefonoControl.addValidators(this.createNumberValidator(this.registerForm.get('telefono') as AbstractControl));
-
-    const cedulaControl = this.registerForm.get('cedula') as FormControl;
-    cedulaControl.addValidators(this.createNumberValidator(this.registerForm.get('cedula') as AbstractControl));
-
-
-  }
-
-  createNumberValidator(controlNumber: AbstractControl) {
-    return () => {
-      if (isNaN(controlNumber.value.replace(/\s/g, ''))){
-        return { number_error: 'Solo se aceptan números.' };
-      }
-      else if(controlNumber.value.replace(/\s/g, '').length !== 10){
-        return { number_error: 'Ingrese los 10 dígitos requeridos.' };
-      }
-      return null;
-    };
-  }
-  sendUpdateToCompareValidator(reciberUpdateControl: AbstractControl) {
-    return () => {
-      reciberUpdateControl.updateValueAndValidity();
-      return null;
-    };
-  }
-
-  createCompareValidator(controlOne: AbstractControl, controlTwo: AbstractControl) {
-    return () => {
-      if (controlOne.value !== controlTwo.value){
-        return { match_error: 'Value does not match' };
-      }
-      return null;
-    };
   }
 
   formEdit: FormGroup = new FormGroup({
-    nombre: new FormControl(''),
-    apellido: new FormControl(''),
-     correo: new FormControl(''),
-    ced: new FormControl(''),
-    cell: new FormControl(''),
-    city: new FormControl(''),
-    cargo: new FormControl(''),
-    sexo: new  FormControl(''),
-    pass: new FormControl(''),
-    confirmPass: new FormControl(''),
-
-  });
-
-  form: FormGroup = new FormGroup({
-    fullname: new FormControl(''),
-    lastname: new FormControl(''),
-    email: new FormControl(''),
-    cedula: new FormControl(''),
-    telefono: new FormControl(''),
-    ciudad: new FormControl(''),
+    nombre: new FormControl('', [Validators.required]),
+    estado: new FormControl(''),
+    apellidos: new FormControl('', [Validators.required]),
+    correo: new FormControl('', [Validators.required, Validators.email]),
+    cedula: new FormControl('',
+    [
+      Validators.required,
+      Validators.minLength(10),
+      Validators.maxLength(10)
+    ]),
+    telefono: new FormControl('',
+    [
+      Validators.required,
+      Validators.minLength(10),
+      Validators.maxLength(10)
+    ]),
+    ciudad: new FormControl('', [Validators.required]),
     rol: new FormControl(''),
-    genero: new  FormControl(''),
-    password: new FormControl(),
-    confirmPassword: new FormControl(),
+    genero: new FormControl(''),
+    password: new FormControl('',[Validators.required, Validators.minLength(6)]),
+    confirmPassword: new FormControl('',[Validators.required, Validators.minLength(6)]),
+    imagen: new FormControl(this.fileImagenActualizar),
 
   });
-  ngOnInit() {
-   this.pythonAnyWhereService.obtener_cargos().subscribe(cargo=>{
-    this.cargos=cargo
+  admiCrear: FormGroup = new FormGroup({
+    nombre: new FormControl('', [Validators.required]),
+    apellidos: new FormControl('', [Validators.required]),
+    correo: new FormControl('', [Validators.required, Validators.email]),
+    cedula: new FormControl('',
+    [
+      Validators.required,
+      Validators.minLength(10),
+      Validators.maxLength(10)
+    ]),
+    telefono: new FormControl('',
+    [
+      Validators.required,
+      Validators.minLength(10),
+      Validators.maxLength(10)
+    ]),
+    ciudad: new FormControl('', [Validators.required]),
+    rol: new FormControl(''),
+    genero: new FormControl(''),
+    password: new FormControl('',[Validators.required, Validators.minLength(6)]),
+    confirmPassword: new FormControl('',[Validators.required, Validators.minLength(6)]),
+    imagen: new FormControl(this.fileImagenActualizar),
 
-   })
-    this.pythonAnyWhereService.obtener_administradores().subscribe(adminPagination => {
-      this.administradores = adminPagination.results;
-      console.log(this.administradores)
-      if(adminPagination.next!=null){
-        this.condicionNext=true
+  });
+  constructor(private pythonAnywhereService: PythonAnywhereService, private sanitizer: DomSanitizer) {
+    this.pythonAnywhereService.obtener_administradores().subscribe(resp => {
+      this.total = resp.total_objects
+      this.arr_admi = resp.results;
+      this.arr_filtered_admi = this.arr_admi;
+      if (resp.next != null) {
+        this.condicionNext = true
       }
-      for (let index = 1; index <= adminPagination.total_pages; index++) {
+      for (let index = 1; index <= resp.total_pages; index++) {
         this.pageNumber.push(index)
 
       }
+    });
+
+    // Validators
+    const imagenCrearControl = this.admiCrear.get('imagen') as FormControl;
+    imagenCrearControl.addValidators(this.createImageValidator(this.admiCrear.get('imagen') as AbstractControl, 'crear'));
+    // const imagenActualizarControl = this.actualizarProfesionesForm.get('imagen') as FormControl;
+    // imagenActualizarControl.addValidators(this.createImageValidator(this.actualizarProfesionesForm.get('imagen') as AbstractControl, 'actualizar'));
+  }
 
 
+  next(event: any) {
+
+    this.currentPage = this.currentPage + 1
+    this.pythonAnywhereService.obtener_administradores(this.currentPage).subscribe(resp => {
+      this.arr_admi = resp.results;
+      this.arr_filtered_admi = this.arr_admi;
+    })
+  }
+
+  previous(event: any) {
+
+    this.currentPage = this.currentPage - 1
+    this.pythonAnywhereService.obtener_administradores(this.currentPage).subscribe(resp => {
+      this.arr_admi = resp.results;
+      this.arr_filtered_admi = this.arr_admi;
+    })
+  }
+
+  iteracion(event: any) {
+    this.pythonAnywhereService.obtener_administradores(event.target.value).subscribe(resp => {
+      this.arr_admi = resp.results;
+      this.arr_filtered_admi = this.arr_admi;
+      this.currentPage = resp.current_page_number
+      if (resp.next != null) {
+        this.condicionNext = true
+      }
 
     })
-    this.form = this.formBuilder.group(
-      {
-        fullname: ['', Validators.required],
-        lastname: ['', Validators.required],
-        telefono: [
-          '',
-          [
-            Validators.required,
-            Validators.minLength(10),
-            Validators.maxLength(10)
-          ]
-        ],
-        cedula: [
-          '',
-          [
-            Validators.required,
-            Validators.minLength(10),
-            Validators.maxLength(10)
-          ]
-        ],
-        rol: ['', [Validators.required]],
-        ciudad: ['', [Validators.required]],
-        genero: ['', [Validators.required]],
-        email: ['', [Validators.required, Validators.email]],
-        password: [
-          '',
-          [
-            Validators.required,
-            Validators.minLength(6),
-            Validators.maxLength(40)
-          ]
-        ],
-        confirmPassword: ['', Validators.required],
-      },
 
-    );
-    this.formEdit = this.formBuilder.group(
-      {
-        nombre: ['', Validators.required],
-        apellido: ['', Validators.required],
-        cell: [
-          '',
-          [
-            Validators.required,
-            Validators.minLength(10),
-            Validators.maxLength(10)
-          ]
-        ],
-        ced: [
-          '',
-          [
-            Validators.required,
-            Validators.minLength(10),
-            Validators.maxLength(10)
-          ]
-        ],
-        cargo: ['', [Validators.required]],
-        city: ['', [Validators.required]],
-        sexo: ['', [Validators.required]],
-        correo: ['', [Validators.required, Validators.email]],
-        pass: [
-          '',
-          [
-            Validators.required,
-            Validators.minLength(6),
-            Validators.maxLength(40)
-          ]
-        ],
-        confirmPass: ['', Validators.required],
-      },
-
-    );
   }
 
+  loadImageFromDevice(event: any, tipo: string) {
+    const file: File = event.target.files[0];
+    if (file) {
+      this.extraerBase64(file)
+        .then((imagen: any) => {
+          if (tipo === 'crear') {
+            this.admiCrear.get('imagen')?.setValue(file);
+            this.fileImagenCrear = file;
+            this.imagenCrear = imagen.base;
+          }
+          // else if(tipo === 'actualizar'){
+          //   this.actualizarProfesionesForm.get('imagen')?.setValue(file);
+          //   this.fileImagenActualizar = file;
+          //   this.imagenActualizar = imagen.base;
+          // }
+        })
+        .catch(err => console.log(err));
+    }
+  };
 
-iteracion(event:any){
-this.pythonAnyWhereService.obtener_administradores(event.target.value).subscribe(admi=>{
-  this.administradores= admi.results
-  this.currentPage =admi.current_page_number
-  if(admi.next!=null){
-    this.condicionNext=true
+  extraerBase64 = async ($event: any) => new Promise((resolve) => {
+    try {
+      const unsafeImg = window.URL.createObjectURL($event);
+      const image = this.sanitizer.bypassSecurityTrustUrl(unsafeImg);
+      const reader = new FileReader();
+      reader.readAsDataURL($event);
+      reader.onload = () => {
+        resolve({
+          blob: $event,
+          image,
+          base: reader.result
+        });
+      };
+      reader.onerror = error => {
+        resolve({
+          blob: $event,
+          image,
+          base: null
+        });
+      };
+      return image;
+    } catch (e) {
+      return null;
+    }
+  });
+
+  getErrorMessage(formGroup: FormGroup, item: string): string {
+    const itemControl: FormControl = formGroup.get(item) as FormControl;
+    switch (item) {
+      case 'imagen':
+        if (itemControl.hasError('image_error')) {
+          return itemControl.getError('image_error');
+        }
+        return '';
+
+      case 'nombre':
+        if (itemControl.hasError('required')) {
+          return 'Debe llenar este campo';
+        }
+        return '';
+
+      case 'apellidos':
+        if (itemControl.hasError('required')) {
+          return 'Debe llenar este campo';
+        }
+        return '';
+
+      case 'cedula':
+        if (itemControl.hasError('required')) {
+          return 'Debe llenar este campo';
+        }
+        return '';
+      case 'telefono':
+        if (itemControl.hasError('required')) {
+          return 'Debe llenar este campo';
+        }
+        return '';
+      case 'password':
+        if (itemControl.hasError('required')) {
+          return 'Debe llenar este campo';
+        }
+        return '';
+      case 'genero':
+        if (itemControl.hasError('required')) {
+          return 'Debe llenar este campo';
+        }
+        return '';
+      case 'rol':
+        if (itemControl.hasError('required')) {
+          return 'Debe llenar este campo';
+        }
+        return '';
+      case 'ciudad':
+        if (itemControl.hasError('required')) {
+          return 'Debe llenar este campo';
+        }
+        return '';
+      case 'confirmPassword':
+        if (itemControl.hasError('required')) {
+          return 'Debe llenar este campo';
+        }
+        return '';
+      case 'correo':
+        if (itemControl.hasError('required')) {
+          return 'Debe llenar este campo';
+        }
+        return '';
+
+      default:
+        return '';
+    }
+  }
+  establecerMensaje(mensaje: string, tipo: string) {
+    console.log(this.admiCrear)
+    if (tipo === 'actualizar') {
+      this.isActualizar = true;
+      this.isEliminar = false;
+      this.isCrear = false;
+    }
+    else if (tipo === 'eliminar') {
+      this.isEliminar = true;
+      this.isActualizar = false;
+      this.isCrear = false;
+    }
+    else if (tipo === 'crear') {
+      this.isCrear = true;
+      this.isEliminar = false;
+      this.isActualizar = false;
+    }
+    this.mensajeAlerta = mensaje;
   }
 
-})
+  isInvalidForm(subForm: string, tipo: string) {
+    if (tipo === 'crear') {
 
-}
-next(event:any){
-
-  this.currentPage=this.currentPage+1
-  this.pythonAnyWhereService.obtener_administradores(this.currentPage).subscribe(admi=>{
-    this.administradores= admi.results
-    this.currentPage =admi.current_page_number
-  })
- }
-
- previous(event:any){
-
-  this.currentPage=this.currentPage-1
-  this.pythonAnyWhereService.obtener_administradores(this.currentPage).subscribe(admi=>{
-    this.administradores= admi.results
-    this.currentPage =admi.current_page_number
-  })
- }
- mostrar(event:Event) {
-  this.show=true
-
- }
- get f(): { [key: string]: AbstractControl } {
-  return this.form.controls;
-}
-get e(): { [key: string]: AbstractControl } {
-  return this.formEdit.controls;
-}
-onSubmit(): void {
-  this.submitted = true;
-  this.admi.nombres=this.form.value.fullname
-  this.admi.username=this.form.value.email
-  this.admi.email=this.form.value.email
-  this.admi.password=this.form.value.password
-  this.admi.tipo="Administrador"
-  this.admi.apellidos=this.form.value.lastname
-  this.admi.cedula=this.form.value.cedula
-  this.admi.ciudad=this.form.value.ciudad
-  this.admi.rol="Secretario"
-  this.admi.genero=this.form.value.genero
-  this.admi.telefono=this.form.value.telefono
-
-
-  if (this.form.status=="INVALID") {
-
-    return;
-  }else{
-    this.pythonAnyWhereService.crear_administrador(this.admi).subscribe(resp=>{
-
-      console.log(resp)
-     })
+      return this.admiCrear.get(subForm)?.invalid && this.admiCrear.get(subForm)?.touched || this.admiCrear.get(subForm)?.dirty && this.getErrorMessage(this.admiCrear, subForm).length !== 0;
+    } else {
+      return
+      return this.formEdit.get(subForm)?.invalid && this.formEdit.get(subForm)?.touched || this.formEdit.get(subForm)?.dirty  && this.getErrorMessage(this.formEdit, subForm).length!==0;
+    }
   }
 
+  createImageValidator(controlImage: AbstractControl, tipo: string) {
+    return () => {
+      const file = controlImage.value as File;
 
-}
-
-onReset(): void {
-  this.submitted = false;
-  this.form.reset();
-}
-
-ver(admi:any){
-  this.showEdit=true
-  this.showFormEdit=false
-this.administradoSelected=admi
-
-
-}
-cerrar(){
-this.showEdit=false
-
-}
-editar(){
-  this.administradoEdit=this.administradoSelected
-  console.log(this.administradoEdit)
-  this.showFormEdit=true
-  this.showEdit=false
-
-
-}
-save(){
-  this.submitted = true;
-  let id = this.administradoEdit.id
-  this.admiEditar.nombres=this.formEdit.value.nombre
-  this.admiEditar.username=this.formEdit.value.correo
-  this.admiEditar.email=this.formEdit.value.correo
-  this.admiEditar.password=this.formEdit.value.pass
-  this.admiEditar.tipo=this.formEdit.value.cargo
-  this.admiEditar.apellidos=this.formEdit.value.apellido
-  this.admiEditar.cedula=this.formEdit.value.ced
-  this.admiEditar.ciudad=this.formEdit.value.city
-  this.admiEditar.emailNuevo=this.formEdit.value.correo
-  this.admiEditar.genero=this.formEdit.value.sexo
-  this.admiEditar.telefono=this.formEdit.value.ced
-
-
-  if (this.form.status=="INVALID") {
-
-    return;
-  }else{
-   this.pythonAnyWhereService.actualizar_administrador(id,this.admiEditar).subscribe(resp=>console.log(resp)
-   )
+      if (file && file.name) {
+        console.log('Ingresa al validator if');
+        console.log(file);
+        const tokensImgName: any[] = file.name.split('.');
+        console.log(tokensImgName);
+        if (tokensImgName.length === 2) {
+          const imgExtension = tokensImgName[1];
+          if (imgExtension !== 'jpg' && imgExtension !== 'jpeg' && imgExtension !== 'png' && imgExtension !== 'jfif') {
+            console.log('Entra en error de imagen');
+            if (tipo === 'crear') {
+              this.admiCrear.get('imagen')?.setValue(null);
+              this.existImageCrear = false;
+            }
+            // else if(tipo === 'actualizar'){
+            //   this.actualizarProfesionesForm.get('imagen')?.setValue(null);
+            //   this.existImageActualizar = false;
+            // }
+            return { image_error: 'Solo imágenes con formato jpg, jpeg, png o jfif.' };
+          }
+          console.log('Formato de imagen correcto');
+          if (tipo === 'crear') {
+            this.existImageCrear = true;
+          }
+          else if (tipo === 'actualizar') {
+            this.existImageActualizar = true;
+          }
+        }
+        return null;
+      } else {
+        console.log('No hay imagen seleccionada');
+        return null;
+      }
+    };
   }
 
+  onCrear() {
+    this.admi.nombres = this.admiCrear.value.nombre
+    this.admi.username = this.admiCrear.value.correo
+    this.admi.email = this.admiCrear.value.correo
+    this.admi.password = this.admiCrear.value.password
+    this.admi.tipo = "Administrador"
+    this.admi.apellidos = this.admiCrear.value.apellido
+    this.admi.cedula = this.admiCrear.value.cedula
+    this.admi.ciudad = this.admiCrear.value.ciudad
+    this.admi.rol = this.admiCrear.value.rol
+    this.admi.genero = this.admiCrear.value.genero
+    this.admi.telefono = this.admiCrear.value.telefono
+    const foto = this.admiCrear.get('imagen')?.value;
+    if (foto && this.existImageCrear) {
+      this.admi.foto = this.admiCrear.value.foto; // Si hay foto se le agrega al body.
+    }
 
-}
-cancelar(){
-  this.showFormEdit=false
-}
+    if (this.admiCrear.status == "INVALID") {
 
+      return;
+    } else {
+      this.pythonAnywhereService.crear_administrador(this.admi).subscribe(resp => {
+
+        console.log(resp)
+      })
+    }
+  }
+  onActualizar() {
+    const admiEditar: BodyActualizarAdministrador = {
+      id: 0,
+      username: '',
+      email: '',
+      password: '',
+      tipo: '',
+      nombres: '',
+      apellidos: '',
+      ciudad: '',
+      cedula: '',
+      telefono: '',
+      genero: '',
+      emailNuevo: '',
+      foto: '',
+      estado:true
+    }
+    const id = this.admi_seleccionada.id
+    admiEditar.id = this.admi_seleccionada.id
+    admiEditar.nombres = this.formEdit.get('nombre')?.value;
+    admiEditar.username = this.formEdit.get('correo')?.value;
+    admiEditar.email = this.formEdit.get('correo')?.value;
+    // admiEditar.password = this.formEdit.get('password')?.value;
+    admiEditar.tipo = this.formEdit.get('rol')?.value;
+    admiEditar.apellidos = this.formEdit.get('apellidos')?.value;
+    admiEditar.cedula = this.formEdit.get('cedula')?.value;
+    admiEditar.ciudad = this.formEdit.get('ciudad')?.value;
+    admiEditar.emailNuevo = this.formEdit.get('correo')?.value;
+    admiEditar.genero = this.formEdit.get('genero')?.value;
+    admiEditar.telefono = this.formEdit.get('telefono')?.value;
+    admiEditar.estado = this.formEdit.get('estado')?.value;
+     console.log( this.formEdit)
+    if (this.formEdit.status == "INVALID") {
+      this.pythonAnywhereService.actualizar_administrador(id, admiEditar).subscribe(resp => console.log(resp)
+      )
+      return;
+    } else {
+      this.pythonAnywhereService.actualizar_administrador(id, admiEditar).subscribe(resp => console.log(resp)
+      )
+    }
+  }
+
+  limpiarForm(tipo: string) {
+    if(tipo === 'crear') {
+      this.existImageCrear = false;
+      this.admiCrear.get('nombre')?.reset();
+      this.admiCrear.get('apellidos')?.reset();
+      this.admiCrear.get('ciudad')?.reset();
+      this.admiCrear.get('telefono')?.setValue('');
+      this.admiCrear.get('genero')?.setValue('');
+      this.admiCrear.get('rol')?.setValue('');
+      this.admiCrear.get('correo')?.setValue('');
+      this.admiCrear.get('password')?.setValue('');
+      this.admiCrear.get('confirmPassword')?.setValue('');
+      this.admiCrear.get('imagen')?.setValue('');
+
+    } else if(tipo === 'actualizar') {
+      // console.log(this.profesion_seleccionada);
+      // console.log('Servicio de la profesion seleccionada: ', this.profesion_seleccionada?.servicio[0].nombre);
+      const nombre = this.admi_seleccionada?.user_datos.nombres;
+      const apellidos = this.admi_seleccionada?.user_datos.apellidos;
+      const telefono = this.admi_seleccionada?.user_datos.telefono;
+      const cedula = this.admi_seleccionada?.user_datos.cedula;
+      const correo = this.admi_seleccionada?.user_datos.user.email;
+      const genero = this.admi_seleccionada?.user_datos.genero;
+      const ciudad = this.admi_seleccionada?.user_datos.ciudad;
+      const rol = this.admi_seleccionada?.user_datos.user.groups[0].name;
+      const foto = this.admi_seleccionada?.user_datos.foto;
+      // const contra = this.admi_seleccionada?.user_datos.password;
+      const estado = this.admi_seleccionada?.user_datos.estado;
+      this.existImageActualizar = false;
+      this.formEdit.get('imagen')?.reset();
+      nombre? this.formEdit.get('nombre')?.setValue(nombre) : this.formEdit.get('nombre')?.reset();
+      apellidos? this.formEdit.get('apellidos')?.setValue(apellidos) : this.formEdit.get('apellidos')?.reset();
+      telefono? this.formEdit.get('telefono')?.setValue(telefono) : this.formEdit.get('telefono')?.reset();
+      cedula? this.formEdit.get('cedula')?.setValue(cedula) : this.formEdit.get('cedula')?.reset();
+      correo? this.formEdit.get('correo')?.setValue(correo) : this.formEdit.get('correo')?.reset();
+      genero? this.formEdit.get('genero')?.setValue(genero) : this.formEdit.get('genero')?.reset();
+      ciudad? this.formEdit.get('ciudad')?.setValue(ciudad) : this.formEdit.get('ciudad')?.reset();
+      // contra? this.formEdit.get('password')?.setValue(contra) : this.formEdit.get('password')?.reset();
+      rol? this.formEdit.get('rol')?.setValue(rol) : this.formEdit.get('rol')?.reset();
+      if(estado != undefined) this.formEdit.get('estado')?.setValue(estado)
+    } else {
+      console.log('Se paso algo erroneo en limpiar form');
+    }
+  }
+
+  search(evento: any) {
+    const texto = evento.target.value;
+    console.log('Escribe en el buscador: ', texto)
+    this.arr_filtered_admi = this.arr_admi;
+    if (texto && texto.trim() !== '') {
+      this.arr_filtered_admi = this.arr_filtered_admi?.filter((solicitud) => {
+        return solicitud.user_datos.nombres.toLowerCase().includes(texto.toLowerCase())
+      });
+    }}
 }

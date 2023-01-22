@@ -1,539 +1,788 @@
+<div class="container-fluid">
+  <!-- Titulo principal -->
+    <div class="row p-2 justify-content-center align-items-center">
+         <div class="col text-center">
+              <h2 class="p-0 m-0">Administradores</h2>
+              <h2 class="p-0 m-0">Total de administradores: {{total}}</h2>
+         </div>
+    </div>
 
-<h1 class="titulo" style="margin-Left: 2rem">Administradores {{identificador}}</h1>
-<div class="d-grid gap-2 col-6 mx-auto">
-    <button class="btn btn-primary" type="button" (click)="mostrar($event)">Agregar
-        Administradores</button>
-</div>
+    <!-- Buscar y agregar admi -->
+    <div class="row p-2 justify-content-center align-items-center">
+      <div class="col-xl-7 col-lg-5"></div>
+      <div class="col-xl-3 col-lg-4">
+        <div class="input-group">
+          <input type="text" (input)="search($event)" class="form-control" placeholder="Buscar"
+            aria-label="Buscar" aria-describedby="basic-addon1">
+          <button class="input-group-text" id="basic-addon1"> <i class="bi
+              bi-search"></i> </button>
+        </div>
+      </div>
+      <div class="col-xl-2 col-lg-3">
+        <button
+          type="button"
+          class="btn btn-primary"
+          data-bs-toggle="modal"
+          (click)="limpiarForm('crear')"
+          href="#modalCrearProfesion">Agregar Administrador</button>
+      </div>
+    </div>
+    <!-- Contenedor de admi -->
+    <div class="row justify-content-center align-items-center p-0">
+      <div class="col-10 text-center">
+        <!-- Titulo -->
+        <div class="row p-2 bg-primary text-white">
+          <div class="col-2 align-self-center">
+            <h3 class="p-0 m-0">Nombres</h3>
+          </div>
 
+          <div class="col-2 align-self-center">
+            <h3 class="p-0 m-0">Cedula</h3>
+          </div>
 
-<div>
-    <div style="display: flex; flex-direction: column; margin-right:1rem">
-        <h3 style="margin-Left:1.9rem"><strong>Total Administradores: </strong>42</h3>
-        <div style="display:flex; flex-direction:row; justify-content:end">
-            <Button type="primary" size="default">
-                Filtrar
-            </Button>
+          <div class="col-2 align-self-center">
+            <h3 class="p-0 m-0">Correo Electronico</h3>
+          </div>
 
+          <div class="col-2 align-self-center">
+            <h3 class="p-0 m-0">Telefono</h3>
+          </div>
+          <div class="col-2 align-self-center">
+            <h3 class="p-0 m-0">Fecha Creacion</h3>
+          </div>
+          <div class="col-2 align-self-center">
+            <h3 class="p-0 m-0">Estado</h3>
+          </div>
         </div>
 
-
-    </div>
-    <mat-card *ngIf="show" class="example-card">
-        <mat-card-header>
-            <div mat-card-avatar class="example-header-image"></div>
-            <mat-card-title>Agregar administrador</mat-card-title>
-        </mat-card-header>
-
-        <mat-card-content>
-            <div class="register-form">
-                <form [formGroup]="form" (ngSubmit)="onSubmit()">
-                <!-- nombres -->
-                  <div class="form-group">
-                    <label>Nombres</label>
-                    <input
-                      type="text"
-                      formControlName="fullname"
-                      class="form-control"
-                      [ngClass]="{ 'is-invalid': submitted && f['fullname'].errors }"
-                    />
-                    <div *ngIf="submitted && f['fullname'].errors" class="invalid-feedback">
-                      <div *ngIf="f['fullname'].errors['required']">Fullname is required</div>
-                    </div>
-                  </div>
-                  <!-- apellidos -->
-                  <div class="form-group">
-                    <label>Apellidos</label>
-                    <input
-                      type="text"
-                      formControlName="lastname"
-                      class="form-control"
-                      [ngClass]="{ 'is-invalid': submitted && f['lastname'].errors }"
-                    />
-                    <div *ngIf="submitted && f['lastname'].errors" class="invalid-feedback">
-                      <div *ngIf="f['lastname'].errors['required']">El apellido es Obligatorio</div>
-                    </div>
-                  </div>
-                  <!-- telefono -->
-                  <div class="form-group">
-                    <label>Telefono</label>
-                    <input
-                      type="text"
-                      formControlName="telefono"
-                      class="form-control"
-                      [ngClass]="{ 'is-invalid': submitted && f['telefono'].errors }"
-                    />
-                    <div *ngIf="submitted && f['telefono'].errors" class="invalid-feedback">
-                      <div *ngIf="f['telefono'].errors['required']">El telefono es obligatorio</div>
-                      <div *ngIf="f['telefono'].errors['minlength']">
-                        deben ser 10 digitos
-                      </div>
-                      <div *ngIf="f['telefono'].errors['maxlength']">
-                        deben ser 10 digitos
-                      </div>
-                    </div>
-                  </div>
-                  <!-- cedula -->
-                  <div class="form-group">
-                    <label>Cedula</label>
-                    <input
-                      type="text"
-                      formControlName="cedula"
-                      class="form-control"
-                      [ngClass]="{ 'is-invalid': submitted && f['cedula'].errors }"
-                    />
-                    <div *ngIf="submitted && f['cedula'].errors" class="invalid-feedback">
-                      <div *ngIf="f['cedula'].errors['required']">El telefono es obligatorio</div>
-                      <div *ngIf="f['cedula'].errors['minlength']">
-                        deben ser 10 digitos
-                      </div>
-                      <div *ngIf="f['cedula'].errors['maxlength']">
-                        deben ser 10 digitos
-                      </div>
-                    </div>
-                  </div>
-                    <!-- ciudad -->
-                    <div class="form-group">
-                        <label>Ciudad</label>
-                        <br />
-                        <select name="size" required  formControlName="ciudad">
-                            <option *ngFor="let c of ciudades" value="{{c}}"> {{c}}</option>
-
-                          </select><br />
-                          <div *ngIf="submitted && f['ciudad'].errors" class="invalid-feedback">
-                            <div *ngIf="f['ciudad'].errors['ciudad']">Elija una ciudad</div>
-
-                          </div>
-
-                      </div>
-                  <div class="form-group">
-                    <!-- correo -->
-                    <label>correo</label>
-                    <input
-                      type="text"
-                      formControlName="email"
-                      class="form-control"
-                      [ngClass]="{ 'is-invalid': submitted && f['email'].errors }"
-                    />
-                    <div *ngIf="submitted && f['email'].errors" class="invalid-feedback">
-                      <div *ngIf="f['email'].errors['required']">Email is required</div>
-                      <div *ngIf="f['email'].errors['email']">Email is invalid</div>
-                    </div>
-                  </div>
-                <!-- genero -->
-
-                <div class="form-group">
-                    <label>Genero</label>
-                    <br />
-                    <select name="size" required  formControlName="genero">
-                        <option *ngFor="let g of generos" value="{{g}}"> {{g}}</option>
-
-                      </select><br />
-                      <div *ngIf="submitted && f['genero'].errors" class="invalid-feedback">
-                        <div *ngIf="f['genero'].errors['genero']">Elija un genero</div>
-
-                      </div>
-
-                  </div>
-
-                    <!-- genero -->
-
-                <div class="form-group">
-                    <label>Rol</label>
-                    <br />
-                    <select name="size" required  formControlName="rol">
-                        <option value="enfermito">enfermito</option>
-                        <option value="Hangaroa">Hangaroa</option>
-                        <option value="Secretario">Secretario</option>
-                        <option value="Secretario">administrador de publicidades</option>
-                      </select><br />
-                      <div *ngIf="submitted && f['rol'].errors" class="invalid-feedback">
-                        <div *ngIf="f['rol'].errors['rol']">Elija un rol</div>
-
-                      </div>
-
-                  </div>
-                  <div class="form-group">
-                    <label>Contrasena</label>
-                    <input
-                      type="password"
-                      formControlName="password"
-                      class="form-control"
-                      [ngClass]="{ 'is-invalid': submitted && f['password'].errors }"
-                    />
-                    <div *ngIf="submitted && f['password'].errors" class="invalid-feedback">
-                      <div *ngIf="f['password'].errors['required']">Password is required</div>
-
-                      <div *ngIf="f['password'].errors['maxlength']">
-                        Username must not exceed 40 characters
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="form-group">
-                    <label>Confirmar contrasena</label>
-                    <input
-                      type="password"
-                      formControlName="confirmPassword"
-                      class="form-control"
-                      [ngClass]="{ 'is-invalid': submitted && f['confirmPassword'].errors }"
-                    />
-                    <div
-                      *ngIf="submitted && f['confirmPassword'].errors"
-                      class="invalid-feedback"
-                    >
-                      <div *ngIf="f['confirmPassword'].errors['required']">
-                        Confirm Password is required
-                      </div>
-                      <div *ngIf="f['confirmPassword'].errors['matching']">
-                        Confirm Password does not match
-                      </div>
-                    </div>
-                  </div>
-
-
-
-                  <div class="form-group">
-                    <button type="submit" class="btn btn-primary">Guardar</button>
-                    <button
-                      type="button"
-                      (click)="onReset()"
-                      class="btn btn-warning float-right"
-                    >
-                      Vaciar
-                    </button>
-                  </div>
-                </form>
-              </div>
-        </mat-card-content>
-
-    </mat-card>
-
-    <table class="table table-hover">
-        <thead>
-            <tr>
-                <th scope="col">Nombres</th>
-                <th scope="col">Telefono</th>
-                <th scope="col">Fecha Creacion</th>
-                <th scope="col">Estado</th>
-            </tr>
-        </thead>
-        <tbody >
-            <!-- | paginate: {itemsPerPage: 10, currentPage: page} -->
-            <tr *ngFor="let a of administradores " (click)="ver(a)" >
-
-                <td>{{a.user_datos.nombres}} {{a.user_datos.apellidos}} </td>
-                <td>{{a.user_datos.telefono}}</td>
-                <td>{{a.user_datos.fecha_creacion}}</td>
-                <td>{{a.estado}}</td>
-            </tr>
-
-        </tbody>
-    </table>
-    <div class="col-lg-8" *ngIf="showEdit">
-      <div class="card mb-4">
-        <div class="card-body">
-          <!-- nomnbres -->
-          <div class="row">
-            <div class="col-sm-3">
-              <p class="mb-0">Nombres</p>
-            </div>
-            <div class="col-sm-9">
-              <p class="text-muted mb-0">{{administradoSelected.user_datos.nombres}}</p>
-            </div>
+        <!-- Profesion -->
+        <div (click)="admi_seleccionada=a" *ngFor="let a of arr_filtered_admi"
+          class="row p-2 bg-light fila_info_profesion" data-bs-toggle="modal"
+          href="#modalInformacionProfesion" role="button">
+          <div class="col-2 align-self-center">
+            <h4 class="p-0 m-0"> {{a.user_datos.nombres}}
+              {{a.user_datos.apellidos}}</h4>
           </div>
-          <hr>
-          <div class="row">
-            <div class="col-sm-3">
-              <p class="mb-0">Apellidos</p>
-            </div>
-            <div class="col-sm-9">
-              <p class="text-muted mb-0">{{administradoSelected.user_datos.apellidos}}</p>
-            </div>
-          </div>
-          <hr>
-          <div class="row">
-            <div class="col-sm-3">
-              <p class="mb-0">Genero</p>
-            </div>
-            <div class="col-sm-9">
-              <p class="text-muted mb-0">{{administradoSelected.user_datos.genero}}</p>
-            </div>
-          </div>
-          <hr>
-          <div class="row">
-            <div class="col-sm-3">
-              <p class="mb-0">Cedula</p>
-            </div>
-            <div class="col-sm-9">
-              <p class="text-muted mb-0">{{administradoSelected.user_datos.cedula}}</p>
-            </div>
-          </div>
-          <hr>
-          <div class="row">
-            <div class="col-sm-3">
-              <p class="mb-0">Ciudad</p>
-            </div>
-            <div class="col-sm-9">
-              <p class="text-muted mb-0">{{administradoSelected.user_datos.ciudad}}</p>
-            </div>
-          </div>
-          <hr>
-          <div class="row">
-            <div class="col-sm-3">
-              <p class="mb-0">Telefono</p>
-            </div>
-            <div class="col-sm-9">
-              <p class="text-muted mb-0">{{admiEditar.telefono}} CA</p>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-sm-3">
-              <p class="mb-0">Correo</p>
-            </div>
-            <div class="col-sm-9">
-              <p class="text-muted mb-0">{{administradoSelected.user_datos.user.email}}</p>
-            </div>
-          </div>
-          <hr>
-          <div class="row">
-            <div class="col-sm-3">
-              <p class="mb-0">Rol</p>
-            </div>
-            <div class="col-sm-9">
-              <p class="text-muted mb-0">{{administradoSelected.user_datos.user.groups[0].name}}</p>
-            </div>
-          </div>
-          <hr>
-          <div class="row">
-            <div class="col-sm-3">
-              <p class="mb-0">Estado</p>
-            </div>
-            <div class="col-sm-9">
-              <p class="text-muted mb-0">{{administradoSelected.user_datos.estado}} </p>
-            </div>
-          </div>
-          <hr>
-          <div class="row">
-            <div class="col-sm-3">
-              <p class="mb-0">Habilidar/Deshabilitar</p>
-            </div>
-            <div class="col-sm-9">
 
-            </div>
+          <div class="col-2 align-self-center">
+            <h4 class="p-0 m-0"> {{a.user_datos.cedula}} </h4>
+          </div>
+
+          <div class="col-2 align-self-center">
+            <h4 class="p-0 m-0">{{a.user_datos.user.username}}</h4>
+          </div>
+
+          <div class="col-2 align-self-center">
+            <h4 class="p-0 m-0"> {{a.user_datos.telefono}}</h4>
+          </div>
+          <div class="col-2 align-self-center">
+            <h4 class="p-0 m-0"> {{a.user_datos.fecha_creacion}}</h4>
+          </div>
+          <div class="col-2 align-self-center">
+            <h4 class="p-0 m-0"> {{a.user_datos.estado}}</h4>
           </div>
         </div>
       </div>
-      <button (click)="cerrar()"> Cerrar</button>
-      <button (click)="editar()"> Editar</button>
     </div>
 
+  </div>
 
-</div>
-<mat-card *ngIf="showFormEdit" class="example-card">
-  <mat-card-header>
-      <div mat-card-avatar class="example-header-image"></div>
-      <mat-card-title>Agregar administrador</mat-card-title>
-  </mat-card-header>
+  <!-- Modal informacion de admi -->
+  <div class="modal fade" id="modalInformacionProfesion" aria-hidden="true"
+    aria-labelledby="modalInformacionProfesionLabel" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header align-items-center">
+          <h1 class="modal-title fs-5 m-0 p-0 fw-bold"
+            id="modalInformacionProfesionLabel">Información de Administradores</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"
+            aria-label="Close"></button>
+        </div>
+        <div class="modal-body mb-0">
+          <div class="row p-2">
+            <div class="row p-2">
+              <img [src]="admi_seleccionada?.user_datos.foto?
+                'https://tomesoft1.pythonanywhere.com'+admi_seleccionada?.foto :
+                'assets/imagenes/ProfesionDefault.png'" class="rounded mx-auto
+                d-block img-fluid w-50 image_modal" alt="...">
+            </div>
+          </div>
 
-  <mat-card-content>
-      <div class="register-form">
-          <form [formGroup]="formEdit" (ngSubmit)="save()">
-          <!-- nombres -->
-            <div class="form-group">
-              <label>Nombres</label>
-              <input
-              clearInput
-               value="{{administradoEdit.user_datos.nombres}}"
-                type="text"
-                formControlName="nombre"
-                class="form-control"
-                [ngClass]="{ 'is-invalid': submitted && e['name'].errors }"
-              />
-              <div *ngIf="submitted && e['nombre'].errors" class="invalid-feedback">
-                <div *ngIf="e['nombre'].errors['required']">Fullname is required</div>
+          <div class="row p-2 align-items-center">
+            <div class="col-5">
+              <h3 class="m-0 p-0 fw-bold">Nombre:</h3>
+            </div>
+            <div class="col-7">
+              {{admi_seleccionada?.user_datos.nombres}}
+            </div>
+          </div>
+
+          <div class="row p-2 align-items-center">
+            <div class="col-5">
+              <h3 class="m-0 p-0 fw-bold">Apellidos:</h3>
+            </div>
+            <div class="col-7">
+              {{admi_seleccionada?.user_datos.apellidos}}
+            </div>
+          </div>
+
+
+
+          <div class="row p-2 align-items-center">
+            <div class="col-5">
+              <h3 class="m-0 p-0 fw-bold">Cedula</h3>
+            </div>
+            <div class="col-7">
+              {{admi_seleccionada?.user_datos.cedula}}
+            </div>
+          </div>
+
+          <div class="row p-2 align-items-center">
+            <div class="col-5">
+              <h3 class="m-0 p-0 fw-bold">Telefono</h3>
+            </div>
+            <div class="col-7">
+              {{admi_seleccionada?.user_datos.telefono}}
+            </div>
+          </div>
+
+          <div class="row p-2 align-items-center">
+            <div class="col-5">
+              <h3 class="m-0 p-0 fw-bold">Genero</h3>
+            </div>
+            <div class="col-7">
+              {{admi_seleccionada?.user_datos.genero}}
+            </div>
+          </div>
+
+          <div class="row p-2 align-items-center">
+            <div class="col-5">
+              <h3 class="m-0 p-0 fw-bold">Rol</h3>
+            </div>
+            <div class="col-7">
+              {{admi_seleccionada?.user_datos.user.groups[0].name}}
+            </div>
+          </div>
+
+          <div class="row p-2 align-items-center">
+            <div class="col-5">
+              <h3 class="m-0 p-0 fw-bold">Estado</h3>
+            </div>
+            <div class="col-7">
+              Activo
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+          (click)="limpiarForm('actualizar')"
+            class="btn btn-success"
+            data-bs-target="#modalInformacionEdicionProfesion"
+            data-bs-toggle="modal">Editar</button>
+          <button
+            class="btn btn-danger"
+            data-bs-target="#modalConfirmacion"
+            data-bs-toggle="modal">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Modal edicion de informacion de admi -->
+  <div class="modal fade" id="modalInformacionEdicionProfesion"
+    aria-hidden="true" aria-labelledby="modalInformacionEdicionProfesionLabel"
+    tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header align-items-center">
+          <h1 class="modal-title fs-5 m-0 p-0 fw-bold"
+            id="modalInformacionEdicionProfesionLabel">Edición de
+            Administradores</h1>
+
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"></button>
+        </div>
+        <div class="modal-body mb-0">
+          <form [formGroup]="formEdit" class="">
+            <div class="row">
+              <div class="col d-flex justify-content-center">
+                <img *ngIf="existImageActualizar" class="image_modal rounded
+                  mx-auto d-block img-fluid w-50" [src]="imagenActualizar"
+                  alt="Archivo incorrecto">
+                <img *ngIf="!existImageActualizar &&
+                  admi_seleccionada?.user_datos.foto?.foto" class="image_modal
+                  rounded mx-auto d-block img-fluid w-50"
+                  [src]="'https://tomesoft1.pythonanywhere.com'+admi_seleccionada?.user_datos.foto?.foto"
+                  alt="Archivo incorrecto">
+                <i *ngIf="!existImageActualizar &&
+                  !admi_seleccionada?.user_datos.foto?.foto" class="rounded
+                  mx-auto d-block img-fluid w-50 bi bi-upload icono"></i>
               </div>
-            </div>
-            <!-- apellidos -->
-            <div class="form-group">
-              <label>Apellidos</label>
-              <input
-              value="{{administradoSelected.user_datos.apellidos}}"
-                type="text"
-                formControlName="apellido"
-                class="form-control"
-                [ngClass]="{ 'is-invalid': submitted && f['lastname'].errors }"
-              />
-              <div *ngIf="submitted && e['apellido'].errors" class="invalid-feedback">
-                <div *ngIf="e['apellido'].errors['required']">El apellido es Obligatorio</div>
-              </div>
-            </div>
-            <!-- telefono -->
-            <div class="form-group">
-              <label>Telefono</label>
-              <input
-              value="{{administradoSelected.user_datos.telefono}}"
-                type="text"
-                formControlName="cell"
-                class="form-control"
-                [ngClass]="{ 'is-invalid': submitted && e['cell'].errors }"
-              />
-              <div *ngIf="submitted && e['cell'].errors" class="invalid-feedback">
-                <div *ngIf="e['cell'].errors['required']">El telefono es obligatorio</div>
-                <div *ngIf="e['cell'].errors['minlength']">
-                  deben ser 10 digitos
-                </div>
-                <div *ngIf="e['cell'].errors['maxlength']">
-                  deben ser 10 digitos
-                </div>
-              </div>
-            </div>
-            <!-- cedula -->
-            <div class="form-group">
-              <label>Cedula</label>
-              <input
-              value="{{administradoSelected.user_datos.cedula}}"
-                type="text"
-                formControlName="ced"
-                class="form-control"
-                [ngClass]="{ 'is-invalid': submitted && f['cedula'].errors }"
-              />
-              <div *ngIf="submitted && e['ced'].errors" class="invalid-feedback">
-                <div *ngIf="e['ced'].errors['required']">El telefono es obligatorio</div>
-                <div *ngIf="e['ced'].errors['minlength']">
-                  deben ser 10 digitos
-                </div>
-                <div *ngIf="e['ced'].errors['maxlength']">
-                  deben ser 10 digitos
-                </div>
-              </div>
-            </div>
-              <!-- ciudad -->
-              <div class="form-group">
-                  <label>Ciudad</label>
-                  <br />
-                  <select name="size" required  formControlName="city">
-                      <option *ngFor="let c of ciudades" value="{{c}}"> {{c}}</option>
-
-                    </select><br />
-                    <div *ngIf="submitted && e['city'].errors" class="invalid-feedback">
-                      <div *ngIf="e['city'].errors['city']">Elija una ciudad</div>
-
-                    </div>
-
-                </div>
-            <div class="form-group">
-              <!-- correo -->
-              <label>correo</label>
-              <input
-              value="{{administradoSelected.user_datos.user.email}}"
-                type="text"
-                formControlName="correo"
-                class="form-control"
-                [ngClass]="{ 'is-invalid': submitted && f['correo'].errors }"
-              />
-              <div *ngIf="submitted && e['correo'].errors" class="invalid-feedback">
-                <div *ngIf="e['correo'].errors['required']">Email is required</div>
-                <div *ngIf="e['correo'].errors['correo']">Email is invalid</div>
-              </div>
-            </div>
-          <!-- genero -->
-
-          <div class="form-group">
-              <label>Genero</label>
-              <br />
-              <select name="size" required  formControlName="sexo">
-                  <option *ngFor="let g of generos" value="{{g}}"> {{g}}</option>
-
-                </select><br />
-                <div *ngIf="submitted && e['sexo'].errors" class="invalid-feedback">
-                  <div *ngIf="e['sexo'].errors['sexo']">Elija un genero</div>
-
-                </div>
-
-            </div>
-
-              <!-- genero -->
-
-          <div class="form-group">
-              <label>Rol</label>
-              <br />
-              <select value='{{administradoSelected.user_datos.user.groups[0].name}}'name="size" required  formControlName="cargo">
-                  <option value="enfermito">enfermito</option>
-                  <option value="Hangaroa">Hangaroa</option>
-                  <option value="Secretario">Secretario</option>
-                  <option value="Secretario">administrador de publicidades</option>
-                </select><br />
-                <div *ngIf="submitted && e['cargo'].errors" class="invalid-feedback">
-                  <div *ngIf="e['cargo'].errors['cargo']">Elija un rol</div>
-
-                </div>
-
-            </div>
-            <div class="form-group">
-              <label>Contrasena</label>
-              <input
-              value="123456"
-                type="password"
-                formControlName="pass"
-                class="form-control"
-                [ngClass]="{ 'is-invalid': submitted && e['pass'].errors }"
-              />
-              <div *ngIf="submitted && e['pass'].errors" class="invalid-feedback">
-                <div *ngIf="e['pass'].errors['required']">Password is required</div>
-
-                <div *ngIf="e['pass'].errors['maxlength']">
-                  Username must not exceed 40 characters
-                </div>
+              <div class="p-2">
+                <input
+                  class="w-100 centrar form-control"
+                  [ngClass]="formEdit.get('imagen')?.hasError('image_error') ?
+                  'is-invalid' : '' || (existImageActualizar)? 'is-valid' : ''"
+                  type="file"
+                  id="file_input"
+                  accept="image/png, image/jpeg"
+                  (change)="loadImageFromDevice($event, 'actualizar')">
+                <div class="invalid-feedback">{{getErrorMessage(formEdit,
+                  'imagen')}}</div>
               </div>
             </div>
 
-            <div class="form-group">
-              <label>Confirmar contrasena</label>
-              <input
-              value="123456"
-                type="password"
-                formControlName="confirmPass"
-                class="form-control"
-                [ngClass]="{ 'is-invalid': submitted && e['confirmPas'].errors }"
-              />
-              <div
-                *ngIf="submitted && e['confirmPass'].errors"
-                class="invalid-feedback"
-              >
-                <div *ngIf="e['confirmPass'].errors['required']">
-                  Confirm Password is required
-                </div>
-                <div *ngIf="e['confirmPass'].errors['matching']">
-                  Confirm Password does not match
-                </div>
+            <div class="row p-2 align-items-center">
+              <div class="col-5">
+                <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
+                    fw-bold">Nombre:</h3></label>
+              </div>
+              <div class="col-7">
+                <input
+                  type="text"
+                  formControlName="nombre"
+                  class="form-control"
+                  [ngClass]="isInvalidForm('nombre', 'actualizar') ?
+                  'is-invalid' : ''"
+                  [placeholder]="admi_seleccionada?.user_datos.nombres"
+                  [value]="admi_seleccionada?.user_datos.nombres">
+                <div class="invalid-feedback"> {{getErrorMessage(formEdit,
+                  'nombre')}} </div>
+              </div>
+            </div>
+
+            <div class="row p-2 align-items-center">
+              <div class="col-5">
+                <label for="textareaDescripcion" class="form-label"><h3
+                    class="m-0 p-0 fw-bold">Apellidos:</h3></label>
+              </div>
+              <div class="col-7">
+                <textarea
+                  class="form-control"
+                  formControlName="apellidos"
+                  [ngClass]="isInvalidForm('apellidos', 'actualizar') ?
+                  'is-invalid' : ''"
+                  id="textareaDescripcion"
+                  [placeholder]="admi_seleccionada?.user_datos.apellidos"
+                  [value]="admi_seleccionada?.user_datos.apellidos"></textarea>
+                <div class="invalid-feedback"> {{getErrorMessage(formEdit,
+                  'apellidos')}} </div>
+              </div>
+            </div>
+
+            <div class="row p-2 align-items-center">
+              <div class="col-5">
+                <label for="textareaDescripcion" class="form-label"><h3
+                    class="m-0 p-0 fw-bold">Telefono:</h3></label>
+              </div>
+              <div class="col-7">
+                <input
+                  class="form-control"
+                  formControlName="telefono"
+                  [ngClass]="isInvalidForm('telefono', 'actualizar') ?
+                  'is-invalid' : ''"
+                  type="text"
+
+                  [value]="admi_seleccionada?.user_datos.telefono">
+                <div class="invalid-feedback"> {{getErrorMessage(formEdit,
+                  'telefono')}} </div>
+              </div>
+            </div>
+
+            <div class="row p-2 align-items-center">
+              <div class="col-5">
+                <label for="textareaDescripcion" class="form-label"><h3
+                    class="m-0 p-0 fw-bold">Cedula:</h3></label>
+              </div>
+              <div class="col-7">
+                <textarea
+                  type="text"
+                  class="form-control"
+                  formControlName="cedula"
+                  [ngClass]="isInvalidForm('cedula', 'actualizar') ?
+                  'is-invalid' : ''"
+                  [placeholder]="admi_seleccionada?.user_datos.cedula"
+                  [value]="admi_seleccionada?.user_datos.cedula"></textarea>
+                <div class="invalid-feedback"> {{getErrorMessage(formEdit,
+                  'cedula')}} </div>
+              </div>
+            </div>
+
+            <div class="row p-2 align-items-center">
+              <div class="col-5">
+                <label for="textareaDescripcion" class="form-label"><h3
+                    class="m-0 p-0 fw-bold">Correo:</h3></label>
+              </div>
+              <div class="col-7">
+                <input
+                  type="email"
+                  class="form-control"
+                  formControlName="correo"
+                  [ngClass]="isInvalidForm('correo', 'actualizar') ?
+                  'is-invalid' : ''"
+                  [placeholder]="admi_seleccionada?.user_datos.user.email"
+                  [value]="admi_seleccionada?.user_datos.user.email">
+                <div class="invalid-feedback"> {{getErrorMessage(formEdit,
+                  'correo')}} </div>
               </div>
             </div>
 
 
+            <div class="row p-2 align-items-center">
+              <div class="col-5">
+                <label for="selectorServicioCrear" class="form-label"><h3
+                    class="m-0 p-0 fw-bold">Ciudad:</h3></label>
+              </div>
+              <div class="col-7">
+                <select
+                  class="form-select"
+                  [ngClass]="isInvalidForm('ciudad', 'actualizar') ?
+                  'is-invalid' : ''"
+                  formControlName="ciudad"
+                  [value]="admi_seleccionada?.user_datos.ciudad"
+                  aria-describedby="selectorServicioCrearFeedback">
+                  <option selected disabled value="">Elija una ciudad...</option>
+                  <option *ngFor="let c of ciudades" [id]="c" [value]="c"> {{c}}
+                  </option>
+                </select>
+                <div id="selectorServicioCrearFeedback"
+                  class="invalid-feedback"> {{getErrorMessage(formEdit,
+                  'ciudad')}} </div>
+              </div>
+            </div>
 
-            <div class="form-group">
-              <button type="submit" class="btn btn-primary">Guardar</button>
-              <button
-                type="button"
-                (click)="onReset()"
-                class="btn btn-warning float-right"
-              >
-                Vaciar
-              </button>
+            <div class="row p-2 align-items-center">
+              <div class="col-5">
+                <label for="selectorServicioCrear" class="form-label"><h3
+                    class="m-0 p-0 fw-bold">Genero:</h3></label>
+              </div>
+              <div class="col-7">
+                <select
+                  class="form-select"
+                  [ngClass]="isInvalidForm('genero', 'actualizar') ?
+                  'is-invalid' : ''"
+                  formControlName="genero"
+                  id="ge"
+                  [value]="admi_seleccionada?.user_datos.genero"
+                  aria-describedby="selectorServicioCrearFeedback">
+                  <option selected disabled value="">Elija una genero...</option>
+                  <option *ngFor="let c of generos" [id]="c" [value]="c"> {{c}}
+                  </option>
+                </select>
+                <div id="selectorServicioCrearFeedback"
+                  class="invalid-feedback"> {{getErrorMessage(formEdit,
+                  'genero')}} </div>
+              </div>
+            </div>
+
+            <div class="row p-2 align-items-center">
+              <div class="col-5">
+                <label for="selectorServicioCrear" class="form-label"><h3
+                    class="m-0 p-0 fw-bold">Rol:</h3></label>
+              </div>
+              <div class="col-7">
+                <select
+                  class="form-select"
+                  [ngClass]="isInvalidForm('rol', 'actualizar') ? 'is-invalid' :
+                  ''"
+                  formControlName="rol"
+                  [value]="admi_seleccionada?.user_datos.user.groups[0].name"
+                  aria-describedby="selectorServicioCrearFeedback">
+                  <option selected disabled value="">Elija una rol...</option>
+                  <option *ngFor="let c of roles" [id]="c" [value]="c"> {{c}}
+                  </option>
+                </select>
+                <div id="selectorServicioCrearFeedback"
+                  class="invalid-feedback"> {{getErrorMessage(formEdit, 'rol')}}
+                </div>
+              </div>
+            </div>
+
+            <!-- <div class="row p-2 align-items-center">
+              <div class="col-5">
+                <label for="textareaDescripcion" class="form-label"><h3
+                    class="m-0 p-0 fw-bold">Contrasena:</h3></label>
+              </div>
+              <div class="col-7">
+                <input
+                  type="password"
+                  class="form-control"
+                  formControlName="password"
+                  [ngClass]="isInvalidForm('password', 'actualizar') ?
+                  'is-invalid' : ''"
+                  [placeholder]="admi_seleccionada?.user_datos.user.password"
+                  [value]="admi_seleccionada?.user_datos.user.password">
+                <div class="invalid-feedback"> {{getErrorMessage(formEdit,
+                  'password')}} </div>
+              </div>
+            </div>
+
+            <div class="row p-2 align-items-center">
+              <div class="col-5">
+                <label for="textareaDescripcion" class="form-label"><h3
+                    class="m-0 p-0 fw-bold"> Confirmar Contrasena:</h3></label>
+              </div>
+              <div class="col-7">
+                <input
+                  type="password"
+                  class="form-control"
+                  formControlName="confirmPassword"
+                  [ngClass]="isInvalidForm('confirmPassword', 'actualizar') ?
+                  'is-invalid' : ''"
+                  [placeholder]="admi_seleccionada?.user_datos.user.password"
+                  [value]="admi_seleccionada?.user_datos.user.password">
+                <div class="invalid-feedback"> {{getErrorMessage(formEdit,
+                  'confirmPassword')}} </div>
+              </div>
+         
+            </div> -->
+           
+            <div class="row p-2 align-items-center">
+              <div class="col-5">
+                <label for="switchEstado" class="form-check-label"><h3 class="m-0 p-0 fw-bold">Habilitar/Deshabilitar:</h3></label>
+              </div>
+              <div class="col-7 form-check form-switch d-flex justify-content-end fs-6">
+                <input
+                  class="form-check-input"
+                  [ngClass]="isInvalidForm('estado', 'actualizar')? 'is-invalid' : ''"
+                  formControlName="estado"
+                  id="switchEstado"
+                  type="checkbox"
+                  role="switch"
+                  aria-describedby="switchEstadoFeedback"
+                >
+                <div id="switchEstadoFeedback" class="invalid-feedback"> {{getErrorMessage(formEdit, 'estado')}} </div>
+              </div>
             </div>
           </form>
         </div>
-  </mat-card-content>
+        <div class="modal-footer">
+          <button class="btn btn-danger"
+            data-bs-target="#modalInformacionProfesion" data-bs-toggle="modal">Regresar</button>
+          <button
 
-</mat-card>
-<nav aria-label="Page navigation example">
-    <ul class="pagination">
-        <li class="page-item"><a class="page-link" (click)="previous($event)">Previous</a></li>
-        <div *ngFor="let n of pageNumber; let i=index;">
-            <li class="page-item"><button class="page-link" value="{{n}}"
-                    (click)="iteracion($event)">{{n}}</button></li>
+            data-bs-target="#modalConfirmacion"
+            data-bs-toggle="modal"
+            class="btn btn-success"
+            (click)="establecerMensaje('Está seguro que desea actualizar la información?', 'actualizar')" >Actualizar</button>
         </div>
 
+        <!-- <pre>
+        {{actualizarProfesionesForm.value | json}}
+      </pre> -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal crear admi -->
+  <div class="modal fade" id="modalCrearProfesion" aria-hidden="true"
+    aria-labelledby="modalCrearProfesionLabel" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header align-items-center">
+          <h1 class="modal-title fs-5 m-0 p-0 fw-bold"
+            id="modalCrearProfesionLabel">Crear Administrador</h1>
+          <!-- (click)="limpiarForm('crear')" -->
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"></button>
+        </div>
+        <div class="modal-body mb-0">
+          <form [formGroup]="admiCrear" class="">
+            <!-- Seccion de imagen -->
+            <div class="row">
+              <div class="col d-flex justify-content-center">
+                <img *ngIf="existImageCrear" class="rounded mx-auto d-block
+                  img-fluid w-50 image_modal" [src]="imagenCrear" alt="Archivo
+                  incorrecto">
+                <i *ngIf="!existImageCrear" class="rounded mx-auto d-block
+                  img-fluid w-50 bi bi-upload icono"></i>
+              </div>
+              <div class="p-2">
+                <input
+                  class="w-100 centrar form-control"
+                  [ngClass]="admiCrear.get('imagen')?.hasError('image_error') ?
+                  'is-invalid' : '' || (existImageCrear)? 'is-valid' : ''"
+                  type="file"
+
+                  accept="image/png, image/jpeg"
+                  (change)="loadImageFromDevice($event, 'crear')">
+                <div class="invalid-feedback">{{getErrorMessage(admiCrear,
+                  'imagen')}}</div>
+              </div>
+            </div>
+
+            <div class="row p-2 align-items-center">
+              <div class="col-5">
+                <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
+                    fw-bold">Nombre:</h3></label>
+              </div>
+              <div class="col-7">
+                <input
+                  type="text"
+                  formControlName="nombre"
+                  class="form-control"
+                  [ngClass]="isInvalidForm('nombre', 'crear') ? 'is-invalid' :
+                  admiCrear.get('nombre')?.touched ||
+                  admiCrear.get('nombre')?.dirty &&
+                  !admiCrear.get('nombre')?.invalid ? 'is-valid' : ''"
+                  id="inputNombre"
+                  placeholder="Juan luis">
+                <div class="invalid-feedback"> {{getErrorMessage(admiCrear,
+                  'nombre')}} </div>
+              </div>
+            </div>
+
+            <div class="row p-2 align-items-center">
+              <div class="col-5">
+                <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
+                    fw-bold">Apellidos:</h3></label>
+              </div>
+              <div class="col-7">
+                <input
+                  type="text"
+                  formControlName="apellidos"
+                  class="form-control"
+                  [ngClass]="isInvalidForm('apellidos', 'crear') ? 'is-invalid'
+                  : admiCrear.get('apellidos')?.touched ||
+                  admiCrear.get('apellidos')?.dirty &&
+                  !admiCrear.get('apellidos')?.invalid ? 'is-valid' : ''"
+                  id="inputApellido"
+                  placeholder="Perez Villamar">
+                <div class="invalid-feedback"> {{getErrorMessage(admiCrear,
+                  'apellidos')}} </div>
+              </div>
+            </div>
+
+            <div class="row p-2 align-items-center">
+              <div class="col-5">
+                <label for="textareaDescripcion" class="form-label"><h3
+                    class="m-0 p-0 fw-bold">Telefono:</h3></label>
+              </div>
+              <div class="col-7">
+                <textarea
+                  class="form-control"
+                  formControlName="telefono"
+                  [ngClass]="isInvalidForm('telefono', 'crear') ? 'is-invalid' :
+                  ''"
+                  id="tel"
+                  placeholder="0960044508"></textarea>
+                <div class="invalid-feedback"> {{getErrorMessage(admiCrear,
+                  'telefono')}} </div>
+              </div>
+            </div>
+
+            <div class="row p-2 align-items-center">
+              <div class="col-5">
+                <label for="textareaDescripcion" class="form-label"><h3
+                    class="m-0 p-0 fw-bold">Cedula:</h3></label>
+              </div>
+              <div class="col-7">
+                <textarea
+                  class="form-control"
+                  formControlName="cedula"
+                  [ngClass]="isInvalidForm('cedula', 'crear') ? 'is-invalid' :
+                  ''"
+
+                  placeholder="0960044508"></textarea>
+                <div class="invalid-feedback"> {{getErrorMessage(admiCrear,
+                  'cedula')}} </div>
+              </div>
+            </div>
+
+            <div class="row p-2 align-items-center">
+              <div class="col-5">
+                <label for="textareaDescripcion" class="form-label"><h3
+                    class="m-0 p-0 fw-bold">Correo:</h3></label>
+              </div>
+              <div class="col-7">
+                <input
+                  type="email"
+                  class="form-control"
+                  formControlName="correo"
+                  [ngClass]="isInvalidForm('correo', 'crear') ? 'is-invalid' :
+                  ''"
+                  id="ced"
+                  placeholder="juan@example.com">
+                <div class="invalid-feedback"> {{getErrorMessage(admiCrear,
+                  'correo')}} </div>
+              </div>
+            </div>
+
+
+            <div class="row p-2 align-items-center">
+              <div class="col-5">
+                <label for="selectorServicioCrear" class="form-label"><h3
+                    class="m-0 p-0 fw-bold">Ciudad:</h3></label>
+              </div>
+              <div class="col-7">
+                <select
+                  class="form-select"
+                  [ngClass]="isInvalidForm('ciudad', 'crear') ? 'is-invalid' :
+                  ''"
+                  formControlName="ciudad"
+                  id="ciu"
+                  aria-describedby="selectorServicioCrearFeedback">
+                  <option selected disabled value="">Elija una ciudad...</option>
+                  <option *ngFor="let c of ciudades" [id]="c" [value]="c"> {{c}}
+                  </option>
+                </select>
+                <div id="selectorServicioCrearFeedback"
+                  class="invalid-feedback"> {{getErrorMessage(admiCrear,
+                  'ciudad')}} </div>
+              </div>
+            </div>
+
+            <div class="row p-2 align-items-center">
+              <div class="col-5">
+                <label for="selectorServicioCrear" class="form-label"><h3
+                    class="m-0 p-0 fw-bold">Genero:</h3></label>
+              </div>
+              <div class="col-7">
+                <select
+                  class="form-select"
+                  [ngClass]="isInvalidForm('genero', 'crear') ? 'is-invalid' :
+                  ''"
+                  formControlName="genero"
+                  aria-describedby="selectorServicioCrearFeedback">
+                  <option selected disabled value="">Elija una genero...</option>
+                  <option *ngFor="let c of generos" [id]="c" [value]="c"> {{c}}
+                  </option>
+                </select>
+                <div id="selectorServicioCrearFeedback"
+                  class="invalid-feedback"> {{getErrorMessage(admiCrear,
+                  'genero')}} </div>
+              </div>
+            </div>
+
+            <div class="row p-2 align-items-center">
+              <div class="col-5">
+                <label for="selectorServicioCrear" class="form-label"><h3
+                    class="m-0 p-0 fw-bold">Rol:</h3></label>
+              </div>
+              <div class="col-7">
+                <select
+                  class="form-select"
+                  [ngClass]="isInvalidForm('rol', 'crear') ? 'is-invalid' : ''"
+                  formControlName="rol"
+                  id="ro"
+
+                  aria-describedby="selectorServicioCrearFeedback">
+                  <option selected disabled value="">Elija una rol...</option>
+                  <option *ngFor="let c of roles" [id]="c" [value]="c"> {{c}}
+                  </option>
+                </select>
+                <div id="selectorServicioCrearFeedback"
+                  class="invalid-feedback"> {{getErrorMessage(admiCrear,
+                  'rol')}} </div>
+              </div>
+            </div>
+
+            <div class="row p-2 align-items-center">
+              <div class="col-5">
+                <label for="textareaDescripcion" class="form-label"><h3
+                    class="m-0 p-0 fw-bold">Contrasena:</h3></label>
+              </div>
+              <div class="col-7">
+                <input
+                  type="password"
+                  class="form-control"
+                  formControlName="password"
+                  [ngClass]="isInvalidForm('password', 'crear') ? 'is-invalid' :
+                  ''"
+                  id="pw"
+                  placeholder="*******">
+                <div class="invalid-feedback"> {{getErrorMessage(admiCrear,
+                  'password')}} </div>
+              </div>
+            </div>
+
+            <div class="row p-2 align-items-center">
+              <div class="col-5">
+                <label for="textareaDescripcion" class="form-label"><h3
+                    class="m-0 p-0 fw-bold"> Confirmar Contrasena:</h3></label>
+              </div>
+              <div class="col-7">
+                <input
+                  type="password"
+                  class="form-control"
+                  formControlName="confirmPassword"
+                  [ngClass]="isInvalidForm('confirmPassword', 'crear') ?
+                  'is-invalid' : ''"
+                  id="pwd"
+                  placeholder="*******">
+                <div class="invalid-feedback"> {{getErrorMessage(admiCrear,
+                  'confirmPassword')}} </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button
+            [disabled]="admiCrear.invalid? true : false"
+            data-bs-target="#modalConfirmacion"
+            data-bs-toggle="modal"
+            class="btn btn-success"
+            (click)="establecerMensaje('Está seguro que desea crear la profesión?', 'crear')">Crear</button>
+        </div>
+
+        <!-- <pre>
+          {{crearProfesionesForm.value | json}}
+        </pre> -->
+      </div>
+    </div>
+  </div>
+
+<!-- Modal de confirmacion (Alerta) -->
+  <div class="modal fade" id="modalConfirmacion" tabindex="-1"
+  aria-labelledby="modalConfirmacionLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <!-- Titulo del modal confirmacion -->
+      <div class="modal-header">
+        <h1 class="modal-title fs-5 m-0 p-0 fw-bold"
+          id="modalConfirmacionLabel">Confirmar selección</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"
+          aria-label="Close"></button>
+      </div>
+
+      <!-- Cuerpo del modal confirmacion -->
+      <div class="modal-body">
+        {{mensajeAlerta}}
+      </div>
+
+      <!-- Footer del modal confirmacion -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+        <button *ngIf="isCrear" type="button" class="btn btn-success"
+          (click)="onCrear()" data-bs-dismiss="modal">Confirmar</button>
+        <button *ngIf="isActualizar" type="button" class="btn btn-success"
+          (click)="onActualizar()" data-bs-dismiss="modal">Confirmar</button>
+        <!-- <button *ngIf="isEliminar" type="button" class="btn btn-success" (click)="onDelete()" data-bs-dismiss="modal">Confirmar</button> -->
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div  class="container-fluid">
+  <div class="row p-2 justify-content-center align-items-center">
+    <nav aria-label="Page navigation example">
+      <ul class="pagination">
+        <li class="page-item"><a class="page-link" (click)="previous($event)">Previous</a></li>
+        <div *ngFor="let n of pageNumber; let i=index;">
+          <li class="page-item"><button class="page-link" value="{{n}}"
+              (click)="iteracion($event)">{{n}}</button></li>
+        </div>
+  
         <li class="page-item"><a class="page-link" (click)="next($event)">Next</a></li>
-    </ul>
-</nav>
+      </ul>
+    </nav>
+  </div>
+</div>
+
+ 
