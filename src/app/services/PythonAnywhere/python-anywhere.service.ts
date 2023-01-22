@@ -23,9 +23,9 @@ import { BodyActualizarPlanProveedor, BodyCrearPlan, BodyCrearPlanProveedor, Bod
 import { BodyCrearPublicidad, BodyResponseCrearPublicidad } from 'src/app/interfaces/publicidad';
 import { Ciudad } from 'src/app/interfaces/ciudad';
 import { AdminUserPass } from 'src/app/interfaces/admin-user-pass';
-import { NotificacionAnuncio } from 'src/app/interfaces/notificacion-anuncio';
+import { BodyCrearNotificacionAnuncio, NotificacionAnuncio } from 'src/app/interfaces/notificacion';
 import { BodyActualizarGroup, BodyCrearGroup, Group, Permission } from 'src/app/interfaces/group';
-import { SolicitudProfesion } from 'src/app/interfaces/solicitud';
+import { SolicitudProfesion, SolicitudProfesionPaginacion } from 'src/app/interfaces/solicitud';
 @Injectable({
   providedIn: 'root',
 })
@@ -1330,14 +1330,14 @@ export class PythonAnywhereService {
    * @param bodyCrear
    * @returns Retorna un obejto con un estado OK 200 {"sucess": true}
    */
-  send_notificacion(bodyCrear: NotificacionAnuncio) {
+  send_notificacion(bodyCrear: BodyCrearNotificacionAnuncio): Observable<any> {
     const dataCrear = new FormData();
     dataCrear.append("titulo", bodyCrear.titulo);
     dataCrear.append("mensaje", bodyCrear.mensaje);
     dataCrear.append("descripcion", bodyCrear.descripcion);
     dataCrear.append("ruta", bodyCrear.ruta);
     bodyCrear.imagen ? dataCrear.append("imagen", bodyCrear.imagen) : null;
-    return this.http.post(`${this.API_URL}/notificacion-anuncio/`, dataCrear);
+    return this.http.post(`${this.API_URL}/notificacion-anuncio/`, dataCrear) as Observable<any>;
   }
 
   //REPETIDO, LO MISMO QUE  obtener_planes()
@@ -1432,22 +1432,32 @@ export class PythonAnywhereService {
    * @param page El numero de pagina. ! Solo he visto pagina con page=1, mas haya salen invalidas
    * @returns // { "page_size": 10, "total_objects": 0, "total_pages": 1, "current_page_number": 1,  "next": null, "previous": null,  "results": [ SolicitudProfesion ] }
    */
+
   obtener_solicitudes(page: any) {
     return this.http.get(`${this.API_URL}/solicitudes-proveedores/?page=${page}`);
   }
 
+  /**
+   * Función que busca las Solicitudes de Profesión que coincidan en sus nombres o apellidos con el parametro enviado.
+   *
+   * @author Kevin Chévez
+   * @param usuario Recibe un string con con el contenido a buscar en los nombres y apellidos del proveedor.
+   * @param page (Opcional) Recibe un number indicando la pagina del filtro. Por defecto 1.
+   * @returns Devuelve un Observable con un objeto SolicitudProfesionPaginacion.
+   */
+  solicitudesByUser(usuario: string, page = 1): Observable<SolicitudProfesionPaginacion> {
+    return this.http.get(`${this.API_URL}/solicitudesUser_search/${usuario}?page=${page}`) as Observable<SolicitudProfesionPaginacion>;
+  }
 
   /**
+   * Función que filtra los proveedores pendientes en un rango de fechas.
    *
-   * @author Margarita Mawyin
-   * @param usuario Correo del usuario soliciante, proveedor o admin
-   * @param page El numero de pagina. ! Solo he visto pagina con page=1, mas haya salen invalidas
-   * @returns // { "page_size": 10, "total_objects": 0, "total_pages": 1, "current_page_number": 1,  "next": null, "previous": null,  "results": [] }
+   * @author Kevin Chévez
+   * @param fechaInicio Recibe un string de la fecha inicio con el formato AAAA-MM-DD para aplicar al filtro.
+   * @param fechaFin Recibe un string de la fecha fin con el formato AAAA-MM-DD para aplicar al filtro.
+   * @param page (Opcional) Recibe un number indicando la pagina del filtro. Por defecto 1.
+   * @returns Devuelve un Observable con un objeto ProveedorPaginacion de todas las respuestas filtradas.
    */
-  solicitudesByUser(usuario: any, page: any) {
-    return this.http.get(`${this.API_URL}/solicitudesUser_search/${usuario}?page=${page}`);
-  }
-  //no se usa en la otra app
   solicitudesByDate(fechaInicio: any, fechaFin: any, page: any) {
     return this.http.get(`${this.API_URL}/solicitudesDate_search/?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}&page=${page}`);
   }
