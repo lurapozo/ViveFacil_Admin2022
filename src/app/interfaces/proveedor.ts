@@ -63,7 +63,7 @@ export interface BodyActualizarProveedorPendiente {
   direccion: string;
   genero: string;
   licencia: string;
-  copiaLicencia: File | null; //Required
+  copiaLicencia: File | null; 
   copiaCedula: File; //Required
   filesDocuments: File[]; //Required
   cedula: string;

@@ -20,3 +20,7 @@ export interface BodyCrearPublicidad {
   export interface BodyResponseCrearPublicidad {
     objeto : Publicidad;
   }
+
+  export interface BodyActualizarPublicidad {
+    
+  }

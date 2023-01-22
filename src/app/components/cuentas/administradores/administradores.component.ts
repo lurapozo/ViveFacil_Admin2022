@@ -443,4 +443,14 @@ total=0
       console.log('Se paso algo erroneo en limpiar form');
     }
   }
+
+  search(evento: any) {
+    const texto = evento.target.value;
+    console.log('Escribe en el buscador: ', texto)
+    this.arr_filtered_admi = this.arr_admi;
+    if (texto && texto.trim() !== '') {
+      this.arr_filtered_admi = this.arr_filtered_admi?.filter((solicitud) => {
+        return solicitud.user_datos.nombres.toLowerCase().includes(texto.toLowerCase())
+      });
+    }}
 }
