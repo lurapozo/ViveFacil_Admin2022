@@ -1,1 +1,160 @@
-<p>notificaciones-push works!</p>
+<div class="container-fluid">
+  <!-- Titulo principal -->
+  <div class="row p-2 justify-content-center align-items-center">
+    <div class="col text-center">
+      <h2 class="p-0 m-0">Notificaciones push</h2>
+    </div>
+  </div>
+
+  <!-- Contenedor formulario para la notificacion -->
+  <div class="row justify-content-center align-items-center p-0">
+    <form [formGroup]="crearNotificacionForm" class="col-8">
+
+      <!-- Seccion de titulo -->
+      <div class="row p-2 align-items-center">
+        <div class="col-2">
+          <label for="inputNombre" class="form-label"><h3 class="m-0 p-0">Título:</h3></label>
+        </div>
+        <div class="col-10">
+          <input
+            type="text"
+            formControlName="titulo"
+            class="form-control"
+            [ngClass]="isInvalidForm('titulo') ? 'is-invalid' : ''"
+            id="inputNombre"
+            placeholder="Título de la notificación"
+          >
+          <div class="invalid-feedback"> {{getErrorMessage(crearNotificacionForm, 'titulo')}} </div>
+        </div>
+      </div>
+
+      <!-- Seccion de mensaje -->
+      <div class="row p-2 align-items-center">
+        <div class="col-2">
+          <label for="textareaDescripcion" class="form-label"><h3 class="m-0 p-0">Mensaje:</h3></label>
+        </div>
+        <div class="col-10">
+          <textarea
+            class="form-control"
+            formControlName="mensaje"
+            [ngClass]="isInvalidForm('mensaje') ? 'is-invalid' : ''"
+            id="textareaDescripcion"
+            placeholder="Escriba el mensaje de la notificación"
+          ></textarea>
+        <div class="invalid-feedback"> {{getErrorMessage(crearNotificacionForm, 'mensaje')}} </div>
+        </div>
+      </div>
+
+      <!-- Seccion de descripcion -->
+      <div class="row p-2 align-items-center">
+        <div class="col-2">
+          <label for="textareaDescripcion" class="form-label"><h3 class="m-0 p-0">Descripción:</h3></label>
+        </div>
+        <div class="col-10">
+          <textarea
+            class="form-control"
+            formControlName="descripcion"
+            [ngClass]="isInvalidForm('descripcion') ? 'is-invalid' : ''"
+            id="textareaDescripcion"
+            placeholder="Escriba la descripción de la notificación"
+          ></textarea>
+        <div class="invalid-feedback"> {{getErrorMessage(crearNotificacionForm, 'descripcion')}} </div>
+        </div>
+      </div>
+
+      <!-- Seccion de ruta -->
+      <div class="row p-2 align-items-center">
+        <div class="col-2">
+          <label for="inputNombre" class="form-label"><h3 class="m-0 p-0">Ruta:</h3></label>
+        </div>
+        <div class="col-10">
+          <input
+            type="text"
+            formControlName="ruta"
+            class="form-control"
+            [ngClass]="isInvalidForm('ruta') ? 'is-invalid' : ''"
+            id="inputNombre"
+            placeholder="Ruta de la notificación"
+          >
+          <div class="invalid-feedback"> {{getErrorMessage(crearNotificacionForm, 'ruta')}} </div>
+        </div>
+      </div>
+
+      <!-- Seccion de imagen -->
+      <div class="row p-2 align-items-center">
+        <div class="col-12 d-flex justify-content-center" for="file_input">
+          <img *ngIf="existImageNotificacion" class="image_modal rounded mx-auto d-block img-fluid w-50" [src]="imagenNotificacion" alt="Archivo incorrecto">
+          <i *ngIf="!existImageNotificacion" class="rounded mx-auto d-block img-fluid w-50 bi bi-upload icono"></i>
+        </div>
+        <div class="col-11 p-2">
+          <input
+            class="w-100 form-control"
+            [ngClass]="crearNotificacionForm.get('imagen')?.hasError('image_error') ? 'is-invalid' : '' || (existImageNotificacion)? 'is-valid' : ''"
+            type="file"
+            id="file_input"
+            accept="image/png, image/jpeg"
+            (change)="loadImageFromDevice($event, 'actualizar')"
+          >
+          <div class="invalid-feedback">{{getErrorMessage(crearNotificacionForm, 'imagen')}}</div>
+        </div>
+        <div class="col-1 d-flex justify-content-center p-2 align-self-start">
+          <button (click)="eliminarImagen()" type="button" class="btn btn-outline-danger" aria-label="Close">
+            <i class="bi bi-trash"></i>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <!-- Boton de crear notificacion -->
+  <div class="row justify-content-center align-items-center p-0 m-5">
+    <div class="col text-center">
+      <button
+        [disabled]="crearNotificacionForm.invalid? true : false"
+        data-bs-target="#modalConfirmacion"
+        data-bs-toggle="modal"
+        class="btn btn-success"
+        (click)="establecerMensaje('Está seguro que desea crear la notificación?')"
+      >Crear</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de confirmacion (Alerta) -->
+<div class="modal fade" id="modalConfirmacion" tabindex="-1" aria-labelledby="modalConfirmacionLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <!-- Titulo del modal confirmacion -->
+      <div class="modal-header">
+        <h1 class="modal-title fs-5 m-0 p-0" id="modalConfirmacionLabel">Confirmar selección</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <!-- Cuerpo del modal confirmacion -->
+      <div class="modal-body">
+        {{mensajeAlerta}}
+      </div>
+
+      <!-- Footer del modal confirmacion -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-success" (click)="onCrearNotificacion()" data-bs-dismiss="modal">Confirmar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast de Información -->
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+  <div #liveToast id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header" [ngClass]="isErrorToast? ' bg-danger' : ' bg-success'">
+      <img src="../../../assets/imagenes/notification_logo.png" class="rounded me-2" width="25px" alt="...">
+      <strong class="me-auto text-light">{{tituloToast}}</strong>
+      <small class="text-light">Ahora</small>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body bg-opacity-25" [ngClass]="isErrorToast? ' bg-danger' : ' bg-success'">
+      {{mensajeToast}}
+    </div>
+  </div>
+</div>

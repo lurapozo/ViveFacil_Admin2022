@@ -11,7 +11,7 @@ import { BodyActualizarCargo, BodyCrearCargo, BodyResponseCrearCargo, Cargo } fr
 import { BodyPromocionActualizar, BodyResponsePromocionActualizar, Promocion } from 'src/app/interfaces/promocion';
 import { BodyCuponActualizar, BodyResponseCuponActualizar, Cupon } from 'src/app/interfaces/cupon';
 import { PaymentEfectivo, PaymentPaginacion, PaymentTarjeta } from 'src/app/interfaces/payment';
-import { BodyActualizarProveedor, BodyActualizarProveedorPendiente, BodyCrearProfesionesProveedor, BodyCrearProveedor, BodyCrearProveedorPendiente, BodyResponseCrearProveedorPendiente, Proveedor, ProveedorPaginacion, ProveedorPendiente, ProveedorProfesion } from 'src/app/interfaces/proveedor';
+import { BodyActualizarProveedor, BodyActualizarProveedorPendiente, BodyCrearProfesionProveedor, BodyCrearProveedor, BodyCrearProveedorPendiente, BodyResponseCrearProfesionProveedor, BodyResponseCrearProveedorPendiente, Proveedor, ProveedorPaginacion, ProveedorPendiente, ProveedorProfesion } from 'src/app/interfaces/proveedor';
 import { Documento, DocumentoPendiente } from 'src/app/interfaces/documento';
 import { CuentaBancariaProveedor } from 'src/app/interfaces/cuenta-bancaria';
 import { BodyActualizarProfesion, BodyCrearProfesion, BodyResponseActualizarProfesion, BodyResponseCrearProfesion, Profesion } from 'src/app/interfaces/profesion';
@@ -23,9 +23,9 @@ import { BodyActualizarPlan, BodyActualizarPlanProveedor, BodyCrearPlan, BodyCre
 import { BodyCrearPublicidad, BodyResponseCrearPublicidad } from 'src/app/interfaces/publicidad';
 import { Ciudad } from 'src/app/interfaces/ciudad';
 import { AdminUserPass } from 'src/app/interfaces/admin-user-pass';
-import { NotificacionAnuncio } from 'src/app/interfaces/notificacion-anuncio';
+import { BodyCrearNotificacionAnuncio, NotificacionAnuncio } from 'src/app/interfaces/notificacion';
 import { BodyActualizarGroup, BodyCrearGroup, Group, Permission } from 'src/app/interfaces/group';
-import { SolicitudProfesion } from 'src/app/interfaces/solicitud';
+import { SolicitudProfesion, SolicitudProfesionPaginacion } from 'src/app/interfaces/solicitud';
 import { PagosTarjetaUser } from 'src/app/interfaces/tarjeta';
 import { Sugerencia } from 'src/app/interfaces/sugerencia';
 @Injectable({
@@ -874,10 +874,10 @@ export class PythonAnywhereService {
    * @author Margarita Mawyin
    * @param user correo del proveedor
    * @param data profesion y ano_experiencia. EJ: data = {"profesion": "Jardinero", ano_experiencia: 5 }
-   * @returns Devuelve status 200ok y un Observable con un objeto any
+   * @returns Devuelve status un Observable con un objeto BodyResponseCrearProfesionProveedor
    */
-  crear_profesiones_proveedor(user: string, data: BodyCrearProfesionesProveedor) : Observable<Array<ProveedorProfesion>> {
-    return this.http.post(`${this.API_URL}/proveedor_profesiones/${user}`, data) as Observable<Array<ProveedorProfesion>>;
+  crear_profesiones_proveedor(user: string, data: BodyCrearProfesionProveedor) : Observable<BodyResponseCrearProfesionProveedor> {
+    return this.http.post(`${this.API_URL}/proveedor_profesiones/${user}`, data) as Observable<BodyResponseCrearProfesionProveedor>;
   }
 
 
@@ -1084,7 +1084,7 @@ export class PythonAnywhereService {
     return this.http.get(`${this.API_URL}/pagosol_efectivo/${pago_ID}`);
   }
   /**
-   * 
+   *
    * @author Margarita Mawyin
    * @param pago_ID un id de  obtener_pagos_tarjeta()
    * @returns Devuelve un Observable con un objeto PagosTarjetaUser
@@ -1092,7 +1092,7 @@ export class PythonAnywhereService {
   obtener_pago_solT(pago_ID: any) : Observable<PagosTarjetaUser> {
     return this.http.get(`${this.API_URL}/pagosol_tarjeta/${pago_ID}`)  as Observable<PagosTarjetaUser>;
   }
-  //FALTA 
+  //FALTA
   enviar_correo_alerta(correo: any, asunto: any, texto: any) {
     return this.http.get(
       `${this.API_URL}/enviaralerta/${correo}/${asunto}/${texto}`
@@ -1104,9 +1104,9 @@ export class PythonAnywhereService {
    * @author Margarita Mawyin
    * @param sugerencia Recibe un objeto con el estado. EJ: {"estado": true}
    * @param id id de la sugerencia
-   * @returns  retorna un status 200=OK o 400=BAD_REQUEST  
+   * @returns  retorna un status 200=OK o 400=BAD_REQUEST
    */
-  
+
   editar_sugerencia_estado(sugerencia: any, id: any) {
     return this.http.put(`${this.API_URL}/suggestion/${id}`, sugerencia);
   }
@@ -1125,10 +1125,10 @@ export class PythonAnywhereService {
   * Funcion que trae las sugerencias leidas por pagina especificada
   *
   * @author Margarita Mawyin
-  * @param page 
+  * @param id
   * @returns Retorna objetos de ProveedorPaginacion
   */
-  obtener_sugerenciasLeidas(page: any) : Observable<ProveedorPaginacion>{
+  obtener_sugerenciasLeidas(page = 1) : Observable<ProveedorPaginacion>{
     return this.http.get(`${this.API_URL}/read-suggestions/?page=${page}`) as Observable<ProveedorPaginacion>;
   }
 
@@ -1136,10 +1136,10 @@ export class PythonAnywhereService {
   * Funcion que trae las sugerencias NO leidas por pagina especificada
   *
   * @author Margarita Mawyin
-  * @param page
+  * @param id
   * @returns Retorna objetos de ProveedorPaginacion
   */
-  obtener_sugerenciasNoLeidas(page: number) : Observable<ProveedorPaginacion> {
+  obtener_sugerenciasNoLeidas(page = 1) : Observable<ProveedorPaginacion> {
     return this.http.get(`${this.API_URL}/unread-suggestions/?page=${page}`) as Observable<ProveedorPaginacion>;
   }
 
@@ -1160,9 +1160,9 @@ export class PythonAnywhereService {
   }
 
   /**
-  * Funcion que trae los planes 
-  * 
-  * @author Margarita Mawyin 
+  * Funcion que trae los planes
+  *
+  * @author Margarita Mawyin
   * @returns Retorna arreglo de objetos  Plan
   */
   obtener_planes() : Observable<Array<Plan>> {
@@ -1187,9 +1187,9 @@ export class PythonAnywhereService {
     return this.http.post(this.API_URL + '/planes/', dataCrear) as Observable<BodyResponseCrearPlan>;
   }
 
-  /** 
+  /**
    * Funcion que actualiza un plan en la base de datos según el parametro pasado.
-   * 
+   *
    * @author Margarita Mawyin
    * @param bodyCrear Recibe un Objeto BodyActualizarPlan la cual se encarga de actualizar un plan con los campos necesarios.
    * @returns Devuelve un Observable con un objeto Plan
@@ -1230,9 +1230,9 @@ export class PythonAnywhereService {
   }
 
   /**
-   * 
+   *
    * Funcion que filtra por titulo las publicidades
-   * 
+   *
    * @author Margarita Mawyin
    * @param buscar Recibe el titulo , que se puede obtener de obtener_publicidades()
    * @param page Recive un numero de pagina
@@ -1277,9 +1277,9 @@ export class PythonAnywhereService {
 
 
 /**
- * 
- * @param bodyActualizar 
- * @returns 
+ *
+ * @param bodyActualizar
+ * @returns
  */
   actualizar_publicidad(bodyActualizar: any) {
     const dataCrear = new FormData();
@@ -1360,14 +1360,14 @@ export class PythonAnywhereService {
    * @param bodyCrear
    * @returns Retorna un obejto con un estado OK 200 {"sucess": true}
    */
-  send_notificacion(bodyCrear: NotificacionAnuncio) {
+  send_notificacion(bodyCrear: BodyCrearNotificacionAnuncio): Observable<any> {
     const dataCrear = new FormData();
     dataCrear.append("titulo", bodyCrear.titulo);
     dataCrear.append("mensaje", bodyCrear.mensaje);
     dataCrear.append("descripcion", bodyCrear.descripcion);
     dataCrear.append("ruta", bodyCrear.ruta);
     bodyCrear.imagen ? dataCrear.append("imagen", bodyCrear.imagen) : null;
-    return this.http.post(`${this.API_URL}/notificacion-anuncio/`, dataCrear);
+    return this.http.post(`${this.API_URL}/notificacion-anuncio/`, dataCrear) as Observable<any>;
   }
 
   //REPETIDO, LO MISMO QUE  obtener_planes()
@@ -1458,27 +1458,38 @@ export class PythonAnywhereService {
 
 
   /**
-   * @author Margarita Mawyin
-   * @param page El numero de pagina. ! Solo he visto pagina con page=1, mas haya salen invalidas
-   * @returns // { "page_size": 10, "total_objects": 0, "total_pages": 1, "current_page_number": 1,  "next": null, "previous": null,  "results": [ SolicitudProfesion ] }
-   */
-  obtener_solicitudes(page=1) {
-    return this.http.get(`${this.API_URL}/solicitudes-proveedores/?page=${page}`);
-  }
-
-
-  /**
+   * Funcion que obtiene de la base de datos las solicitudes de profesiones para los proveedores.
    *
    * @author Margarita Mawyin
-   * @param usuario Correo del usuario soliciante, proveedor o admin
-   * @param page El numero de pagina. ! Solo he visto pagina con page=1, mas haya salen invalidas
-   * @returns // { "page_size": 10, "total_objects": 0, "total_pages": 1, "current_page_number": 1,  "next": null, "previous": null,  "results": [] }
+   * @param page (Opcional) Recibe un number indicando la pagina del filtro. Por defecto 1.
+   * @returns Devuelve un observable con el objeto SolicitudProfesionPaginacion
    */
-  solicitudesByUser(usuario: any, page: any) {
-    return this.http.get(`${this.API_URL}/solicitudesUser_search/${usuario}?page=${page}`);
+  obtener_solicitudes(page = 1): Observable<SolicitudProfesionPaginacion> {
+    return this.http.get(`${this.API_URL}/solicitudes-proveedores/?page=${page}`) as Observable<SolicitudProfesionPaginacion>;
   }
-  //no se usa en la otra app
-  solicitudesByDate(fechaInicio: any, fechaFin: any, page: any) {
+
+  /**
+   * Función que busca las Solicitudes de Profesión que coincidan en sus nombres o apellidos con el parametro enviado.
+   *
+   * @author Kevin Chévez
+   * @param usuario Recibe un string con con el contenido a buscar en los nombres y apellidos del proveedor.
+   * @param page (Opcional) Recibe un number indicando la pagina del filtro. Por defecto 1.
+   * @returns Devuelve un Observable con un objeto SolicitudProfesionPaginacion.
+   */
+  solicitudesByUser(usuario: string, page = 1): Observable<SolicitudProfesionPaginacion> {
+    return this.http.get(`${this.API_URL}/solicitudesUser_search/${usuario}?page=${page}`) as Observable<SolicitudProfesionPaginacion>;
+  }
+
+  /**
+   * Función que busca las Solicitudes de Profesión que coincidan en sus nombres o apellidos con el parametro enviado.
+   *
+   * @author Kevin Chévez
+   * @param fechaInicio Recibe un string de la fecha inicio con el formato AAAA-MM-DD para aplicar al filtro.
+   * @param fechaFin Recibe un string de la fecha fin con el formato AAAA-MM-DD para aplicar al filtro.
+   * @param page (Opcional) Recibe un number indicando la pagina del filtro. Por defecto 1.
+   * @returns Devuelve un Observable con un objeto ProveedorPaginacion de todas las respuestas filtradas.
+   */
+  solicitudesByDate(fechaInicio: string, fechaFin: string, page = 1) {
     return this.http.get(`${this.API_URL}/solicitudesDate_search/?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}&page=${page}`);
   }
 

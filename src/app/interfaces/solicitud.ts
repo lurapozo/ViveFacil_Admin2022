@@ -23,11 +23,21 @@ export interface Solicitud {
 }
 export interface SolicitudProfesion {
   id: number;
-  proveedor: Proveedor
+  proveedor: Proveedor;
   profesion: string;
   anio_experiencia: number;
   fecha_solicitud: string;
   documento: string;
   estado: boolean;
-  fecha: string;
+  fecha: string | null;
+}
+
+export interface SolicitudProfesionPaginacion {
+  page_size: number;
+  total_objects: number;
+  total_pages: number;
+  current_page_number: number;
+  next: string | null;
+  previous: string | null;
+  results: SolicitudProfesion[];
 }

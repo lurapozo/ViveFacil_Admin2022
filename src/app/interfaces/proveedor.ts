@@ -63,7 +63,7 @@ export interface BodyActualizarProveedorPendiente {
   direccion: string;
   genero: string;
   licencia: string;
-  copiaLicencia: File | null; 
+  copiaLicencia: File | null;
   copiaCedula: File; //Required
   filesDocuments: File[]; //Required
   cedula: string;
@@ -193,8 +193,14 @@ export interface ProveedorProfesion {
   ano_experiencia: number;
   estado: boolean;
 }
-
-export interface BodyCrearProfesionesProveedor {
-  profesion: string,
-  ano_experiencia: number
+export interface BodyCrearProfesionProveedor {
+  profesion: string;
+  ano_experiencia: number;
 }
+
+export interface BodyResponseCrearProfesionProveedor {
+  success: boolean;
+  message: string;
+  profesion_proveedor?: ProveedorProfesion;
+}
+

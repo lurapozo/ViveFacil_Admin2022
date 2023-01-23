@@ -6,7 +6,7 @@
         <h2 class="p-0 m-0">Total de solicitudes  Pendientes: {{total}}</h2>
       </div>
     </div>
-  
+
     <!-- Buscar y agregar admi -->
     <div class="row p-2 justify-content-center align-items-center">
       <div class="col-xl-7 col-lg-5"></div>
@@ -19,8 +19,9 @@
               bi-search"></i> </button>
         </div>
       </div>
-  
+
     </div>
+
     <!-- Contenedor de admi -->
     <div class="row justify-content-center align-items-center p-0">
       <div class="col-10 text-center">
@@ -29,75 +30,47 @@
           <div class="col-3 align-self-center">
             <h3 class="p-0 m-0">Nombres</h3>
           </div>
-  
+
           <div class="col-3 align-self-center">
             <h3 class="p-0 m-0">Profesion solicitada</h3>
           </div>
-  
+
           <div class="col-3 align-self-center">
             <h3 class="p-0 m-0">Fecha Solicitud</h3>
           </div>
-  
+
           <div class="col-3 align-self-center">
             <h3 class="p-0 m-0">Estado</h3>
           </div>
-      
-  
         </div>
-  
+
         <!-- Profesion -->
-        <div (click)=" soli_seleccionada=a" *ngFor="let a of
-        arr_filtered_soli"
-          class="row p-2 bg-light fila_info_profesion" data-bs-toggle="modal"
-          href="#modalInformacionProfesion" role="button">
+        <div (click)="soli_seleccionada=a" *ngFor="let a of arr_filtered_soli" class="row p-2 bg-light fila_info_profesion" data-bs-toggle="modal" href="#modalInformacionProfesion" role="button">
           <div class="col-3 align-self-center">
             <h4 class="p-0 m-0"> {{a.proveedor.user_datos.nombres}}
                 {{a.proveedor.user_datos.nombres}}</h4>
           </div>
-  
+
           <div class="col-3 align-self-center">
             <h4 class="p-0 m-0"> {{a.profesion}} </h4>
           </div>
-  
+
           <div class="col-3 align-self-center">
             <h4 class="p-0 m-0">{{a.fecha_solicitud}}</h4>
           </div>
-  
-          <div class="col-3 align-self-center">
-            <h4 class="p-0 m-0"> {{a.estado}}</h4>
-          </div>
-        
-  
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="modal fade" id="modalConfirmacion" tabindex="-1" aria-labelledby="modalConfirmacionLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <!-- Titulo del modal confirmacion -->
-        <div class="modal-header">
-          <h1 class="modal-title fs-5 m-0 p-0 fw-bold" id="modalConfirmacionLabel">Confirmar selección</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-  
-        <!-- Cuerpo del modal confirmacion -->
-        <div class="modal-body">
-          {{mensajeAlerta}}
-        </div>
-  
-        <!-- Footer del modal confirmacion -->
-        <div class="modal-footer">
-          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
-          <button *ngIf="isAceptar" type="button" class="btn btn-success" (click)="onNegar()" data-bs-dismiss="modal">Confirmar</button>
-          <button *ngIf="isNegar" type="button" class="btn btn-success"  (click)="onAceptar()" data-bs-dismiss="modal">Confirmar</button>
-        </div>
-      </div>
-    </div>
-  </div>
 
-  
-  <div  class="container-fluid">
+          <!-- Denegado == true, En proceso == false -->
+          <div class="col-3 align-self-center">
+            <span *ngIf="!a.estado" class="badge text-bg-warning">En proceso</span>
+            <span *ngIf="a.estado" class="badge text-bg-danger">Denegado</span>
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Seccion paginacion -->
     <div class="row p-2 justify-content-center align-items-center">
       <nav aria-label="Page navigation example">
         <ul class="pagination">
@@ -106,75 +79,122 @@
             <li class="page-item"><button class="page-link" value="{{n}}"
                 (click)="iteracion($event)">{{n}}</button></li>
           </div>
-    
+
           <li class="page-item"><a class="page-link" (click)="next($event)">Next</a></li>
         </ul>
       </nav>
     </div>
-  </div>
-  <div class="modal fade" id="modalInformacionProfesion" aria-hidden="true" aria-labelledby="modalInformacionProfesionLabel" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-      <div class="modal-content">
-        <div class="modal-header align-items-center">
-          <h1 class="modal-title fs-5 m-0 p-0 fw-bold" id="modalInformacionProfesionLabel">Información de Solicitud</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+
+<!-- Modal de Informacion de solicitud -->
+<div class="modal fade" id="modalInformacionProfesion" aria-hidden="true" aria-labelledby="modalInformacionProfesionLabel" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <!-- Titulo del modal -->
+      <div class="modal-header align-items-center">
+        <h1 class="modal-title fs-5 m-0 p-0 fw-bold" id="modalInformacionProfesionLabel">Información de Solicitud</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <!-- Cuerpo del modal -->
+      <div class="modal-body mb-0">
+
+        <!-- Seccion nombre -->
+        <div class="row p-2 align-items-center">
+          <div class="col-5">
+            <h3 class="m-0 p-0 fw-bold">Nombre:</h3>
+          </div>
+          <div class="col-7">
+            {{soli_seleccionada?.proveedor?.user_datos?.nombres}}  {{soli_seleccionada?.proveedor?.user_datos?.apellidos}}
+          </div>
         </div>
-        <div class="modal-body mb-0">
-       
-  
-          <div class="row p-2 align-items-center">
-            <div class="col-5">
-              <h3 class="m-0 p-0 fw-bold">Nombre:</h3>
-            </div>
-            <div class="col-7">
-              {{soli_seleccionada?.proveedor.user_datos.nombres}}  {{soli_seleccionada?.proveedor.user_datos.apellidos}}
-            </div>
+
+        <!-- Seccion profesion solicitada -->
+        <div class="row p-2 align-items-center">
+          <div class="col-5">
+            <h3 class="m-0 p-0 fw-bold">Profesion Solicitada:</h3>
           </div>
-
-
-          <div class="row p-2 align-items-center">
-            <div class="col-5">
-              <h3 class="m-0 p-0 fw-bold">Profesion Solicitada:</h3>
-            </div>
-            <div class="col-7">
-              {{soli_seleccionada?.profesion}}
-            </div>
+          <div class="col-7">
+            {{soli_seleccionada?.profesion}}
           </div>
+        </div>
 
-          <div class="row p-2 align-items-center">
-            <div class="col-5">
-              <h3 class="m-0 p-0 fw-bold">Experiencia:</h3>
-            </div>
-            <div class="col-7">
-              {{soli_seleccionada?.anio_experiencia}}
-            </div>
+        <!-- Seccion experiencia -->
+        <div class="row p-2 align-items-center">
+          <div class="col-5">
+            <h3 class="m-0 p-0 fw-bold">Experiencia:</h3>
           </div>
-
-          <div class="row p-2 align-items-center">
-            <div class="col-5">
-              <h3 class="m-0 p-0 fw-bold">Fecha de la solicitud:</h3>
-            </div>
-            <div class="col-7">
-              {{soli_seleccionada?.fecha_solicitud}}
-            </div>
+          <div class="col-7">
+            {{soli_seleccionada?.anio_experiencia}}
           </div>
-  
+        </div>
 
-        <div class="modal-footer">
+        <!-- Seccion fecha -->
+        <div class="row p-2 align-items-center">
+          <div class="col-5">
+            <h3 class="m-0 p-0 fw-bold">Fecha de la solicitud:</h3>
+          </div>
+          <div class="col-7">
+            {{soli_seleccionada?.fecha_solicitud}}
+          </div>
+        </div>
+
+        <!-- Seccion de botones -->
+        <div *ngIf="!soli_seleccionada?.estado" class="modal-footer">
           <button
-          class="btn btn-success"
-          data-bs-target="#modalConfirmacion"
-          data-bs-toggle="modal"
-          (click)="establecerMensaje('Está seguro que desea aceptar la solicitud?', 'aceptar')"
-        >Aceptar</button>
+            class="btn btn-success"
+            data-bs-target="#modalConfirmacion"
+            data-bs-toggle="modal"
+            (click)="establecerMensaje('Está seguro que desea aceptar la solicitud?', 'aceptar')"
+          >Aceptar</button>
           <button
             class="btn btn-danger"
             data-bs-target="#modalConfirmacion"
             data-bs-toggle="modal"
-            (click)="establecerMensaje('Está seguro que desea eliminar la profesión?', 'negar')"
+            (click)="establecerMensaje('Está seguro que desea negar la solicitud de profesión?', 'negar')"
           >Negar</button>
         </div>
       </div>
     </div>
   </div>
+</div>
 
+<!-- Modal de confirmacion -->
+<div class="modal fade" id="modalConfirmacion" tabindex="-1" aria-labelledby="modalConfirmacionLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <!-- Titulo del modal confirmacion -->
+      <div class="modal-header">
+        <h1 class="modal-title fs-5 m-0 p-0 fw-bold" id="modalConfirmacionLabel">Confirmar selección</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <!-- Cuerpo del modal confirmacion -->
+      <div class="modal-body">
+        {{mensajeAlerta}}
+      </div>
+
+      <!-- Footer del modal confirmacion -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+        <button *ngIf="isNegar" type="button" class="btn btn-success" (click)="onNegar()" data-bs-dismiss="modal">Confirmar</button>
+        <button *ngIf="isAceptar" type="button" class="btn btn-success"  (click)="onAceptar()" data-bs-dismiss="modal">Confirmar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast de Información -->
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+  <div #liveToast id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header" [ngClass]="isErrorToast? ' bg-danger' : ' bg-success'">
+      <img src="../../../assets/imagenes/notification_logo.png" class="rounded me-2" width="25px" alt="...">
+      <strong class="me-auto text-light">{{tituloToast}}</strong>
+      <small class="text-light">Ahora</small>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body bg-opacity-25" [ngClass]="isErrorToast? ' bg-danger' : ' bg-success'">
+      {{mensajeToast}}
+    </div>
+  </div>
+</div>

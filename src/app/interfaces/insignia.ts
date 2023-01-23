@@ -1,11 +1,11 @@
 export interface Insignia {
-  id: number;
+  id: string;
   nombre: string;
-  imagen: string;
+  imagen: File;
   servicio: string;
   tipo_usuario: string;
   estado: boolean;
-  pedidos: number;
+  pedidos: string;
   fecha_creacion: string;
   descripcion: string;
   tipo: string;
@@ -17,17 +17,17 @@ export interface BodyActualizarInsignia {
   servicio?: string;
   tipo_usuario?: string;
   estado: boolean;
-  pedidos?: number;
+  pedidos?: string;
   descripcion?: string;
   tipo?: string;
 }
 
 export interface BodyCrearInsignia {
   nombre: string;
-  imagen?: File;
+  imagen?: File ;
   servicio: string;
   tipoUsuario: string;
-  pedidos: number;
+  pedidos: string;
   descripcion: string;
   tipo: string;
 }
