@@ -11,7 +11,7 @@ import { BodyActualizarCargo, BodyCrearCargo, BodyResponseCrearCargo, Cargo } fr
 import { BodyPromocionActualizar, BodyResponsePromocionActualizar, Promocion } from 'src/app/interfaces/promocion';
 import { BodyCuponActualizar, BodyResponseCuponActualizar, Cupon } from 'src/app/interfaces/cupon';
 import { PaymentEfectivo, PaymentPaginacion, PaymentTarjeta } from 'src/app/interfaces/payment';
-import { BodyActualizarProveedor, BodyActualizarProveedorPendiente, BodyCrearProfesionesProveedor, BodyCrearProveedor, BodyCrearProveedorPendiente, BodyResponseCrearProveedorPendiente, Proveedor, ProveedorPaginacion, ProveedorPendiente, ProveedorProfesion } from 'src/app/interfaces/proveedor';
+import { BodyActualizarProveedor, BodyActualizarProveedorPendiente, BodyCrearProfesionProveedor, BodyCrearProveedor, BodyCrearProveedorPendiente, BodyResponseCrearProfesionProveedor, BodyResponseCrearProveedorPendiente, Proveedor, ProveedorPaginacion, ProveedorPendiente, ProveedorProfesion } from 'src/app/interfaces/proveedor';
 import { Documento, DocumentoPendiente } from 'src/app/interfaces/documento';
 import { CuentaBancariaProveedor } from 'src/app/interfaces/cuenta-bancaria';
 import { BodyActualizarProfesion, BodyCrearProfesion, BodyResponseActualizarProfesion, BodyResponseCrearProfesion, Profesion } from 'src/app/interfaces/profesion';
@@ -874,10 +874,10 @@ export class PythonAnywhereService {
    * @author Margarita Mawyin
    * @param user correo del proveedor
    * @param data profesion y ano_experiencia. EJ: data = {"profesion": "Jardinero", ano_experiencia: 5 }
-   * @returns Devuelve status 200ok y un Observable con un objeto any
+   * @returns Devuelve status un Observable con un objeto BodyResponseCrearProfesionProveedor
    */
-  crear_profesiones_proveedor(user: string, data: BodyCrearProfesionesProveedor) : Observable<Array<ProveedorProfesion>> {
-    return this.http.post(`${this.API_URL}/proveedor_profesiones/${user}`, data) as Observable<Array<ProveedorProfesion>>;
+  crear_profesiones_proveedor(user: string, data: BodyCrearProfesionProveedor) : Observable<BodyResponseCrearProfesionProveedor> {
+    return this.http.post(`${this.API_URL}/proveedor_profesiones/${user}`, data) as Observable<BodyResponseCrearProfesionProveedor>;
   }
 
 
@@ -1128,7 +1128,7 @@ export class PythonAnywhereService {
   * @param id
   * @returns Retorna objetos de ProveedorPaginacion
   */
-  obtener_sugerenciasLeidas(page: any) : Observable<ProveedorPaginacion>{
+  obtener_sugerenciasLeidas(page = 1) : Observable<ProveedorPaginacion>{
     return this.http.get(`${this.API_URL}/read-suggestions/?page=${page}`) as Observable<ProveedorPaginacion>;
   }
 
@@ -1139,7 +1139,7 @@ export class PythonAnywhereService {
   * @param id
   * @returns Retorna objetos de ProveedorPaginacion
   */
-  obtener_sugerenciasNoLeidas(page: any) : Observable<ProveedorPaginacion> {
+  obtener_sugerenciasNoLeidas(page = 1) : Observable<ProveedorPaginacion> {
     return this.http.get(`${this.API_URL}/unread-suggestions/?page=${page}`) as Observable<ProveedorPaginacion>;
   }
 
@@ -1458,12 +1458,14 @@ export class PythonAnywhereService {
 
 
   /**
+   * Funcion que obtiene de la base de datos las solicitudes de profesiones para los proveedores.
+   *
    * @author Margarita Mawyin
-   * @param page El numero de pagina. ! Solo he visto pagina con page=1, mas haya salen invalidas
-   * @returns // { "page_size": 10, "total_objects": 0, "total_pages": 1, "current_page_number": 1,  "next": null, "previous": null,  "results": [ SolicitudProfesion ] }
+   * @param page (Opcional) Recibe un number indicando la pagina del filtro. Por defecto 1.
+   * @returns Devuelve un observable con el objeto SolicitudProfesionPaginacion
    */
-  obtener_solicitudes(page=1) {
-    return this.http.get(`${this.API_URL}/solicitudes-proveedores/?page=${page}`);
+  obtener_solicitudes(page = 1): Observable<SolicitudProfesionPaginacion> {
+    return this.http.get(`${this.API_URL}/solicitudes-proveedores/?page=${page}`) as Observable<SolicitudProfesionPaginacion>;
   }
 
   /**
@@ -1479,7 +1481,7 @@ export class PythonAnywhereService {
   }
 
   /**
-   * Función que filtra los proveedores pendientes en un rango de fechas.
+   * Función que busca las Solicitudes de Profesión que coincidan en sus nombres o apellidos con el parametro enviado.
    *
    * @author Kevin Chévez
    * @param fechaInicio Recibe un string de la fecha inicio con el formato AAAA-MM-DD para aplicar al filtro.
@@ -1487,7 +1489,7 @@ export class PythonAnywhereService {
    * @param page (Opcional) Recibe un number indicando la pagina del filtro. Por defecto 1.
    * @returns Devuelve un Observable con un objeto ProveedorPaginacion de todas las respuestas filtradas.
    */
-  solicitudesByDate(fechaInicio: any, fechaFin: any, page: any) {
+  solicitudesByDate(fechaInicio: string, fechaFin: string, page = 1) {
     return this.http.get(`${this.API_URL}/solicitudesDate_search/?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}&page=${page}`);
   }
 
