@@ -18,7 +18,7 @@ export class SugerenciasLeidasComponent {
 
   constructor(private pythonAnywhereService: PythonAnywhereService, private sanitizer: DomSanitizer) {
 
-    this.pythonAnywhereService.obtener_sugerenciasLeidas().subscribe(resp => {
+    this.pythonAnywhereService.obtener_sugerenciasLeidas(1).subscribe(resp => {
       this.total = Object(resp).total_objects
       this.arr_sugerencias = Object(resp).results;
 

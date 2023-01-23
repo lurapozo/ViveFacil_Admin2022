@@ -1125,7 +1125,7 @@ export class PythonAnywhereService {
   * Funcion que trae las sugerencias leidas por pagina especificada
   *
   * @author Margarita Mawyin
-  * @param id 
+  * @param page 
   * @returns Retorna objetos de ProveedorPaginacion
   */
   obtener_sugerenciasLeidas(page: any) : Observable<ProveedorPaginacion>{
@@ -1136,10 +1136,10 @@ export class PythonAnywhereService {
   * Funcion que trae las sugerencias NO leidas por pagina especificada
   *
   * @author Margarita Mawyin
-  * @param id 
+  * @param page
   * @returns Retorna objetos de ProveedorPaginacion
   */
-  obtener_sugerenciasNoLeidas(page: any) : Observable<ProveedorPaginacion> {
+  obtener_sugerenciasNoLeidas(page: number) : Observable<ProveedorPaginacion> {
     return this.http.get(`${this.API_URL}/unread-suggestions/?page=${page}`) as Observable<ProveedorPaginacion>;
   }
 
