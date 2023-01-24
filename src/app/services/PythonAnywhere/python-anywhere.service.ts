@@ -255,7 +255,7 @@ export class PythonAnywhereService {
    * @param estado Recibe un boolean indicando el estado de la promocion. (true - false).
    * @returns Devuelve un Observable con la respuesta OK(200) o Error(500).
    */
-  cambio_promocion_estado(id: string, estado: boolean): Observable<any> {
+  cambio_promocion_estado(id: any, estado: boolean): Observable<any> {
     return this.http.put(`${this.API_URL}/promocion_estado/?id=${id}`, {
       estado: estado,
     });
@@ -269,7 +269,7 @@ export class PythonAnywhereService {
    * @param id Recibe un string perteneciente al ID de la promocion la cual sera modificada.
    * @returns Devuelve un Observable con un objeto BodyResponsePromocionActualizar.
    */
-  actualizar_promocion(bodyActualizar: BodyPromocionActualizar, id: string): Observable<BodyResponsePromocionActualizar> {
+  actualizar_promocion(bodyActualizar: BodyPromocionActualizar, id: any): Observable<BodyResponsePromocionActualizar> {
     const dataUpdate = new FormData();
     dataUpdate.append("codigo", bodyActualizar.codigo);
     dataUpdate.append("titulo", bodyActualizar.titulo);
@@ -292,7 +292,7 @@ export class PythonAnywhereService {
    * @param id Recibe un string perteneciente al ID de la Promocion la cual sera eliminada.
    * @returns Devuelve un Observable con una respuesta OK(204) or Error(500).
    */
-  eliminar_promocion(id: string): Observable<any> {
+  eliminar_promocion(id: any): Observable<any> {
     return this.http.delete(`${this.API_URL}/promocion_delete/${id}`);
   }
   //-----------------------------------------------------------------------------------------------------------------------

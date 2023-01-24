@@ -1,1 +1,746 @@
-<p>promocion works!</p>
+<div class="container-fluid">
+    <!-- Titulo principal -->
+    <div class="row p-2 justify-content-center align-items-center">
+      <div class="col text-center">
+        <h2 class="p-0 m-0">Promociones </h2>
+      </div>
+    </div>
+  
+    <!-- Buscar y agregar profesion -->
+    <div class="row p-2 justify-content-center align-items-center">
+      <div class="col-xl-7 col-lg-5"></div>
+      <div class="col-xl-3 col-lg-4">
+        <div class="input-group">
+          <input type="text" (input)="search($event)" class="form-control"
+            placeholder="Buscar" aria-label="Buscar"
+            aria-describedby="basic-addon1">
+          <button class="input-group-text" id="basic-addon1"> <i class="bi
+              bi-search"></i> </button>
+        </div>
+      </div>
+      <div class="col-xl-2 col-lg-3">
+        <button
+          type="button"
+          class="btn btn-primary"
+          data-bs-toggle="modal"
+          href="#modalCrearProfesion"
+          (click)="limpiarForm('crear')">Agregar Promocion</button>
+      </div>
+    </div>
+  
+    <!-- Contenedor de profesiones -->
+    <div class="row justify-content-center align-items-center p-0">
+      <div class="col-10 text-center">
+        <!-- Titulo -->
+        <div class="row p-2 bg-primary text-white">
+          <div class="col-2 align-self-center">
+            <h3 class="p-0 m-0">Imagen</h3>
+          </div>
+  
+          <div class="col-1 align-self-center">
+            <h3 class="p-0 m-0">Codigo</h3>
+          </div>
+  
+          <div class="col-2 align-self-center">
+            <h3 class="p-0 m-0">Titulo</h3>
+          </div>
+  
+          <div class="col-1 align-self-center">
+            <h3 class="p-0 m-0">Cantidad</h3>
+          </div>
+  
+          <div class="col-2 align-self-center">
+            <h3 class="p-0 m-0">Fecha Inicio</h3>
+          </div>
+  
+          <div class="col-2 align-self-center">
+            <h3 class="p-0 m-0">Fecha Fin</h3>
+          </div>
+  
+          <div class="col-1 align-self-center">
+            <h3 class="p-0 m-0">Estado</h3>
+          </div>
+        </div>
+  
+        <!-- Profesion -->
+        <div (click)="ver(a)" *ngFor="let a of arr_filtered_promocion" class="row p-2
+          bg-light fila_info_profesion" data-bs-toggle="modal"
+          href="#modalInformacionProfesion" role="button">
+          <div class="col-2 align-self-center">
+            <img [src]="a.foto? 'https://tomesoft1.pythonanywhere.com'+a.foto :
+              '../../../assets/imagenes/ProfesionDefault.png'" class="rounded
+              mx-auto d-block img-fluid img_profesion" alt="...">
+          </div>
+  
+          <div class="col-1 align-self-center">
+            <h4 class="p-0 m-0"> {{a.codigo}} </h4>
+          </div>
+  
+          <div class="col-2 align-self-center">
+            <h4 class="p-0 m-0">{{a.titulo}}</h4>
+          </div>
+  
+          <div class="col-1 align-self-center">
+            <h4 class="p-0 m-0">{{a.cantidad}}</h4>
+          </div>
+  
+          <div class="col-2 align-self-center">
+            <h4 class="p-0 m-0">{{a.fecha_iniciacion}}</h4>
+          </div>
+  
+          <div class="col-2 align-self-center">
+            <h4 class="p-0 m-0">{{a.fecha_expiracion}}</h4>
+          </div>
+  
+          <div class="col-1 align-self-center">
+            <h4 class="p-0 m-0">{{a.estado}}</h4>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="modal fade" id="modalInformacionProfesion" aria-hidden="true"
+    aria-labelledby="modalInformacionProfesionLabel" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header align-items-center">
+          <h1 class="modal-title fs-5 m-0 p-0 fw-bold"
+            id="modalInformacionProfesionLabel">Información de cupones</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"
+            aria-label="Close"></button>
+        </div>
+        <div class="modal-body mb-0">
+          <div class="row p-2">
+            <div class="row p-2">
+              <img [src]="promocion_seleccionada?.foto?
+                'https://tomesoft1.pythonanywhere.com'+promocion_seleccionada?.foto :
+                'assets/imagenes/ProfesionDefault.png'" class="rounded mx-auto
+                d-block img-fluid w-50 image_modal" alt="...">
+              
+            </div>
+          </div>
+  
+          <div class="row p-2 align-items-center">
+            <div class="col-5">
+              <h3 class="m-0 p-0 fw-bold">Titulo:</h3>
+            </div>
+            <div class="col-7">
+              {{promocion_seleccionada?.titulo}}
+            </div>
+          </div>
+  
+          <div class="row p-2 align-items-center">
+            <div class="col-5">
+              <h3 class="m-0 p-0 fw-bold">Codigo:</h3>
+            </div>
+            <div class="col-7">
+              {{promocion_seleccionada?.codigo}}
+            </div>
+          </div>
+  
+          <div class="row p-2 align-items-center">
+            <div class="col-5">
+              <h3 class="m-0 p-0 fw-bold">Categoria:</h3>
+            </div>
+            <div class="col-7">
+              {{promocion_seleccionada?.tipo_categoria}}
+            </div>
+          </div>
+  
+          <div class="row p-2 align-items-center">
+            <div class="col-5">
+              <h3 class="m-0 p-0 fw-bold">Descuento:</h3>
+            </div>
+            <div class="col-7">
+              {{promocion_seleccionada?.porcentaje}}
+            </div>
+          </div>
+  
+          <div class="row p-2 align-items-center">
+            <div class="col-5">
+              <h3 class="m-0 p-0 fw-bold">Cantidad</h3>
+            </div>
+            <div class="col-7">
+              {{promocion_seleccionada?.cantidad}}
+            </div>
+          </div>
+  
+          <div class="row p-2 align-items-center">
+            <div class="col-5">
+              <h3 class="m-0 p-0 fw-bold">Fecha inicio</h3>
+            </div>
+            <div class="col-7">
+              {{promocion_seleccionada?.fecha_iniciacion}}
+            </div>
+          </div>
+  
+          <div class="row p-2 align-items-center">
+            <div class="col-5">
+              <h3 class="m-0 p-0 fw-bold">Fecha de Expiracion</h3>
+            </div>
+            <div class="col-7">
+              {{promocion_seleccionada?.fecha_iniciacion}}
+            </div>
+          </div>
+  
+          <div class="row p-2 align-items-center">
+            <div class="col-5">
+              <h3 class="m-0 p-0 fw-bold">Estado</h3>
+            </div>
+            <div class="col-7">
+              {{activo}}
+            </div>
+          </div>
+  
+          <div class="row p-2 align-items-center">
+            <div class="col-5">
+              <label for="switchEstado" class="form-check-label"><h3 class="m-0
+                  p-0 fw-bold">Habilitar/Deshabilitar:</h3></label>
+            </div>
+            <div class="col-7 form-check form-switch d-flex justify-content-end
+              fs-6">
+              <input
+                (change)="cambiarEstado($event)"
+                [checked]="activo? true : false"
+                class="form-check-input"
+                id="switchEstado"
+                type="checkbox"
+                role="switch"
+                checked
+                aria-describedby="switchEstadoFeedback">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            class="btn btn-danger"
+            data-bs-target="#modalConfirmacion"
+            data-bs-toggle="modal"
+            (click)="establecerMensaje('Está seguro que desea eliminar la profesión?', 'eliminar')">Eliminar</button>
+          <button
+            (click)="limpiarForm('actualizar')"
+  
+            class="btn btn-success"
+            data-bs-target="#modalInformacionEdicionProfesion"
+            data-bs-toggle="modal">Editar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="modal fade" id="modalInformacionEdicionProfesion" aria-hidden="true"
+    aria-labelledby="modalInformacionEdicionProfesionLabel" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header align-items-center">
+          <h1 class="modal-title fs-5 m-0 p-0 fw-bold"
+            id="modalInformacionEdicionProfesionLabel">Edición de Cupones</h1>
+          <!-- (click)="limpiarForm('actualizar')" -->
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"></button>
+        </div>
+        <div class="modal-body mb-0">
+          <form [formGroup]="formEdit" class="">
+            <div class="row">
+              <div class="col d-flex justify-content-center">
+                <img *ngIf="existImageActualizar" class="image_modal rounded
+                  mx-auto d-block img-fluid w-50" [src]="imagenActualizar"
+                  alt="Archivo incorrecto">
+                <img *ngIf="!existImageActualizar && promocion_seleccionada?.foto"
+                  class="image_modal rounded mx-auto d-block img-fluid w-50"
+                  [src]="'https://tomesoft1.pythonanywhere.com'+promocion_seleccionada?.foto"
+                  alt="Archivo incorrecto">
+                <i *ngIf="!existImageActualizar && !promocion_seleccionada?.foto"
+                  class="rounded mx-auto d-block img-fluid w-50 bi bi-upload
+                  icono"></i>
+              </div>
+              <div class="p-2">
+                <input
+                  class="w-100 centrar form-control"
+                  [ngClass]="formEdit.get('imagen')?.hasError('image_error') ?
+                  'is-invalid' : '' || (existImageActualizar)? 'is-valid' : ''"
+                  type="file"
+                  id="file_input"
+                  accept="image/png, image/jpeg"
+                  (change)="loadImageFromDevice($event, 'actualizar')">
+                <div class="invalid-feedback">{{getErrorMessage(formEdit,
+                  'imagen')}}</div>
+              </div>
+            </div>
+  
+            <div class="row p-2 align-items-center">
+              <div class="col-5">
+                <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
+                    fw-bold">Titulo:</h3></label>
+              </div>
+              <div class="col-7">
+                <input
+                  type="text"
+                  formControlName="titulo"
+                  class="form-control"
+                  [ngClass]="isInvalidForm('titulo', 'actualizar') ? 'is-invalid'
+                  : ''"
+  
+                  value="Mark"
+                  [placeholder]="promocion_seleccionada?.titulo"
+                  [value]="promocion_seleccionada?.titulo">
+                <div class="invalid-feedback"> {{getErrorMessage(formEdit,
+                  'titulo')}} </div>
+              </div>
+            </div>
+  
+            <div class="row p-2 align-items-center">
+              <div class="col-5">
+                <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
+                    fw-bold">Descripcion:</h3></label>
+              </div>
+              <div class="col-7">
+                <textarea
+                  type="text"
+                  formControlName="descripcion"
+                  class="form-control"
+                  [ngClass]="isInvalidForm('descripcion', 'actualizar') ?
+                  'is-invalid' : ''"
+  
+                  value="Mark"
+  
+                  [value]="promocion_seleccionada?.descripcion"></textarea>
+                <div class="invalid-feedback"> {{getErrorMessage(formEdit,
+                  'descripcion')}} </div>
+              </div>
+            </div>
+  
+  
+            <div class="row p-2 align-items-center">
+              <div class="col-5">
+                <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
+                    fw-bold">Descuento:</h3></label>
+              </div>
+              <div class="col-7">
+                <input
+                  type="number"
+                  formControlName="descuento"
+                  class="form-control"
+                  [ngClass]="isInvalidForm('descuento', 'actualizar') ?
+                  'is-invalid' : ''"
+  
+                  value="Mark"
+  
+                  [value]="promocion_seleccionada?.porcentaje">
+                <div class="invalid-feedback"> {{getErrorMessage(formEdit,
+                  'descuento')}} </div>
+              </div>
+            </div>
+  
+  
+            <div class="row p-2 align-items-center">
+              <div class="col-5">
+                <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
+                    fw-bold">Cantidad:</h3></label>
+              </div>
+              <div class="col-7">
+                <input
+                  type="number"
+                  formControlName="cantidad"
+                  class="form-control"
+                  [ngClass]="isInvalidForm('cantidad', 'actualizar') ?
+                  'is-invalid' : ''"
+  
+                  value="Mark"
+  
+                  [value]="promocion_seleccionada?.cantidad">
+                <div class="invalid-feedback"> {{getErrorMessage(formEdit,
+                  'cantidad')}} </div>
+              </div>
+            </div>
+  
+            <div class="row p-2 align-items-center">
+              <div class="col-5">
+                <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
+                    fw-bold">Fecha de Inicio:</h3></label>
+              </div>
+              <div class="col-7">
+                <input type="date"
+                  [value]="promocion_seleccionada?.fecha_iniciacion" id="start"
+                  required pattern="\d{4}-\d{2}-\d{2}"
+                  formControlName="inicio"
+                  min="{{getCurrentDate()}}">
+                <div class="invalid-feedback"> {{getErrorMessage(formEdit,
+                  'descuento')}} </div>
+              </div>
+            </div>
+  
+            <div class="row p-2 align-items-center">
+              <div class="col-5">
+  
+                <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
+                    fw-bold">Fecha Expiracion:</h3>
+  
+                </label>
+  
+              </div>
+              <div class="col-7">
+                <input [value]="promocion_seleccionada?.fecha_expiracion"
+                  formControlName="fin" type="date" id="start" required
+                  pattern="\d{4}-\d{2}-\d{2}"
+                  min="{{getCurrentDate()}}">
+                <div class="invalid-feedback"> {{getErrorMessage(formEdit,
+                  'descuento')}} </div>
+              </div>
+            </div>
+  
+            <div class="row p-2 align-items-center">
+                <div class="col-5">
+                  <label for="selectorServicioCrear" class="form-label"><h3
+                      class="m-0 p-0 fw-bold">Participante:</h3></label>
+                </div>
+                <div class="col-7">
+                  <select
+    
+    
+                    class="form-select"
+                    [ngClass]="isInvalidForm('participante', 'actualizar') ?
+                    'is-invalid' : ''"
+                    formControlName="participante"
+                    [value]="promocion_seleccionada?.participantes"
+                    class="form-control"
+                    [ngClass]="isInvalidForm('categoria', 'crear') ? 'is-invalid' :
+                    promocionCrear.get('categoria')?.touched ||
+                    promocionCrear.get('categoria')?.dirty &&
+                    !promocionCrear.get('categoria')?.invalid ? 'is-valid' : ''"
+                    aria-describedby="selectorServicioCrearFeedback">
+                    <option *ngFor="let c of participante" [id]="c"
+                      value={{promocion_seleccionada?.participantes}}> {{c}}
+                    </option>
+                  </select>
+                  <div id="selectorServicioCrearFeedback"
+                    class="invalid-feedback"> {{getErrorMessage(formEdit,
+                    'participante')}} </div>
+                </div>
+              </div>
+  
+  
+            <div class="row p-2 align-items-center">
+              <div class="col-5">
+                <label for="selectorServicioCrear" class="form-label"><h3
+                    class="m-0 p-0 fw-bold">Categoria:</h3></label>
+              </div>
+              <div class="col-7">
+                <select
+  
+  
+                  class="form-select"
+                  [ngClass]="isInvalidForm('categoria', 'actualizar') ?
+                  'is-invalid' : ''"
+                  formControlName="categoria"
+                [value]="promocion_seleccionada?.tipo_categoria"
+                  class="form-control"
+                  [ngClass]="isInvalidForm('categoria', 'crear') ? 'is-invalid' :
+                  promocionCrear.get('categoria')?.touched ||
+                  promocionCrear.get('categoria')?.dirty &&
+                  !promocionCrear.get('categoria')?.invalid ? 'is-valid' : ''"
+                  aria-describedby="selectorServicioCrearFeedback">
+                  <option *ngFor="let c of categoria" [id]="c.nombre"
+                    value={{promocion_seleccionada?.tipo_categoria}}> {{c.nombre}}
+                  </option>
+                </select>
+                <div id="selectorServicioCrearFeedback"
+                  class="invalid-feedback"> {{getErrorMessage(formEdit,
+                  'categoria')}} </div>
+              </div>
+            </div>
+  
+  
+  
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-danger"
+            data-bs-target="#modalInformacionProfesion" data-bs-toggle="modal">Regresar</button>
+          <button
+  
+            data-bs-target="#modalConfirmacion"
+            data-bs-toggle="modal"
+            class="btn btn-success"
+            (click)="establecerMensaje('Está seguro que desea actualizar la información?', 'actualizar')">Actualizar</button>
+        </div>
+  
+        <!-- <pre>
+          {{actualizarProfesionesForm.value | json}}
+        </pre> -->
+      </div>
+    </div>
+  </div>
+  <!-- Modal crear admi -->
+  <div class="modal fade" id="modalCrearProfesion" aria-hidden="true"
+    aria-labelledby="modalCrearProfesionLabel" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header align-items-center">
+          <h1 class="modal-title fs-5 m-0 p-0 fw-bold"
+            id="modalCrearProfesionLabel">Crear Cupon</h1>
+          <!-- (click)="limpiarForm('crear')" -->
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"></button>
+        </div>
+        <div class="modal-body mb-0">
+          <form [formGroup]="promocionCrear" class="">
+            <!-- Seccion de imagen -->
+            <div class="row">
+              <div class="col d-flex justify-content-center">
+                <img *ngIf="existImageCrear" class="rounded mx-auto d-block
+                  img-fluid w-50 image_modal" [src]="imagenCrear" alt="Archivo
+                  incorrecto">
+                <i *ngIf="!existImageCrear" class="rounded mx-auto d-block
+                  img-fluid w-50 bi bi-upload icono"></i>
+              </div>
+              <div class="p-2">
+                <input
+                  class="w-100 centrar form-control"
+                  [ngClass]="promocionCrear.get('imagen')?.hasError('image_error') ?
+                  'is-invalid' : '' || (existImageCrear)? 'is-valid' : ''"
+                  type="file"
+  
+                  accept="image/png, image/jpeg"
+                  (change)="loadImageFromDevice($event, 'crear')">
+                <div class="invalid-feedback">{{getErrorMessage(promocionCrear,
+                  'imagen')}}</div>
+              </div>
+            </div>
+  
+  
+            <div class="row p-2 align-items-center">
+              <div class="col-5">
+                <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
+                    fw-bold">Titulo:</h3></label>
+              </div>
+              <div class="col-7">
+                <input
+                  type="text"
+                  formControlName="titulo"
+                  class="form-control"
+                  [ngClass]="isInvalidForm('titulo', 'crear') ? 'is-invalid' :
+                  promocionCrear.get('titulo')?.touched ||
+                  promocionCrear.get('titulo')?.dirty &&
+                  !promocionCrear.get('titulo')?.invalid ? 'is-valid' : ''"
+                  placeholder="Promocion">
+                <div class="invalid-feedback"> {{getErrorMessage(promocionCrear,
+                  'titulo')}} </div>
+              </div>
+            </div>
+  
+  
+            <div class="row p-2 align-items-center">
+              <div class="col-5">
+                <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
+                    fw-bold">Descripcion:</h3></label>
+              </div>
+              <div class="col-7">
+                <textarea
+                  type="text"
+                  formControlName="descripcion"
+                  class="form-control"
+                  [ngClass]="isInvalidForm('descripcion', 'crear') ? 'is-invalid'
+                  :
+                  promocionCrear.get('descripcion')?.touched ||
+                  promocionCrear.get('descripcion')?.dirty &&
+                  !promocionCrear.get('descripcion')?.invalid ? 'is-valid' : ''"
+                  placeholder="Promocion"></textarea>
+                <div class="invalid-feedback"> {{getErrorMessage(promocionCrear,
+                  'descripcion')}} </div>
+              </div>
+            </div>
+  
+            <div class="row p-2 align-items-center">
+              <div class="col-5">
+                <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
+                    fw-bold">Descuento:</h3></label>
+              </div>
+              <div class="col-7">
+                <input
+                  type="number"
+                  formControlName="descuento"
+                  class="form-control"
+                  [ngClass]="isInvalidForm('descuento', 'crear') ? 'is-invalid' :
+                  promocionCrear.get('descuento')?.touched ||
+                  promocionCrear.get('descuento')?.dirty &&
+                  !promocionCrear.get('descuento')?.invalid ? 'is-valid' : ''"
+                  placeholder="Promocion">
+                <div class="invalid-feedback"> {{getErrorMessage(promocionCrear,
+                  'descuento')}} </div>
+              </div>
+            </div>
+            <div class="row p-2 align-items-center">
+              <div class="col-5">
+                <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
+                    fw-bold">Cantidad:</h3></label>
+              </div>
+              <div class="col-7">
+                <input
+                  type="number"
+                  formControlName="cantidad"
+                  class="form-control"
+                  [ngClass]="isInvalidForm('cantidad', 'crear') ? 'is-invalid' :
+                  promocionCrear.get('cantidad')?.touched ||
+                  promocionCrear.get('cantidad')?.dirty &&
+                  !promocionCrear.get('cantidad')?.invalid ? 'is-valid' : ''"
+                  placeholder="Promocion">
+                <div class="invalid-feedback"> {{getErrorMessage(promocionCrear,
+                  'cantidad')}} </div>
+              </div>
+            </div>
+  
+  
+            <div class="row p-2 align-items-center">
+              <div class="col-5">
+                <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
+                    fw-bold">Participantes:</h3></label>
+              </div>
+              <div class="col-7">
+                <select
+                class="form-select"
+                [ngClass]="isInvalidForm('categoria', 'crear') ?
+                'is-invalid' : ''"
+                formControlName="categoria"
+
+                class="form-control"
+                [ngClass]="isInvalidForm('categoria', 'crear') ? 'is-invalid' :
+                promocionCrear.get('categoria')?.touched ||
+                promocionCrear.get('categoria')?.dirty &&
+                !promocionCrear.get('categoria')?.invalid ? 'is-valid' : ''"
+                aria-describedby="selectorServicioCrearFeedback">
+                <option selected disabled value="">Elija una Categoria...</option>
+                <option *ngFor="let c of participante" [id]="c"
+                  [value]="c"> {{c}}
+                </option>
+              </select>
+                <div class="invalid-feedback"> {{getErrorMessage(promocionCrear,
+                  'punto')}} </div>
+              </div>
+            </div>
+  
+  
+            <div class="row p-2 align-items-center">
+              <div class="col-5">
+                <label for="selectorServicioCrear" class="form-label"><h3
+                    class="m-0 p-0 fw-bold">Categoria:</h3></label>
+              </div>
+              <div class="col-7">
+                <select
+                  class="form-select"
+                  [ngClass]="isInvalidForm('categoria', 'crear') ?
+                  'is-invalid' : ''"
+                  formControlName="categoria"
+  
+                  class="form-control"
+                  [ngClass]="isInvalidForm('categoria', 'crear') ? 'is-invalid' :
+                  promocionCrear.get('categoria')?.touched ||
+                  promocionCrear.get('categoria')?.dirty &&
+                  !promocionCrear.get('categoria')?.invalid ? 'is-valid' : ''"
+                  aria-describedby="selectorServicioCrearFeedback">
+                  <option selected disabled value="">Elija una Categoria...</option>
+                  <option *ngFor="let c of categoria" [id]="c.nombre"
+                    [value]="c.nombre"> {{c.nombre}}
+                  </option>
+                </select>
+                <div id="selectorServicioCrearFeedback"
+                  class="invalid-feedback"> {{getErrorMessage(promocionCrear,
+                  'categoria')}} </div>
+              </div>
+            </div>
+  
+            <div class="row p-2 align-items-center">
+              <div class="col-5">
+                <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
+                    fw-bold">Fecha de Inicio:</h3></label>
+              </div>
+              <div class="col-7">
+                <input type="date"
+                  id="start"
+                  required pattern="\d{4}-\d{2}-\d{2}"
+                  formControlName="inicio"
+                  min="{{getCurrentDate()}}">
+                <div class="invalid-feedback"> {{getErrorMessage(promocionCrear,
+                  'inicio')}} </div>
+              </div>
+            </div>
+  
+            <div class="row p-2 align-items-center">
+              <div class="col-5">
+  
+                <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
+                    fw-bold">Fecha Expiracion:</h3>
+  
+                </label>
+  
+              </div>
+              <div class="col-7">
+                <input
+                  formControlName="fin" type="date" id="start" required
+                  pattern="\d{4}-\d{2}-\d{2}"
+                  min="{{getCurrentDate()}}">
+                <div class="invalid-feedback"> {{getErrorMessage(promocionCrear,
+                  'fin')}} </div>
+              </div>
+            </div>
+  
+  
+  
+  
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button
+  
+            data-bs-target="#modalConfirmacion"
+            data-bs-toggle="modal"
+            class="btn btn-success" 
+            (click)="establecerMensaje('Está seguro que desea crear la  profesión?', 'crear')">Crear</button>
+        </div>
+  
+        <!-- <pre>
+            {{crearProfesionesForm.value | json}}
+          </pre> -->
+      </div>
+    </div>
+  </div>
+  
+  <!-- Modal de confirmacion (Alerta) -->
+  <div class="modal fade" id="modalConfirmacion" tabindex="-1"
+    aria-labelledby="modalConfirmacionLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <!-- Titulo del modal confirmacion -->
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 m-0 p-0 fw-bold"
+            id="modalConfirmacionLabel">Confirmar selección</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"
+            aria-label="Close"></button>
+        </div>
+  
+        <!-- Cuerpo del modal confirmacion -->
+        <div class="modal-body">
+          {{mensajeAlerta}}
+        </div>
+  
+        <!-- Footer del modal confirmacion -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+          <button *ngIf="isCrear" type="button" class="btn btn-success"
+            (click)="onCrear()" data-bs-dismiss="modal">Confirmar</button>
+          <button *ngIf="isActualizar" type="button" class="btn btn-success"
+            (click)="onActualizar()" data-bs-dismiss="modal">Confirmar</button>
+          <button *ngIf="isEliminar" type="button" class="btn btn-success"
+            (click)="onDelete()" data-bs-dismiss="modal">Confirmar</button>
+        </div>
+      </div>
+  
+    </div>
+  </div>

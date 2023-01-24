@@ -13,7 +13,20 @@ export interface Promocion {
   tipo_categoria: string;
   cantidad: number;
 }
-
+export interface PromocionCrear {
+ 
+  codigo: string;
+  titulo: string;
+  descripcion: string;
+  porcentaje: number;
+  fecha_iniciacion: string | null;
+  fecha_expiracion: string;
+  participantes: string;
+  estado: boolean;
+  foto: string;
+  tipo_categoria: string;
+  cantidad: number;
+}
 export interface BodyPromocionActualizar {
   codigo: string;
   titulo: string;
