@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
-import { BodyCuponActualizar, Cupon } from 'src/app/interfaces/cupon';
+import { BodyCuponActualizar, Cupon, CuponCrear } from 'src/app/interfaces/cupon';
 import { PythonAnywhereService } from 'src/app/services/PythonAnywhere/python-anywhere.service';
 import * as moment from 'moment';
 @Component({
@@ -10,13 +10,13 @@ import * as moment from 'moment';
   styleUrls: ['./cupones.component.css']
 })
 export class CuponesComponent {
-  arr_cupon!: any[];
-  arr_filtered_cupon!: any[];
+  arr_cupon!: Cupon[]  | undefined;
+  arr_filtered_cupon!: Cupon[]  | undefined;
   imagenCrear: any
   condicionNext = false
   currentPage = 1
   pageNumber: number[] = [];
-  cupon_seleccionada: any
+  cupon_seleccionada:  Cupon  | undefined;
   fileImagenActualizar: File = {} as File
   imagenActualizar: any
   fileImagenCrear: any
@@ -77,7 +77,10 @@ export class CuponesComponent {
 
   cambiarEstado(event:any){
     let estado = event.srcElement.checked
-    this.pythonAnywhereService.cambio_cupon_estado(this.cupon_seleccionada.id,estado).subscribe(resp=>{console.log(resp);});
+    if(this.cupon_seleccionada){
+      this.pythonAnywhereService.cambio_cupon_estado(this.cupon_seleccionada.id,estado).subscribe(resp=>{console.log(resp);});
+    }
+  
 
   }
   ver(cupon:any){
@@ -317,22 +320,55 @@ export class CuponesComponent {
   };
 
   onCrear(){
-    let cupon : Cupon={
-      codigo: "45",
-      titulo: this.cuponCrear.value.titulo,
-      descripcion: this.cuponCrear.value.descripcion,
-      porcentaje: this.cuponCrear.value.descuento,
-      fecha_iniciacion: this.cuponCrear.value.inicio,
-      fecha_expiracion: this.cuponCrear.value.fin,
-      puntos: this.cuponCrear.value.punto,
-      foto: this.cuponCrear.value.imagen,
-      tipo_categoria: this.cuponCrear.value.categoria,
-      cantidad: this.cuponCrear.value.cantidad
+    let cupon : CuponCrear={
+      codigo: '',
+      titulo: '',
+      descripcion: '',
+      porcentaje: 0,
+      fecha_iniciacion: '',
+      fecha_expiracion: '',
+      puntos: 0,
+      foto: '',
+      tipo_categoria: '',
+      cantidad: 0
     }
-    console.log(cupon)
-  this.pythonAnywhereService.crear_cupon(cupon).subscribe(resp => {
-    console.log(resp)
-  })
+
+    const codigo = this.cuponCrear.get('titulo')?.value;
+    const titulo = this.cuponCrear.get('titulo')?.value;
+    const descripcion = this.cuponCrear.get('descripcion')?.value;
+    const inicio = this.cuponCrear.get('inicio')?.value;
+    const fin = this.cuponCrear.get('fin')?.value;
+    const cantidad = this.cuponCrear.get('cantidad')?.value;
+    const puntos = this.cuponCrear.get('punto')?.value;
+    const categoria = this.cuponCrear.get('categoria')?.value;
+    const descuento = this.cuponCrear.get('descuento')?.value;
+    const foto = this.cuponCrear.get('imagen')?.value;
+
+    console.log(codigo , titulo , descripcion , inicio , fin , cantidad , puntos , categoria , descuento)
+    if(codigo && titulo && descripcion && inicio && fin && cantidad && puntos && categoria && descuento ){
+      cupon.titulo = codigo
+      cupon.descripcion = descripcion
+      cupon.fecha_iniciacion = inicio
+      cupon.fecha_expiracion = fin
+      cupon.porcentaje = descuento
+      cupon.cantidad =cantidad
+      cupon.puntos = puntos
+      cupon.tipo_categoria = categoria
+      if(foto && this.existImageCrear){
+        cupon.foto = foto; // Si hay foto se le agrega al body.
+      }
+      this.pythonAnywhereService.crear_cupon(cupon).subscribe(resp => {
+        console.log(resp)
+      })
+
+    }
+    
+ 
+
+  
+    
+   
+
 
   }
   onActualizar(){
@@ -348,22 +384,40 @@ export class CuponesComponent {
       foto: null,
       tipo_categoria: ''
     }
+    const codigo = this.formEdit.get('codigo')?.value;
+    const titulo = this.formEdit.get('titulo')?.value;
+    const descripcion = this.formEdit.get('descripcion')?.value;
+    const inicio = this.formEdit.get('inicio')?.value;
+    const fin = this.formEdit.get('fin')?.value;
+    const cantidad = this.formEdit.get('cantidad')?.value;
+    const puntos = this.formEdit.get('punto')?.value;
+    const categoria = this.formEdit.get('categoria')?.value;
+    const descuento = this.formEdit.get('descuento')?.value;
+    const foto = this.formEdit.get('imagen')?.value;
+    if(codigo && titulo && descripcion && inicio && fin && cantidad && puntos && categoria && descuento ){
+      cupon.titulo = codigo
+      cupon.descripcion = descripcion
+      cupon.fecha_iniciacion = inicio
+      cupon.fecha_expiracion = fin
+      cupon.porcentaje = descuento
+      cupon.cantidad =cantidad
+      cupon.puntos = puntos
+      cupon.tipo_categoria = categoria
 
-    cupon.codigo = this.formEdit.get('titulo')?.value;
-    cupon.titulo = this.formEdit.get('titulo')?.value;
-    cupon.descripcion = this.formEdit.get('descripcion')?.value;
-    cupon.fecha_iniciacion = this.formEdit.get('inicio')?.value;
-    cupon.fecha_expiracion = this.formEdit.get('fin')?.value;
-    cupon.porcentaje = this.formEdit.get('descuento')?.value;
-    cupon.cantidad = this.formEdit.get('cantidad')?.value;
-    cupon.puntos = this.formEdit.get('punto')?.value;
-    cupon.foto = this.formEdit.get('imagen')?.value;
-    cupon.tipo_categoria = this.formEdit.get('categoria')?.value;
-    
+    }
+
+
+    if(foto && this.existImageCrear){
+      cupon.foto = foto; // Si hay foto se le agrega al body.
+    }
     console.log(cupon)
-    const id = this.cupon_seleccionada.id
-    console.log(this.formEdit)
-    this.pythonAnywhereService.actualizar_cupon(cupon,id).subscribe(resp=>{console.log(resp);})
+    if(this.cupon_seleccionada){
+      const id = this.cupon_seleccionada.id
+      console.log(this.formEdit)
+      this.pythonAnywhereService.actualizar_cupon(cupon,id).subscribe(resp=>{console.log(resp);})
+
+    }
+
   ;
 
   }
@@ -393,7 +447,9 @@ export class CuponesComponent {
     }}
 
     onDelete(){
-
+    if(this.cupon_seleccionada){
       this.pythonAnywhereService.eliminar_cupon(this.cupon_seleccionada.id).subscribe(resp=>console.log(resp))
+    }
+      
     }
 }

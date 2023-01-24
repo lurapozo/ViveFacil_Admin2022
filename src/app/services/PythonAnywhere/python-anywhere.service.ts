@@ -9,7 +9,7 @@ import { map, Observable } from 'rxjs';
 import { BodyActualizarInsignia, BodyCrearInsignia, BodyResponseCrearInsignia, Insignia } from 'src/app/interfaces/insignia';
 import { BodyActualizarCargo, BodyCrearCargo, BodyResponseCrearCargo, Cargo } from 'src/app/interfaces/cargo';
 import { BodyPromocionActualizar, BodyResponsePromocionActualizar, Promocion } from 'src/app/interfaces/promocion';
-import { BodyCuponActualizar, BodyResponseCuponActualizar, Cupon } from 'src/app/interfaces/cupon';
+import { BodyCuponActualizar, BodyResponseCuponActualizar, Cupon, CuponCrear } from 'src/app/interfaces/cupon';
 import { PaymentEfectivo, PaymentPaginacion, PaymentTarjeta } from 'src/app/interfaces/payment';
 import { BodyActualizarProveedor, BodyActualizarProveedorPendiente, BodyCrearProfesionProveedor, BodyCrearProveedor, BodyCrearProveedorPendiente, BodyResponseCrearProfesionProveedor, BodyResponseCrearProveedorPendiente, Proveedor, ProveedorPaginacion, ProveedorPendiente, ProveedorProfesion } from 'src/app/interfaces/proveedor';
 import { Documento, DocumentoPendiente } from 'src/app/interfaces/documento';
@@ -305,7 +305,7 @@ export class PythonAnywhereService {
    * @param id Recibe un string del ID del cupo a traer de la base de datos.
    * @returns Devuelve un Observable con el objeto Cupon esperado.
    */
-  obtener_cupon(id: string): Observable<Cupon> {
+  obtener_cupon(id: string): Observable<CuponCrear> {
     return this.http.get(`${this.API_URL}/cupones/${id}`) as Observable<Cupon>;
   }
 
@@ -1197,7 +1197,7 @@ export class PythonAnywhereService {
   actualizar_plan(bodyCrear: BodyActualizarPlan) : Observable<Plan> {
     const dataCrear = new FormData();
     dataCrear.append("id", bodyCrear.id.toString());
-    bodyCrear.descripcion ? dataCrear.append("descripcion", bodyCrear.descripcion) : null;
+    bodyCrear.descripcion ? dataCrear.append("descripcion", bodyCrear.descripcion) : null
     bodyCrear.imagen ? dataCrear.append("imagen", bodyCrear.imagen) : null;
     bodyCrear.precio ? dataCrear.append("precio", bodyCrear.precio.toString()) : null;
     bodyCrear.duracion ? dataCrear.append("duracion", bodyCrear.duracion.toString()) : null;

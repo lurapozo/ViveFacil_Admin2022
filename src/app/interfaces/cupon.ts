@@ -1,4 +1,19 @@
 export interface Cupon {
+  id:string;
+  codigo: string;
+  titulo: string;
+  descripcion: string;
+  porcentaje: number;
+  fecha_iniciacion: string;
+  fecha_expiracion: string;
+  puntos: number;
+  foto: string;
+  tipo_categoria: string;
+  cantidad: number;
+  estado:boolean
+}
+
+export interface CuponCrear {
   codigo: string;
   titulo: string;
   descripcion: string;
@@ -10,7 +25,6 @@ export interface Cupon {
   tipo_categoria: string;
   cantidad: number;
 }
-
 export interface BodyCuponActualizar {
   codigo: string;
   titulo: string;
