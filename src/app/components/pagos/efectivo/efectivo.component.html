@@ -2,9 +2,18 @@
     <!-- Titulo principal -->
     <div class="row p-2 justify-content-center align-items-center">
       <div class="col text-center">
+     
         <h2 class="p-0 m-0"> Efectivo</h2>
-        <h2 class="p-0 m-0">Total Efectivo: $ {{totalEfectivo}}</h2>
-        <h2 class="p-0 m-0">Total: $ {{total}}</h2>
+        <div class="row">
+            <div class="col">
+                <h2 class="p-0 m-0">Total Efectivo: $ {{totalEfectivo}}</h2>
+            </div>
+            <div class="col">
+                <h2 class="p-0 m-0">Total: $ {{total}}</h2>
+            </div>
+           
+        </div>
+       
       </div>
     </div>
 
@@ -67,7 +76,7 @@
           </div>
          
           <div class="col-1 align-self-center">
-            <h4 class="p-0 m-0">$ {{a.valor}}</h4>
+            <h4 class="p-0 m-0">${{a.valor}}</h4>
           </div>
 
         

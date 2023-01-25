@@ -1,1 +1,235 @@
-<p>tarjeta works!</p>
+<div class="container-fluid">
+    <!-- Titulo principal -->
+    <div class="row p-2 justify-content-center align-items-center">
+      <div class="col text-center">
+     
+        <h2 class="p-0 m-0"> Efectivo</h2>
+        <div class="row">
+            <div class="col">
+                <h4 class="p-0 m-0">Total Efectivo: $ {{totalTarjeta}}</h4>
+            </div>
+            <div class="col">
+                <h4 class="p-0 m-0">Total: $ {{total}}</h4>
+            </div>
+
+            <div class="col">
+                <h4 class="p-0 m-0">Total: $ {{totalBanco}}</h4>
+            </div>
+
+            <div class="col">
+                <h4 class="p-0 m-0">Total: $ {{totalPayment}}</h4>
+            </div>
+
+           
+        </div>
+       
+      </div>
+    </div>
+
+    <!-- Buscar y agregar admi -->
+    <div class="row p-2 justify-content-center align-items-center">
+      <div class="col-xl-7 col-lg-5"></div>
+      <div class="col-xl-3 col-lg-4">
+        <div class="input-group">
+          <input type="text" class="form-control" placeholder="Buscar"
+            aria-label="Buscar" aria-describedby="basic-addon1"
+            (input)="search($event)">
+          <button class="input-group-text" id="basic-addon1"> <i class="bi
+              bi-search"></i> </button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Contenedor de admi -->
+    <div class="row justify-content-center align-items-center p-0">
+      <div class="col-10 text-center">
+        <!-- Titulo -->
+        <div class="row p-2 bg-primary text-white">
+          <div class="col-2 align-self-center">
+            <h3 class="p-0 m-0">Cliente</h3>
+          </div>
+
+          <div class="col-2 align-self-center">
+            <h3 class="p-0 m-0">Proveedor</h3>
+          </div>
+
+          <div class="col-2 align-self-center">
+            <h3 class="p-0 m-0">Servicio</h3>
+          </div>
+          <div class="col-2 align-self-center">
+            <h3 class="p-0 m-0">Fecha</h3>
+          </div>
+
+          <div class="col-2 align-self-center">
+            <h3 class="p-0 m-0">Valor($)</h3>
+          </div>
+
+          <div class="col-2 align-self-center">
+            <h3 class="p-0 m-0">Proveedor Pagado</h3>
+          </div>
+        </div>
+
+        <!-- Profesion -->
+        <div (click)="tarjeta_seleccionada=a" *ngFor="let a of arr_filtered_tarjeta" class="row p-2 bg-light fila_info_profesion" data-bs-toggle="modal" href="#modalInformacionProfesion" role="button">
+         
+            <div class="col-2 align-self-center">
+            <h4 class="p-0 m-0"> {{a.usuario}}</h4>
+          </div>
+
+          <div class="col-2 align-self-center">
+            <h4 class="p-0 m-0"> {{a.proveedor}} </h4>
+          </div>
+
+          <div class="col-2 align-self-center">
+            <h4 class="p-0 m-0">{{a.servicio}}</h4>
+          </div>
+          <div class="col-2  align-self-center">
+            <h4 class="p-0 m-0">{{a.fecha_creacion}}</h4>
+          </div>
+         
+          <div class="col-2 align-self-center">
+            <h4 class="p-0 m-0">${{a.valor}}</h4>
+          </div>
+
+          <div class="col-2 align-self-center">
+            <h4 class="p-0 m-0">{{a.pago_proveedor}}</h4>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Seccion paginacion -->
+    <div class="row p-2 justify-content-center align-items-center">
+      <nav aria-label="Page navigation example">
+        <ul class="pagination">
+          <li class="page-item"><a class="page-link" (click)="previous($event)">Previous</a></li>
+          <div *ngFor="let n of pageNumber; let i=index;">
+            <li class="page-item"><button class="page-link" value="{{n}}"
+                (click)="iteracion($event)">{{n}}</button></li>
+          </div>
+
+          <li class="page-item"><a class="page-link" (click)="next($event)">Next</a></li>
+        </ul>
+      </nav>
+    </div>
+</div>
+
+<div class="modal fade" id="modalInformacionProfesion" aria-hidden="true"
+aria-labelledby="modalInformacionProfesionLabel" tabindex="-1">
+<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+  <div class="modal-content">
+    <div class="modal-header align-items-center">
+      <h1 class="modal-title fs-5 m-0 p-0 fw-bold"
+        id="modalInformacionProfesionLabel">Información Efectivo</h1>
+      <button type="button" class="btn-close" data-bs-dismiss="modal"
+        aria-label="Close"></button>
+    </div>
+    <div class="modal-body mb-0">
+
+     <h4>Transaccion</h4>
+
+     <div class="row p-2 align-items-center">
+        <div class="col-5">
+          <h3 class="m-0 p-0 fw-bold">Cargo Paymentest:</h3>
+        </div>
+        <div class="col-7">
+          {{tarjeta_seleccionada?.cargo_paymentez}}
+        </div>
+      </div>
+      <div class="row p-2 align-items-center">
+        <div class="col-5">
+          <h3 class="m-0 p-0 fw-bold">Cargo Banco:</h3>
+        </div>
+        <div class="col-7">
+          {{tarjeta_seleccionada?.cargo_banco}}
+        </div>
+      </div>
+      <div class="row p-2 align-items-center">
+        <div class="col-5">
+          <h3 class="m-0 p-0 fw-bold">Cargo Sistema:</h3>
+        </div>
+        <div class="col-7">
+          {{tarjeta_seleccionada?.cargo_sistema}}
+        </div>
+      </div>
+
+     <h4>Cliente</h4>
+      <div class="row p-2 align-items-center">
+        <div class="col-5">
+          <h3 class="m-0 p-0 fw-bold">Nombre:</h3>
+        </div>
+        <div class="col-7">
+          {{tarjeta_seleccionada?.usuario}}
+        </div>
+      </div>
+
+      <div class="row p-2 align-items-center">
+        <div class="col-5">
+          <h3 class="m-0 p-0 fw-bold">Correo:</h3>
+        </div>
+        <div class="col-7">
+          {{tarjeta_seleccionada?.user?.email}}
+        </div>
+      </div>
+
+      <h4>Proveedor</h4>
+      <div class="row p-2 align-items-center">
+        <div class="col-5">
+          <h3 class="m-0 p-0 fw-bold">Nombre:</h3>
+        </div>
+        <div class="col-7">
+          {{tarjeta_seleccionada?.proveedor}}
+        </div>
+      </div>
+      
+      <div class="row p-2 align-items-center">
+        <div class="col-5">
+          <h3 class="m-0 p-0 fw-bold">Telefono:</h3>
+        </div>
+        <div class="col-7">
+          {{tarjeta_seleccionada?.prov_telefono}}
+        </div>
+      </div>
+
+      <div class="row p-2 align-items-center">
+        <div class="col-5">
+          <h3 class="m-0 p-0 fw-bold">Correo:</h3>
+        </div>
+        <div class="col-7">
+          {{tarjeta_seleccionada?.prov_correo}}
+        </div>
+      </div>
+      <h4>valor pagado al Proveedor: {{tarjeta_seleccionada?.valor}}</h4>
+      <div *ngIf="tarjeta_seleccionada?.pago_proveedor" class="row p-2 align-items-center">
+        <div class="col-5">
+          <h3 class="m-0 p-0 fw-bold">Importante:</h3>
+        </div>
+        <div class="col-7">
+            Este pago ya se le ha cancelado al proveedor.
+        </div>
+      </div>
+
+      <div *ngIf="!tarjeta_seleccionada?.pago_proveedor" class="row p-2 align-items-center">
+        <div class="col-5">
+          <h3 class="m-0 p-0 fw-bold">Importante:</h3>
+        </div>
+        <div class="col-7 form-check form-switch d-flex justify-content-end fs-6">
+            <input
+            (change)="cambiarEstado($event)"
+            [checked]="tarjeta_seleccionada?.pago_proveedor? true : false"
+              class="form-check-input"
+              id="switchEstado"
+              type="checkbox"
+              role="switch"
+              checked
+              aria-describedby="switchEstadoFeedback"
+            >
+          </div>
+      </div>
+    </div>
+   
+  </div>
+</div>
+</div>

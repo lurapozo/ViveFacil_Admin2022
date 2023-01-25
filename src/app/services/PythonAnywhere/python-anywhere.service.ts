@@ -486,7 +486,7 @@ export class PythonAnywhereService {
    * @param estado Recibe un boolean indicando el estado del cupon. (true - false).
    * @returns Devuelve un Observable con la respuesta OK(200) o Error(500).
    */
-  cambio_pago_proveedor_estado(id: string, estado: boolean) {
+  cambio_pago_proveedor_estado(id: any, estado: boolean) {
     return this.http.put(`${this.API_URL}/tarjeta_pago/?id=${id}`, { estado: estado, });
   }
   //-----------------------------------------------------------------------------------------------------------------------
@@ -1003,8 +1003,8 @@ export class PythonAnywhereService {
  * @author Margarita Mawyin
  * @returns Devuelve un Observable con un objeto ProveedorPaginacion
  */
-  obtener_pagos_tarjetaP(page: any) :  Observable<ProveedorPaginacion>{
-    return this.http.get(`${this.API_URL}/pago_tarjetasP/?page=${page}`) as  Observable<ProveedorPaginacion>;
+  obtener_pagos_tarjetaP(page=1) :  Observable<any>{
+    return this.http.get(`${this.API_URL}/pago_tarjetasP/?page=${page}`) as  Observable<any>;
   }
 
   /**
