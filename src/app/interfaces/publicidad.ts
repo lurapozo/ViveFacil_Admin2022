@@ -22,5 +22,11 @@ export interface BodyCrearPublicidad {
   }
 
   export interface BodyActualizarPublicidad {
+    titulo: string,
+    descripcion: string,
+    fecha_inicio: string,
+    fecha_expiracion: string,
+    imagen?: File,
+    url: string
     
   }

@@ -1,1 +1,500 @@
-<p>publicidad works!</p>
+<div class="container-fluid">
+    <!-- Titulo principal -->
+    <div class="row p-2 justify-content-center align-items-center">
+      <div class="col text-center">
+        <h2 class="p-0 m-0">Publicidad </h2>
+      </div>
+    </div>
+  
+    <!-- Buscar y agregar profesion -->
+    <div class="row p-2 justify-content-center align-items-center">
+      <div class="col-xl-7 col-lg-5"></div>
+      <div class="col-xl-3 col-lg-4">
+        <div class="input-group">
+          <input type="text" (input)="search($event)" class="form-control"
+            placeholder="Buscar" aria-label="Buscar"
+            aria-describedby="basic-addon1">
+          <button class="input-group-text" id="basic-addon1"> <i class="bi
+              bi-search"></i> </button>
+        </div>
+      </div>
+      <div class="col-xl-2 col-lg-3">
+        <button
+          type="button"
+          class="btn btn-primary"
+          data-bs-toggle="modal"
+          href="#modalCrearProfesion"
+          (click)="limpiarForm('crear')">Agregar Publicidad</button>
+      </div>
+    </div>
+  
+    <!-- Contenedor de profesiones -->
+    <div class="row justify-content-center align-items-center p-0">
+      <div class="col-10 text-center">
+        <!-- Titulo -->
+        <div class="row p-2 bg-primary text-white">
+          <div class="col-3 align-self-center">
+            <h3 class="p-0 m-0">Imagen</h3>
+          </div>
+    
+          <div class="col-3 align-self-center">
+            <h3 class="p-0 m-0">Titulo</h3>
+          </div>
+  
+  
+          <div class="col-3 align-self-center">
+            <h3 class="p-0 m-0">Fecha Inicio</h3>
+          </div>
+  
+          <div class="col-3 align-self-center">
+            <h3 class="p-0 m-0">Fecha Fin</h3>
+          </div>
+  
+        
+        </div>
+  
+        <!-- Profesion -->
+        <div (click)="ver(a)" *ngFor="let a of arr_filtered_publicidad" class="row p-2
+          bg-light fila_info_profesion" data-bs-toggle="modal"
+          href="#modalInformacionProfesion" role="button">
+          <div class="col-3 align-self-center">
+            <img [src]="a.imagen? 'https://tomesoft1.pythonanywhere.com'+a.imagen :
+              '../../../assets/imagenes/ProfesionDefault.png'" class="rounded
+              mx-auto d-block img-fluid img_profesion" alt="...">
+          </div>
+  
+
+  
+          <div class="col-3 align-self-center">
+            <h4 class="p-0 m-0">{{a.titulo}}</h4>
+          </div>
+  
+       
+  
+          <div class="col-3 align-self-center">
+            <h4 class="p-0 m-0">{{a.fecha_inicio}}</h4>
+          </div>
+  
+          <div class="col-3 align-self-center">
+            <h4 class="p-0 m-0">{{a.fecha_expiracion}}</h4>
+          </div>
+  
+       
+        </div>
+      </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalInformacionProfesion" aria-hidden="true"
+aria-labelledby="modalInformacionProfesionLabel" tabindex="-1">
+<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+  <div class="modal-content">
+    <div class="modal-header align-items-center">
+      <h1 class="modal-title fs-5 m-0 p-0 fw-bold"
+        id="modalInformacionProfesionLabel">Información de Publicidad</h1>
+      <button type="button" class="btn-close" data-bs-dismiss="modal"
+        aria-label="Close"></button>
+    </div>
+    <div class="modal-body mb-0">
+      <div class="row p-2">
+        <div class="row p-2">
+          <img [src]="publicidad_seleccionada?.imagen?
+            'https://tomesoft1.pythonanywhere.com'+publicidad_seleccionada?.imagen :
+            'assets/imagenes/ProfesionDefault.png'" class="rounded mx-auto
+            d-block img-fluid w-50 image_modal" alt="...">
+          
+        </div>
+      </div>
+
+      <div class="row p-2 align-items-center">
+        <div class="col-5">
+          <h3 class="m-0 p-0 fw-bold">Titulo:</h3>
+        </div>
+        <div class="col-7">
+          {{publicidad_seleccionada?.titulo}}
+        </div>
+      </div>
+
+
+      <div class="row p-2 align-items-center">
+        <div class="col-5">
+          <h3 class="m-0 p-0 fw-bold">Url:</h3>
+        </div>
+        <div class="col-7">
+          {{publicidad_seleccionada?.url}}
+        </div>
+      </div>
+
+   
+
+      <div class="row p-2 align-items-center">
+        <div class="col-5">
+          <h3 class="m-0 p-0 fw-bold">Fecha inicio</h3>
+        </div>
+        <div class="col-7">
+          {{publicidad_seleccionada?.fecha_inicio}}
+        </div>
+      </div>
+
+      <div class="row p-2 align-items-center">
+        <div class="col-5">
+          <h3 class="m-0 p-0 fw-bold">Fecha de Expiracion</h3>
+        </div>
+        <div class="col-7">
+          {{publicidad_seleccionada?.fecha_expiracion}}
+        </div>
+      </div>
+
+      
+    </div>
+    <div class="modal-footer">
+      <button
+        class="btn btn-danger"
+        data-bs-target="#modalConfirmacion"
+        data-bs-toggle="modal"
+        (click)="establecerMensaje('Está seguro que desea eliminar la profesión?', 'eliminar')">Eliminar</button>
+      <button
+        (click)="limpiarForm('actualizar')"
+
+        class="btn btn-success"
+        data-bs-target="#modalInformacionEdicionProfesion"
+        data-bs-toggle="modal">Editar</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="modal fade" id="modalInformacionEdicionProfesion" aria-hidden="true"
+aria-labelledby="modalInformacionEdicionProfesionLabel" tabindex="-1">
+<div class="modal-dialog modal-dialog-centered">
+  <div class="modal-content">
+    <div class="modal-header align-items-center">
+      <h1 class="modal-title fs-5 m-0 p-0 fw-bold"
+        id="modalInformacionEdicionProfesionLabel">Edición de Publicidad</h1>
+      <!-- (click)="limpiarForm('actualizar')" -->
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="modal"
+        aria-label="Close"></button>
+    </div>
+    <div class="modal-body mb-0">
+      <form [formGroup]="formEdit" class="">
+        <div class="row">
+          <div class="col d-flex justify-content-center">
+            <img *ngIf="existImageActualizar" class="image_modal rounded
+              mx-auto d-block img-fluid w-50" [src]="imagenActualizar"
+              alt="Archivo incorrecto">
+            <img *ngIf="!existImageActualizar && publicidad_seleccionada?.imagen"
+              class="image_modal rounded mx-auto d-block img-fluid w-50"
+              [src]="'https://tomesoft1.pythonanywhere.com'+publicidad_seleccionada?.imagen"
+              alt="Archivo incorrecto">
+            <i *ngIf="!existImageActualizar && !publicidad_seleccionada?.imagen"
+              class="rounded mx-auto d-block img-fluid w-50 bi bi-upload
+              icono"></i>
+          </div>
+          <div class="p-2">
+            <input
+              class="w-100 centrar form-control"
+              [ngClass]="formEdit.get('imagen')?.hasError('image_error') ?
+              'is-invalid' : '' || (existImageActualizar)? 'is-valid' : ''"
+              type="file"
+              id="file_input"
+              accept="image/png, image/jpeg"
+              (change)="loadImageFromDevice($event, 'actualizar')">
+            <div class="invalid-feedback">{{getErrorMessage(formEdit,
+              'imagen')}}</div>
+          </div>
+        </div>
+
+        <div class="row p-2 align-items-center">
+          <div class="col-5">
+            <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
+                fw-bold">Titulo:</h3></label>
+          </div>
+          <div class="col-7">
+            <input
+              type="text"
+              formControlName="titulo"
+              class="form-control"
+              [ngClass]="isInvalidForm('titulo', 'actualizar') ? 'is-invalid'
+              : ''"
+
+              value="Mark"
+              [placeholder]="publicidad_seleccionada?.titulo"
+              [value]="publicidad_seleccionada?.titulo">
+            <div class="invalid-feedback"> {{getErrorMessage(formEdit,
+              'titulo')}} </div>
+          </div>
+        </div>
+
+        <div class="row p-2 align-items-center">
+          <div class="col-5">
+            <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
+                fw-bold">Descripcion:</h3></label>
+          </div>
+          <div class="col-7">
+            <textarea
+              type="text"
+              formControlName="descripcion"
+              class="form-control"
+              [ngClass]="isInvalidForm('descripcion', 'actualizar') ?
+              'is-invalid' : ''"
+
+              value="Mark"
+
+              [value]="publicidad_seleccionada?.descripcion"></textarea>
+            <div class="invalid-feedback"> {{getErrorMessage(formEdit,
+              'descripcion')}} </div>
+          </div>
+        </div>
+
+
+        <div class="row p-2 align-items-center">
+          <div class="col-5">
+            <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
+                fw-bold">Url:</h3></label>
+          </div>
+          <div class="col-7">
+            <input
+              type="text"
+              formControlName="url"
+              class="form-control"
+              [ngClass]="isInvalidForm('url', 'actualizar') ?
+              'is-invalid' : ''"
+
+              value="Mark"
+
+              [value]="publicidad_seleccionada?.url">
+            <div class="invalid-feedback"> {{getErrorMessage(formEdit,
+              'url')}} </div>
+          </div>
+        </div>
+
+        <div class="row p-2 align-items-center">
+          <div class="col-5">
+            <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
+                fw-bold">Fecha de Inicio:</h3></label>
+          </div>
+          <div class="col-7">
+            <input type="date"
+              [value]="publicidad_seleccionada?.fecha_inicio" id="start"
+              required pattern="\d{4}-\d{2}-\d{2}"
+              formControlName="inicio"
+              min="{{getCurrentDate()}}">
+            <div class="invalid-feedback"> {{getErrorMessage(formEdit,
+              'inicio')}} </div>
+          </div>
+        </div>
+
+        <div class="row p-2 align-items-center">
+          <div class="col-5">
+
+            <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
+                fw-bold">Fecha Expiracion:</h3>
+
+            </label>
+
+          </div>
+          <div class="col-7">
+            <input [value]="publicidad_seleccionada?.fecha_expiracion"
+              formControlName="fin" type="date" id="start" required
+              pattern="\d{4}-\d{2}-\d{2}"
+              min="{{getCurrentDate()}}">
+            <div class="invalid-feedback"> {{getErrorMessage(formEdit,
+              'fin')}} </div>
+          </div>
+        </div>
+
+   
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-danger"
+        data-bs-target="#modalInformacionProfesion" data-bs-toggle="modal">Regresar</button>
+      <button
+
+        data-bs-target="#modalConfirmacion"
+        data-bs-toggle="modal"
+        class="btn btn-success"
+        (click)="establecerMensaje('Está seguro que desea actualizar la información?', 'actualizar')">Actualizar</button>
+    </div>
+
+    <!-- <pre>
+      {{actualizarProfesionesForm.value | json}}
+    </pre> -->
+  </div>
+</div>
+</div>
+<!-- Modal crear admi -->
+<div class="modal fade" id="modalCrearProfesion" aria-hidden="true"
+aria-labelledby="modalCrearProfesionLabel" tabindex="-1">
+<div class="modal-dialog modal-dialog-centered">
+  <div class="modal-content">
+    <div class="modal-header align-items-center">
+      <h1 class="modal-title fs-5 m-0 p-0 fw-bold"
+        id="modalCrearProfesionLabel">Crear Publicidad</h1>
+      <!-- (click)="limpiarForm('crear')" -->
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="modal"
+        aria-label="Close"></button>
+    </div>
+    <div class="modal-body mb-0">
+      <form [formGroup]="publicidadCrear" class="">
+        <!-- Seccion de imagen -->
+        <div class="row">
+          <div class="col d-flex justify-content-center">
+            <img *ngIf="existImageCrear" class="rounded mx-auto d-block
+              img-fluid w-50 image_modal" [src]="imagenCrear" alt="Archivo
+              incorrecto">
+            <i *ngIf="!existImageCrear" class="rounded mx-auto d-block
+              img-fluid w-50 bi bi-upload icono"></i>
+          </div>
+          <div class="p-2">
+            <input
+              class="w-100 centrar form-control"
+              [ngClass]="publicidadCrear.get('imagen')?.hasError('image_error') ?
+              'is-invalid' : '' || (existImageCrear)? 'is-valid' : ''"
+              type="file"
+
+              accept="image/png, image/jpeg"
+              (change)="loadImageFromDevice($event, 'crear')">
+            <div class="invalid-feedback">{{getErrorMessage(publicidadCrear,
+              'imagen')}}</div>
+          </div>
+        </div>
+
+
+        <div class="row p-2 align-items-center">
+          <div class="col-5">
+            <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
+                fw-bold">Titulo:</h3></label>
+          </div>
+          <div class="col-7">
+            <input
+              type="text"
+              formControlName="titulo"
+              class="form-control"
+              [ngClass]="isInvalidForm('titulo', 'crear') ? 'is-invalid' :
+              publicidadCrear.get('titulo')?.touched ||
+              publicidadCrear.get('titulo')?.dirty &&
+              !publicidadCrear.get('titulo')?.invalid ? 'is-valid' : ''"
+              placeholder="Promocion">
+            <div class="invalid-feedback"> {{getErrorMessage(publicidadCrear,
+              'titulo')}} </div>
+          </div>
+        </div>
+
+
+        <div class="row p-2 align-items-center">
+          <div class="col-5">
+            <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
+                fw-bold">Url:</h3></label>
+          </div>
+          <div class="col-7">
+            <textarea
+              type="text"
+              formControlName="url"
+              class="form-control"
+              [ngClass]="isInvalidForm('url', 'crear') ? 'is-invalid'
+              :
+              publicidadCrear.get('url')?.touched ||
+              publicidadCrear.get('url')?.dirty &&
+              !publicidadCrear.get('url')?.invalid ? 'is-valid' : ''"
+              placeholder="Promocion"></textarea>
+            <div class="invalid-feedback"> {{getErrorMessage(publicidadCrear,
+              'url')}} </div>
+          </div>
+        </div>
+
+     
+        <div class="row p-2 align-items-center">
+          <div class="col-5">
+            <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
+                fw-bold">Fecha de Inicio:</h3></label>
+          </div>
+          <div class="col-7">
+            <input type="date"
+              id="start"
+              required pattern="\d{4}-\d{2}-\d{2}"
+              formControlName="inicio"
+              min="{{getCurrentDate()}}">
+            <div class="invalid-feedback"> {{getErrorMessage(publicidadCrear,
+              'inicio')}} </div>
+          </div>
+        </div>
+
+        <div class="row p-2 align-items-center">
+          <div class="col-5">
+
+            <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
+                fw-bold">Fecha Expiracion:</h3>
+
+            </label>
+
+          </div>
+          <div class="col-7">
+            <input
+              formControlName="fin" type="date" id="start" required
+              pattern="\d{4}-\d{2}-\d{2}"
+              min="{{getCurrentDate()}}">
+            <div class="invalid-feedback"> {{getErrorMessage(publicidadCrear,
+              'fin')}} </div>
+          </div>
+        </div>
+
+
+
+
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button
+
+        data-bs-target="#modalConfirmacion"
+        data-bs-toggle="modal"
+        class="btn btn-success" 
+        (click)="establecerMensaje('Está seguro que desea crear la  profesión?', 'crear')">Crear</button>
+    </div>
+
+    <!-- <pre>
+        {{crearProfesionesForm.value | json}}
+      </pre> -->
+  </div>
+</div>
+</div>
+
+<!-- Modal de confirmacion (Alerta) -->
+<div class="modal fade" id="modalConfirmacion" tabindex="-1"
+aria-labelledby="modalConfirmacionLabel" aria-hidden="true">
+<div class="modal-dialog">
+  <div class="modal-content">
+    <!-- Titulo del modal confirmacion -->
+    <div class="modal-header">
+      <h1 class="modal-title fs-5 m-0 p-0 fw-bold"
+        id="modalConfirmacionLabel">Confirmar selección</h1>
+      <button type="button" class="btn-close" data-bs-dismiss="modal"
+        aria-label="Close"></button>
+    </div>
+
+    <!-- Cuerpo del modal confirmacion -->
+    <div class="modal-body">
+      {{mensajeAlerta}}
+    </div>
+
+    <!-- Footer del modal confirmacion -->
+    <div class="modal-footer">
+      <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+      <button *ngIf="isCrear" type="button" class="btn btn-success"
+        (click)="onCrear()" data-bs-dismiss="modal">Confirmar</button>
+      <button *ngIf="isActualizar" type="button" class="btn btn-success"
+        (click)="onActualizar()" data-bs-dismiss="modal">Confirmar</button>
+      <button *ngIf="isEliminar" type="button" class="btn btn-success"
+        (click)="onDelete()" data-bs-dismiss="modal">Confirmar</button>
+    </div>
+  </div>
+
+</div>
+</div>

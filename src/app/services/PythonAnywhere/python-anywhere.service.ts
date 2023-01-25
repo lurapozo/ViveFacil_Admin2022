@@ -20,7 +20,7 @@ import { BodyActualizarCategoria, BodyCrearCategoria, BodyResponseCrearCategoria
 import { BodyActualizarServicio, Servicio } from 'src/app/interfaces/servicio';
 import { BodyCrearSubCategoria, BodyResponseCrearSubCategoria } from 'src/app/interfaces/sub-categoria';
 import { BodyActualizarPlan, BodyActualizarPlanProveedor, BodyCrearPlan, BodyCrearPlanProveedor, BodyResponseCrearPlan, Plan, PlanProveedor } from 'src/app/interfaces/plan';
-import { BodyCrearPublicidad, BodyResponseCrearPublicidad } from 'src/app/interfaces/publicidad';
+import { BodyCrearPublicidad, BodyResponseCrearPublicidad, Publicidad } from 'src/app/interfaces/publicidad';
 import { Ciudad } from 'src/app/interfaces/ciudad';
 import { AdminUserPass } from 'src/app/interfaces/admin-user-pass';
 import { BodyCrearNotificacionAnuncio, NotificacionAnuncio } from 'src/app/interfaces/notificacion';
@@ -1225,8 +1225,8 @@ export class PythonAnywhereService {
    * @param page Recibe un numero de pagina. 1
    * @returns Retorna un objeto ProveedorPaginacion
    */
-  obtener_publicidades(page: string) : Observable<ProveedorPaginacion> {
-    return this.http.get(`${this.API_URL}/publicidades/?page=${page}`) as Observable<ProveedorPaginacion>;
+  obtener_publicidades(page=1) : any {
+    return this.http.get(`${this.API_URL}/publicidades/?page=${page}`) 
   }
 
   /**
