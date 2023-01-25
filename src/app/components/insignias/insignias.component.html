@@ -174,7 +174,7 @@
         <div class="col-7 form-check form-switch d-flex justify-content-end fs-6">
           <input
           (change)="cambiarEstado($event)"
-          [checked]="activo? true : false"
+          [checked]="insignia_seleccionada?.estado? true : false"
             class="form-check-input"
             id="switchEstado"
             type="checkbox"
