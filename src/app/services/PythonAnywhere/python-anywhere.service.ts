@@ -219,7 +219,7 @@ export class PythonAnywhereService {
    * @param id Recibe un string perteneciente al ID del cargo el cual sera modificado.
    * @returns Devuelve un Observable con un objeto Cargo actualizado.
    */
-  actualizar_cargo(bodyActualizar: BodyActualizarCargo, id: string): Observable<Cargo> {
+  actualizar_cargo(bodyActualizar: BodyActualizarCargo, id: any): Observable<Cargo> {
     return this.http.put(`${this.API_URL}/cargo_update/${id}`, bodyActualizar) as Observable<Cargo>;
   }
 
@@ -230,7 +230,7 @@ export class PythonAnywhereService {
    * @param id Recibe un string perteneciente al ID del Cargo el cual sera eliminado.
    * @returns Devuelve un Observable con una respuesta OK(204) or Error(500).
    */
-  eliminar_cargo(id: string): Observable<any> {
+  eliminar_cargo(id: any): Observable<any> {
     return this.http.delete(`${this.API_URL}/cargo_delete/${id}`) as Observable<any>;
   }
   //-----------------------------------------------------------------------------------------------------------------------
@@ -993,8 +993,8 @@ export class PythonAnywhereService {
    * @author Margarita Mawyin
    * @returns Devuelve un Observable con un objeto ProveedorPaginacion
    */
-  obtener_pagos_efectivoP(page: any) : Observable<ProveedorPaginacion> {
-    return this.http.get(`${this.API_URL}/pago_efectivosP/?page=${page}`) as Observable<ProveedorPaginacion>;
+  obtener_pagos_efectivoP(page=1) : Observable<any> {
+    return this.http.get(`${this.API_URL}/pago_efectivosP/?page=${page}`) as Observable<any>;
   }
 
   /**
