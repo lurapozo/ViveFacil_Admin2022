@@ -31,7 +31,8 @@ export class InsigniasComponent {
   imagenActualizar: string | undefined;
   fileImagenCrear: File = {} as File;
   imagenCrear: string | undefined;
-
+  profesion = ['Automotriz','Hogar','Oficina','Promociones']
+  tipo = ['Solicitante','Proveedor']
   arr_servicios: Servicio[] | undefined;
   constructor(private pythonAnywhereService: PythonAnywhereService, private sanitizer: DomSanitizer) {
 
@@ -312,7 +313,7 @@ export class InsigniasComponent {
       if(foto && this.existImageCrear){
         Insignia.imagen = foto; // Si hay foto se le agrega al body.
       }
-    console.log(pedidos)
+    console.log(Insignia)
     this.pythonAnywhereService.crear_insignia(Insignia).subscribe(resp=>{
       console.log(resp)
     })
@@ -334,19 +335,18 @@ onActualizar(){
     const servicio = this.editarInsignias.get('servicio')?.value;
     const nombre = this.editarInsignias.get('nombre')?.value;
     const descripcion = this.editarInsignias.get('descripcion')?.value;
-    const estado = this.editarInsignias.get('estado')?.value;
     const tipo = this.editarInsignias.get('tipo')?.value;
     const usuario = this.editarInsignias.get('usuario')?.value;
     const pedidos = this.editarInsignias.get('pedidos')?.value;
     const foto = this.editarInsignias.get('imagen')?.value;
-
-    if(id && nombre && servicio && descripcion && estado && tipo && usuario && pedidos) {
+   console.log(nombre , servicio , descripcion  , tipo , usuario && pedidos)
+    if(nombre && servicio && descripcion  && tipo && usuario && pedidos) {
       insignia.tipo= tipo
       insignia.tipo_usuario=usuario
       insignia.servicio = servicio;
       insignia.nombre = nombre;
       insignia.descripcion = descripcion;
-      insignia.estado = estado;
+  
       insignia.pedidos= pedidos
  
       if(this.existImageActualizar && foto){
@@ -354,6 +354,7 @@ onActualizar(){
       }
 
     this.pythonAnywhereService.actualizar_insignia(insignia,id).subscribe(resp=>{
+      console.log(resp)
       this.mostrarToastInfo('Estado de la solicitud profesion', 'Insignia editada correctamente', false);
     })
 }

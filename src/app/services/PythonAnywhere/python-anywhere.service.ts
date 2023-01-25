@@ -163,7 +163,7 @@ export class PythonAnywhereService {
    * @param id Recibe un string perteneciente al ID de la insignia la cual sera modificada.
    * @returns Devuelve un Observable de un Objeto Insignia el cual fue modificado.
    */
-  actualizar_insignia(bodyActualizar: BodyActualizarInsignia, id: string): Observable<Insignia> {
+  actualizar_insignia(bodyActualizar: BodyActualizarInsignia, id: any): Observable<Insignia> {
     const dataUpdate = new FormData();
     bodyActualizar.nombre ? dataUpdate.append('nombre', bodyActualizar.nombre) : null;
     bodyActualizar.imagen ? dataUpdate.append('imagen', bodyActualizar.imagen) : null;
@@ -832,8 +832,7 @@ export class PythonAnywhereService {
     bodyCrear.imagen ? dataCrear.append("imagen", bodyCrear.imagen) : null;
     dataCrear.append("servicio", bodyCrear.servicio);
     dataCrear.append("tipoUsuario", bodyCrear.tipoUsuario);
-    dataCrear.append("pedidos", bodyCrear.nombre);
-    dataCrear.append("imagen", bodyCrear.pedidos.toString());
+    dataCrear.append("pedidos", bodyCrear.pedidos);
     dataCrear.append("descripcion", bodyCrear.descripcion);
     return this.http.post(`${this.API_URL}/insignias/`, dataCrear) as Observable<BodyResponseCrearInsignia>;
   }

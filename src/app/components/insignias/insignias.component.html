@@ -313,11 +313,8 @@
                 formControlName="usuario"
                 [value]="insignia_seleccionada?.tipo_usuario"
                 aria-describedby="selectorServicioCrearFeedback">
-                <option selected disabled [value]="insignia_seleccionada?.servicio">Elija un tipo de usuario...</option>
-                <option  value="Solicitante"> Solicitante
-                </option>
-                <option  value="Proveedor"> Proveedor
-                </option>
+                <option selected disabled >Elija un tipo de usuario...</option>
+                <option *ngFor="let c of tipo" value="{{c}}"> {{c}}</option>
               </select>
               <div id="selectorServicioCrearFeedback"
                 class="invalid-feedback"> {{getErrorMessage(editarInsignias,
@@ -325,8 +322,6 @@
             </div>
           </div>
 
-
-          
           <div class="row p-2 align-items-center">
             <div class="col-5">
               <label for="selectorServicioCrear" class="form-label"><h3
@@ -338,23 +333,20 @@
                 [ngClass]="isInvalidForm('tipo', 'actualizar') ?
                 'is-invalid' : ''"
                 formControlName="tipo"
-                [value]="insignia_seleccionada?.servicio"
+          
                 aria-describedby="selectorServicioCrearFeedback">
-                <option selected disabled value="">Elija un tipo ...</option>
-                <option  value="Hogar"> Hogar
-                </option>
-                <option  value="Automotriz"> Automotriz
-                </option>
-                <option  value="Promiciones"> Promiciones
-                </option>
-                <option  value="Oficina"> Oficina
-                </option>
+                <option selected disabled >Elija un tipo de usuario...</option>
+                <option *ngFor="let c of profesion" value="{{c}}"> {{c}}</option>
               </select>
               <div id="selectorServicioCrearFeedback"
                 class="invalid-feedback"> {{getErrorMessage(editarInsignias,
                 'tipo')}} </div>
             </div>
           </div>
+
+
+          
+  
 
           
         </form>
