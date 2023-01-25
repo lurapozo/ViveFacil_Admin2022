@@ -47,8 +47,8 @@ export class CuponesComponent {
 
 
   cuponCrear: FormGroup = new FormGroup({
-    codigo: new FormControl(),
     titulo: new FormControl('', [Validators.required]),
+    codigo: new FormControl('', [Validators.required]),
     descripcion: new FormControl('', [Validators.required]),
     descuento: new FormControl('', [Validators.required]),
     cantidad: new FormControl(''),
@@ -62,7 +62,7 @@ export class CuponesComponent {
   });
 
   formEdit: FormGroup = new FormGroup({
-
+    codigo: new FormControl('', [Validators.required]),
     titulo: new FormControl('', [Validators.required]),
     descripcion: new FormControl('', [Validators.required]),
     descuento: new FormControl('', [Validators.required]),
@@ -107,6 +107,8 @@ export class CuponesComponent {
       this.cuponCrear.get('punto')?.setValue('');
       this.cuponCrear.get('categoria')?.setValue('');
       this.cuponCrear.get('imagen')?.setValue('');
+      this.cuponCrear.get('codigo')?.setValue('');
+   
    
 
     } else if(tipo === 'actualizar') {
@@ -120,7 +122,7 @@ export class CuponesComponent {
       const inicio = this.cupon_seleccionada?.fecha_iniciacion;
       const fin = this.cupon_seleccionada?.fecha_expiracion;
       const foto = this.cupon_seleccionada?.foto;
-
+      const codigo = this.cupon_seleccionada?.codigo;
     
       this.existImageActualizar = false;
       this.formEdit.get('imagen')?.reset();
@@ -133,6 +135,7 @@ export class CuponesComponent {
       inicio? this.formEdit.get('inicio')?.setValue(inicio) : this.formEdit.get('inicio')?.reset();
       fin? this.formEdit.get('fin')?.setValue(inicio) : this.formEdit.get('fin')?.reset();
       foto? this.formEdit.get('imagen')?.setValue(inicio) : this.formEdit.get('imagen')?.reset();
+      codigo? this.formEdit.get('codigo')?.setValue(codigo) : this.formEdit.get('codigo')?.reset();
 
    
   }}
@@ -199,6 +202,11 @@ export class CuponesComponent {
           return 'Debe llenar este campo';
         }
         return '';
+        case 'codigo':
+          if (itemControl.hasError('required')) {
+            return 'Debe llenar este campo';
+          }
+          return '';
 
       default:
         return '';
@@ -332,8 +340,7 @@ export class CuponesComponent {
       tipo_categoria: '',
       cantidad: 0
     }
-
-    const codigo = this.cuponCrear.get('titulo')?.value;
+    const codigo = this.cuponCrear.get('codigo')?.value;
     const titulo = this.cuponCrear.get('titulo')?.value;
     const descripcion = this.cuponCrear.get('descripcion')?.value;
     const inicio = this.cuponCrear.get('inicio')?.value;
@@ -344,9 +351,10 @@ export class CuponesComponent {
     const descuento = this.cuponCrear.get('descuento')?.value;
     const foto = this.cuponCrear.get('imagen')?.value;
 
-    console.log(codigo , titulo , descripcion , inicio , fin , cantidad , puntos , categoria , descuento)
-    if(codigo && titulo && descripcion && inicio && fin && cantidad && puntos && categoria && descuento ){
-      cupon.titulo = codigo
+    console.log(  titulo , descripcion , inicio , fin , cantidad , puntos , categoria , descuento)
+    if( codigo && titulo && descripcion && inicio && fin && cantidad && puntos && categoria && descuento ){
+      cupon.codigo=codigo
+      cupon.titulo=titulo
       cupon.descripcion = descripcion
       cupon.fecha_iniciacion = inicio
       cupon.fecha_expiracion = fin
@@ -395,7 +403,8 @@ export class CuponesComponent {
     const descuento = this.formEdit.get('descuento')?.value;
     const foto = this.formEdit.get('imagen')?.value;
     if(codigo && titulo && descripcion && inicio && fin && cantidad && puntos && categoria && descuento ){
-      cupon.titulo = codigo
+      cupon.codigo=codigo
+      cupon.titulo=titulo
       cupon.descripcion = descripcion
       cupon.fecha_iniciacion = inicio
       cupon.fecha_expiracion = fin
@@ -413,7 +422,7 @@ export class CuponesComponent {
     console.log(cupon)
     if(this.cupon_seleccionada){
       const id = this.cupon_seleccionada.id
-      console.log(this.formEdit)
+      console.log(id)
       this.pythonAnywhereService.actualizar_cupon(cupon,id).subscribe(resp=>{console.log(resp);})
 
     }

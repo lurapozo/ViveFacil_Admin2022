@@ -329,7 +329,7 @@ export class PythonAnywhereService {
    * @param id Recibe un string perteneciente al ID del cupon la cual sera modificada.
    * @returns Devuelve un Observable con un objeto BodyResponseCuponActualizar.
    */
-  actualizar_cupon(bodyActualizar: BodyCuponActualizar, id: string): Observable<BodyResponseCuponActualizar> {
+  actualizar_cupon(bodyActualizar: BodyCuponActualizar, id: any): Observable<BodyResponseCuponActualizar> {
     const dataUpdate = new FormData();
     dataUpdate.append("codigo", bodyActualizar.codigo);
     dataUpdate.append("titulo", bodyActualizar.titulo);

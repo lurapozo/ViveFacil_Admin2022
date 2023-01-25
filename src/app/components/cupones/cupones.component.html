@@ -202,7 +202,7 @@
             fs-6">
             <input
               (change)="cambiarEstado($event)"
-              [checked]="activo? true : false"
+              [checked]="cupon_seleccionada?.estado? true : false"
               class="form-check-input"
               id="switchEstado"
               type="checkbox"
@@ -275,6 +275,26 @@
           <div class="row p-2 align-items-center">
             <div class="col-5">
               <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
+                  fw-bold">Codigo:</h3></label>
+            </div>
+            <div class="col-7">
+              <input
+                type="text"
+                formControlName="codigo"
+                class="form-control"
+                [ngClass]="isInvalidForm('codigo', 'actualizar') ? 'is-invalid'
+                : ''"
+
+                value="Mark"
+                [placeholder]="cupon_seleccionada?.titulo"
+                [value]="cupon_seleccionada?.titulo">
+              <div class="invalid-feedback"> {{getErrorMessage(formEdit,
+                'codigo')}} </div>
+            </div>
+          </div>
+          <div class="row p-2 align-items-center">
+            <div class="col-5">
+              <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
                   fw-bold">Titulo:</h3></label>
             </div>
             <div class="col-7">
@@ -284,7 +304,6 @@
                 class="form-control"
                 [ngClass]="isInvalidForm('titulo', 'actualizar') ? 'is-invalid'
                 : ''"
-
                 value="Mark"
                 [placeholder]="cupon_seleccionada?.titulo"
                 [value]="cupon_seleccionada?.titulo">
@@ -370,7 +389,7 @@
                 formControlName="inicio"
                 min="{{getCurrentDate()}}">
               <div class="invalid-feedback"> {{getErrorMessage(formEdit,
-                'descuento')}} </div>
+                'inicio')}} </div>
             </div>
           </div>
 
@@ -389,7 +408,7 @@
                 pattern="\d{4}-\d{2}-\d{2}"
                 min="{{getCurrentDate()}}">
               <div class="invalid-feedback"> {{getErrorMessage(formEdit,
-                'descuento')}} </div>
+                'fin')}} </div>
             </div>
           </div>
 
@@ -429,10 +448,10 @@
                 formControlName="categoria"
 
                 class="form-control"
-                [ngClass]="isInvalidForm('categoria', 'crear') ? 'is-invalid' :
-                cuponCrear.get('categoria')?.touched ||
-                cuponCrear.get('categoria')?.dirty &&
-                !cuponCrear.get('categoria')?.invalid ? 'is-valid' : ''"
+                [ngClass]="isInvalidForm('categoria', 'actualizar') ? 'is-invalid' :
+                formEdit.get('categoria')?.touched ||
+                formEdit.get('categoria')?.dirty &&
+                !formEdit.get('categoria')?.invalid ? 'is-valid' : ''"
                 aria-describedby="selectorServicioCrearFeedback">
                 <option *ngFor="let c of categoria" [id]="c.nombre"
                   value={{cupon_seleccionada?.tipo_categoria}}> {{c.nombre}}
@@ -505,6 +524,25 @@
             </div>
           </div>
 
+          <div class="row p-2 align-items-center">
+            <div class="col-5">
+              <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
+                  fw-bold">Codigo:</h3></label>
+            </div>
+            <div class="col-7">
+              <input
+                type="text"
+                formControlName="codigo"
+                class="form-control"
+                [ngClass]="isInvalidForm('codigo', 'crear') ? 'is-invalid' :
+                cuponCrear.get('codigo')?.touched ||
+                cuponCrear.get('codigo')?.dirty &&
+                !cuponCrear.get('codigo')?.invalid ? 'is-valid' : ''"
+                placeholder="Promocion">
+              <div class="invalid-feedback"> {{getErrorMessage(cuponCrear,
+                'codigo')}} </div>
+            </div>
+          </div>
 
           <div class="row p-2 align-items-center">
             <div class="col-5">
