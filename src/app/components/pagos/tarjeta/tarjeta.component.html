@@ -6,18 +6,18 @@
         <h2 class="p-0 m-0"> Efectivo</h2>
         <div class="row">
             <div class="col">
-                <h4 class="p-0 m-0">Total Efectivo: $ {{totalTarjeta}}</h4>
+                <h4 class="p-0 m-0">Total Tarjeta: $ {{totalTarjeta}}</h4>
             </div>
             <div class="col">
                 <h4 class="p-0 m-0">Total: $ {{total}}</h4>
             </div>
 
             <div class="col">
-                <h4 class="p-0 m-0">Total: $ {{totalBanco}}</h4>
+                <h4 class="p-0 m-0">Total Cargo Banco: $ {{totalBanco}}</h4>
             </div>
 
             <div class="col">
-                <h4 class="p-0 m-0">Total: $ {{totalPayment}}</h4>
+                <h4 class="p-0 m-0">Total cargo Sistema: $ {{totalPayment}}</h4>
             </div>
 
            
@@ -85,7 +85,7 @@
             <h4 class="p-0 m-0">{{a.servicio}}</h4>
           </div>
           <div class="col-2  align-self-center">
-            <h4 class="p-0 m-0">{{a.fecha_creacion}}</h4>
+            <h4 class="p-0 m-0">{{a.fecha_creacion | date: ' MMM d, y, h:mm:ss a'}}</h4>
           </div>
          
           <div class="col-2 align-self-center">
@@ -93,8 +93,10 @@
           </div>
 
           <div class="col-2 align-self-center">
-            <h4 class="p-0 m-0">{{a.pago_proveedor}}</h4>
+            <span *ngIf="!a.pago_proveedor" class="badge text-bg-warning">Por Pagar</span>
+            <span *ngIf="a.pago_proveedor" class="badge text-bg-success">Pagado</span>
           </div>
+
 
         </div>
       </div>
@@ -207,13 +209,14 @@ aria-labelledby="modalInformacionProfesionLabel" tabindex="-1">
           <h3 class="m-0 p-0 fw-bold">Importante:</h3>
         </div>
         <div class="col-7">
-            Este pago ya se le ha cancelado al proveedor.
+          <span  class="badge text-bg-success">Este pago ya se le ha cancelado al proveedor.</span>
+          
         </div>
       </div>
 
       <div *ngIf="!tarjeta_seleccionada?.pago_proveedor" class="row p-2 align-items-center">
         <div class="col-5">
-          <h3 class="m-0 p-0 fw-bold">Importante:</h3>
+          <h3 class="m-0 p-0 fw-bold">Pagar:</h3>
         </div>
         <div class="col-7 form-check form-switch d-flex justify-content-end fs-6">
             <input
@@ -232,4 +235,19 @@ aria-labelledby="modalInformacionProfesionLabel" tabindex="-1">
    
   </div>
 </div>
+</div>
+
+<!-- Toast de Información -->
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+  <div #liveToast id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header" [ngClass]="isErrorToast? ' bg-danger' : ' bg-success'">
+      <img src="../../../assets/imagenes/notification_logo.png" class="rounded me-2" width="25px" alt="...">
+      <strong class="me-auto text-light">{{tituloToast}}</strong>
+      <small class="text-light">Ahora</small>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body bg-opacity-25" [ngClass]="isErrorToast? ' bg-danger' : ' bg-success'">
+      {{mensajeToast}}
+    </div>
+  </div>
 </div>

@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { PythonAnywhereService } from 'src/app/services/PythonAnywhere/python-anywhere.service';
 import { BodyActualizarInsignia, BodyCrearInsignia, Insignia } from '../../interfaces/insignia';
 import { Servicio } from 'src/app/interfaces/servicio';
+import { Categoria } from '../../interfaces/categoria';
 
 @Component({
   selector: 'app-insignias',
@@ -32,8 +33,10 @@ export class InsigniasComponent {
   fileImagenCrear: File = {} as File;
   imagenCrear: string | undefined;
   profesion = ['Automotriz','Hogar','Oficina','Promociones']
-  tipo = ['Solicitante','Proveedor']
+  arr_tipo = ['Solicitante','Proveedor']
   arr_servicios: Servicio[] | undefined;
+  arr_categoria?: Categoria[] | undefined;
+
   constructor(private pythonAnywhereService: PythonAnywhereService, private sanitizer: DomSanitizer) {
 
     this.pythonAnywhereService.obtener_insignias().subscribe(resp => {
@@ -47,6 +50,12 @@ export class InsigniasComponent {
       this.arr_servicios = resp;
       console.log(this.arr_servicios)
     });
+
+    this.pythonAnywhereService.obtener_categorias().subscribe(resp=>{
+      this.arr_categoria=resp
+    }
+
+    )
     const imagenCrearControl = this.crearInsignias.get('imagen') as FormControl;
     imagenCrearControl.addValidators(this.createImageValidator(this.crearInsignias.get('imagen') as AbstractControl, 'crear'));
     const imagenActualizarControl = this.editarInsignias.get('imagen') as FormControl;
@@ -57,7 +66,7 @@ export class InsigniasComponent {
     nombre: new FormControl('', [Validators.required]),
     pedidos: new FormControl('', [Validators.required]),
     servicio: new FormControl('', [Validators.required]),
-    tipo:new FormControl('', [Validators.required]),
+    cat:new FormControl('', [Validators.required]),
     usuario:new FormControl('', [Validators.required]),
     descripcion:new FormControl('', [Validators.required]),
   }, []);
@@ -67,7 +76,7 @@ export class InsigniasComponent {
     nombre: new FormControl('', [Validators.required]),
     pedidos: new FormControl('', [Validators.required]),
     servicio: new FormControl('', [Validators.required]),
-    tipo:new FormControl('', [Validators.required]),
+    cat:new FormControl('', [Validators.required]),
     usuario:new FormControl('', [Validators.required]),
     descripcion:new FormControl('', [Validators.required]),
   }, []);
@@ -235,18 +244,15 @@ export class InsigniasComponent {
         }
         return '';
 
-      case 'pedidos':
-        if (itemControl.hasError('required')) {
-          return 'Debe seleccionar un estado';
-        }
-        return '';
-        case 'tipo':
+        case 'cat':
+          
           if (itemControl.hasError('required')) {
             return 'Debe seleccionar un estado';
           }
           return '';
           case 'usuario':
           if (itemControl.hasError('required')) {
+             console.log('entre')
             return 'Debe seleccionar un estado';
           }
           return '';
@@ -261,26 +267,25 @@ export class InsigniasComponent {
       this.crearInsignias.get('nombre')?.reset();
       this.crearInsignias.get('descripcion')?.reset();
       this.crearInsignias.get('servicio')?.setValue('');
-      this.crearInsignias.get('tipo')?.setValue('');
+      this.crearInsignias.get('cat')?.setValue('');
       this.crearInsignias.get('pedidos')?.setValue('');
       this.crearInsignias.get('servicio')?.setValue('');
       this.crearInsignias.get('usuario')?.setValue('');
     } else if(tipo === 'actualizar') {
-      // console.log(this.profesion_seleccionada);
-      // console.log('Servicio de la profesion seleccionada: ', this.profesion_seleccionada?.servicio[0].nombre);
+
       const servicio = this.insignia_seleccionada?.servicio;
       const nombre = this.insignia_seleccionada?.nombre;
       const descripcion = this.insignia_seleccionada?.descripcion;
       const estado = this.insignia_seleccionada?.estado;
-      const tipo =  this.insignia_seleccionada?.tipo_usuario;
+      const tipo =  this.insignia_seleccionada?.tipo;
       const pedido =  this.insignia_seleccionada?.pedidos;
-      const usuario =  this.insignia_seleccionada?.pedidos;
+      const usuario =  this.insignia_seleccionada?.tipo_usuario;
       this.existImageActualizar = false;
       this.editarInsignias.get('imagen')?.reset();
       nombre? this.editarInsignias.get('nombre')?.setValue(nombre) : this.editarInsignias.get('nombre')?.reset();
       descripcion? this.editarInsignias.get('descripcion')?.setValue(descripcion) : this.editarInsignias.get('descripcion')?.reset();
       servicio? this.editarInsignias.get('servicio')?.setValue(servicio) : this.editarInsignias.get('servicio')?.reset();
-      tipo? this.editarInsignias.get('tipo')?.setValue(tipo) : this.editarInsignias.get('tipo')?.reset();
+      tipo? this.editarInsignias.get('cat')?.setValue(tipo) : this.editarInsignias.get('cat')?.reset();
       pedido? this.editarInsignias.get('pedidos')?.setValue(pedido) : this.editarInsignias.get('pedidos')?.reset();
       
     } 
@@ -300,7 +305,7 @@ export class InsigniasComponent {
     const servicio = this.crearInsignias.get('servicio')?.value;
     const nombre = this.crearInsignias.get('nombre')?.value;
     const descripcion = this.crearInsignias.get('descripcion')?.value;
-    const tipo = this.crearInsignias.get('tipo')?.value;
+    const tipo = this.crearInsignias.get('cat')?.value;
     const usuario = this.crearInsignias.get('usuario')?.value;
     const foto = this.crearInsignias.get('imagen')?.value;
     if(nombre && servicio && descripcion && tipo && pedidos && usuario) {
@@ -315,7 +320,8 @@ export class InsigniasComponent {
       }
     console.log(Insignia)
     this.pythonAnywhereService.crear_insignia(Insignia).subscribe(resp=>{
-      console.log(resp)
+      this.limpiarForm('crear');
+      this.mostrarToastInfo('Estado de la Insignia profesion', 'Insignia Creada correctamente', false);
     })
   }
 }
@@ -335,7 +341,7 @@ onActualizar(){
     const servicio = this.editarInsignias.get('servicio')?.value;
     const nombre = this.editarInsignias.get('nombre')?.value;
     const descripcion = this.editarInsignias.get('descripcion')?.value;
-    const tipo = this.editarInsignias.get('tipo')?.value;
+    const tipo = this.editarInsignias.get('cat')?.value;
     const usuario = this.editarInsignias.get('usuario')?.value;
     const pedidos = this.editarInsignias.get('pedidos')?.value;
     const foto = this.editarInsignias.get('imagen')?.value;
@@ -346,25 +352,26 @@ onActualizar(){
       insignia.servicio = servicio;
       insignia.nombre = nombre;
       insignia.descripcion = descripcion;
-  
       insignia.pedidos= pedidos
  
-      if(this.existImageActualizar && foto){
-        insignia.imagen = foto; // Si hay foto se le agrega al body.
-      }
-
-    this.pythonAnywhereService.actualizar_insignia(insignia,id).subscribe(resp=>{
-      console.log(resp)
-      this.mostrarToastInfo('Estado de la solicitud profesion', 'Insignia editada correctamente', false);
-    })
+   
+   
+}
+if(this.existImageActualizar && foto){
+  insignia.imagen = foto; 
 }
 
+this.pythonAnywhereService.actualizar_insignia(insignia,id).subscribe(resp=>{
+  console.log(resp)
+  this.limpiarForm('actualizar');
+  this.mostrarToastInfo('Estado de la Insignia profesion', 'Insignia editada correctamente', false);
+})
 }
 
 onEliminar(){
   if(this.insignia_seleccionada){
     this.pythonAnywhereService.eliminar_insignia(this.insignia_seleccionada.id).subscribe(resp=>{
-      this.mostrarToastInfo('Estado de la solicitud profesion', 'Insignia Eliminada correctamente', false);
+      this.mostrarToastInfo('Estado de la solicitud Insignia', 'Insignia Eliminada correctamente', false);
     })
   }
   
@@ -385,8 +392,12 @@ cambiarEstado(event:any){
   let estado = event.srcElement.checked
   if(this.insignia_seleccionada){
     this.pythonAnywhereService.cambio_insignia_estado(this.insignia_seleccionada.id,estado).subscribe(resp=>{console.log(resp);});
-  }
+    this.mostrarToastInfo('Estado de la Insignia ', 'Insignia editada correctamente', false);
+  } 
 
 
 }
+
+
+
 }

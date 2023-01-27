@@ -24,7 +24,7 @@
           class="btn btn-primary"
           data-bs-toggle="modal"
           href="#modalCrearProfesion"
-          (click)="limpiarForm('crear')">Agregar Publicidad</button>
+          (click)="limpiarForm('crear')">Agregar Cargo</button>
       </div>
     </div>
   
@@ -186,8 +186,8 @@ aria-labelledby="modalInformacionEdicionProfesionLabel" tabindex="-1">
                 fw-bold">Nombre:</h3></label>
           </div>
           <div class="col-7">
-            <textarea
-              type="text"
+            <input
+              type="number"
               formControlName="porcentaje"
               class="form-control"
               [ngClass]="isInvalidForm('porcentaje', 'actualizar') ?
@@ -196,7 +196,7 @@ aria-labelledby="modalInformacionEdicionProfesionLabel" tabindex="-1">
               value="Mark"
 
               [value]="cargo_seleccionada
-?.nombre"></textarea>
+?.nombre">
             <div class="invalid-feedback"> {{getErrorMessage(formEdit,
               'porcentaje')}} </div>
           </div>
@@ -225,18 +225,13 @@ aria-labelledby="modalInformacionEdicionProfesionLabel" tabindex="-1">
           </div>
         </div>
 
-     
-
-        
-
-   
       </form>
     </div>
     <div class="modal-footer">
       <button class="btn btn-danger"
         data-bs-target="#modalInformacionProfesion" data-bs-toggle="modal">Regresar</button>
       <button
-
+      [disabled]="formEdit.invalid? true : false"
         data-bs-target="#modalConfirmacion"
         data-bs-toggle="modal"
         class="btn btn-success"
@@ -284,7 +279,7 @@ aria-labelledby="modalCrearProfesionLabel" tabindex="-1">
               cargoCrear.get('titulo')?.touched ||
               cargoCrear.get('titulo')?.dirty &&
               !cargoCrear.get('titulo')?.invalid ? 'is-valid' : ''"
-              placeholder="Promocion">
+              placeholder="Paymentest">
             <div class="invalid-feedback"> {{getErrorMessage(cargoCrear,
               'titulo')}} </div>
           </div>
@@ -299,16 +294,16 @@ aria-labelledby="modalCrearProfesionLabel" tabindex="-1">
           <div class="col-7">
             <textarea
               type="text"
-              formControlName="porcentaje"
+              formControlName="nombre"
               class="form-control"
-              [ngClass]="isInvalidForm('porcentaje', 'crear') ? 'is-invalid'
+              [ngClass]="isInvalidForm('nombre', 'crear') ? 'is-invalid'
               :
-              cargoCrear.get('porcentaje')?.touched ||
-              cargoCrear.get('porcentaje')?.dirty &&
-              !cargoCrear.get('porcentaje')?.invalid ? 'is-valid' : ''"
-              placeholder="Promocion"></textarea>
+              cargoCrear.get('nombre')?.touched ||
+              cargoCrear.get('nombre')?.dirty &&
+              !cargoCrear.get('nombre')?.invalid ? 'is-valid' : ''"
+              placeholder="Banco"></textarea>
             <div class="invalid-feedback"> {{getErrorMessage(cargoCrear,
-              'porcentaje')}} </div>
+              'nombre')}} </div>
           </div>
         </div>
 
@@ -318,8 +313,8 @@ aria-labelledby="modalCrearProfesionLabel" tabindex="-1">
                   fw-bold">Porcentaje:</h3></label>
             </div>
             <div class="col-7">
-              <textarea
-                type="text"
+              <input
+                type="number"
                 formControlName="porcentaje"
                 class="form-control"
                 [ngClass]="isInvalidForm('porcentaje', 'crear') ? 'is-invalid'
@@ -327,7 +322,7 @@ aria-labelledby="modalCrearProfesionLabel" tabindex="-1">
                 cargoCrear.get('porcentaje')?.touched ||
                 cargoCrear.get('porcentaje')?.dirty &&
                 !cargoCrear.get('porcentaje')?.invalid ? 'is-valid' : ''"
-                placeholder="Promocion"></textarea>
+                placeholder="1%">
               <div class="invalid-feedback"> {{getErrorMessage(cargoCrear,
                 'porcentaje')}} </div>
             </div>
@@ -338,7 +333,7 @@ aria-labelledby="modalCrearProfesionLabel" tabindex="-1">
     </div>
     <div class="modal-footer">
       <button
-
+      [disabled]="cargoCrear.invalid? true : false"
         data-bs-target="#modalConfirmacion"
         data-bs-toggle="modal"
         class="btn btn-success" 
@@ -383,4 +378,19 @@ aria-labelledby="modalConfirmacionLabel" aria-hidden="true">
   </div>
 
 </div>
+</div>
+
+<!-- Toast de Información -->
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+  <div #liveToast id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header" [ngClass]="isErrorToast? ' bg-danger' : ' bg-success'">
+      <img src="../../../assets/imagenes/notification_logo.png" class="rounded me-2" width="25px" alt="...">
+      <strong class="me-auto text-light">{{tituloToast}}</strong>
+      <small class="text-light">Ahora</small>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body bg-opacity-25" [ngClass]="isErrorToast? ' bg-danger' : ' bg-success'">
+      {{mensajeToast}}
+    </div>
+  </div>
 </div>

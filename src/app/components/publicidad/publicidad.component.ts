@@ -4,7 +4,6 @@ import { FormControl, AbstractControl, FormGroup, Validators } from '@angular/fo
 import { DomSanitizer } from '@angular/platform-browser';
 import { PythonAnywhereService } from 'src/app/services/PythonAnywhere/python-anywhere.service';
 import * as moment from 'moment';
-import { PromocionCrear, BodyPromocionActualizar } from 'src/app/interfaces/promocion';
 @Component({
   selector: 'app-publicidad',
   templateUrl: './publicidad.component.html',
@@ -327,13 +326,13 @@ onCrear(){
   const foto = this.publicidadCrear
   .get('imagen')?.value;
 
- 
-  if( titulo && descripcion && inicio && fin  && url  ){
 
+    console.log(inicio,fin)
     cupon.descripcion = descripcion
-    cupon.fecha_inicio = inicio
-    cupon.fecha_expiracion = fin
+    cupon.fecha_inicio = moment(inicio).format("YYYY-MM-DDTHH:mm:SS")
+    cupon.fecha_expiracion = moment(fin).format("YYYY-MM-DDTHH:mm:SS")
     cupon.url = url
+    cupon.titulo = titulo
     
     if(foto && this.existImageCrear){
       cupon.imagen = foto; // Si hay foto se le agrega al body.
@@ -342,7 +341,7 @@ onCrear(){
       console.log(resp)
     })
 
-  }
+
   
 }
 
@@ -353,7 +352,8 @@ onActualizar(){
     descripcion: '',
     fecha_expiracion: '',
     url: '',
-    fecha_inicio: ''
+    fecha_inicio: '',
+    id: 0
   }
  
   const titulo = this.formEdit.get('titulo')?.value;
@@ -362,29 +362,26 @@ onActualizar(){
   const fin = this.formEdit.get('fin')?.value;
   const url = this.formEdit.get('url')?.value;
   const foto = this.formEdit.get('imagen')?.value;
-  if( titulo && descripcion && inicio && fin && url ){
-    publi.titulo = titulo
-    publi.descripcion = descripcion
-    publi.fecha_inicio = inicio
-    publi.fecha_expiracion = fin
-    publi.url = url
- 
-
-  }
-
-
+  console.log(inicio,fin)
   if(foto && this.existImageCrear){
     publi.imagen = foto;
   }
-  console.log(publi)
-  if(this.publicidad_seleccionada){
-    const id = this.publicidad_seleccionada.id
-    console.log(this.formEdit)
-    this.pythonAnywhereService.actualizar_publicidad(publi).subscribe(resp=>{console.log(resp);})
+  console.log(titulo && descripcion && inicio && fin && url)
 
+    publi.titulo = titulo
+    publi.descripcion = descripcion
+    publi.fecha_inicio = moment(inicio).format("YYYY-MM-DDTHH:mm:SS")
+    publi.fecha_expiracion = moment(fin).format("YYYY-MM-DDTHH:mm:SS")
+    publi.url = url
+   
+    console.log('entre')
+    if(this.publicidad_seleccionada){
+      publi.id = this.publicidad_seleccionada.id
+      console.log(this.formEdit)
+      this.pythonAnywhereService.actualizar_publicidad(publi).subscribe(resp=>{console.log(resp);})
+  
+    
   }
-
-;
 
 }
 

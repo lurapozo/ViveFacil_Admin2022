@@ -197,29 +197,19 @@
 
           <div class="row p-2 align-items-center">
             <div class="col-5">
-              <label for="selectorServicioCrear" class="form-label"><h3
-                  class="m-0 p-0 fw-bold">Categoria:</h3></label>
+              <label for="switchEstado" class="form-check-label"><h3 class="m-0 p-0 fw-bold">Habilitar/Deshabilitar:</h3></label>
             </div>
-            <div class="col-7">
-              <select
-
-                class="form-select"
-                [ngClass]="isInvalidForm('estado', 'actualizar') ?
-                'is-invalid' : ''"
-                formControlName="estado"
-                [value]="estadoCond"
-                class="form-control"
-                [ngClass]="isInvalidForm('estado', 'actualizar') ? 'is-invalid' :
-                formEdit.get('estado')?.touched ||
-                formEdit.get('estado')?.dirty &&
-                !formEdit.get('estado')?.invalid ? 'is-valid' : ''"
-                aria-describedby="selectorServicioCrearFeedback">
-                <option *ngFor="let  c of estado" [id]="c" value="{{c}}"> {{c}}
-                </option>
-              </select>
-              <div id="selectorServicioCrearFeedback"
-                class="invalid-feedback"> {{getErrorMessage(formEdit,
-                'categoria')}} </div>
+            <div class="col-7 form-check form-switch d-flex justify-content-end fs-6">
+              <input
+              (change)="cambiarEstado($event)"
+              [checked]="planes_seleccionada?.estado? true : false"
+                class="form-check-input"
+                id="switchEstado"
+                type="checkbox"
+                role="switch"
+                checked
+                aria-describedby="switchEstadoFeedback"
+              >
             </div>
           </div>
 
@@ -319,7 +309,7 @@ aria-labelledby="modalCrearProfesionLabel" tabindex="-1">
               : planCrear.get('descripcion')?.touched ||
               planCrear.get('descripcion')?.dirty &&
               !planCrear.get('descripcion')?.invalid ? 'is-valid' : ''"
-              id="inputApellido"
+         
               placeholder="Perez Villamar">
             <div class="invalid-feedback"> {{getErrorMessage(planCrear,
               'descripcion')}} </div>
@@ -333,7 +323,7 @@ aria-labelledby="modalCrearProfesionLabel" tabindex="-1">
           </div>
           <div class="col-7">
             <input
-              type="text"
+              type="number"
               formControlName="precio"
               class="form-control"
               [ngClass]="isInvalidForm('precio', 'crear') ? 'is-invalid'
@@ -354,7 +344,7 @@ aria-labelledby="modalCrearProfesionLabel" tabindex="-1">
           </div>
           <div class="col-7">
             <input
-              type="text"
+              type="number"
               formControlName="duracion"
               class="form-control"
               [ngClass]="isInvalidForm('duracion', 'crear') ? 'is-invalid'
@@ -383,7 +373,7 @@ aria-labelledby="modalCrearProfesionLabel" tabindex="-1">
 
               aria-describedby="selectorServicioCrearFeedback">
               <option selected disabled value="">Elija una rol...</option>
-              <option *ngFor="let c of estado" [id]="c" [value]="c"> {{c}}
+              <option *ngFor="let c of estados" [id]="c" [value]="c"> {{c}}
               </option>
             </select>
             <div id="selectorServicioCrearFeedback"

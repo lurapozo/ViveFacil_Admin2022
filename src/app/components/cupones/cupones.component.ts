@@ -12,14 +12,14 @@ import * as moment from 'moment';
 export class CuponesComponent {
   arr_cupon!: Cupon[]  | undefined;
   arr_filtered_cupon!: Cupon[]  | undefined;
-  imagenCrear: any
   condicionNext = false
   currentPage = 1
   pageNumber: number[] = [];
   cupon_seleccionada:  Cupon  | undefined;
-  fileImagenActualizar: File = {} as File
-  imagenActualizar: any
-  fileImagenCrear: any
+  fileImagenActualizar: File = {} as File;
+  imagenActualizar: string | undefined;
+  fileImagenCrear: File = {} as File;
+  imagenCrear: string | undefined;
   existImageCrear = false; existImageActualizar = false;
   activo = ''
   activoCond = false
@@ -30,6 +30,7 @@ export class CuponesComponent {
     this.pythonAnywhereService.obtener_cupones().subscribe(resp => {
     this.arr_cupon = Object(resp)
     this.arr_filtered_cupon = this.arr_cupon
+    console.log(this.arr_filtered_cupon)
   
     });
     this.pythonAnywhereService.obtener_categorias().subscribe((resp:any[])=>{
@@ -39,7 +40,7 @@ export class CuponesComponent {
       
     })
   
-   const imagenCrearControl = this.cuponCrear.get('imagen') as FormControl;
+    const imagenCrearControl = this.cuponCrear.get('imagen') as FormControl;
    imagenCrearControl.addValidators(this.createImageValidator(this.cuponCrear.get('imagen') as AbstractControl, 'crear'));
      const imagenActualizarControl = this.formEdit.get('imagen') as FormControl;
     imagenActualizarControl.addValidators(this.createImageValidator(this.formEdit.get('imagen') as AbstractControl, 'actualizar'));
@@ -121,7 +122,6 @@ export class CuponesComponent {
       const categoria = this.cupon_seleccionada?.tipo_categoria;
       const inicio = this.cupon_seleccionada?.fecha_iniciacion;
       const fin = this.cupon_seleccionada?.fecha_expiracion;
-      const foto = this.cupon_seleccionada?.foto;
       const codigo = this.cupon_seleccionada?.codigo;
     
       this.existImageActualizar = false;
@@ -134,7 +134,6 @@ export class CuponesComponent {
       categoria? this.formEdit.get('categoria')?.setValue(categoria) : this.formEdit.get('categoria')?.reset();
       inicio? this.formEdit.get('inicio')?.setValue(inicio) : this.formEdit.get('inicio')?.reset();
       fin? this.formEdit.get('fin')?.setValue(inicio) : this.formEdit.get('fin')?.reset();
-      foto? this.formEdit.get('imagen')?.setValue(inicio) : this.formEdit.get('imagen')?.reset();
       codigo? this.formEdit.get('codigo')?.setValue(codigo) : this.formEdit.get('codigo')?.reset();
 
    
@@ -243,6 +242,64 @@ export class CuponesComponent {
     }
   }
 
+  createImageValidator(controlImage: AbstractControl, tipo: string){
+    return () => {
+      const file = controlImage.value as File;
+
+      if(file && file.name){
+        console.log('Ingresa al validator if');
+        console.log(file);
+        const tokensImgName: any[] = file.name.split('.');
+        console.log(tokensImgName);
+        if(tokensImgName.length === 2 ){
+          const imgExtension = tokensImgName[1];
+          if(imgExtension !== 'jpg' && imgExtension !== 'jpeg' && imgExtension !== 'png' && imgExtension !== 'jfif'){
+            console.log('Entra en error de imagen');
+            if(tipo === 'crear'){
+              this.cuponCrear.get('imagen')?.setValue(null);
+              this.existImageCrear = false;
+            }
+            else if(tipo === 'actualizar'){
+              this.formEdit.get('imagen')?.setValue(null);
+              this.existImageActualizar = false;
+            }
+            return { image_error: 'Solo imágenes con formato jpg, jpeg, png o jfif.' };
+          }
+          console.log('Formato de imagen correcto');
+          if(tipo === 'crear'){
+            this.existImageCrear = true;
+          }
+          else if(tipo === 'actualizar'){
+            this.existImageActualizar = true;
+          }
+        }
+        return null;
+      } else {
+        console.log('No hay imagen seleccionada');
+        return null;
+      }
+    };
+  }
+  loadImageFromDevice(event:any, tipo: string) {
+    const file: File = event.target.files[0];
+    if(file){
+      this.extraerBase64(file)
+      .then((imagen: any) => {
+        if(tipo === 'crear'){
+          this.cuponCrear.get('imagen')?.setValue(file);
+          this.fileImagenCrear = file;
+          this.imagenCrear = imagen.base;
+        }
+        else if(tipo === 'actualizar'){
+          this.formEdit.get('imagen')?.setValue(file);
+          this.fileImagenActualizar = file;
+          this.imagenActualizar = imagen.base;
+        }
+      })
+      .catch(err => console.log(err));
+    }
+  };
+
   extraerBase64 = async ($event: any) => new Promise((resolve) => {
     try {
       const unsafeImg = window.URL.createObjectURL($event);
@@ -269,64 +326,6 @@ export class CuponesComponent {
     }
   });
 
-  createImageValidator(controlImage: AbstractControl, tipo: string) {
-    return () => {
-      const file = controlImage.value as File;
-
-      if (file && file.name) {
-        console.log('Ingresa al validator if');
-        console.log(file);
-        const tokensImgName: any[] = file.name.split('.');
-        console.log(tokensImgName);
-        if (tokensImgName.length === 2) {
-          const imgExtension = tokensImgName[1];
-          if (imgExtension !== 'jpg' && imgExtension !== 'jpeg' && imgExtension !== 'png' && imgExtension !== 'jfif') {
-            console.log('Entra en error de imagen');
-            if (tipo === 'crear') {
-              this.cuponCrear.get('imagen')?.setValue(null);
-              this.existImageCrear = false;
-            }
-            else if(tipo === 'actualizar'){
-              this.formEdit.get('imagen')?.setValue(null);
-              this.existImageActualizar = false;
-            }
-            return { image_error: 'Solo imágenes con formato jpg, jpeg, png o jfif.' };
-          }
-          console.log('Formato de imagen correcto');
-          if (tipo === 'crear') {
-            this.existImageCrear = true;
-          }
-          else if (tipo === 'actualizar') {
-            this.existImageActualizar = true;
-          }
-        }
-        return null;
-      } else {
-        console.log('No hay imagen seleccionada');
-        return null;
-      }
-    };
-  }
-  loadImageFromDevice(event: any, tipo: string) {
-    const file: File = event.target.files[0];
-    if (file) {
-      this.extraerBase64(file)
-        .then((imagen: any) => {
-          if (tipo === 'crear') {
-            this.cuponCrear.get('imagen')?.setValue(file);
-            this.fileImagenCrear = file;
-            this.imagenCrear = imagen.base;
-          }
-          else if(tipo === 'actualizar'){
-            this.formEdit.get('imagen')?.setValue(file);
-            this.fileImagenActualizar = file;
-            this.imagenActualizar = imagen.base;
-          }
-        })
-        .catch(err => console.log(err));
-    }
-  };
-
   onCrear(){
     let cupon : CuponCrear={
       codigo: '',
@@ -336,7 +335,6 @@ export class CuponesComponent {
       fecha_iniciacion: '',
       fecha_expiracion: '',
       puntos: 0,
-      foto: '',
       tipo_categoria: '',
       cantidad: 0
     }
@@ -349,7 +347,7 @@ export class CuponesComponent {
     const puntos = this.cuponCrear.get('punto')?.value;
     const categoria = this.cuponCrear.get('categoria')?.value;
     const descuento = this.cuponCrear.get('descuento')?.value;
-    const foto = this.cuponCrear.get('imagen')?.value;
+    const foto = this.cuponCrear.get('imagen')?.value as File;
 
     console.log(  titulo , descripcion , inicio , fin , cantidad , puntos , categoria , descuento)
     if( codigo && titulo && descripcion && inicio && fin && cantidad && puntos && categoria && descuento ){
@@ -363,7 +361,8 @@ export class CuponesComponent {
       cupon.puntos = puntos
       cupon.tipo_categoria = categoria
       if(foto && this.existImageCrear){
-        cupon.foto = foto; // Si hay foto se le agrega al body.
+        console.log('entre')
+        cupon.foto = foto; 
       }
       this.pythonAnywhereService.crear_cupon(cupon).subscribe(resp => {
         console.log(resp)
@@ -371,13 +370,6 @@ export class CuponesComponent {
 
     }
     
- 
-
-  
-    
-   
-
-
   }
   onActualizar(){
     let cupon :BodyCuponActualizar ={
@@ -389,7 +381,6 @@ export class CuponesComponent {
       porcentaje: 0,
       cantidad: 0,
       puntos: 0,
-      foto: null,
       tipo_categoria: ''
     }
     const codigo = this.formEdit.get('codigo')?.value;
@@ -401,7 +392,7 @@ export class CuponesComponent {
     const puntos = this.formEdit.get('punto')?.value;
     const categoria = this.formEdit.get('categoria')?.value;
     const descuento = this.formEdit.get('descuento')?.value;
-    const foto = this.formEdit.get('imagen')?.value;
+    const foto = this.formEdit.get('imagen')?.value as File;
     if(codigo && titulo && descripcion && inicio && fin && cantidad && puntos && categoria && descuento ){
       cupon.codigo=codigo
       cupon.titulo=titulo

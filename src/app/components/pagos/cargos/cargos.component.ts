@@ -21,7 +21,9 @@ export class CargosComponent {
   cargo_seleccionada:  Cargo  | undefined;
   mensajeAlerta: string = '';
   isCrear = false; isActualizar = false; isEliminar = false;
-
+  isErrorToast = false;
+  mensajeToast = "";
+  tituloToast = "";
   constructor(private pythonAnywhereService: PythonAnywhereService, private sanitizer: DomSanitizer) {
     this.pythonAnywhereService.obtener_cargos().subscribe((resp:any )=> {
     this.arr_cargo = resp
@@ -163,10 +165,8 @@ onCrear(){
     cupon.titulo = titulo
     cupon.porcentaje = porcentaje
   
-    
-  
     this.pythonAnywhereService.crear_cargo(cupon).subscribe(resp => {
-      console.log(resp)
+      this.mostrarToastInfo('Estado de la solicitud profesion', 'El cargo ha sido creado con exito', false);
     })
 
   }
@@ -200,7 +200,7 @@ onActualizar(){
     
   if(this.cargo_seleccionada){
     this.pythonAnywhereService.actualizar_cargo(cupon, this.cargo_seleccionada.id).subscribe(resp => {
-      console.log(resp)
+      this.mostrarToastInfo('Estado de la solicitud profesion', 'El cargo ha sido actualizada con exito', false);
     })
   }
   
@@ -226,4 +226,19 @@ search(evento: any) {
     
   }
 
+
+  mostrarToastInfo(titulo: string, mensaje: string, isErrorToast: boolean) {
+    this.isErrorToast = isErrorToast;
+    this.tituloToast = titulo;
+    this.mensajeToast = mensaje;
+    const toast = document.getElementById('liveToast');
+    if(toast){
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 7000);
+    } else {
+      console.log('No hay toast renderizado');
+    }
+  }
 }

@@ -403,11 +403,9 @@ onActualizar(){
 
   }
 
-
   if(foto && this.existImageCrear){
-    cupon.foto = foto; // Si hay foto se le agrega al body.
+    cupon.foto = foto; 
   }
-  console.log(cupon)
   if(this.promocion_seleccionada){
     const id = this.promocion_seleccionada.id
     console.log(this.formEdit)

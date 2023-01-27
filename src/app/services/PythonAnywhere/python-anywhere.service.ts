@@ -5,7 +5,7 @@ import {
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Administrador, AdministradorPaginacion, BodyActualizarAdministrador, BodyCrearAdministrador, BodyResponseCrearAdministrador, } from 'src/app/interfaces/administrador';
-import { map, Observable } from 'rxjs';
+import { map, Observable, pipe, Subject } from 'rxjs';
 import { BodyActualizarInsignia, BodyCrearInsignia, BodyResponseCrearInsignia, Insignia } from 'src/app/interfaces/insignia';
 import { BodyActualizarCargo, BodyCrearCargo, BodyResponseCrearCargo, Cargo } from 'src/app/interfaces/cargo';
 import { BodyPromocionActualizar, BodyResponsePromocionActualizar, Promocion } from 'src/app/interfaces/promocion';
@@ -34,9 +34,12 @@ import { Sugerencia } from 'src/app/interfaces/sugerencia';
 export class PythonAnywhereService {
   API_URL = `https://tomesoft1.pythonanywhere.com`;
   administradores = 'https://tomesoft1.pythonanywhere.com/administradores';
-
+  private _refresh$ = new Subject<void>();
   constructor(private http: HttpClient) { }
 
+get refresh$(){
+    return this._refresh$
+}
 
 
   //------------------------------------------------ SECCIÓN SOLICITANTES -------------------------------------------------
@@ -208,7 +211,8 @@ export class PythonAnywhereService {
    * @returns Devuelve un Observable del Objeto Cargo solicitado.
    */
   obtener_cargo(id: string): Observable<Cargo> {
-    return this.http.get(`${this.API_URL}/cargos/${id}`) as Observable<Cargo>;
+    return this.http.get(`${this.API_URL}/cargos/${id}`) as Observable<Cargo>
+    
   }
 
   /**
@@ -1004,6 +1008,7 @@ export class PythonAnywhereService {
  */
   obtener_pagos_tarjetaP(page=1) :  Observable<any>{
     return this.http.get(`${this.API_URL}/pago_tarjetasP/?page=${page}`) as  Observable<any>;
+    
   }
 
   /**
@@ -1643,5 +1648,9 @@ export class PythonAnywhereService {
     return this.http.delete(`${this.API_URL}/profesion_prov/${id}`);
   }
 
+}
+
+function tap(arg0: () => void): import("rxjs").UnaryFunction<unknown, unknown> {
+  throw new Error('Function not implemented.');
 }
 

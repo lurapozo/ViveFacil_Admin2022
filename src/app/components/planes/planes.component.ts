@@ -11,10 +11,10 @@ import { PythonAnywhereService } from 'src/app/services/PythonAnywhere/python-an
 })
 export class PlanesComponent {
 
-  arr_planes: any[] | undefined;
-  arr_filtered_planes: any[] | undefined;
+  arr_planes: Plan[] | undefined;
+  arr_filtered_planes: Plan[] | undefined;
   arr_servicios: Plan[] | undefined;
-  planes_seleccionada: any | any;
+  planes_seleccionada: Plan | any;
   fileImagenActualizar: File = {} as File;
   imagenActualizar: string | undefined;
   fileImagenCrear: File = {} as File;
@@ -23,8 +23,8 @@ export class PlanesComponent {
   isCrear = false; isActualizar = false; isEliminar = false;
   existImageCrear = false; existImageActualizar = false;
   estadoCond=''
-estado = ['Habilitado','Deshabilitado']
-
+  estados = ['Habilitado','Deshabilitado'] 
+estadoActual=false
   planCrear = new FormGroup({
     imagen: new FormControl(this.fileImagenActualizar),
     nombre: new FormControl('', [Validators.required]),
@@ -51,11 +51,11 @@ estado = ['Habilitado','Deshabilitado']
       this.arr_filtered_planes = this.arr_planes;
     });
   
-    // Validators
-    // const imagenCrearControl = this.crearProfesionesForm.get('imagen') as FormControl;
-    // imagenCrearControl.addValidators(this.createImageValidator(this.crearProfesionesForm.get('imagen') as AbstractControl, 'crear'));
-    // const imagenActualizarControl = this.actualizarProfesionesForm.get('imagen') as FormControl;
-    // imagenActualizarControl.addValidators(this.createImageValidator(this.actualizarProfesionesForm.get('imagen') as AbstractControl, 'actualizar'));
+    Validators
+    const imagenCrearControl = this.planCrear.get('imagen') as FormControl;
+    imagenCrearControl.addValidators(this.createImageValidator(this.planCrear.get('imagen') as AbstractControl, 'crear'));
+    const imagenActualizarControl = this.formEdit.get('imagen') as FormControl;
+    imagenActualizarControl.addValidators(this.createImageValidator(this.formEdit.get('imagen') as AbstractControl, 'actualizar'));
   }
   search(evento: any) {
     const texto = evento.target.value;
@@ -84,17 +84,12 @@ estado = ['Habilitado','Deshabilitado']
       const nombre = this.planes_seleccionada?.nombre;
       const descripcion = this.planes_seleccionada?.descripcion;
       const estado = this.planes_seleccionada?.estado;
-      if(estado){
-          estadoString='Habilitado'
-      }{
-        estadoString='Deshabilitado'
-      }
       const precio = this.planes_seleccionada?.precio;
       this.existImageActualizar = false;
       this.formEdit.get('imagen')?.reset();
       nombre? this.formEdit.get('nombre')?.setValue(nombre) : this.formEdit.get('nombre')?.reset();
       descripcion? this.formEdit.get('descripcion')?.setValue(descripcion) : this.formEdit.get('descripcion')?.reset();
-      estado? this.formEdit.get('estado')?.setValue(estadoString) : this.formEdit.get('estado')?.reset();
+      estado? this.formEdit.get('estado')?.setValue(estado) : this.formEdit.get('estado')?.reset();
       precio? this.formEdit.get('precio')?.setValue(precio) : this.formEdit.get('precio')?.reset();
       duracion? this.formEdit.get('duracion')?.setValue(duracion) : this.formEdit.get('duracion')?.reset();
     }
@@ -164,7 +159,44 @@ estado = ['Habilitado','Deshabilitado']
       return null;
     }
   });
+  createImageValidator(controlImage: AbstractControl, tipo: string){
+    return () => {
+      const file = controlImage.value as File;
 
+      if(file && file.name){
+        console.log('Ingresa al validator if');
+        console.log(file);
+        const tokensImgName: any[] = file.name.split('.');
+        console.log(tokensImgName);
+        if(tokensImgName.length === 2 ){
+          const imgExtension = tokensImgName[1];
+          if(imgExtension !== 'jpg' && imgExtension !== 'jpeg' && imgExtension !== 'png' && imgExtension !== 'jfif'){
+            console.log('Entra en error de imagen');
+            if(tipo === 'crear'){
+              this.planCrear.get('imagen')?.setValue(null);
+              this.existImageCrear = false;
+            }
+            else if(tipo === 'actualizar'){
+              this.formEdit.get('imagen')?.setValue(null);
+              this.existImageActualizar = false;
+            }
+            return { image_error: 'Solo imágenes con formato jpg, jpeg, png o jfif.' };
+          }
+          console.log('Formato de imagen correcto');
+          if(tipo === 'crear'){
+            this.existImageCrear = true;
+          }
+          else if(tipo === 'actualizar'){
+            this.existImageActualizar = true;
+          }
+        }
+        return null;
+      } else {
+        console.log('No hay imagen seleccionada');
+        return null;
+      }
+    };
+  }
   isInvalidForm(subForm: string, tipo: string){
     if(tipo === 'crear') {
       return this.planCrear.get(subForm)?.invalid && this.planCrear.get(subForm)?.touched || this.planCrear.get(subForm)?.dirty  && this.getErrorMessage(this.planCrear, subForm).length!==0;
@@ -234,23 +266,22 @@ estado = ['Habilitado','Deshabilitado']
       duracion: 0,
   
     }
-    let estadoCond =false
+
     const nombre = this.planCrear.get('nombre')?.value;
-    const descripcion = this.planCrear.get('decripcion')?.value;
+    const descripcion = this.planCrear.get('descripcion')?.value;
     const precio = this.planCrear.get('precio')?.value;
     const duracion = this.planCrear.get('duracion')?.value;
-    const estado = this.planCrear.get('estado')?.value;
     const foto = this.planCrear.get('imagen')?.value;
-    if(estado==='Habilitado'){
-       estadoCond=true
-    }
-    if(nombre && descripcion && precio && duracion && estado){
+
+console.log(nombre,descripcion,precio,duracion)
+    if(nombre && descripcion && precio && duracion){
+      console.log('entre')
       crearPlan.nombre=nombre
       crearPlan.descripcion=descripcion
-    
+      crearPlan.duracion=parseInt(duracion)
       crearPlan.precio=parseInt(precio)
       if(foto && this.existImageCrear){
-        crearPlan.imagen = foto; // Si hay foto se le agrega al body.
+        crearPlan.imagen = foto; 
       }
 
       this.pythonAnywhereService.crear_plan(crearPlan).subscribe(resp=>{
@@ -268,41 +299,40 @@ estado = ['Habilitado','Deshabilitado']
 
   }
   onActualizar(){
-    console.log('dg')
+
     const actualizar : BodyActualizarPlan ={
       id:0
     }
-    let estadoCond=this.planes_seleccionada?.estado
+    let estadoActual=this.planes_seleccionada?.estado
     const id = this.planes_seleccionada?.id;
     const nombre = this.formEdit.get('nombre')?.value;
     const descripcion = this.formEdit.get('descripcion')?.value;
     const precio = this.formEdit.get('precio')?.value;
     const duracion = this.formEdit.get('duracion')?.value;
-    const estado = this.formEdit.get('estado')?.value;
     const foto = this.formEdit.get('imagen')?.value;
-    console.log(id,nombre,descripcion,precio,duracion,estado)
-    console.log(this.formEdit)
-    if(estado==='Habilitado'){
-      estadoCond=true
-   }
+
     if(this.existImageActualizar && foto){
       actualizar.imagen = foto; // Si hay foto se le agrega al body.
     }
-    if(nombre && descripcion && precio && duracion && estado){
+    if(nombre && descripcion && precio && duracion){
+      actualizar.id=id
       actualizar.nombre=nombre
       actualizar.descripcion=descripcion
-      actualizar.estado=estadoCond
+      actualizar.estado=estadoActual
       actualizar.precio=parseInt(precio)
-      if(this.planes_seleccionada){
-        actualizar.id=this.planes_seleccionada.id
-      }
-      this.pythonAnywhereService.actualizar_plan(actualizar).subscribe(resp=>{
-        console.log(resp)
-       })
+          this.pythonAnywhereService.actualizar_plan(actualizar).subscribe(resp=>{
+          console.log(resp)
+         })
+
      
     
     
     }
+
+  }
+
+  cambiarEstado(event:any){
+    this.estadoActual=event.srcElement.checked
 
   }
 }
