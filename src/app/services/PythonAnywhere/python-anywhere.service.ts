@@ -970,8 +970,19 @@ get refresh$(){
     "tipo_categoria": "Jardineria"
 }
   */
-  crear_cupon(data: any) {
-    return this.http.post(this.API_URL + '/cupones/', data);
+  crear_cupon(bodyCrear: CuponCrear) {
+    const dataCrear = new FormData();
+    dataCrear.append("codigo", bodyCrear.codigo);
+    bodyCrear.foto ? dataCrear.append("foto", bodyCrear.foto) : null;
+    dataCrear.append("titulo", bodyCrear.titulo);
+    dataCrear.append("puntos", bodyCrear.puntos.toString());
+    dataCrear.append("tipo_categoria", bodyCrear.tipo_categoria);
+    dataCrear.append("cantidad", bodyCrear.cantidad.toString());
+    dataCrear.append("porcentaje", bodyCrear.porcentaje.toString());
+    dataCrear.append("fecha_iniciacion", bodyCrear.fecha_iniciacion);
+    dataCrear.append("fecha_expiracion", bodyCrear.fecha_expiracion);
+    dataCrear.append("descripcion", bodyCrear.descripcion);
+    return this.http.post(this.API_URL + '/cupones/', bodyCrear);
   }
 
   //NO SE LO USABA EN LA ANTERIOR APP

@@ -16,6 +16,9 @@ export class CuponesComponent {
   currentPage = 1
   pageNumber: number[] = [];
   cupon_seleccionada:  Cupon  | undefined;
+  isErrorToast = false;
+  mensajeToast = "";
+  tituloToast = "";
   fileImagenActualizar: File = {} as File;
   imagenActualizar: string | undefined;
   fileImagenCrear: File = {} as File;
@@ -107,7 +110,7 @@ export class CuponesComponent {
       this.cuponCrear.get('fin')?.setValue('');
       this.cuponCrear.get('punto')?.setValue('');
       this.cuponCrear.get('categoria')?.setValue('');
-      this.cuponCrear.get('imagen')?.setValue('');
+      this.cuponCrear.get('imagen')?.reset()
       this.cuponCrear.get('codigo')?.setValue('');
    
    
@@ -347,9 +350,10 @@ export class CuponesComponent {
     const puntos = this.cuponCrear.get('punto')?.value;
     const categoria = this.cuponCrear.get('categoria')?.value;
     const descuento = this.cuponCrear.get('descuento')?.value;
-    const foto = this.cuponCrear.get('imagen')?.value as File;
+    const foto = this.cuponCrear.get('imagen')?.value as File
 
-    console.log(  titulo , descripcion , inicio , fin , cantidad , puntos , categoria , descuento)
+
+
     if( codigo && titulo && descripcion && inicio && fin && cantidad && puntos && categoria && descuento ){
       cupon.codigo=codigo
       cupon.titulo=titulo
@@ -360,16 +364,16 @@ export class CuponesComponent {
       cupon.cantidad =cantidad
       cupon.puntos = puntos
       cupon.tipo_categoria = categoria
-      if(foto && this.existImageCrear){
-        console.log('entre')
-        cupon.foto = foto; 
-      }
-      this.pythonAnywhereService.crear_cupon(cupon).subscribe(resp => {
-        console.log(resp)
-      })
+   
 
     }
-    
+    if(foto && this.existImageCrear){
+      console.log('entre')
+      cupon.foto = foto; 
+    }
+    this.pythonAnywhereService.crear_cupon(cupon).subscribe(resp => {
+      console.log(resp)
+    })
   }
   onActualizar(){
     let cupon :BodyCuponActualizar ={
@@ -406,8 +410,7 @@ export class CuponesComponent {
 
     }
 
-
-    if(foto && this.existImageCrear){
+    if(foto && this.existImageActualizar){
       cupon.foto = foto; // Si hay foto se le agrega al body.
     }
     console.log(cupon)
@@ -417,9 +420,6 @@ export class CuponesComponent {
       this.pythonAnywhereService.actualizar_cupon(cupon,id).subscribe(resp=>{console.log(resp);})
 
     }
-
-  ;
-
   }
 
   getCurrentDate(): string{
