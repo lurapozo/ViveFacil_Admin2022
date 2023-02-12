@@ -1213,6 +1213,11 @@ get refresh$(){
   actualizar_plan(bodyActualizar: BodyActualizarPlan) : Observable<Plan> {
 
 
+
+
+
+    
+
     const dataUpdate = new FormData();
     bodyActualizar.id ? dataUpdate.append('id', bodyActualizar.id):null
     bodyActualizar.nombre ? dataUpdate.append('nombre', bodyActualizar.nombre) : null;
