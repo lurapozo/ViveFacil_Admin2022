@@ -12,16 +12,16 @@ import * as moment from 'moment';
 export class PublicidadComponent {
 
 
-  arr_publicidad!: Publicidad[]  | undefined;
-  arr_filtered_publicidad!: Publicidad[]  | undefined;
-  imagenCrear: any
+  arr_publicidad?: Publicidad[] 
+  arr_filtered_publicidad?: Publicidad[]
+  imagenCrear: string | undefined;
   condicionNext = false
   currentPage = 1
   pageNumber: number[] = [];
-  publicidad_seleccionada:  Publicidad  | undefined;
-  fileImagenActualizar: File = {} as File
-  imagenActualizar: any
-  fileImagenCrear: any
+  publicidad_seleccionada?:  Publicidad;
+  fileImagenActualizar: File = {} as File;
+  imagenActualizar: string | undefined;
+  fileImagenCrear: File = {} as File;
   existImageCrear = false; existImageActualizar = false;
   activo = ''
   activoCond = false
@@ -109,7 +109,7 @@ limpiarForm(tipo: string) {
     this.publicidadCrear
     .get('punto')?.setValue('');
     this.publicidadCrear
-    .get('imagen')?.setValue('');
+    .get('imagen')?.reset();
     this.publicidadCrear
     .get('url')?.setValue('');
 
@@ -117,17 +117,16 @@ limpiarForm(tipo: string) {
 
     const titulo = this.publicidad_seleccionada?.titulo;
     const descripcion = this.publicidad_seleccionada?.descripcion;
-    const inicio = this.publicidad_seleccionada?.fecha_creacion;
+    const inicio = this.publicidad_seleccionada?.fecha_inicio;
     const fin = this.publicidad_seleccionada?.fecha_expiracion;
-    const foto = this.publicidad_seleccionada?.imagen;
     const url = this.publicidad_seleccionada?.url;
   
     this.existImageActualizar = false;
     this.formEdit.get('imagen')?.reset();
+    inicio?this.formEdit.get('inicio')?.setValue(inicio) : this.formEdit.get('inicio')?.reset();
     titulo? this.formEdit.get('titulo')?.setValue(titulo) : this.formEdit.get('nombre')?.reset();
     descripcion? this.formEdit.get('descripcion')?.setValue(descripcion) : this.formEdit.get('descripcion')?.reset();
-    fin? this.formEdit.get('fin')?.setValue(inicio) : this.formEdit.get('fin')?.reset();
-    foto? this.formEdit.get('imagen')?.setValue(inicio) : this.formEdit.get('imagen')?.reset();
+    fin? this.formEdit.get('fin')?.setValue(fin) : this.formEdit.get('fin')?.reset();
     url? this.formEdit.get('url')?.setValue(url) : this.formEdit.get('url')?.reset();
  
 }}
@@ -324,10 +323,10 @@ onCrear(){
   const url = this.publicidadCrear
   .get('url')?.value;
   const foto = this.publicidadCrear
-  .get('imagen')?.value;
+  .get('imagen')?.value as File;
 
 
-    console.log(inicio,fin)
+   
     cupon.descripcion = descripcion
     cupon.fecha_inicio = moment(inicio).format("YYYY-MM-DDTHH:mm:SS")
     cupon.fecha_expiracion = moment(fin).format("YYYY-MM-DDTHH:mm:SS")
@@ -348,35 +347,29 @@ onCrear(){
 
 onActualizar(){
   let publi :BodyActualizarPublicidad ={
-    titulo: '',
-    descripcion: '',
-    fecha_expiracion: '',
-    url: '',
-    fecha_inicio: '',
-    id: 0
+    id: ''
   }
- 
+ publi.id=this.publicidad_seleccionada?.id
   const titulo = this.formEdit.get('titulo')?.value;
   const descripcion = this.formEdit.get('descripcion')?.value;
   const inicio = this.formEdit.get('inicio')?.value;
   const fin = this.formEdit.get('fin')?.value;
   const url = this.formEdit.get('url')?.value;
-  const foto = this.formEdit.get('imagen')?.value;
-  console.log(inicio,fin)
+  const foto = this.formEdit.get('imagen')?.value as File;
+  console.log("soy nulo",inicio,fin)
   if(foto && this.existImageCrear){
     publi.imagen = foto;
   }
-  console.log(titulo && descripcion && inicio && fin && url)
+  console.log(inicio)
 
     publi.titulo = titulo
     publi.descripcion = descripcion
     publi.fecha_inicio = moment(inicio).format("YYYY-MM-DDTHH:mm:SS")
     publi.fecha_expiracion = moment(fin).format("YYYY-MM-DDTHH:mm:SS")
     publi.url = url
-   
-    console.log('entre')
+
     if(this.publicidad_seleccionada){
-      publi.id = this.publicidad_seleccionada.id
+
       console.log(this.formEdit)
       this.pythonAnywhereService.actualizar_publicidad(publi).subscribe(resp=>{console.log(resp);})
   
@@ -449,4 +442,5 @@ search(evento: any) {
 
   }
 
+  
 }

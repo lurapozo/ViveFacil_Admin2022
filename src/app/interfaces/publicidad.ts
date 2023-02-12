@@ -21,13 +21,14 @@ export interface BodyCrearPublicidad {
     objeto : Publicidad;
   }
 
-  export interface BodyActualizarPublicidad {
-    id:number,
-    titulo: string,
-    descripcion: string,
-    fecha_inicio: string,
-    fecha_expiracion: string,
+  export interface BodyActualizarPublicidad 
+  {
+    id:any,
+    titulo?: string,
+    descripcion?: string,
+    fecha_inicio?: string,
+    fecha_expiracion?: string,
     imagen?: File,
-    url: string
+    url?: string
     
   }

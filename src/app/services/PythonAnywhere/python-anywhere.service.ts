@@ -20,7 +20,7 @@ import { BodyActualizarCategoria, BodyCrearCategoria, BodyResponseCrearCategoria
 import { BodyActualizarServicio, Servicio } from 'src/app/interfaces/servicio';
 import { BodyCrearSubCategoria, BodyResponseCrearSubCategoria } from 'src/app/interfaces/sub-categoria';
 import { BodyActualizarPlan, BodyActualizarPlanProveedor, BodyCrearPlan, BodyCrearPlanProveedor, BodyResponseCrearPlan, Plan, PlanProveedor } from 'src/app/interfaces/plan';
-import { BodyCrearPublicidad, BodyResponseCrearPublicidad, Publicidad } from 'src/app/interfaces/publicidad';
+import { BodyActualizarPublicidad, BodyCrearPublicidad, BodyResponseCrearPublicidad, Publicidad } from 'src/app/interfaces/publicidad';
 import { Ciudad } from 'src/app/interfaces/ciudad';
 import { AdminUserPass } from 'src/app/interfaces/admin-user-pass';
 import { BodyCrearNotificacionAnuncio, NotificacionAnuncio } from 'src/app/interfaces/notificacion';
@@ -1195,6 +1195,7 @@ get refresh$(){
   crear_plan(bodyCrear: BodyCrearPlan): Observable<BodyResponseCrearPlan> {
     const dataCrear = new FormData();
     dataCrear.append("nombre", bodyCrear.nombre);
+    dataCrear.append("estado", bodyCrear.estado.toString());
     dataCrear.append("descripcion", bodyCrear.descripcion);
     bodyCrear.imagen ? dataCrear.append("imagen", bodyCrear.imagen) : null;
     dataCrear.append("precio", bodyCrear.precio.toString());
@@ -1209,15 +1210,19 @@ get refresh$(){
    * @param bodyCrear Recibe un Objeto BodyActualizarPlan la cual se encarga de actualizar un plan con los campos necesarios.
    * @returns Devuelve un Observable con un objeto Plan
    */
-  actualizar_plan(bodyCrear: BodyActualizarPlan) : Observable<Plan> {
-    const dataCrear = new FormData();
-    dataCrear.append("id", bodyCrear.id.toString());
-    bodyCrear.descripcion ? dataCrear.append("descripcion", bodyCrear.descripcion) : null
-    bodyCrear.imagen ? dataCrear.append("imagen", bodyCrear.imagen) : null;
-    bodyCrear.precio ? dataCrear.append("precio", bodyCrear.precio.toString()) : null;
-    bodyCrear.duracion ? dataCrear.append("duracion", bodyCrear.duracion.toString()) : null;
-    bodyCrear.estado ? dataCrear.append("estado", bodyCrear.estado.toString()) : null;
-    return this.http.put(this.API_URL + '/planes/', dataCrear) as Observable<Plan>;
+  actualizar_plan(bodyActualizar: BodyActualizarPlan) : Observable<Plan> {
+
+
+    const dataUpdate = new FormData();
+    bodyActualizar.id ? dataUpdate.append('id', bodyActualizar.id):null
+    bodyActualizar.nombre ? dataUpdate.append('nombre', bodyActualizar.nombre) : null;
+    bodyActualizar.imagen ? dataUpdate.append('imagen', bodyActualizar.imagen) : null;
+    bodyActualizar.descripcion ? dataUpdate.append('descripcion', bodyActualizar.descripcion) : null;
+    bodyActualizar.duracion ? dataUpdate.append('duracion', bodyActualizar.duracion) : null;
+    bodyActualizar.precio ? dataUpdate.append('precio', bodyActualizar.precio) : null;
+
+    
+    return this.http.put(this.API_URL + '/planes/', dataUpdate) as Observable<Plan>;
   }
 
 
@@ -1293,15 +1298,23 @@ get refresh$(){
 
 /**
  *
- * @param bodyActualizar
+ * @param bodyActualizar                                                                          
  * @returns
  */
-  actualizar_publicidad(bodyActualizar: any) {
-    const dataCrear = new FormData();
+  actualizar_publicidad(bodyActualizar: BodyActualizarPublicidad): Observable<Publicidad> {
+    const dataUpdate = new FormData();
+    bodyActualizar.id ? dataUpdate.append('id', bodyActualizar.id):null
+    bodyActualizar.titulo ? dataUpdate.append('titulo', bodyActualizar.titulo) : null;
+    bodyActualizar.imagen ? dataUpdate.append('imagen', bodyActualizar.imagen) : null;
+    bodyActualizar.descripcion ? dataUpdate.append('descripcion', bodyActualizar.descripcion) : null;
+    bodyActualizar.fecha_inicio ? dataUpdate.append('fecha_inicio', bodyActualizar.fecha_inicio) : null;
+    bodyActualizar.fecha_expiracion ? dataUpdate.append('fecha_expiracion', bodyActualizar.fecha_expiracion) : null;
+    bodyActualizar.url ? dataUpdate.append('url', bodyActualizar.url) : null;
 
-    return this.http.put(this.API_URL + '/publicidades/', dataCrear);
+
+    return this.http.put(this.API_URL + '/publicidades/', dataUpdate) as any;
   }
-
+ 
   /**
    * Funcion que elimna la publicidad por ID especificado
    *

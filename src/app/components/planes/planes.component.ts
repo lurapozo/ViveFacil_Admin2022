@@ -41,7 +41,7 @@ estadoActual=false
     descripcion: new FormControl('', [Validators.required]),
     precio: new FormControl('', [Validators.required]),
     duracion: new FormControl('', [Validators.required]),
-    estado:new FormControl('', [Validators.required]),
+    
   }, []);
 
 
@@ -83,13 +83,13 @@ estadoActual=false
       const duracion = this.planes_seleccionada?.duracion
       const nombre = this.planes_seleccionada?.nombre;
       const descripcion = this.planes_seleccionada?.descripcion;
-      const estado = this.planes_seleccionada?.estado;
+     
       const precio = this.planes_seleccionada?.precio;
       this.existImageActualizar = false;
       this.formEdit.get('imagen')?.reset();
       nombre? this.formEdit.get('nombre')?.setValue(nombre) : this.formEdit.get('nombre')?.reset();
       descripcion? this.formEdit.get('descripcion')?.setValue(descripcion) : this.formEdit.get('descripcion')?.reset();
-      estado? this.formEdit.get('estado')?.setValue(estado) : this.formEdit.get('estado')?.reset();
+      
       precio? this.formEdit.get('precio')?.setValue(precio) : this.formEdit.get('precio')?.reset();
       duracion? this.formEdit.get('duracion')?.setValue(duracion) : this.formEdit.get('duracion')?.reset();
     }
@@ -113,7 +113,7 @@ estadoActual=false
     this.mensajeAlerta = mensaje;
   }
 
-  
+
   loadImageFromDevice(event:any, tipo: string) {
     const file: File = event.target.files[0];
     if(file){
@@ -159,44 +159,6 @@ estadoActual=false
       return null;
     }
   });
-  createImageValidator(controlImage: AbstractControl, tipo: string){
-    return () => {
-      const file = controlImage.value as File;
-
-      if(file && file.name){
-        console.log('Ingresa al validator if');
-        console.log(file);
-        const tokensImgName: any[] = file.name.split('.');
-        console.log(tokensImgName);
-        if(tokensImgName.length === 2 ){
-          const imgExtension = tokensImgName[1];
-          if(imgExtension !== 'jpg' && imgExtension !== 'jpeg' && imgExtension !== 'png' && imgExtension !== 'jfif'){
-            console.log('Entra en error de imagen');
-            if(tipo === 'crear'){
-              this.planCrear.get('imagen')?.setValue(null);
-              this.existImageCrear = false;
-            }
-            else if(tipo === 'actualizar'){
-              this.formEdit.get('imagen')?.setValue(null);
-              this.existImageActualizar = false;
-            }
-            return { image_error: 'Solo imágenes con formato jpg, jpeg, png o jfif.' };
-          }
-          console.log('Formato de imagen correcto');
-          if(tipo === 'crear'){
-            this.existImageCrear = true;
-          }
-          else if(tipo === 'actualizar'){
-            this.existImageActualizar = true;
-          }
-        }
-        return null;
-      } else {
-        console.log('No hay imagen seleccionada');
-        return null;
-      }
-    };
-  }
   isInvalidForm(subForm: string, tipo: string){
     if(tipo === 'crear') {
       return this.planCrear.get(subForm)?.invalid && this.planCrear.get(subForm)?.touched || this.planCrear.get(subForm)?.dirty  && this.getErrorMessage(this.planCrear, subForm).length!==0;
@@ -258,29 +220,74 @@ estadoActual=false
     }
 
   }
+  createImageValidator(controlImage: AbstractControl, tipo: string){
+    return () => {
+      const file = controlImage.value as File;
+
+      if(file && file.name){
+        console.log('Ingresa al validator if');
+        console.log(file);
+        const tokensImgName: any[] = file.name.split('.');
+        console.log(tokensImgName);
+        if(tokensImgName.length === 2 ){
+          const imgExtension = tokensImgName[1];
+          if(imgExtension !== 'jpg' && imgExtension !== 'jpeg' && imgExtension !== 'png' && imgExtension !== 'jfif'){
+            console.log('Entra en error de imagen');
+            if(tipo === 'crear'){
+              this.planCrear.get('imagen')?.setValue(null);
+              this.existImageCrear = false;
+            }
+            else if(tipo === 'actualizar'){
+              this.formEdit.get('imagen')?.setValue(null);
+              this.existImageActualizar = false;
+            }
+            return { image_error: 'Solo imágenes con formato jpg, jpeg, png o jfif.' };
+          }
+          console.log('Formato de imagen correcto');
+          if(tipo === 'crear'){
+            this.existImageCrear = true;
+          }
+          else if(tipo === 'actualizar'){
+          
+            this.existImageActualizar = true;
+            console.log(this.existImageActualizar)
+          }
+        }
+        return null;
+      } else {
+        console.log('No hay imagen seleccionada');
+        return null;
+      }
+    };
+  }
   onCrear(){
     const crearPlan : BodyCrearPlan={
       nombre: '',
       descripcion: '',
       precio: 0,
       duracion: 0,
-  
+      estado: false
     }
-
+   const estado =this.planCrear.get('estado')?.value;
     const nombre = this.planCrear.get('nombre')?.value;
     const descripcion = this.planCrear.get('descripcion')?.value;
     const precio = this.planCrear.get('precio')?.value;
     const duracion = this.planCrear.get('duracion')?.value;
     const foto = this.planCrear.get('imagen')?.value;
+    if(estado==='Habilitado'){
+      crearPlan.estado=true
+    }else{
+      crearPlan.estado=false
+    }
 
-console.log(nombre,descripcion,precio,duracion)
     if(nombre && descripcion && precio && duracion){
       console.log('entre')
       crearPlan.nombre=nombre
       crearPlan.descripcion=descripcion
       crearPlan.duracion=parseInt(duracion)
       crearPlan.precio=parseInt(precio)
-      if(foto && this.existImageCrear){
+      if(foto && this.imagenCrear ){
+  
         crearPlan.imagen = foto; 
       }
 
@@ -303,23 +310,25 @@ console.log(nombre,descripcion,precio,duracion)
     const actualizar : BodyActualizarPlan ={
       id:0
     }
-    let estadoActual=this.planes_seleccionada?.estado
+
     const id = this.planes_seleccionada?.id;
     const nombre = this.formEdit.get('nombre')?.value;
     const descripcion = this.formEdit.get('descripcion')?.value;
     const precio = this.formEdit.get('precio')?.value;
     const duracion = this.formEdit.get('duracion')?.value;
     const foto = this.formEdit.get('imagen')?.value;
-
+    console.log(this.formEdit)
     if(this.existImageActualizar && foto){
-      actualizar.imagen = foto; // Si hay foto se le agrega al body.
+     
+      actualizar.imagen = foto; 
     }
     if(nombre && descripcion && precio && duracion){
+      console.log(nombre,descripcion,precio,duracion)
       actualizar.id=id
       actualizar.nombre=nombre
       actualizar.descripcion=descripcion
-      actualizar.estado=estadoActual
-      actualizar.precio=parseInt(precio)
+      actualizar.precio=precio
+      actualizar.duracion=duracion
           this.pythonAnywhereService.actualizar_plan(actualizar).subscribe(resp=>{
           console.log(resp)
          })

@@ -89,151 +89,247 @@
       </div>
     </div>
 </div>
-<!-- Modal informacion de profesion -->
-<div class="modal fade" id="modalInformacionProfesion" aria-hidden="true" aria-labelledby="modalInformacionProfesionLabel" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-      <div class="modal-content">
-        <div class="modal-header align-items-center">
-          <h1 class="modal-title fs-5 m-0 p-0 fw-bold" id="modalInformacionProfesionLabel">Información de profesión</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+<div class="modal fade" id="modalInformacionProfesion" aria-hidden="true"
+  aria-labelledby="modalInformacionProfesionLabel" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header align-items-center">
+        <h1 class="modal-title fs-5 m-0 p-0 fw-bold"
+          id="modalInformacionProfesionLabel">Información de Insignias</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"
+          aria-label="Close"></button>
+      </div>
+      <div class="modal-body mb-0">
+        <div class="row p-2">
+          <img [src]="planes_seleccionada?.imagen?
+            'https://tomesoft1.pythonanywhere.com'+planes_seleccionada?.imagen
+            : 'assets/imagenes/ProfesionDefault.png'" class="rounded mx-auto
+            d-block img-fluid w-50 image_modal" alt="...">
         </div>
 
-       <div class="modal-body mb-0">
+        <div class="row p-2 align-items-center">
+          <div class="col-5">
+            <h3 class="m-0 p-0 fw-bold">Nombre:</h3>
+          </div>
+          <div class="col-7">
+            {{planes_seleccionada?.nombre}}
+          </div>
+        </div>
+
+        <div class="row p-2 align-items-center">
+          <div class="col-5">
+            <h3 class="m-0 p-0 fw-bold">Descripción:</h3>
+          </div>
+          <div class="col-7">
+            {{planes_seleccionada?.descripcion}}
+          </div>
+        </div>
+
+        <div class="row p-2 align-items-center">
+          <div class="col-5">
+            <h3 class="m-0 p-0 fw-bold">Valor:</h3>
+          </div>
+          <div class="col-7">
+            {{planes_seleccionada?.precio}}
+          </div>
+        </div>
+
+        <div class="row p-2 align-items-center">
+          <div class="col-5">
+            <h3 class="m-0 p-0 fw-bold">Duracion</h3>
+          </div>
+          <div class="col-7">
+            {{planes_seleccionada?.duracion}}
+          </div>
+        </div>
+
+
+        <div class="row p-2 align-items-center">
+          <div class="col-5">
+            <h3 class="m-0 p-0 fw-bold">Estado</h3>
+          </div>
+          <div class="col-7">
+            {{estadoCond}}
+          </div>
+        </div>
+        <div class="row p-2 align-items-center">
+          <div class="col-5">
+            <label for="switchEstado" class="form-check-label"><h3 class="m-0
+                p-0 fw-bold">Habilitar/Deshabilitar:</h3></label>
+          </div>
+          <div class="col-7 form-check form-switch d-flex justify-content-end
+            fs-6">
+            <input
+              (change)="cambiarEstado($event)"
+              [checked]="planes_seleccionada?.estado? true : false"
+              class="form-check-input"
+              id="switchEstado"
+              type="checkbox"
+              role="switch"
+              checked
+              aria-describedby="switchEstadoFeedback">
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button
+          class="btn btn-success"
+          data-bs-target="#modalInformacionEdicionProfesion"
+          data-bs-toggle="modal"
+          (click)="limpiarForm('actualizar')">Editar</button>
+        <button
+          class="btn btn-danger"
+          data-bs-target="#modalConfirmacion"
+          data-bs-toggle="modal"
+          (click)="establecerMensaje('Está seguro que desea eliminar lainsignia?', 'eliminar')">Eliminar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modalInformacionEdicionProfesion" aria-hidden="true"
+  aria-labelledby="modalInformacionEdicionProfesionLabel" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header align-items-center">
+        <h1 class="modal-title fs-5 m-0 p-0 fw-bold"
+          id="modalInformacionEdicionProfesionLabel">Edición de Insignias</h1>
+        <!-- (click)="limpiarForm('actualizar')" -->
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"></button>
+      </div>
+      <div class="modal-body mb-0">
         <form [formGroup]="formEdit" class="">
           <div class="row">
             <div class="col d-flex justify-content-center">
-              <img *ngIf="existImageActualizar" class="image_modal rounded mx-auto d-block img-fluid w-50" [src]="imagenActualizar" alt="Archivo incorrecto">
-              <img *ngIf="!existImageActualizar && planes_seleccionada?.imagen" class="image_modal rounded mx-auto d-block img-fluid w-50" [src]="'https://tomesoft1.pythonanywhere.com'+planes_seleccionada?.imagen" alt="Archivo incorrecto">
-              <i *ngIf="!existImageActualizar && !planes_seleccionada?.imagen" class="rounded mx-auto d-block img-fluid w-50 bi bi-upload icono"></i>
+              <img *ngIf="existImageActualizar" class="image_modal rounded
+                mx-auto d-block img-fluid w-50" [src]="imagenActualizar"
+                alt="Archivo incorrecto">
+              <img *ngIf="!existImageActualizar &&
+                planes_seleccionada?.imagen" class="image_modal rounded
+                mx-auto d-block img-fluid w-50"
+                [src]="'https://tomesoft1.pythonanywhere.com'+planes_seleccionada?.imagen"
+                alt="Archivo incorrecto">
+              <i *ngIf="!existImageActualizar && !planes_seleccionada?.imagen"
+                class="rounded mx-auto d-block img-fluid w-50 bi bi-upload
+                icono"></i>
             </div>
             <div class="p-2">
               <input
                 class="w-100 centrar form-control"
-                [ngClass]="formEdit.get('imagen')?.hasError('image_error') ? 'is-invalid' : '' || (existImageActualizar)? 'is-valid' : ''"
+                [ngClass]="formEdit.get('imagen')?.hasError('image_error')
+                ? 'is-invalid' : '' || (existImageActualizar)? 'is-valid' : ''"
                 type="file"
                 id="file_input"
                 accept="image/png, image/jpeg"
-                (change)="loadImageFromDevice($event, 'actualizar')"
-              >
-              <div class="invalid-feedback">{{getErrorMessage(formEdit, 'imagen')}}</div>
+                (change)="loadImageFromDevice($event, 'actualizar')">
+              <div class="invalid-feedback">{{getErrorMessage(formEdit,
+                'imagen')}}</div>
             </div>
           </div>
 
           <div class="row p-2 align-items-center">
             <div class="col-5">
-              <label for="inputNombre" class="form-label"><h3 class="m-0 p-0 fw-bold">Nombre:</h3></label>
+              <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
+                  fw-bold">Nombre:</h3></label>
             </div>
             <div class="col-7">
               <input
                 type="text"
                 formControlName="nombre"
                 class="form-control"
-                [ngClass]="isInvalidForm('nombre', 'actualizar') ? 'is-invalid' : ''"
-            
-                value="Mark"
+                [ngClass]="isInvalidForm('nombre', 'actualizar') ? 'is-invalid'
+                : ''"
+                id="inputNombre"
                 [placeholder]="planes_seleccionada?.nombre"
-                [value]="planes_seleccionada?.nombre"
-              >
-              <div class="invalid-feedback"> {{getErrorMessage(formEdit, 'nombre')}} </div>
+                [value]="planes_seleccionada?.nombre">
+              <div class="invalid-feedback"> {{getErrorMessage(formEdit,
+                'nombre')}} </div>
             </div>
           </div>
 
           <div class="row p-2 align-items-center">
             <div class="col-5">
-              <label for="inputNombre" class="form-label"><h3 class="m-0 p-0 fw-bold">Descripcion:</h3></label>
+              <label for="textareaDescripcion" class="form-label"><h3 class="m-0
+                  p-0 fw-bold">descripcion:</h3></label>
             </div>
             <div class="col-7">
               <input
-                type="text"
+              type="text"
+                class="form-control"
                 formControlName="descripcion"
-                class="form-control"
-                [ngClass]="isInvalidForm('descripcion', 'actualizar') ? 'is-invalid' : ''"
-                id="inputNombre"
-                value="Mark"
-                [placeholder]="planes_seleccionada?.descripcion"
-                [value]="planes_seleccionada?.descripcion"
-              >
-              <div class="invalid-feedback"> {{getErrorMessage(formEdit, 'descripcion')}} </div>
-            </div>
-          </div>
-
-          <div class="row p-2 align-items-center">
-            <div class="col-5">
-              <label for="inputNombre" class="form-label"><h3 class="m-0 p-0 fw-bold">Precio:</h3></label>
-            </div>
-            <div class="col-7">
-              <input
-                type="number"
-                formControlName="precio"
-                class="form-control"
-                [ngClass]="isInvalidForm('precio', 'actualizar') ? 'is-invalid' : ''"
-         
-                value="Mark"
-                [placeholder]="planes_seleccionada?.precio"
-                [value]="planes_seleccionada?.precio"
-              >
-              <div class="invalid-feedback"> {{getErrorMessage(formEdit, 'precio')}} </div>
-            </div>
-          </div>
-
-          <div class="row p-2 align-items-center">
-            <div class="col-5">
-              <label for="inputNombre" class="form-label"><h3 class="m-0 p-0 fw-bold">Duracion:</h3></label>
-            </div>
-            <div class="col-7">
-              <input
-                type="number"
-                formControlName="duracion"
-                class="form-control"
-                [ngClass]="isInvalidForm('duracion', 'actualizar') ? 'is-invalid' : ''"
-                id="inputNombre"
-           
+                [ngClass]="isInvalidForm('descripcion', 'actualizar') ?
+                'is-invalid' : ''"
+                id="textareaDescripcion"
                 [placeholder]="planes_seleccionada?.duracion"
-                [value]="planes_seleccionada?.duracion"
-              >
-              <div class="invalid-feedback"> {{getErrorMessage(formEdit, 'duracion')}} </div>
+                [value]="planes_seleccionada?.descripcion">
+              <div class="invalid-feedback"> {{getErrorMessage(formEdit,
+                'duracion')}} </div>
             </div>
           </div>
 
           <div class="row p-2 align-items-center">
             <div class="col-5">
-              <label for="switchEstado" class="form-check-label"><h3 class="m-0 p-0 fw-bold">Habilitar/Deshabilitar:</h3></label>
+              <label for="textareaDescripcion" class="form-label"><h3 class="m-0
+                  p-0 fw-bold">Duracion:</h3></label>
             </div>
-            <div class="col-7 form-check form-switch d-flex justify-content-end fs-6">
+            <div class="col-7">
               <input
-              (change)="cambiarEstado($event)"
-              [checked]="planes_seleccionada?.estado? true : false"
-                class="form-check-input"
-                id="switchEstado"
-                type="checkbox"
-                role="switch"
-                checked
-                aria-describedby="switchEstadoFeedback"
-              >
+              type="number"
+                class="form-control"
+                formControlName="duracion"
+                [ngClass]="isInvalidForm('duracion', 'actualizar') ?
+                'is-invalid' : ''"
+                id="textareaDescripcion"
+                [placeholder]="planes_seleccionada?.duracion"
+                [value]="planes_seleccionada?.descripcion">
+              <div class="invalid-feedback"> {{getErrorMessage(formEdit,
+                'duracion')}} </div>
             </div>
           </div>
 
+          <div class="row p-2 align-items-center">
+            <div class="col-5">
+              <label for="textareaDescripcion" class="form-label"><h3 class="m-0
+                  p-0 fw-bold">Valor:</h3></label>
+            </div>
+            <div class="col-7">
+              <input
+              type="number"
+                class="form-control"
+                formControlName="precio"
+                [ngClass]="isInvalidForm('precio', 'actualizar') ?
+                'is-invalid' : ''"
+                id="textareaDescripcion"
+                [placeholder]="planes_seleccionada?.duracion"
+                [value]="planes_seleccionada?.descripcion">
+              <div class="invalid-feedback"> {{getErrorMessage(formEdit,
+                'precio')}} </div>
+            </div>
+          </div>
+       
         </form>
       </div>
-
-
-        <div class="modal-footer">
-            <button
-            class="btn btn-success"
-            data-bs-target="#modalConfirmacion"
-            data-bs-toggle="modal"
-            (click)="limpiarForm('actualizar')"
-            (click)="establecerMensaje('Está seguro que desea editar el plan?', 'actualizar')"
-          >Aceptar</button>
-          <button
-            class="btn btn-danger"
-            data-bs-target="#modalConfirmacion"
-            data-bs-toggle="modal"
-            (click)="establecerMensaje('Está seguro que desea eliminar el plan ?', 'eliminar')"
-          >Eliminar</button>
-        </div>
+      <div class="modal-footer">
+        <button class="btn btn-danger"
+          data-bs-target="#modalInformacionProfesion" data-bs-toggle="modal">Regresar</button>
+        <button
+       
+          data-bs-target="#modalConfirmacion"
+          data-bs-toggle="modal"
+          class="btn btn-success"
+          (click)="establecerMensaje('Está seguro que desea actualizar laminformación?', 'actualizar')">Actualizar</button>
       </div>
+
+      <!-- <pre>
+        {{actualizarProfesionesForm.value | json}}
+      </pre> -->
     </div>
+  </div>
 </div>
 <div class="modal fade" id="modalCrearProfesion" aria-hidden="true"
 aria-labelledby="modalCrearProfesionLabel" tabindex="-1">
