@@ -354,7 +354,7 @@ export class CuponesComponent {
 
 
 
-    if( codigo && titulo && descripcion && inicio && fin && cantidad && puntos && categoria && descuento ){
+    if( titulo && descripcion && inicio && fin && cantidad && puntos && categoria && descuento ){
       cupon.codigo=codigo
       cupon.titulo=titulo
       cupon.descripcion = descripcion
@@ -364,16 +364,18 @@ export class CuponesComponent {
       cupon.cantidad =cantidad
       cupon.puntos = puntos
       cupon.tipo_categoria = categoria
+      console.log('entre')
+      if(foto && this.existImageCrear){
+        console.log('entre')
+        cupon.foto = foto; 
+      }
+      this.pythonAnywhereService.crear_cupon(cupon).subscribe(resp => {
+        console.log(resp)
+      })
    
 
     }
-    if(foto && this.existImageCrear){
-      console.log('entre')
-      cupon.foto = foto; 
-    }
-    this.pythonAnywhereService.crear_cupon(cupon).subscribe(resp => {
-      console.log(resp)
-    })
+
   }
   onActualizar(){
     let cupon :BodyCuponActualizar ={

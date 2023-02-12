@@ -115,10 +115,12 @@ limpiarForm(tipo: string) {
     this.promocionCrear.get('categoria')?.setValue('');
     this.promocionCrear.get('imagen')?.setValue('');
     this.promocionCrear.get('participante')?.setValue('');
+    this.promocionCrear.get('codigo')?.setValue('')
 
   } else if(tipo === 'actualizar') {
 
     const titulo = this.promocion_seleccionada?.titulo;
+    const codigo = this.promocion_seleccionada?.codigo;
     const descripcion = this.promocion_seleccionada?.descripcion;
     const descuento = this.promocion_seleccionada?.porcentaje;
     const cantidad = this.promocion_seleccionada?.cantidad;
@@ -130,7 +132,8 @@ limpiarForm(tipo: string) {
   
     this.existImageActualizar = false;
     this.formEdit.get('imagen')?.reset();
-    titulo? this.formEdit.get('titulo')?.setValue(titulo) : this.formEdit.get('nombre')?.reset();
+    titulo? this.formEdit.get('codigo')?.setValue(codigo) : this.formEdit.get('codigo')?.reset();
+    titulo? this.formEdit.get('titulo')?.setValue(titulo) : this.formEdit.get('titulo')?.reset();
     descripcion? this.formEdit.get('descripcion')?.setValue(descripcion) : this.formEdit.get('descripcion')?.reset();
     descuento? this.formEdit.get('descuento')?.setValue(descuento) : this.formEdit.get('descuento')?.reset();
     cantidad? this.formEdit.get('cantidad')?.setValue(cantidad) : this.formEdit.get('cantidad')?.reset();
@@ -335,7 +338,7 @@ onCrear(){
     estado: false
   }
 
-  const codigo = this.promocionCrear.get('titulo')?.value;
+  const codigo = this.promocionCrear.get('codigo')?.value;
   const titulo = this.promocionCrear.get('titulo')?.value;
   const descripcion = this.promocionCrear.get('descripcion')?.value;
   const inicio = this.promocionCrear.get('inicio')?.value;
@@ -347,8 +350,9 @@ onCrear(){
   const foto = this.promocionCrear.get('imagen')?.value;
 
   console.log(codigo , titulo , descripcion , inicio , fin , cantidad , participante , categoria , descuento)
-  if(codigo && titulo && descripcion && inicio && fin && cantidad && participante && categoria && descuento ){
-    cupon.titulo = codigo
+  if(titulo && descripcion && inicio && fin && cantidad && participante && categoria && descuento ){
+    cupon.titulo = titulo
+    cupon.codigo=codigo
     cupon.descripcion = descripcion
     cupon.fecha_iniciacion = inicio
     cupon.fecha_expiracion = fin
@@ -392,7 +396,8 @@ onActualizar(){
   const descuento = this.formEdit.get('descuento')?.value;
   const foto = this.formEdit.get('imagen')?.value;
   if(codigo && titulo && descripcion && inicio && fin && cantidad && participante && categoria && descuento ){
-    cupon.titulo = codigo
+    cupon.codigo = codigo
+    cupon.titulo=titulo
     cupon.descripcion = descripcion
     cupon.fecha_iniciacion = inicio
     cupon.fecha_expiracion = fin
