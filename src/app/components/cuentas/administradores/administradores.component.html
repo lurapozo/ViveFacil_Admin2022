@@ -79,7 +79,8 @@
             <h4 class="p-0 m-0"> {{a.user_datos.fecha_creacion}}</h4>
           </div>
           <div class="col-2 align-self-center">
-            <h4 class="p-0 m-0"> {{a.user_datos.estado}}</h4>
+            <span *ngIf="!a.user_datos.estado" class="badge text-bg-danger">Inactivo</span>
+            <span *ngIf="a.user_datos.estado" class="badge text-bg-success">Activo</span>
           </div>
         </div>
       </div>
@@ -166,10 +167,20 @@
 
           <div class="row p-2 align-items-center">
             <div class="col-5">
-              <h3 class="m-0 p-0 fw-bold">Estado</h3>
+              <label for="switchEstado" class="form-check-label"><h3 class="m-0
+                  p-0 fw-bold">Habilitar/Deshabilitar:</h3></label>
             </div>
-            <div class="col-7">
-              Activo
+            <div class="col-7 form-check form-switch d-flex justify-content-end
+              fs-6">
+              <input
+                (change)="cambiarEstado($event)"
+                [checked]="admi_seleccionada?.user_datos.estado? true : false"
+                class="form-check-input"
+                id="switchEstado"
+                type="checkbox"
+                role="switch"
+                checked
+                aria-describedby="switchEstadoFeedback">
             </div>
           </div>
         </div>
@@ -439,23 +450,7 @@
          
             </div> -->
            
-            <div class="row p-2 align-items-center">
-              <div class="col-5">
-                <label for="switchEstado" class="form-check-label"><h3 class="m-0 p-0 fw-bold">Habilitar/Deshabilitar:</h3></label>
-              </div>
-              <div class="col-7 form-check form-switch d-flex justify-content-end fs-6">
-                <input
-                  class="form-check-input"
-                  [ngClass]="isInvalidForm('estado', 'actualizar')? 'is-invalid' : ''"
-                  formControlName="estado"
-                  id="switchEstado"
-                  type="checkbox"
-                  role="switch"
-                  aria-describedby="switchEstadoFeedback"
-                >
-                <div id="switchEstadoFeedback" class="invalid-feedback"> {{getErrorMessage(formEdit, 'estado')}} </div>
-              </div>
-            </div>
+        
           </form>
         </div>
         <div class="modal-footer">

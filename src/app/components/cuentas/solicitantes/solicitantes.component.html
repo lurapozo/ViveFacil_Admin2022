@@ -69,10 +69,11 @@
               <h4 class="p-0 m-0"> {{a.user_datos.telefono}}</h4>
             </div>
             <div class="col-2 align-self-center">
-              <h4 class="p-0 m-0"> {{a.user_datos.fecha_creacion}}</h4>
+              <h4 class="p-0 m-0"> {{a.user_datos.fecha_creacion | date: ' MMM d, y, h:mm:ss a'}} </h4>
             </div>
             <div class="col-2 align-self-center">
-              <h4 class="p-0 m-0" > {{a.user_datos.estado}}</h4>
+              <span *ngIf="!a.estado" class="badge text-bg-danger">Inactivo</span>
+              <span *ngIf="a.estado" class="badge text-bg-success">Activo</span>
             </div>
           </div>
         </div>

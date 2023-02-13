@@ -453,4 +453,9 @@ total=0
         return solicitud.user_datos.nombres.toLowerCase().includes(texto.toLowerCase())
       });
     }}
+
+    cambiarEstado(event:any){
+      let estado = event.srcElement.checked
+      this.pythonAnywhereService.actualizar_administrador
+    }
 }
