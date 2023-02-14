@@ -1,1 +1,160 @@
-<p>categorias works!</p>
+<div class="container-fluid">
+    <!-- Titulo principal -->
+    <div class="row p-2 justify-content-center align-items-center">
+      <div class="col text-center">
+        <h2 class="p-0 m-0"> Categorias</h2>
+  
+      </div>
+    </div>
+  
+    <!-- Buscar y agregar admi -->
+    <div class="row p-2 justify-content-center align-items-center">
+      <div class="col-xl-7 col-lg-5"></div>
+      <div class="col-xl-3 col-lg-4">
+        <div class="input-group">
+          <input type="text" class="form-control" placeholder="Buscar"
+            aria-label="Buscar" aria-describedby="basic-addon1"
+            (input)="search($event)">
+          <button class="input-group-text" id="basic-addon1"> <i class="bi
+              bi-search"></i> </button>
+        </div>
+      </div>
+      <div class="col-xl-2 col-lg-3">
+        <button
+          type="button"
+          class="btn btn-primary"
+          data-bs-toggle="modal"
+          href="#modalCrearProfesion"
+          >Agregar Insignia</button>
+      </div>
+    </div>
+  
+    <!-- Contenedor de admi -->
+    <div class="row justify-content-center align-items-center p-0">
+      <div class="col-10 text-center">
+        <!-- Titulo -->
+        <div class="row p-2 bg-primary text-white">
+          <div class="col-3 align-self-center">
+            <h3 class="p-0 m-0">Imagen</h3>
+          </div>
+  
+          <div class="col-3 align-self-center">
+            <h3 class="p-0 m-0">Nombre</h3>
+          </div>
+  
+          <div class="col-3 align-self-center">
+            <h3 class="p-0 m-0">Descripcion</h3>
+          </div>
+  
+  
+          <div class="col-3 align-self-center">
+            <h3 class="p-0 m-0">Estado</h3>
+          </div>
+  
+        </div>
+  
+        <!-- Profesion -->
+        <div (click)="categoria_seleccionada=a" *ngFor="let a of categoria" class="row
+          p-2 bg-light fila_info_profesion" data-bs-toggle="modal"
+          href="#modalInformacionProfesion" role="button">
+          <div class="col-3 align-self-center">
+            <img [src]="a.foto? 'https://tomesoft1.pythonanywhere.com'+a.foto
+              : '../../../assets/imagenes/ProfesionDefault.png'" class="rounded
+              mx-auto d-block img-fluid img_profesion" alt="...">
+          </div>
+  
+          <div class="col-3 align-self-center">
+            <h4 class="p-0 m-0"> {{a.nombre}} </h4>
+          </div>
+  
+          <div class="col-3 align-self-center">
+            <h4 class="p-0 m-0">{{a.descripcion}}</h4>
+          </div>
+  
+       
+  
+          <div class="col-3 align-self-center">
+            <span *ngIf="!a.estado" class="badge text-bg-danger">Inactivo</span>
+            <span *ngIf="a.estado" class="badge text-bg-success">Activo</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+  
+</div>
+
+<div class="modal fade" id="modalInformacionProfesion" aria-hidden="true"
+  aria-labelledby="modalInformacionProfesionLabel" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header align-items-center">
+        <h1 class="modal-title fs-5 m-0 p-0 fw-bold"
+          id="modalInformacionProfesionLabel">Información de Insignias</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"
+          aria-label="Close"></button>
+      </div>
+      <div class="modal-body mb-0">
+   
+   
+          <div class="row p-2">
+            <img [src]="categoria_seleccionada?.foto2?
+              'https://tomesoft1.pythonanywhere.com'+categoria_seleccionada?.foto2
+              : 'assets/imagenes/ProfesionDefault.png'" class="rounded mx-auto
+              d-block img-fluid w-50 image_modal" alt="...">
+          </div>
+        <div class="row p-2 align-items-center">
+          <div class="col-5">
+            <h3 class="m-0 p-0 fw-bold">Nombre:</h3>
+          </div>
+          <div class="col-7">
+            {{categoria_seleccionada?.nombre}}
+          </div>
+        </div>
+
+        <div class="row p-2 align-items-center">
+          <div class="col-5">
+            <h3 class="m-0 p-0 fw-bold">Descripción:</h3>
+          </div>
+          <div class="col-7">
+            {{categoria_seleccionada?.descripcion}}
+          </div>
+        </div>
+
+
+
+        <div class="row p-2 align-items-center">
+          <div class="col-5">
+            <label for="switchEstado" class="form-check-label"><h3 class="m-0
+                p-0 fw-bold">Habilitar/Deshabilitar:</h3></label>
+          </div>
+          <div class="col-7 form-check form-switch d-flex justify-content-end
+            fs-6">
+            <input
+              (change)="cambiarEstado($event)"
+              [checked]="categoria_seleccionada?.estado? true : false"
+              class="form-check-input"
+              id="switchEstado"
+              type="checkbox"
+              role="switch"
+              checked
+              aria-describedby="switchEstadoFeedback">
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button
+          class="btn btn-success"
+          data-bs-target="#modalInformacionEdicionProfesion"
+          data-bs-toggle="modal"
+         >Editar</button>
+        <button
+          class="btn btn-danger"
+          data-bs-target="#modalConfirmacion"
+          data-bs-toggle="modal"
+          >Eliminar</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -41,7 +41,9 @@ get refresh$(){
     return this._refresh$
 }
 
-
+obtener_politicas(){
+  return this.http.get(`${this.API_URL}/politics/`)
+}
   //------------------------------------------------ SECCIÓN SOLICITANTES -------------------------------------------------
   /**
    * Obtiene todos los solicitantes, y los entrega en un formato con paginación.
@@ -441,6 +443,10 @@ get refresh$(){
    */
   eliminar_administrador(id: string): Observable<any> {
     return this.http.delete(`${this.API_URL}/administrador_delete/${id}`);
+  }
+
+  cambio_administrador_estado(id:any,estado:any){
+    return this.http.put(`${this.API_URL}/administrador_estado/?id=${id}`,{ estado: estado, });
   }
 
   /**
