@@ -66,7 +66,6 @@ export class CuponesComponent {
   });
 
   formEdit: FormGroup = new FormGroup({
-    codigo: new FormControl('', [Validators.required]),
     titulo: new FormControl('', [Validators.required]),
     descripcion: new FormControl('', [Validators.required]),
     descuento: new FormControl('', [Validators.required]),
@@ -105,13 +104,13 @@ export class CuponesComponent {
       this.cuponCrear.get('titulo')?.reset();
       this.cuponCrear.get('descuento')?.reset();
       this.cuponCrear.get('descripcion')?.reset();
-      this.cuponCrear.get('cantidad')?.setValue('');
-      this.cuponCrear.get('inicio')?.setValue('');
-      this.cuponCrear.get('fin')?.setValue('');
-      this.cuponCrear.get('punto')?.setValue('');
-      this.cuponCrear.get('categoria')?.setValue('');
+      this.cuponCrear.get('cantidad')?.reset()
+      this.cuponCrear.get('inicio')?.reset()
+      this.cuponCrear.get('fin')?.reset()
+      this.cuponCrear.get('punto')?.reset()
+      this.cuponCrear.get('categoria')?.reset()
       this.cuponCrear.get('imagen')?.reset()
-      this.cuponCrear.get('codigo')?.setValue('');
+      this.cuponCrear.get('codigo')?.reset()
    
    
 
@@ -125,7 +124,7 @@ export class CuponesComponent {
       const categoria = this.cupon_seleccionada?.tipo_categoria;
       const inicio = this.cupon_seleccionada?.fecha_iniciacion;
       const fin = this.cupon_seleccionada?.fecha_expiracion;
-      const codigo = this.cupon_seleccionada?.codigo;
+     
     
       this.existImageActualizar = false;
       this.formEdit.get('imagen')?.reset();
@@ -137,7 +136,7 @@ export class CuponesComponent {
       categoria? this.formEdit.get('categoria')?.setValue(categoria) : this.formEdit.get('categoria')?.reset();
       inicio? this.formEdit.get('inicio')?.setValue(inicio) : this.formEdit.get('inicio')?.reset();
       fin? this.formEdit.get('fin')?.setValue(inicio) : this.formEdit.get('fin')?.reset();
-      codigo? this.formEdit.get('codigo')?.setValue(codigo) : this.formEdit.get('codigo')?.reset();
+   
 
    
   }}
@@ -170,11 +169,6 @@ export class CuponesComponent {
         }
         return '';
       case 'punto':
-        if (itemControl.hasError('required')) {
-          return 'Debe llenar este campo';
-        }
-        return '';
-      case 'foto':
         if (itemControl.hasError('required')) {
           return 'Debe llenar este campo';
         }
@@ -245,6 +239,7 @@ export class CuponesComponent {
     }
   }
 
+
   createImageValidator(controlImage: AbstractControl, tipo: string){
     return () => {
       const file = controlImage.value as File;
@@ -263,7 +258,7 @@ export class CuponesComponent {
               this.existImageCrear = false;
             }
             else if(tipo === 'actualizar'){
-              this.formEdit.get('imagen')?.setValue(null);
+              this.cuponCrear.get('imagen')?.setValue(null);
               this.existImageActualizar = false;
             }
             return { image_error: 'Solo imágenes con formato jpg, jpeg, png o jfif.' };
@@ -294,7 +289,7 @@ export class CuponesComponent {
           this.imagenCrear = imagen.base;
         }
         else if(tipo === 'actualizar'){
-          this.formEdit.get('imagen')?.setValue(file);
+          this.cuponCrear.get('imagen')?.setValue(file);
           this.fileImagenActualizar = file;
           this.imagenActualizar = imagen.base;
         }
@@ -367,7 +362,8 @@ export class CuponesComponent {
       console.log('entre')
       if(foto && this.existImageCrear){
         console.log('entre')
-        cupon.foto = foto; 
+        cupon.foto = foto;
+       
       }
       this.pythonAnywhereService.crear_cupon(cupon).subscribe(resp => {
         console.log(resp)
@@ -389,7 +385,7 @@ export class CuponesComponent {
       puntos: 0,
       tipo_categoria: ''
     }
-    const codigo = this.formEdit.get('codigo')?.value;
+   
     const titulo = this.formEdit.get('titulo')?.value;
     const descripcion = this.formEdit.get('descripcion')?.value;
     const inicio = this.formEdit.get('inicio')?.value;
@@ -398,9 +394,8 @@ export class CuponesComponent {
     const puntos = this.formEdit.get('punto')?.value;
     const categoria = this.formEdit.get('categoria')?.value;
     const descuento = this.formEdit.get('descuento')?.value;
-    const foto = this.formEdit.get('imagen')?.value as File;
-    if(codigo && titulo && descripcion && inicio && fin && cantidad && puntos && categoria && descuento ){
-      cupon.codigo=codigo
+    const foto = this.formEdit.get('imagen')?.value as File
+    if( titulo && descripcion && inicio && fin && cantidad && puntos && categoria && descuento ){
       cupon.titulo=titulo
       cupon.descripcion = descripcion
       cupon.fecha_iniciacion = inicio

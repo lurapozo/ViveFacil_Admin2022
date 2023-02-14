@@ -93,7 +93,8 @@
           </div>
   
           <div class="col-1 align-self-center">
-            <h4 class="p-0 m-0">{{a.estado}}</h4>
+            <span *ngIf="a.estado" class="badge text-bg-success">Activo</span>
+            <span *ngIf="!a.estado" class="badge text-bg-danger">Inactivo</span>
           </div>
         </div>
       </div>
@@ -147,6 +148,14 @@
               {{promocion_seleccionada?.tipo_categoria}}
             </div>
           </div>
+          <div class="row p-2 align-items-center">
+            <div class="col-5">
+              <h3 class="m-0 p-0 fw-bold">Tipo:</h3>
+            </div>
+            <div class="col-7">
+              {{promocion_seleccionada?.participantes}}
+            </div>
+          </div>
   
           <div class="row p-2 align-items-center">
             <div class="col-5">
@@ -184,15 +193,7 @@
               }}
             </div>
           </div>
-  
-          <div class="row p-2 align-items-center">
-            <div class="col-5">
-              <h3 class="m-0 p-0 fw-bold">Estado</h3>
-            </div>
-            <div class="col-7">
-              {{activo}}
-            </div>
-          </div>
+
   
           <div class="row p-2 align-items-center">
             <div class="col-5">
@@ -203,7 +204,7 @@
               fs-6">
               <input
                 (change)="cambiarEstado($event)"
-                [checked]="activo? true : false"
+                [checked]="promocion_seleccionada?.estado?true : false"
                 class="form-check-input"
                 id="switchEstado"
                 type="checkbox"
@@ -273,26 +274,7 @@
               </div>
             </div>
   
-            <div class="row p-2 align-items-center">
-              <div class="col-5">
-                <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
-                    fw-bold">Codigo:</h3></label>
-              </div>
-              <div class="col-7">
-                <input
-                  type="text"
-                  formControlName="codigo"
-                  class="form-control"
-                  [ngClass]="isInvalidForm('codigo', 'actualizar') ? 'is-invalid'
-                  : ''"
-  
-                  value="Mark"
-                  [placeholder]="promocion_seleccionada?.titulo"
-                  [value]="promocion_seleccionada?.titulo">
-                <div class="invalid-feedback"> {{getErrorMessage(formEdit,
-                  'codigo')}} </div>
-              </div>
-            </div>
+      
             <div class="row p-2 align-items-center">
               <div class="col-5">
                 <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
@@ -326,8 +308,7 @@
                   class="form-control"
                   [ngClass]="isInvalidForm('descripcion', 'actualizar') ?
                   'is-invalid' : ''"
-  
-                  value="Mark"
+
   
                   [value]="promocion_seleccionada?.descripcion"></textarea>
                 <div class="invalid-feedback"> {{getErrorMessage(formEdit,
@@ -381,36 +362,41 @@
   
             <div class="row p-2 align-items-center">
               <div class="col-5">
+    
                 <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
-                    fw-bold">Fecha de Inicio:</h3></label>
+                    fw-bold">Fecha Inicio:</h3>
+    
+                </label>
+    
               </div>
               <div class="col-7">
-                <input type="date"
-                  [value]="promocion_seleccionada?.fecha_iniciacion" id="start"
-                  required pattern="\d{4}-\d{2}-\d{2}"
-                  formControlName="inicio"
+                <input [value]="promocion_seleccionada?.fecha_iniciacion"
+                [ngClass]="isInvalidForm('inicio', 'actualizar') ?
+                'is-invalid' : ''"
+                  formControlName="inicio" type="date" format="YYYY-MM-DDTHH:mm:ssZ" id="start" required
                   min="{{getCurrentDate()}}">
                 <div class="invalid-feedback"> {{getErrorMessage(formEdit,
-                  'descuento')}} </div>
+                  'inicio')}} </div>
               </div>
             </div>
   
             <div class="row p-2 align-items-center">
               <div class="col-5">
-  
+    
                 <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
                     fw-bold">Fecha Expiracion:</h3>
-  
+    
                 </label>
-  
+    
               </div>
               <div class="col-7">
                 <input [value]="promocion_seleccionada?.fecha_expiracion"
-                  formControlName="fin" type="date" id="start" required
-                  pattern="\d{4}-\d{2}-\d{2}"
+                [ngClass]="isInvalidForm('fin', 'actualizar') ?
+                'is-invalid' : ''"
+                  formControlName="fin" type="date" format="YYYY-MM-DDTHH:mm:ssZ" id="start" required
                   min="{{getCurrentDate()}}">
                 <div class="invalid-feedback"> {{getErrorMessage(formEdit,
-                  'descuento')}} </div>
+                  'fin')}} </div>
               </div>
             </div>
   
@@ -421,18 +407,14 @@
                 </div>
                 <div class="col-7">
                   <select
-    
-    
+  
                     class="form-select"
                     [ngClass]="isInvalidForm('participante', 'actualizar') ?
                     'is-invalid' : ''"
                     formControlName="participante"
                     [value]="promocion_seleccionada?.participantes"
                     class="form-control"
-                    [ngClass]="isInvalidForm('categoria', 'crear') ? 'is-invalid' :
-                    promocionCrear.get('categoria')?.touched ||
-                    promocionCrear.get('categoria')?.dirty &&
-                    !promocionCrear.get('categoria')?.invalid ? 'is-valid' : ''"
+          
                     aria-describedby="selectorServicioCrearFeedback">
                     <option *ngFor="let c of participante" [id]="c"
                       value={{promocion_seleccionada?.participantes}}> {{c}}
@@ -452,7 +434,6 @@
               </div>
               <div class="col-7">
                 <select
-  
   
                   class="form-select"
                   [ngClass]="isInvalidForm('categoria', 'actualizar') ?
@@ -483,7 +464,7 @@
           <button class="btn btn-danger"
             data-bs-target="#modalInformacionProfesion" data-bs-toggle="modal">Regresar</button>
           <button
-  
+          [disabled]="formEdit.invalid? true : false"
             data-bs-target="#modalConfirmacion"
             data-bs-toggle="modal"
             class="btn btn-success"
@@ -550,7 +531,7 @@
                   promocionCrear.get('codigo')?.touched ||
                   promocionCrear.get('codigo')?.dirty &&
                   !promocionCrear.get('codigo')?.invalid ? 'is-valid' : ''"
-                  placeholder="Promocion">
+                  placeholder="Codigo">
                 <div class="invalid-feedback"> {{getErrorMessage(promocionCrear,
                   'codigo')}} </div>
               </div>
@@ -591,7 +572,7 @@
                   promocionCrear.get('descripcion')?.touched ||
                   promocionCrear.get('descripcion')?.dirty &&
                   !promocionCrear.get('descripcion')?.invalid ? 'is-valid' : ''"
-                  placeholder="Promocion"></textarea>
+                  placeholder="Descripcion"></textarea>
                 <div class="invalid-feedback"> {{getErrorMessage(promocionCrear,
                   'descripcion')}} </div>
               </div>
@@ -611,7 +592,7 @@
                   promocionCrear.get('descuento')?.touched ||
                   promocionCrear.get('descuento')?.dirty &&
                   !promocionCrear.get('descuento')?.invalid ? 'is-valid' : ''"
-                  placeholder="Promocion">
+                  placeholder="%">
                 <div class="invalid-feedback"> {{getErrorMessage(promocionCrear,
                   'descuento')}} </div>
               </div>
@@ -630,7 +611,7 @@
                   promocionCrear.get('cantidad')?.touched ||
                   promocionCrear.get('cantidad')?.dirty &&
                   !promocionCrear.get('cantidad')?.invalid ? 'is-valid' : ''"
-                  placeholder="Promocion">
+                  placeholder="2">
                 <div class="invalid-feedback"> {{getErrorMessage(promocionCrear,
                   'cantidad')}} </div>
               </div>
@@ -645,15 +626,15 @@
               <div class="col-7">
                 <select
                 class="form-select"
-                [ngClass]="isInvalidForm('categoria', 'crear') ?
+                [ngClass]="isInvalidForm('participante', 'crear') ?
                 'is-invalid' : ''"
-                formControlName="categoria"
+                formControlName="participante"
 
                 class="form-control"
-                [ngClass]="isInvalidForm('categoria', 'crear') ? 'is-invalid' :
-                promocionCrear.get('categoria')?.touched ||
-                promocionCrear.get('categoria')?.dirty &&
-                !promocionCrear.get('categoria')?.invalid ? 'is-valid' : ''"
+                [ngClass]="isInvalidForm('participante', 'crear') ? 'is-invalid' :
+                promocionCrear.get('participante')?.touched ||
+                promocionCrear.get('participante')?.dirty &&
+                !promocionCrear.get('participante')?.invalid ? 'is-valid' : ''"
                 aria-describedby="selectorServicioCrearFeedback">
                 <option selected disabled value="">Elija una Categoria...</option>
                 <option *ngFor="let c of participante" [id]="c"
@@ -661,7 +642,7 @@
                 </option>
               </select>
                 <div class="invalid-feedback"> {{getErrorMessage(promocionCrear,
-                  'punto')}} </div>
+                  'participante')}} </div>
               </div>
             </div>
   
@@ -703,6 +684,10 @@
               <div class="col-7">
                 <input type="date"
                   id="start"
+                  [ngClass]="isInvalidForm('inicio', 'crear') ? 'is-invalid' :
+                  promocionCrear.get('inicio')?.touched ||
+                  promocionCrear.get('inicio')?.dirty &&
+                  !promocionCrear.get('inicio')?.invalid ? 'is-valid' : ''"
                   required pattern="\d{4}-\d{2}-\d{2}"
                   formControlName="inicio"
                   min="{{getCurrentDate()}}">
@@ -723,7 +708,10 @@
               <div class="col-7">
                 <input
                   formControlName="fin" type="date" id="start" required
-                  pattern="\d{4}-\d{2}-\d{2}"
+                  [ngClass]="isInvalidForm('fin', 'crear') ? 'is-invalid' :
+                  promocionCrear.get('fin')?.touched ||
+                  promocionCrear.get('fin')?.dirty &&
+                  !promocionCrear.get('fin')?.invalid ? 'is-valid' : ''"
                   min="{{getCurrentDate()}}">
                 <div class="invalid-feedback"> {{getErrorMessage(promocionCrear,
                   'fin')}} </div>
@@ -731,13 +719,11 @@
             </div>
   
   
-  
-  
           </form>
         </div>
         <div class="modal-footer">
           <button
-  
+          [disabled]="promocionCrear.invalid? true : false"
             data-bs-target="#modalConfirmacion"
             data-bs-toggle="modal"
             class="btn btn-success" 

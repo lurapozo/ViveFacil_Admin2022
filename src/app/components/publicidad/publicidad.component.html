@@ -285,8 +285,6 @@ aria-labelledby="modalInformacionEdicionProfesionLabel" tabindex="-1">
               [ngClass]="isInvalidForm('url', 'actualizar') ?
               'is-invalid' : ''"
 
-              value="Mark"
-
               [value]="publicidad_seleccionada?.url">
             <div class="invalid-feedback"> {{getErrorMessage(formEdit,
               'url')}} </div>
@@ -304,7 +302,9 @@ aria-labelledby="modalInformacionEdicionProfesionLabel" tabindex="-1">
           </div>
           <div class="col-7">
             <input [value]="publicidad_seleccionada?.fecha_inicio"
-              formControlName="inicio" type="datetime-local" id="start" required
+            [ngClass]="isInvalidForm('inicio', 'actualizar') ?
+            'is-invalid' : ''"
+              formControlName="inicio" type="datetime-local" format="YYYY-MM-DDTHH:mm:ssZ" id="start" required
               min="{{getCurrentDate()}}">
             <div class="invalid-feedback"> {{getErrorMessage(formEdit,
               'inicio')}} </div>
@@ -322,7 +322,9 @@ aria-labelledby="modalInformacionEdicionProfesionLabel" tabindex="-1">
           </div>
           <div class="col-7">
             <input [value]="publicidad_seleccionada?.fecha_expiracion"
-              formControlName="fin" type="datetime-local" id="start" required
+            [ngClass]="isInvalidForm('fin', 'actualizar') ?
+            'is-invalid' : ''"
+              formControlName="fin"  format="YYYY-MM-DDTHH:mm:ssZ" type="datetime-local" id="start" required
               min="{{getCurrentDate()}}"
         
               >
@@ -338,7 +340,7 @@ aria-labelledby="modalInformacionEdicionProfesionLabel" tabindex="-1">
       <button class="btn btn-danger"
         data-bs-target="#modalInformacionProfesion" data-bs-toggle="modal">Regresar</button>
       <button
-
+      [disabled]="formEdit.invalid? true : false"
         data-bs-target="#modalConfirmacion"
         data-bs-toggle="modal"
         class="btn btn-success"
@@ -465,7 +467,12 @@ aria-labelledby="modalCrearProfesionLabel" tabindex="-1">
           <div class="col-7">
             <input type="datetime-local"
               id="start"
-              required pattern="\d{4}-\d{2}-\d{2}"
+              required
+              [ngClass]="isInvalidForm('inicio', 'crear') ? 'is-invalid'
+              :
+              publicidadCrear.get('inicio')?.touched ||
+              publicidadCrear.get('inicio')?.dirty &&
+              !publicidadCrear.get('inicio')?.invalid ? 'is-valid' : ''"
               formControlName="inicio"
               min="{{getCurrentDate()}}">
             <div class="invalid-feedback"> {{getErrorMessage(publicidadCrear,
@@ -485,7 +492,11 @@ aria-labelledby="modalCrearProfesionLabel" tabindex="-1">
           <div class="col-7">
             <input
               formControlName="fin" type="datetime-local" id="start" required
-              pattern="\d{4}-\d{2}-\d{2}"
+              [ngClass]="isInvalidForm('fin', 'crear') ? 'is-invalid'
+              :
+              publicidadCrear.get('fin')?.touched ||
+              publicidadCrear.get('fin')?.dirty &&
+              !publicidadCrear.get('fin')?.invalid ? 'is-valid' : ''"
               min="{{getCurrentDate()}}">
             <div class="invalid-feedback"> {{getErrorMessage(publicidadCrear,
               'fin')}} </div>
@@ -499,7 +510,7 @@ aria-labelledby="modalCrearProfesionLabel" tabindex="-1">
     </div>
     <div class="modal-footer">
       <button
-
+      [disabled]="publicidadCrear.invalid? true : false"
         data-bs-target="#modalConfirmacion"
         data-bs-toggle="modal"
         class="btn btn-success" 

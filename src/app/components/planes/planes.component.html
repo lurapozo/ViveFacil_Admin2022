@@ -81,7 +81,8 @@
           </div>
 
           <div class="col-2 align-self-center">
-            <h4 class="p-0 m-0">{{a.estado}}</h4>
+            <span *ngIf="a.estado" class="badge text-bg-success">Activo</span>
+            <span *ngIf="!a.estado" class="badge text-bg-danger">Inactivo</span>
           </div>
           
 
@@ -318,7 +319,7 @@
         <button class="btn btn-danger"
           data-bs-target="#modalInformacionProfesion" data-bs-toggle="modal">Regresar</button>
         <button
-       
+        [disabled]="formEdit.invalid? true : false"
           data-bs-target="#modalConfirmacion"
           data-bs-toggle="modal"
           class="btn btn-success"

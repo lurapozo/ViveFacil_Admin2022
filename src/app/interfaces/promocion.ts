@@ -9,7 +9,7 @@ export interface Promocion {
   fecha_expiracion: string;
   participantes: string;
   estado: boolean;
-  foto: string;
+  foto: File | null;
   tipo_categoria: string;
   cantidad: number;
 }
@@ -23,11 +23,12 @@ export interface PromocionCrear {
   fecha_expiracion: string;
   participantes: string;
   estado: boolean;
-  foto: string;
+  foto: File | null;
   tipo_categoria: string;
   cantidad: number;
 }
 export interface BodyPromocionActualizar {
+  id:any
   codigo: string;
   titulo: string;
   descripcion: string;

@@ -13,14 +13,14 @@ export class PromocionComponent {
 
   arr_promocion!: Promocion[]  | undefined;
   arr_filtered_promocion!: Promocion[]  | undefined;
-  imagenCrear: any
   condicionNext = false
   currentPage = 1
   pageNumber: number[] = [];
   promocion_seleccionada:  Promocion  | undefined;
-  fileImagenActualizar: File = {} as File
-  imagenActualizar: any
-  fileImagenCrear: any
+  fileImagenActualizar: File = {} as File;
+  imagenActualizar: string | undefined;
+  fileImagenCrear: File = {} as File;
+  imagenCrear: string | undefined;
   existImageCrear = false; existImageActualizar = false;
   activo = ''
   activoCond = false
@@ -51,15 +51,15 @@ export class PromocionComponent {
 }
 
 promocionCrear: FormGroup = new FormGroup({
-  codigo: new FormControl(),
+  codigo: new FormControl('',[Validators.required]),
   titulo: new FormControl('', [Validators.required]),
   descripcion: new FormControl('', [Validators.required]),
   descuento: new FormControl('', [Validators.required]),
-  cantidad: new FormControl(''),
-  inicio: new FormControl(''),
+  cantidad: new FormControl('',[Validators.required]),
+  inicio: new FormControl('',[Validators.required]),
   fin: new FormControl('',[Validators.required]),
   imagen: new FormControl(this.fileImagenActualizar),
-  categoria: new FormControl(''),
+  categoria: new FormControl('',[Validators.required]),
   participante:new FormControl('', [Validators.required]),
 
 
@@ -67,15 +67,14 @@ promocionCrear: FormGroup = new FormGroup({
 
 
 formEdit: FormGroup = new FormGroup({
-  codigo: new FormControl(),
   titulo: new FormControl('', [Validators.required]),
   descripcion: new FormControl('', [Validators.required]),
   descuento: new FormControl('', [Validators.required]),
-  cantidad: new FormControl(''),
-  inicio: new FormControl(''),
+  cantidad: new FormControl('',[Validators.required]),
+  inicio: new FormControl('',[Validators.required]),
   fin: new FormControl('',[Validators.required]),
   imagen: new FormControl(this.fileImagenActualizar),
-  categoria: new FormControl(''),
+  categoria: new FormControl('',[Validators.required]),
   participante:new FormControl('', [Validators.required]),
 
 
@@ -108,14 +107,14 @@ limpiarForm(tipo: string) {
     this.promocionCrear.get('titulo')?.reset();
     this.promocionCrear.get('descuento')?.reset();
     this.promocionCrear.get('descripcion')?.reset();
-    this.promocionCrear.get('cantidad')?.setValue('');
-    this.promocionCrear.get('inicio')?.setValue('');
-    this.promocionCrear.get('fin')?.setValue('');
-    this.promocionCrear.get('punto')?.setValue('');
-    this.promocionCrear.get('categoria')?.setValue('');
-    this.promocionCrear.get('imagen')?.setValue('');
-    this.promocionCrear.get('participante')?.setValue('');
-    this.promocionCrear.get('codigo')?.setValue('')
+    this.promocionCrear.get('cantidad')?.reset();
+    this.promocionCrear.get('inicio')?.reset();
+    this.promocionCrear.get('fin')?.reset();
+    this.promocionCrear.get('punto')?.reset();
+    this.promocionCrear.get('categoria')?.reset();
+    this.promocionCrear.get('imagen')?.reset();
+    this.promocionCrear.get('participante')?.reset();
+    this.promocionCrear.get('codigo')?.reset();
 
   } else if(tipo === 'actualizar') {
 
@@ -132,7 +131,6 @@ limpiarForm(tipo: string) {
   
     this.existImageActualizar = false;
     this.formEdit.get('imagen')?.reset();
-    titulo? this.formEdit.get('codigo')?.setValue(codigo) : this.formEdit.get('codigo')?.reset();
     titulo? this.formEdit.get('titulo')?.setValue(titulo) : this.formEdit.get('titulo')?.reset();
     descripcion? this.formEdit.get('descripcion')?.setValue(descripcion) : this.formEdit.get('descripcion')?.reset();
     descuento? this.formEdit.get('descuento')?.setValue(descuento) : this.formEdit.get('descuento')?.reset();
@@ -331,7 +329,7 @@ onCrear(){
     porcentaje: 0,
     fecha_iniciacion: '',
     fecha_expiracion: '',
-    foto: '',
+    foto: null,
     tipo_categoria: '',
     cantidad: 0,
     participantes: '',
@@ -347,10 +345,10 @@ onCrear(){
   const participante = this.promocionCrear.get('participante')?.value;
   const categoria = this.promocionCrear.get('categoria')?.value;
   const descuento = this.promocionCrear.get('descuento')?.value;
-  const foto = this.promocionCrear.get('imagen')?.value;
+  const foto = this.promocionCrear.get('imagen')?.value as File;
 
   console.log(codigo , titulo , descripcion , inicio , fin , cantidad , participante , categoria , descuento)
-  if(titulo && descripcion && inicio && fin && cantidad && participante && categoria && descuento ){
+ 
     cupon.titulo = titulo
     cupon.codigo=codigo
     cupon.descripcion = descripcion
@@ -363,17 +361,18 @@ onCrear(){
     if(foto && this.existImageCrear){
       cupon.foto = foto; // Si hay foto se le agrega al body.
     }
-    this.pythonAnywhereService.crear_promocion(cupon).subscribe(resp => {
-      console.log(resp)
-    })
 
-  }
+
+  
+  this.pythonAnywhereService.crear_promocion(cupon).subscribe(resp => {
+    console.log(resp)
+  })
   
 }
 
 
 onActualizar(){
-  let cupon :BodyPromocionActualizar ={
+  let promo :BodyPromocionActualizar ={
     codigo: '',
     titulo: '',
     descripcion: '',
@@ -383,9 +382,10 @@ onActualizar(){
     cantidad: 0,
     foto: null,
     tipo_categoria: '',
-    participantes: ''
+    participantes: '',
+    id: ''
   }
-  const codigo = this.formEdit.get('codigo')?.value;
+
   const titulo = this.formEdit.get('titulo')?.value;
   const descripcion = this.formEdit.get('descripcion')?.value;
   const inicio = this.formEdit.get('inicio')?.value;
@@ -394,27 +394,31 @@ onActualizar(){
   const participante = this.formEdit.get('participante')?.value;
   const categoria = this.formEdit.get('categoria')?.value;
   const descuento = this.formEdit.get('descuento')?.value;
-  const foto = this.formEdit.get('imagen')?.value;
-  if(codigo && titulo && descripcion && inicio && fin && cantidad && participante && categoria && descuento ){
-    cupon.codigo = codigo
-    cupon.titulo=titulo
-    cupon.descripcion = descripcion
-    cupon.fecha_iniciacion = inicio
-    cupon.fecha_expiracion = fin
-    cupon.porcentaje = descuento
-    cupon.cantidad =cantidad
-    cupon.participantes = participante
-    cupon.tipo_categoria = categoria
+  const foto = this.formEdit.get('imagen')?.value as File;
+  
+   
+    promo.titulo=titulo
+    promo.descripcion = descripcion
+    promo.fecha_iniciacion = inicio
+    promo.fecha_expiracion = fin
+    promo.porcentaje = descuento
+    promo.cantidad =cantidad
+    promo.participantes = participante
+    promo.tipo_categoria = categoria
+    if(this.promocion_seleccionada?.codigo){
+      promo.codigo=this.promocion_seleccionada?.codigo
+    }
 
-  }
+  
 
   if(foto && this.existImageCrear){
-    cupon.foto = foto; 
+    promo.foto = foto; 
   }
   if(this.promocion_seleccionada){
     const id = this.promocion_seleccionada.id
+    promo.id=id
     console.log(this.formEdit)
-    this.pythonAnywhereService.actualizar_promocion(cupon,id).subscribe(resp=>{console.log(resp);})
+    this.pythonAnywhereService.actualizar_promocion(promo,id).subscribe(resp=>{console.log(resp);})
 
   }
 

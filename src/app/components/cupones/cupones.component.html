@@ -264,26 +264,7 @@
             </div>
           </div>
 
-          <div class="row p-2 align-items-center">
-            <div class="col-5">
-              <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
-                  fw-bold">Codigo:</h3></label>
-            </div>
-            <div class="col-7">
-              <input
-                type="text"
-                formControlName="codigo"
-                class="form-control"
-                [ngClass]="isInvalidForm('codigo', 'actualizar') ? 'is-invalid'
-                : ''"
-
-                value="Mark"
-                [placeholder]="cupon_seleccionada?.titulo"
-                [value]="cupon_seleccionada?.titulo">
-              <div class="invalid-feedback"> {{getErrorMessage(formEdit,
-                'codigo')}} </div>
-            </div>
-          </div>
+     
           <div class="row p-2 align-items-center">
             <div class="col-5">
               <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
@@ -316,9 +297,6 @@
                 class="form-control"
                 [ngClass]="isInvalidForm('descripcion', 'actualizar') ?
                 'is-invalid' : ''"
-
-                value="Mark"
-
                 [value]="cupon_seleccionada?.descripcion"></textarea>
               <div class="invalid-feedback"> {{getErrorMessage(formEdit,
                 'descripcion')}} </div>
@@ -338,9 +316,6 @@
                 class="form-control"
                 [ngClass]="isInvalidForm('descuento', 'actualizar') ?
                 'is-invalid' : ''"
-
-                value="Mark"
-
                 [value]="cupon_seleccionada?.porcentaje">
               <div class="invalid-feedback"> {{getErrorMessage(formEdit,
                 'descuento')}} </div>
@@ -360,9 +335,6 @@
                 class="form-control"
                 [ngClass]="isInvalidForm('cantidad', 'actualizar') ?
                 'is-invalid' : ''"
-
-                value="Mark"
-
                 [value]="cupon_seleccionada?.cantidad">
               <div class="invalid-feedback"> {{getErrorMessage(formEdit,
                 'cantidad')}} </div>
@@ -377,7 +349,8 @@
             <div class="col-7">
               <input type="date"
                 [value]="cupon_seleccionada?.fecha_iniciacion" id="start"
-                required pattern="\d{4}-\d{2}-\d{2}"
+                [ngClass]="isInvalidForm('inicio', 'actualizar') ? 'is-invalid' :
+                ''"
                 formControlName="inicio"
                 min="{{getCurrentDate()}}">
               <div class="invalid-feedback"> {{getErrorMessage(formEdit,
@@ -396,8 +369,9 @@
             </div>
             <div class="col-7">
               <input [value]="cupon_seleccionada?.fecha_expiracion"
+              [ngClass]="isInvalidForm('fin', 'actualizar') ? 'is-invalid' :
+              ''"
                 formControlName="fin" type="date" id="start" required
-                pattern="\d{4}-\d{2}-\d{2}"
                 min="{{getCurrentDate()}}">
               <div class="invalid-feedback"> {{getErrorMessage(formEdit,
                 'fin')}} </div>
@@ -416,8 +390,6 @@
                 class="form-control"
                 [ngClass]="isInvalidForm('punto', 'actualizar') ? 'is-invalid' :
                 ''"
-
-
                 [value]="cupon_seleccionada?.puntos">
               <div class="invalid-feedback"> {{getErrorMessage(formEdit,
                 'punto')}} </div>
@@ -432,18 +404,11 @@
             </div>
             <div class="col-7">
               <select
-
-
                 class="form-select"
-                [ngClass]="isInvalidForm('categoria', 'actualizar') ?
-                'is-invalid' : ''"
                 formControlName="categoria"
-
                 class="form-control"
                 [ngClass]="isInvalidForm('categoria', 'actualizar') ? 'is-invalid' :
-                formEdit.get('categoria')?.touched ||
-                formEdit.get('categoria')?.dirty &&
-                !formEdit.get('categoria')?.invalid ? 'is-valid' : ''"
+                ''"
                 aria-describedby="selectorServicioCrearFeedback">
                 <option *ngFor="let c of categoria" [id]="c.nombre"
                   value={{cupon_seleccionada?.tipo_categoria}}> {{c.nombre}}
@@ -463,7 +428,7 @@
         <button class="btn btn-danger"
           data-bs-target="#modalInformacionProfesion" data-bs-toggle="modal">Regresar</button>
         <button
-
+          [disabled]="formEdit.invalid? true : false"
           data-bs-target="#modalConfirmacion"
           data-bs-toggle="modal"
           class="btn btn-success"
@@ -495,27 +460,27 @@
         <form [formGroup]="cuponCrear" class="">
           <!-- Seccion de imagen -->
    
-         <div class="row">
-          <div class="col d-flex justify-content-center">
-            <img *ngIf="existImageCrear" class="rounded mx-auto d-block
-              img-fluid w-50 image_modal" [src]="imagenCrear" alt="Archivo
-              incorrecto">
-            <i *ngIf="!existImageCrear" class="rounded mx-auto d-block
-              img-fluid w-50 bi bi-upload icono"></i>
+          <div class="row">
+            <div class="col d-flex justify-content-center">
+              <img *ngIf="existImageCrear" class="rounded mx-auto d-block
+                img-fluid w-50 image_modal" [src]="imagenCrear" alt="Archivo
+                incorrecto">
+              <i *ngIf="!existImageCrear" class="rounded mx-auto d-block
+                img-fluid w-50 bi bi-upload icono"></i>
+            </div>
+            <div class="p-2">
+              <input
+                class="w-100 centrar form-control"
+                [ngClass]="cuponCrear.get('imagen')?.hasError('image_error')
+                ? 'is-invalid' : '' || (existImageCrear)? 'is-valid' : ''"
+                type="file"
+                id="file_input"
+                accept="image/png, image/jpeg"
+                (change)="loadImageFromDevice($event, 'crear')">
+              <div class="invalid-feedback">{{getErrorMessage(cuponCrear,
+                'imagen')}}</div>
+            </div>
           </div>
-          <div class="p-2">
-            <input
-              class="w-100 centrar form-control"
-              [ngClass]="cuponCrear.get('imagen')?.hasError('image_error')
-              ? 'is-invalid' : '' || (existImageCrear)? 'is-valid' : ''"
-              type="file"
-              id="file_input"
-              accept="image/png, image/jpeg"
-              (change)="loadImageFromDevice($event, 'crear')">
-            <div class="invalid-feedback">{{getErrorMessage(cuponCrear,
-              'imagen')}}</div>
-          </div>
-        </div>
 
           <div class="row p-2 align-items-center">
             <div class="col-5">
@@ -677,6 +642,10 @@
             <div class="col-7">
               <input type="date"
                 id="start"
+                [ngClass]="isInvalidForm('inicio', 'crear') ? 'is-invalid' :
+                cuponCrear.get('inicio')?.touched ||
+                cuponCrear.get('inicio')?.dirty &&
+                !cuponCrear.get('inicio')?.invalid ? 'is-valid' : ''"
                 required pattern="\d{4}-\d{2}-\d{2}"
                 formControlName="inicio"
                 min="{{getCurrentDate()}}">
@@ -698,20 +667,21 @@
               <input
                 formControlName="fin" type="date" id="start" required
                 pattern="\d{4}-\d{2}-\d{2}"
+                [ngClass]="isInvalidForm('fin', 'crear') ? 'is-invalid' :
+                cuponCrear.get('fin')?.touched ||
+                cuponCrear.get('fin')?.dirty &&
+                !cuponCrear.get('fin')?.invalid ? 'is-valid' : ''"
                 min="{{getCurrentDate()}}">
               <div class="invalid-feedback"> {{getErrorMessage(cuponCrear,
                 'fin')}} </div>
             </div>
           </div>
 
-
-
-
         </form>
       </div>
       <div class="modal-footer">
         <button
-
+        [disabled]="cuponCrear.invalid? true : false"
           data-bs-target="#modalConfirmacion"
           data-bs-toggle="modal"
           class="btn btn-success" 

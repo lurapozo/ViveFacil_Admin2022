@@ -1225,7 +1225,7 @@ get refresh$(){
     bodyActualizar.descripcion ? dataUpdate.append('descripcion', bodyActualizar.descripcion) : null;
     bodyActualizar.duracion ? dataUpdate.append('duracion', bodyActualizar.duracion) : null;
     bodyActualizar.precio ? dataUpdate.append('precio', bodyActualizar.precio) : null;
-
+    bodyActualizar.estado ? dataUpdate.append('estado', bodyActualizar.estado.toString()) : null;
     
     return this.http.put(this.API_URL + '/planes/', dataUpdate) as Observable<Plan>;
   }

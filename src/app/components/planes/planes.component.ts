@@ -317,11 +317,8 @@ estadoActual=false
     const precio = this.formEdit.get('precio')?.value;
     const duracion = this.formEdit.get('duracion')?.value;
     const foto = this.formEdit.get('imagen')?.value;
-    console.log(this.formEdit)
-    if(this.existImageActualizar && foto){
-     
-      actualizar.imagen = foto; 
-    }
+   
+console.log(nombre,precio,duracion,descripcion)
     if(nombre && descripcion && precio && duracion){
       console.log(nombre,descripcion,precio,duracion)
       actualizar.id=id
@@ -329,6 +326,10 @@ estadoActual=false
       actualizar.descripcion=descripcion
       actualizar.precio=precio
       actualizar.duracion=duracion
+      if( foto && this.imagenActualizar){
+     
+        actualizar.imagen = foto; 
+      }
           this.pythonAnywhereService.actualizar_plan(actualizar).subscribe(resp=>{
           console.log(resp)
          })
@@ -342,6 +343,19 @@ estadoActual=false
 
   cambiarEstado(event:any){
     this.estadoActual=event.srcElement.checked
+    console.log()
+    const actualizar : BodyActualizarPlan ={
+      id:0
+    }
+    const id = this.planes_seleccionada?.id;
+
+    actualizar.id= id
+
+    actualizar.estado= event.srcElement.checked
+    this.pythonAnywhereService.actualizar_plan(actualizar).subscribe(resp=>{
+      console.log(resp)
+     })
+
 
   }
 }

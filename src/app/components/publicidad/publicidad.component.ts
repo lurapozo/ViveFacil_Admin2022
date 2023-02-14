@@ -62,7 +62,7 @@ export class PublicidadComponent {
 
 publicidadCrear
 : FormGroup = new FormGroup({
-  codigo: new FormControl(),
+
   titulo: new FormControl('', [Validators.required]),
   descripcion: new FormControl('', [Validators.required]),
   inicio: new FormControl(''),
@@ -76,7 +76,7 @@ publicidadCrear
 
 
 formEdit: FormGroup = new FormGroup({
-  codigo: new FormControl(),
+
   titulo: new FormControl('', [Validators.required]),
   descripcion: new FormControl('', [Validators.required]),
   inicio: new FormControl(''),
@@ -326,7 +326,7 @@ onCrear(){
   .get('imagen')?.value as File;
 
 
-   
+   console.log(this.publicidadCrear)
     cupon.descripcion = descripcion
     cupon.fecha_inicio = moment(inicio).format("YYYY-MM-DDTHH:mm:SS")
     cupon.fecha_expiracion = moment(fin).format("YYYY-MM-DDTHH:mm:SS")
@@ -336,9 +336,9 @@ onCrear(){
     if(foto && this.existImageCrear){
       cupon.imagen = foto; // Si hay foto se le agrega al body.
     }
-    this.pythonAnywhereService.crear_publicidad(cupon).subscribe(resp => {
-      console.log(resp)
-    })
+    // this.pythonAnywhereService.crear_publicidad(cupon).subscribe(resp => {
+    //   console.log(resp)
+    // })
 
 
   
@@ -347,9 +347,12 @@ onCrear(){
 
 onActualizar(){
   let publi :BodyActualizarPublicidad ={
-    id: ''
+    id: '',
+    fecha_inicio:this.publicidad_seleccionada?.fecha_inicio,
+    fecha_expiracion:this.publicidad_seleccionada?.fecha_expiracion
   }
  publi.id=this.publicidad_seleccionada?.id
+ console.log(this.publicidad_seleccionada?.fecha_inicio)
   const titulo = this.formEdit.get('titulo')?.value;
   const descripcion = this.formEdit.get('descripcion')?.value;
   const inicio = this.formEdit.get('inicio')?.value;
@@ -361,20 +364,22 @@ onActualizar(){
     publi.imagen = foto;
   }
   console.log(inicio)
+if(titulo && descripcion && inicio && fin && url){
+  publi.titulo = titulo
+  publi.descripcion = descripcion           
+  publi.fecha_inicio = moment(inicio).format('YYYY-MM-DDTHH:mm:ssZ')
+  publi.fecha_expiracion = moment(fin).format("YYYY-MM-DDTHH:mm:SS")
+  publi.url = url
 
-    publi.titulo = titulo
-    publi.descripcion = descripcion
-    publi.fecha_inicio = moment(inicio).format("YYYY-MM-DDTHH:mm:SS")
-    publi.fecha_expiracion = moment(fin).format("YYYY-MM-DDTHH:mm:SS")
-    publi.url = url
+  if(this.publicidad_seleccionada){
 
-    if(this.publicidad_seleccionada){
-
-      console.log(this.formEdit)
-      this.pythonAnywhereService.actualizar_publicidad(publi).subscribe(resp=>{console.log(resp);})
+   
+    this.pythonAnywhereService.actualizar_publicidad(publi).subscribe(resp=>{console.log(resp);})
+    console.log("soy nulo",inicio,fin)
   
-    
-  }
+}
+}
+   
 
 }
 
