@@ -154,6 +154,7 @@ export class InsigniasComponent {
             this.existImageCrear = true;
           }
           else if(tipo === 'actualizar'){
+            console.log("imagen actualizando")
             this.existImageActualizar = true;
           }
         }
@@ -173,6 +174,7 @@ export class InsigniasComponent {
           this.crearInsignias.get('imagen')?.setValue(file);
           this.fileImagenCrear = file;
           this.imagenCrear = imagen.base;
+    
         }
         else if(tipo === 'actualizar'){
           this.editarInsignias.get('imagen')?.setValue(file);

@@ -712,13 +712,21 @@ obtener_politicas(){
    * @param id Recibe un string del ID de la categoria a actualizar el estado.
    * @returns Devuelve un Observable de un Objeto Categoria el cual fue modificado.
    */
-  actualizar_categoria(bodyActualizar: BodyActualizarCategoria, id: string): Observable<Categoria> {
+  actualizar_categoria(bodyActualizar: BodyActualizarCategoria, id: number): Observable<Categoria> {
     const dataUpdate = new FormData();
     bodyActualizar.nombre ? dataUpdate.append('nombre', bodyActualizar.nombre) : null;
     bodyActualizar.descripcion ? dataUpdate.append('descripcion', bodyActualizar.descripcion) : null;
-    dataUpdate.append('estado', bodyActualizar.estado.toString());
     bodyActualizar.foto ? dataUpdate.append('foto', bodyActualizar.foto) : null;
     bodyActualizar.foto2 ? dataUpdate.append('foto2', bodyActualizar.foto2) : null;
+
+    return this.http.put(`${this.API_URL}/categoria_update/${id}`, dataUpdate) as Observable<Categoria>;
+  }
+
+  actualizar_categoria_estado(bodyActualizar: BodyActualizarCategoria, id: number): Observable<Categoria> {
+    const dataUpdate = new FormData();
+  
+    dataUpdate.append('estado', bodyActualizar.estado.toString())
+
 
     return this.http.put(`${this.API_URL}/categoria_update/${id}`, dataUpdate) as Observable<Categoria>;
   }
@@ -730,7 +738,7 @@ obtener_politicas(){
    * @param id Recibe un string perteneciente al ID de la Categorias la cual sera eliminada.
    * @returns Devuelve un Observable con una respuesta OK(204) or Error(500).
    */
-  eliminar_categoria(id: string): Observable<any> {
+  eliminar_categoria(id: number): Observable<any> {
     return this.http.delete(`${this.API_URL}/categoria_delete/${id}`) as Observable<any>;
   }
 
@@ -744,9 +752,10 @@ obtener_politicas(){
   add_categoria(bodyCrear: BodyCrearCategoria): Observable<BodyResponseCrearCategoria> {
     const dataCrear = new FormData();
     dataCrear.append("nombre", bodyCrear.nombre);
-    dataCrear.append("descripcion", bodyCrear.descripcion);
+    dataCrear.append("descripcion", bodyCrear.descripcion);;
     bodyCrear.foto ? dataCrear.append("foto", bodyCrear.foto) : null;
-    return this.http.post(`${this.API_URL}/categorias/`, bodyCrear) as Observable<BodyResponseCrearCategoria>;
+    bodyCrear.foto2 ? dataCrear.append("foto2", bodyCrear.foto2) : null;
+    return this.http.post(`${this.API_URL}/categorias/`, dataCrear) as Observable<BodyResponseCrearCategoria>;
   }
   //-----------------------------------------------------------------------------------------------------------------------
 
@@ -977,6 +986,7 @@ obtener_politicas(){
 }
   */
   crear_cupon(bodyCrear: CuponCrear) {
+  
     const dataCrear = new FormData();
     dataCrear.append("codigo", bodyCrear.codigo);
     bodyCrear.foto ? dataCrear.append("foto", bodyCrear.foto) : null;
@@ -988,10 +998,10 @@ obtener_politicas(){
     dataCrear.append("fecha_iniciacion", bodyCrear.fecha_iniciacion);
     dataCrear.append("fecha_expiracion", bodyCrear.fecha_expiracion);
     dataCrear.append("descripcion", bodyCrear.descripcion);
-    return this.http.post(this.API_URL + '/cupones/', bodyCrear);
+    return this.http.post(this.API_URL + '/cupones/', dataCrear);
   }
 
-  //NO SE LO USABA EN LA ANTERIOR APP
+
   obtener_ctgprom(promCode: any) {
     return this.http.get(`${this.API_URL}/promcategorias/${promCode}`);
   }

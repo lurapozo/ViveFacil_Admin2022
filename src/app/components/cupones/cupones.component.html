@@ -242,8 +242,9 @@
               <img *ngIf="existImageActualizar" class="image_modal rounded
                 mx-auto d-block img-fluid w-50" [src]="imagenActualizar"
                 alt="Archivo incorrecto">
-              <img *ngIf="!existImageActualizar && cupon_seleccionada?.foto"
-                class="image_modal rounded mx-auto d-block img-fluid w-50"
+              <img *ngIf="!existImageActualizar &&
+              cupon_seleccionada?.foto" class="image_modal rounded
+                mx-auto d-block img-fluid w-50"
                 [src]="'https://tomesoft1.pythonanywhere.com'+cupon_seleccionada?.foto"
                 alt="Archivo incorrecto">
               <i *ngIf="!existImageActualizar && !cupon_seleccionada?.foto"
@@ -253,8 +254,8 @@
             <div class="p-2">
               <input
                 class="w-100 centrar form-control"
-                [ngClass]="formEdit.get('imagen')?.hasError('image_error') ?
-                'is-invalid' : '' || (existImageActualizar)? 'is-valid' : ''"
+                [ngClass]="formEdit.get('imagen')?.hasError('image_error')
+                ? 'is-invalid' : '' || (existImageActualizar)? 'is-valid' : ''"
                 type="file"
                 id="file_input"
                 accept="image/png, image/jpeg"
