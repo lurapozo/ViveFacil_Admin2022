@@ -19,7 +19,7 @@ export interface PromocionCrear {
   titulo: string;
   descripcion: string;
   porcentaje: number;
-  fecha_iniciacion: string | null;
+  fecha_iniciacion: string;
   fecha_expiracion: string;
   participantes: string;
   estado: boolean;

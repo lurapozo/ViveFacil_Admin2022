@@ -8,7 +8,7 @@ import { Administrador, AdministradorPaginacion, BodyActualizarAdministrador, Bo
 import { map, Observable, pipe, Subject } from 'rxjs';
 import { BodyActualizarInsignia, BodyCrearInsignia, BodyResponseCrearInsignia, Insignia } from 'src/app/interfaces/insignia';
 import { BodyActualizarCargo, BodyCrearCargo, BodyResponseCrearCargo, Cargo } from 'src/app/interfaces/cargo';
-import { BodyPromocionActualizar, BodyResponsePromocionActualizar, Promocion } from 'src/app/interfaces/promocion';
+import { BodyPromocionActualizar, BodyResponsePromocionActualizar, Promocion, PromocionCrear } from 'src/app/interfaces/promocion';
 import { BodyCuponActualizar, BodyResponseCuponActualizar, Cupon, CuponCrear } from 'src/app/interfaces/cupon';
 import { PaymentEfectivo, PaymentPaginacion, PaymentTarjeta } from 'src/app/interfaces/payment';
 import { BodyActualizarProveedor, BodyActualizarProveedorPendiente, BodyCrearProfesionProveedor, BodyCrearProveedor, BodyCrearProveedorPendiente, BodyResponseCrearProfesionProveedor, BodyResponseCrearProveedorPendiente, Proveedor, ProveedorPaginacion, ProveedorPendiente, ProveedorProfesion } from 'src/app/interfaces/proveedor';
@@ -335,6 +335,7 @@ obtener_politicas(){
    * @param id Recibe un string perteneciente al ID del cupon la cual sera modificada.
    * @returns Devuelve un Observable con un objeto BodyResponseCuponActualizar.
    */
+  
   actualizar_cupon(bodyActualizar: BodyCuponActualizar, id: any): Observable<BodyResponseCuponActualizar> {
     const dataUpdate = new FormData();
     dataUpdate.append("codigo", bodyActualizar.codigo);
@@ -961,8 +962,19 @@ obtener_politicas(){
     "cantidad": 1
       }
   */
-  crear_promocion(data: any) {
-    return this.http.post(this.API_URL + '/promociones/', data);
+  crear_promocion(bodyCrear: PromocionCrear) {
+    const dataCrear = new FormData();
+    dataCrear.append("codigo", bodyCrear.codigo);
+    bodyCrear.foto ? dataCrear.append("foto", bodyCrear.foto) : null;
+    dataCrear.append("titulo", bodyCrear.titulo);
+    dataCrear.append("tipo_categoria", bodyCrear.tipo_categoria);
+    dataCrear.append("cantidad", bodyCrear.cantidad.toString());
+    dataCrear.append("porcentaje", bodyCrear.porcentaje.toString());
+    dataCrear.append("fecha_iniciacion", bodyCrear.fecha_iniciacion);
+    dataCrear.append("fecha_expiracion", bodyCrear.fecha_expiracion);
+    dataCrear.append("descripcion", bodyCrear.descripcion);
+    dataCrear.append("participantes", bodyCrear.participantes);
+    return this.http.post(this.API_URL + '/promociones/', dataCrear);
   }
 
   /**

@@ -126,7 +126,6 @@ limpiarForm(tipo: string) {
     const categoria = this.promocion_seleccionada?.tipo_categoria;
     const inicio = this.promocion_seleccionada?.fecha_iniciacion;
     const fin = this.promocion_seleccionada?.fecha_expiracion;
-    const foto = this.promocion_seleccionada?.foto;
     const participante = this.promocion_seleccionada?.participantes;
   
     this.existImageActualizar = false;
@@ -138,7 +137,6 @@ limpiarForm(tipo: string) {
     categoria? this.formEdit.get('categoria')?.setValue(categoria) : this.formEdit.get('categoria')?.reset();
     inicio? this.formEdit.get('inicio')?.setValue(inicio) : this.formEdit.get('inicio')?.reset();
     fin? this.formEdit.get('fin')?.setValue(inicio) : this.formEdit.get('fin')?.reset();
-    foto? this.formEdit.get('imagen')?.setValue(inicio) : this.formEdit.get('imagen')?.reset();
     participante? this.formEdit.get('participante')?.setValue(participante) : this.formEdit.get('participante')?.reset();
  
 }}
@@ -376,7 +374,7 @@ onActualizar(){
     codigo: '',
     titulo: '',
     descripcion: '',
-    fecha_iniciacion: null,
+    fecha_iniciacion: '',
     fecha_expiracion: '',
     porcentaje: 0,
     cantidad: 0,
@@ -385,7 +383,10 @@ onActualizar(){
     participantes: '',
     id: ''
   }
+if(this.promocion_seleccionada){
 
+  promo.codigo= this.promocion_seleccionada.codigo
+}
   const titulo = this.formEdit.get('titulo')?.value;
   const descripcion = this.formEdit.get('descripcion')?.value;
   const inicio = this.formEdit.get('inicio')?.value;
@@ -409,11 +410,12 @@ onActualizar(){
       promo.codigo=this.promocion_seleccionada?.codigo
     }
 
-  
 
-  if(foto && this.existImageCrear){
+  if(foto && this.imagenActualizar){
+  
     promo.foto = foto; 
   }
+  console.log(this.formEdit)
   if(this.promocion_seleccionada){
     const id = this.promocion_seleccionada.id
     promo.id=id
