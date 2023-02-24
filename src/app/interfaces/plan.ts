@@ -56,5 +56,5 @@ export interface BodyActualizarPlan {
   imagen?: File;
   precio?: any;
   duracion?: any;
-  estado?: boolean;
+  estado?: any;
 }

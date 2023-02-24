@@ -86,11 +86,11 @@
         </div>
 
         <div class="col-2 align-self-center">
-          <h4 class="p-0 m-0">{{a.fecha_iniciacion}}</h4>
+          <h4 class="p-0 m-0">{{a.fecha_iniciacion | date: ' MMM d, y'}}</h4>
         </div>
 
         <div class="col-2 align-self-center">
-          <h4 class="p-0 m-0">{{a.fecha_expiracion}}</h4>
+          <h4 class="p-0 m-0">{{a.fecha_expiracion  | date: ' MMM d, y'}}</h4>
         </div>
 
         <div class="col-1 align-self-center">
@@ -182,7 +182,7 @@
             <h3 class="m-0 p-0 fw-bold">Fecha inicio</h3>
           </div>
           <div class="col-7">
-            {{promocion_seleccionada?.fecha_iniciacion}}
+            {{promocion_seleccionada?.fecha_iniciacion  | date: ' MMM d, y'}}
           </div>
         </div>
 
@@ -192,7 +192,7 @@
           </div>
           <div class="col-7">
             {{promocion_seleccionada?.fecha_expiracion
-            }}
+              | date: ' MMM d, y'}}
           </div>
         </div>
 
@@ -325,7 +325,7 @@
             </div>
             <div class="col-7">
               <input
-                type="number"
+                type="text"
                 formControlName="descuento"
                 class="form-control"
                 [ngClass]="isInvalidForm('descuento', 'actualizar') ?
@@ -347,7 +347,7 @@
             </div>
             <div class="col-7">
               <input
-                type="number"
+                type="text"
                 formControlName="cantidad"
                 class="form-control"
                 [ngClass]="isInvalidForm('cantidad', 'actualizar') ?
@@ -371,6 +371,7 @@
 
             </div>
             <div class="col-7">
+              <small>{{promocion_seleccionada?.fecha_iniciacion | date: 'MMM d, y, h:mm:ss a'}}</small>
               <input [value]="promocion_seleccionada?.fecha_iniciacion"
                 [ngClass]="isInvalidForm('inicio', 'actualizar') ?
                 'is-invalid' : ''"
@@ -392,6 +393,7 @@
 
             </div>
             <div class="col-7">
+              <small>{{promocion_seleccionada?.fecha_expiracion | date: ' MMM d, y, h:mm:ss a'}}</small>
               <input [value]="promocion_seleccionada?.fecha_expiracion"
                 [ngClass]="isInvalidForm('fin', 'actualizar') ?
                 'is-invalid' : ''"
@@ -587,7 +589,7 @@
             </div>
             <div class="col-7">
               <input
-                type="number"
+                type="text"
                 formControlName="descuento"
                 class="form-control"
                 [ngClass]="isInvalidForm('descuento', 'crear') ? 'is-invalid' :
@@ -606,7 +608,7 @@
             </div>
             <div class="col-7">
               <input
-                type="number"
+                type="text"
                 formControlName="cantidad"
                 class="form-control"
                 [ngClass]="isInvalidForm('cantidad', 'crear') ? 'is-invalid' :
@@ -771,5 +773,26 @@
       </div>
     </div>
 
+  </div>
+</div>
+
+
+<!-- Toast de Información -->
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+  <div #liveToast id="liveToast" class="toast" role="alert"
+    aria-live="assertive" aria-atomic="true">
+    <div class="toast-header" [ngClass]="isErrorToast? ' bg-danger' : '
+      bg-success'">
+      <img src="../../../assets/imagenes/notification_logo.png" class="rounded
+        me-2" width="25px" alt="...">
+      <strong class="me-auto text-light">{{tituloToast}}</strong>
+      <small class="text-light">Ahora</small>
+      <button type="button" class="btn-close" data-bs-dismiss="toast"
+        aria-label="Close"></button>
+    </div>
+    <div class="toast-body bg-opacity-25" [ngClass]="isErrorToast? ' bg-danger'
+      : ' bg-success'">
+      {{mensajeToast}}
+    </div>
   </div>
 </div>

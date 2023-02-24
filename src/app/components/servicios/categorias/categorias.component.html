@@ -227,7 +227,7 @@
                 type="file"
                 id="file_input"
                 accept="image/png, image/jpeg"
-                (change)="loadImageFromDevice($event, 'actualizar')">
+                (change)="loadImageFromDevice2($event, 'actualizar')">
               <div class="invalid-feedback">{{getErrorMessage(formEdit,
                 'imagen2')}}</div>
             </div>
@@ -348,9 +348,9 @@
                 [ngClass]="crearCategoria.get('imagen2')?.hasError('image_error')
                 ? 'is-invalid' : '' || (existImageCrear2)? 'is-valid' : ''"
                 type="file"
-                id="file_input"
+                id="file_input2"
                 accept="image/png, image/jpeg"
-                (change)="loadImageFromDevice($event, 'crear')">
+                (change)="loadImageFromDevice2($event, 'crear')">
               <div class="invalid-feedback">{{getErrorMessage(crearCategoria,
                 'imagen2')}}</div>
             </div>
@@ -445,6 +445,26 @@
         <button *ngIf="isEliminar" type="button" class="btn btn-success"
           (click)="onEliminar()" data-bs-dismiss="modal">Confirmar</button>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast de Información -->
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+  <div #liveToast id="liveToast" class="toast" role="alert"
+    aria-live="assertive" aria-atomic="true">
+    <div class="toast-header" [ngClass]="isErrorToast? ' bg-danger' : '
+      bg-success'">
+      <img src="../../../assets/imagenes/notification_logo.png" class="rounded
+        me-2" width="25px" alt="...">
+      <strong class="me-auto text-light">{{tituloToast}}</strong>
+      <small class="text-light">Ahora</small>
+      <button type="button" class="btn-close" data-bs-dismiss="toast"
+        aria-label="Close"></button>
+    </div>
+    <div class="toast-body bg-opacity-25" [ngClass]="isErrorToast? ' bg-danger'
+      : ' bg-success'">
+      {{mensajeToast}}
     </div>
   </div>
 </div>

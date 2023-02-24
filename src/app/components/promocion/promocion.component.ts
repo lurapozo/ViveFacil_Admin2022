@@ -28,7 +28,9 @@ export class PromocionComponent {
   isCrear = false; isActualizar = false; isEliminar = false;
   categoria!: any[];
   participante = ['Solicitante','Proveedor']
-
+  isErrorToast = false;
+  mensajeToast = "";
+  tituloToast = "";
 
 
   constructor(private pythonAnywhereService: PythonAnywhereService, private sanitizer: DomSanitizer) {
@@ -54,8 +56,10 @@ promocionCrear: FormGroup = new FormGroup({
   codigo: new FormControl('',[Validators.required]),
   titulo: new FormControl('', [Validators.required]),
   descripcion: new FormControl('', [Validators.required]),
-  descuento: new FormControl('', [Validators.required]),
-  cantidad: new FormControl('',[Validators.required]),
+  descuento: new FormControl('', [Validators.required, Validators.minLength(1),
+    Validators.maxLength(2), Validators.pattern(/^[0-9]+$/)]),
+  cantidad: new FormControl('', [Validators.required, Validators.minLength(1),
+    Validators.maxLength(2), Validators.pattern(/^[0-9]+$/)]),
   inicio: new FormControl('',[Validators.required]),
   fin: new FormControl('',[Validators.required]),
   imagen: new FormControl(this.fileImagenActualizar),
@@ -69,8 +73,10 @@ promocionCrear: FormGroup = new FormGroup({
 formEdit: FormGroup = new FormGroup({
   titulo: new FormControl('', [Validators.required]),
   descripcion: new FormControl('', [Validators.required]),
-  descuento: new FormControl('', [Validators.required]),
-  cantidad: new FormControl('',[Validators.required]),
+  descuento: new FormControl('', [Validators.required, Validators.minLength(1),
+    Validators.maxLength(2), Validators.pattern(/^[0-9]+$/)]),
+  cantidad: new FormControl('', [Validators.required, Validators.minLength(1),
+    Validators.maxLength(2), Validators.pattern(/^[0-9]+$/)]),
   inicio: new FormControl('',[Validators.required]),
   fin: new FormControl('',[Validators.required]),
   imagen: new FormControl(this.fileImagenActualizar),
@@ -83,7 +89,8 @@ formEdit: FormGroup = new FormGroup({
 cambiarEstado(event:any){
   let estado = event.srcElement.checked
   if(this.promocion_seleccionada){
-    this.pythonAnywhereService.cambio_promocion_estado(this.promocion_seleccionada.id,estado).subscribe(resp=>{console.log(resp);});
+    this.pythonAnywhereService.cambio_promocion_estado(this.promocion_seleccionada.id,estado).subscribe(resp=>{
+      this.mostrarToastInfo('Estado de la Promocion ', 'Promocion Editada correctamente', false);});
   }
 
 
@@ -153,24 +160,28 @@ getErrorMessage(formGroup: FormGroup, item: string): string {
 
     case 'titulo':
       if (itemControl.hasError('required')) {
-        return 'Debe llenar este campo';
+        return 'El Campo Titulo es requerido';
       }
       return '';
 
     case 'descripcion':
       if (itemControl.hasError('required')) {
-        return 'Debe llenar este campo';
+        return 'El Campo Descripcion es requerido';
       }
       return '';
 
     case 'descuento':
       if (itemControl.hasError('required')) {
-        return 'Debe llenar este campo';
+        return 'El campo descuento es requerido';
+      } else if (itemControl.hasError('maxlength')) {
+        return ' El número máximo  permitido es 99';
+      } else if (itemControl.hasError('pattern')) {
+        return ' Solo se permiten números.';
       }
       return '';
     case 'participante':
       if (itemControl.hasError('required')) {
-        return 'Debe llenar este campo';
+        return 'El Campo Participante es requerido';
       }
       return '';
     case 'foto':
@@ -180,22 +191,26 @@ getErrorMessage(formGroup: FormGroup, item: string): string {
       return '';
     case 'categoria':
       if (itemControl.hasError('required')) {
-        return 'Debe llenar este campo';
+        return 'El Campo Categoria es requerido';
       }
       return '';
     case 'cantidad':
       if (itemControl.hasError('required')) {
-        return 'Debe llenar este campo';
+        return 'El campo cantidad es requerido';
+      } else if (itemControl.hasError('maxlength')) {
+        return ' El número máximo  permitido es 99';
+      } else if (itemControl.hasError('pattern')) {
+        return ' Solo se permiten números.';
       }
       return '';
     case 'inicio':
       if (itemControl.hasError('required')) {
-        return 'Debe llenar este campo';
+        return 'El campo Inicio es requerido';
       }
       return '';
     case 'fin':
       if (itemControl.hasError('required')) {
-        return 'Debe llenar este campo';
+        return 'El campo Fin es requerido';
       }
       return '';
 
@@ -229,7 +244,7 @@ isInvalidForm(subForm: string, tipo: string) {
 
     return this.promocionCrear.get(subForm)?.invalid && this.promocionCrear.get(subForm)?.touched || this.promocionCrear.get(subForm)?.dirty && this.getErrorMessage(this.promocionCrear, subForm).length !== 0;
   } else {
-    return
+    
     return this.formEdit.get(subForm)?.invalid && this.formEdit.get(subForm)?.touched || this.formEdit.get(subForm)?.dirty  && this.getErrorMessage(this.formEdit, subForm).length!==0;
   }
 }
@@ -363,7 +378,7 @@ onCrear(){
 
   
   this.pythonAnywhereService.crear_promocion(cupon).subscribe(resp => {
-    console.log(resp)
+    this.mostrarToastInfo('Estado de la Promocion ', 'Promocion creada correctamente', false)
   })
   
 }
@@ -420,7 +435,9 @@ if(this.promocion_seleccionada){
     const id = this.promocion_seleccionada.id
     promo.id=id
     console.log(this.formEdit)
-    this.pythonAnywhereService.actualizar_promocion(promo,id).subscribe(resp=>{console.log(resp);})
+    this.pythonAnywhereService.actualizar_promocion(promo,id).subscribe(resp=>{
+      this.mostrarToastInfo('Estado de la Promocion ', 'Promocion Editada correctamente', false)
+    })
 
   }
 
@@ -455,9 +472,24 @@ search(evento: any) {
 
   onDelete(){
   if(this.promocion_seleccionada){
-    this.pythonAnywhereService.eliminar_promocion(this.promocion_seleccionada.id).subscribe(resp=>console.log(resp))
+    this.pythonAnywhereService.eliminar_promocion(this.promocion_seleccionada.id).subscribe(resp=>
+      this.mostrarToastInfo('Estado de la Promocion ', 'Promocion Eliminado correctamente', false))
   }
     
   }
 
+  mostrarToastInfo(titulo: string, mensaje: string, isErrorToast: boolean) {
+    this.isErrorToast = isErrorToast;
+    this.tituloToast = titulo;
+    this.mensajeToast = mensaje;
+    const toast = document.getElementById('liveToast');
+    if (toast) {
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 7000);
+    } else {
+      console.log('No hay toast renderizado');
+    }
+  }
 }

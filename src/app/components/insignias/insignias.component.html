@@ -89,8 +89,8 @@
         </div>
 
         <div class="col-2 align-self-center">
-          <span *ngIf="!a.estado" class="badge text-bg-success">Inactivo</span>
-          <span *ngIf="a.estado" class="badge text-bg-danger">Activo</span>
+          <span *ngIf="!a.estado" class="badge text-bg-danger">Inactivo</span>
+          <span *ngIf="a.estado" class="badge text-bg-success">Activo</span>
         </div>
       </div>
     </div>
@@ -292,6 +292,27 @@
             </div>
           </div>
 
+          
+          <div class="row p-2 align-items-center">
+            <div class="col-5">
+              <label for="textareaDescripcion" class="form-label"><h3 class="m-0
+                  p-0 fw-bold">Cantidad de pedidos:</h3></label>
+            </div>
+            <div class="col-7">
+              <input
+              type="text"
+                class="form-control"
+                formControlName="pedidos"
+                [ngClass]="isInvalidForm('pedidos', 'actualizar') ?
+                'is-invalid' : ''"
+                id="textareaDescripcion"
+                [placeholder]="insignia_seleccionada?.descripcion"
+                [value]="insignia_seleccionada?.descripcion">
+              <div class="invalid-feedback"> {{getErrorMessage(editarInsignias,
+                'pedidos')}} </div>
+            </div>
+          </div>
+
 
           <div class="row p-2 align-items-center">
             <div class="col-5">
@@ -470,6 +491,7 @@
             </div>
             <div class="col-7">
               <input
+              type="text"
                 class="form-control"
                 formControlName="pedidos"
                 [ngClass]="isInvalidForm('pedidos', 'crear') ? 'is-invalid' :

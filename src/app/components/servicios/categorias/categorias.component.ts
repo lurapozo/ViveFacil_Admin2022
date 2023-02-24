@@ -24,6 +24,9 @@ export class CategoriasComponent {
   imagenCrear2: string | undefined;
   categoria?: Categoria[];
   categoria_seleccionada?: Categoria
+  isErrorToast = false;
+  mensajeToast = "";
+  tituloToast = "";
   constructor(private pythonAnywhereService: PythonAnywhereService, private sanitizer: DomSanitizer) {
     this.pythonAnywhereService.obtener_categorias().subscribe((resp: any[]) => {
       this.categoria = resp
@@ -45,13 +48,13 @@ export class CategoriasComponent {
   }
   crearCategoria = new FormGroup({
     imagen: new FormControl(this.fileImagenActualizar),
-    imagen2: new FormControl(this.fileImagenActualizar),
+    imagen2: new FormControl(this.fileImagenActualizar2),
     nombre: new FormControl('', [Validators.required]),
     descripcion: new FormControl('', [Validators.required]),
   }, []);
   formEdit = new FormGroup({
     imagen: new FormControl(this.fileImagenActualizar, [Validators.required]),
-    imagen2: new FormControl(this.fileImagenActualizar, [Validators.required]),
+    imagen2: new FormControl(this.fileImagenActualizar2, [Validators.required]),
     nombre: new FormControl('', [Validators.required]),
     descripcion: new FormControl('', [Validators.required]),
   }, []);
@@ -181,7 +184,7 @@ export class CategoriasComponent {
   loadImageFromDevice2(event: any, tipo: string) {
     const file: File = event.target.files[0];
     if (file) {
-      this.extraerBase642(file)
+      this.extraerBase64(file)
         .then((imagen: any) => {
           if (tipo === 'crear') {
             this.crearCategoria.get('imagen2')?.setValue(file);
@@ -198,31 +201,7 @@ export class CategoriasComponent {
     }
   };
 
-  extraerBase642 = async ($event: any) => new Promise((resolve) => {
-    try {
-      const unsafeImg = window.URL.createObjectURL($event);
-      const image = this.sanitizer.bypassSecurityTrustUrl(unsafeImg);
-      const reader = new FileReader();
-      reader.readAsDataURL($event);
-      reader.onload = () => {
-        resolve({
-          blob: $event,
-          image,
-          base: reader.result
-        });
-      };
-      reader.onerror = error => {
-        resolve({
-          blob: $event,
-          image,
-          base: null
-        });
-      };
-      return image;
-    } catch (e) {
-      return null;
-    }
-  });
+
   isInvalidForm(subForm: string, tipo: string) {
     if (tipo === 'crear') {
       return this.crearCategoria.get(subForm)?.invalid && this.crearCategoria.get(subForm)?.touched || this.crearCategoria.get(subForm)?.dirty && this.getErrorMessage(this.crearCategoria, subForm).length !== 0;
@@ -324,17 +303,15 @@ export class CategoriasComponent {
     }
   }
   cambiarEstado(event: any) {
-    let estado = event.srcElement.checked
+    let estado = console.log(event.srcElement.checked)
     let categoria: BodyActualizarCategoria = {
-      estado: false
+      estado: event.srcElement.checked
     }
-    if (this.categoria_seleccionada?.estado) {
-      categoria.estado = estado
-    }
+
     if(this.categoria_seleccionada?.id){
       this.pythonAnywhereService.actualizar_categoria_estado(categoria,this.categoria_seleccionada?.id).subscribe(
         resp=>{
-          console.log(resp)
+          this.mostrarToastInfo('Estado de la Categoria ', 'Categoria editada correctamente', false)
         }
       )
     }
@@ -354,7 +331,7 @@ export class CategoriasComponent {
     const descripcion = this.crearCategoria.get('descripcion')?.value;
     const foto = this.crearCategoria.get('imagen')?.value;
     const foto2 = this.crearCategoria.get('imagen2')?.value;
-
+    console.log(foto,foto2)
     if (nombre && descripcion) {
       console.log(nombre, descripcion)
       categoria.nombre = nombre;
@@ -368,7 +345,7 @@ export class CategoriasComponent {
       }
       console.log(categoria)
       this.pythonAnywhereService.add_categoria(categoria).subscribe(resp => {
-        console.log(resp)
+        this.mostrarToastInfo('Estado de la Categoria ', 'Categoria Creada  correctamente', false)
       })
 
     }
@@ -402,7 +379,7 @@ export class CategoriasComponent {
       if(this.categoria_seleccionada?.id){
         this.pythonAnywhereService.actualizar_categoria(categoria,this.categoria_seleccionada?.id).subscribe(
           resp=>{
-            console.log(resp)
+            this.mostrarToastInfo('Estado de la  Categoria ', 'Categoria Editada correctamente', false)
           }
         )
       }
@@ -415,7 +392,7 @@ export class CategoriasComponent {
   onEliminar() {
     if (this.categoria_seleccionada?.id) {
       this.pythonAnywhereService.eliminar_categoria(this.categoria_seleccionada?.id).subscribe(resp => {
-        console.log(resp)
+        this.mostrarToastInfo('Estado de la Categoria ', 'Categoria Eliminada correctamente', false)
       }
 
       )
@@ -423,5 +400,20 @@ export class CategoriasComponent {
     }
 
 
+  }
+
+  mostrarToastInfo(titulo: string, mensaje: string, isErrorToast: boolean) {
+    this.isErrorToast = isErrorToast;
+    this.tituloToast = titulo;
+    this.mensajeToast = mensaje;
+    const toast = document.getElementById('liveToast');
+    if (toast) {
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 7000);
+    } else {
+      console.log('No hay toast renderizado');
+    }
   }
 }

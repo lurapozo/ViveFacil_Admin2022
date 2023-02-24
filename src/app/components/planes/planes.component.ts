@@ -3,6 +3,7 @@ import { BodyActualizarPlan, BodyCrearPlan, BodyCrearPlanProveedor, Plan } from 
 import { FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { PythonAnywhereService } from 'src/app/services/PythonAnywhere/python-anywhere.service';
+import { ProfesionesComponent } from '../profesiones/profesiones.component';
 
 @Component({
   selector: 'app-planes',
@@ -24,13 +25,17 @@ export class PlanesComponent {
   existImageCrear = false; existImageActualizar = false;
   estadoCond=''
   estados = ['Habilitado','Deshabilitado'] 
+  isErrorToast = false;
+  mensajeToast = "";
+  tituloToast = "";
 estadoActual=false
   planCrear = new FormGroup({
     imagen: new FormControl(this.fileImagenActualizar),
     nombre: new FormControl('', [Validators.required]),
     descripcion: new FormControl('', [Validators.required]),
-    precio: new FormControl('', [Validators.required]),
-    duracion: new FormControl('', [Validators.required]),
+    precio: new FormControl('', [Validators.required, Validators.minLength(1),
+      Validators.maxLength(2), Validators.pattern(/^[0-9]+$/)]),
+    duracion: new FormControl('', [Validators.required, Validators.pattern(/^(0?[1-9]|1[0-2])$/), Validators.min(1), Validators.max(2)]),
     estado:new FormControl('', [Validators.required]),
   }, []);
 
@@ -39,8 +44,9 @@ estadoActual=false
     imagen: new FormControl(this.fileImagenActualizar),
     nombre: new FormControl('', [Validators.required]),
     descripcion: new FormControl('', [Validators.required]),
-    precio: new FormControl('', [Validators.required]),
-    duracion: new FormControl('', [Validators.required]),
+    precio: new FormControl('', [Validators.required, Validators.minLength(1),
+      Validators.maxLength(2), Validators.pattern(/^[0-9]+$/)]),
+    duracion: new FormControl('', [Validators.required, Validators.pattern(/^(0?[1-9]|1[0-2])$/), Validators.min(1), Validators.max(2)]),
     
   }, []);
 
@@ -190,13 +196,21 @@ estadoActual=false
 
       case 'precio':
         if (itemControl.hasError('required')) {
-          return 'Debe especificar un servicio';
+          return 'El campo precio es requerido';
+        } else if (itemControl.hasError('maxlength')) {
+          return ' El número máximo  permitido es 99';
+        } else if (itemControl.hasError('pattern')) {
+          return ' Solo se permiten números.';
         }
         return '';
 
       case 'duracion':
         if (itemControl.hasError('required')) {
-          return 'Debe seleccionar un estado';
+          return 'El duracion Duracion es requerido';
+        } else if (itemControl.hasError('maxlength')) {
+          return ' El número máximo  permitido es 12';
+        } else if (itemControl.hasError('pattern')) {
+          return ' Solo se permiten números.';
         }
         return '';
 
@@ -292,7 +306,7 @@ estadoActual=false
       }
 
       this.pythonAnywhereService.crear_plan(crearPlan).subscribe(resp=>{
-        console.log(resp)
+        this.mostrarToastInfo('Estado del Plan ', 'Plan Creado correctamente', false);
       })
     }
 
@@ -300,7 +314,7 @@ estadoActual=false
   onDelete(){
     if(this.planes_seleccionada){
       this.pythonAnywhereService.borrar_plan(this.planes_seleccionada.id).subscribe(resp=>{
-        console.log(resp)
+        this.mostrarToastInfo('Estado del Plan ', 'Plan  eliminado correctamente', false);
       })
     }
 
@@ -331,7 +345,7 @@ console.log(nombre,precio,duracion,descripcion)
         actualizar.imagen = foto; 
       }
           this.pythonAnywhereService.actualizar_plan(actualizar).subscribe(resp=>{
-          console.log(resp)
+            this.mostrarToastInfo('Estado del Plan ', 'Plan editado correctamente', false);
          })
 
      
@@ -345,17 +359,30 @@ console.log(nombre,precio,duracion,descripcion)
     this.estadoActual=event.srcElement.checked
     console.log()
     const actualizar : BodyActualizarPlan ={
-      id:0
+      id:this.planes_seleccionada?.id,
+      estado: event.srcElement.checked
     }
-    const id = this.planes_seleccionada?.id;
-
-    actualizar.id= id
-
-    actualizar.estado= event.srcElement.checked
-    this.pythonAnywhereService.actualizar_plan(actualizar).subscribe(resp=>{
-      console.log(resp)
+  
+    console.log(actualizar)
+    this.pythonAnywhereService.actualizar_plan_estado(actualizar).subscribe(resp=>{
+      this.mostrarToastInfo('Estado del Plan ', 'Plan editado correctamente', false);
      })
 
 
+  }
+
+  mostrarToastInfo(titulo: string, mensaje: string, isErrorToast: boolean) {
+    this.isErrorToast = isErrorToast;
+    this.tituloToast = titulo;
+    this.mensajeToast = mensaje;
+    const toast = document.getElementById('liveToast');
+    if (toast) {
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 7000);
+    } else {
+      console.log('No hay toast renderizado');
+    }
   }
 }

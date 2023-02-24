@@ -54,11 +54,14 @@ export class CuponesComponent {
     titulo: new FormControl('', [Validators.required]),
     codigo: new FormControl('', [Validators.required]),
     descripcion: new FormControl('', [Validators.required]),
-    descuento: new FormControl('', [Validators.required]),
-    cantidad: new FormControl(''),
+    descuento: new FormControl('', [Validators.required, Validators.minLength(1),
+    Validators.maxLength(2), Validators.pattern(/^[0-9]+$/)]),
+    cantidad: new FormControl('', [Validators.required, Validators.minLength(1),
+    Validators.maxLength(2), Validators.pattern(/^[0-9]+$/)]),
     inicio: new FormControl(''),
     fin: new FormControl('', [Validators.required]),
-    punto: new FormControl('', [Validators.required]),
+    punto: new FormControl('', [Validators.required, Validators.minLength(1),
+    Validators.maxLength(2), Validators.pattern(/^[0-9]+$/)]),
     imagen: new FormControl(this.fileImagenActualizar),
     categoria: new FormControl(''),
 
@@ -68,20 +71,25 @@ export class CuponesComponent {
   formEdit: FormGroup = new FormGroup({
     titulo: new FormControl('', [Validators.required]),
     descripcion: new FormControl('', [Validators.required]),
-    descuento: new FormControl('', [Validators.required]),
-    cantidad: new FormControl('',[Validators.required]),
-    inicio: new FormControl('',[Validators.required]),
+    descuento: new FormControl('', [Validators.required, Validators.minLength(1),
+    Validators.maxLength(2), Validators.pattern(/^[0-9]+$/)]),
+    cantidad: new FormControl('', [Validators.required, Validators.minLength(1),
+    Validators.maxLength(2), Validators.pattern(/^[0-9]+$/)]),
+    inicio: new FormControl('', [Validators.required]),
     fin: new FormControl('', [Validators.required]),
-    punto: new FormControl('', [Validators.required]),
+    punto: new FormControl('', [Validators.required, Validators.minLength(1),
+    Validators.maxLength(2), Validators.pattern(/^[0-9]+$/)]),
     imagen: new FormControl(this.fileImagenActualizar),
-    categoria: new FormControl('',[Validators.required]),
+    categoria: new FormControl('', [Validators.required]),
 
   });
 
   cambiarEstado(event: any) {
     let estado = event.srcElement.checked
     if (this.cupon_seleccionada) {
-      this.pythonAnywhereService.cambio_cupon_estado(this.cupon_seleccionada.id, estado).subscribe(resp => { console.log(resp); });
+      this.pythonAnywhereService.cambio_cupon_estado(this.cupon_seleccionada.id, estado).subscribe(resp => { 
+        this.mostrarToastInfo('Estado de la Insignia ', 'Insignia editada correctamente', false);
+       });
     }
 
 
@@ -155,56 +163,69 @@ export class CuponesComponent {
 
       case 'titulo':
         if (itemControl.hasError('required')) {
-          return 'Debe llenar este campo';
+          return 'El campo Titulo es requerido';
         }
         return '';
 
       case 'descripcion':
         if (itemControl.hasError('required')) {
-          return 'Debe llenar este campo';
+          return 'El campo descripcion es requerido';
         }
         return '';
 
       case 'descuento':
         if (itemControl.hasError('required')) {
-          return 'Debe llenar este campo';
+          return 'El campo descuento es requerido';
+        } else if (itemControl.hasError('maxlength')) {
+          return ' El número máximo  permitido es 99';
+        } else if (itemControl.hasError('pattern')) {
+          return ' Solo se permiten números.';
         }
         return '';
       case 'punto':
         if (itemControl.hasError('required')) {
-          return 'Debe llenar este campo';
+          return 'El campo punto es requerido';
+        } else if (itemControl.hasError('maxlength')) {
+          return ' El número máximo  permitido es 99';
+        } else if (itemControl.hasError('pattern')) {
+          return ' Solo se permiten números.';
         }
         return '';
       case 'categoria':
         if (itemControl.hasError('required')) {
-          return 'Debe llenar este campo';
+          return 'El campo categoria es requerido';
         }
         return '';
       case 'rol':
         if (itemControl.hasError('required')) {
-          return 'Debe llenar este campo';
+          return 'el campo rol es requerido';
         }
         return '';
       case 'cantidad':
         if (itemControl.hasError('required')) {
-          return 'Debe llenar este campo';
+          return 'El campo cantidad es requerido';
+        } else if (itemControl.hasError('maxlength')) {
+          return ' El número máximo  permitido es 99';
+        } else if (itemControl.hasError('pattern')) {
+          return ' Solo se permiten números.';
         }
         return '';
       case 'inicio':
         if (itemControl.hasError('required')) {
-          return 'Debe llenar este campo';
+          return 'el campo Inicio es requerido';
         }
         return '';
       case 'fin':
         if (itemControl.hasError('required')) {
-          return 'Debe llenar este campo';
+          return 'El campo fin es requerido';
         }
         return '';
       case 'codigo':
         if (itemControl.hasError('required')) {
-          return 'Debe llenar este campo';
+          return 'El campo codigo es requerido';
         }
         return '';
+
 
       default:
         return '';
@@ -236,7 +257,7 @@ export class CuponesComponent {
 
       return this.cuponCrear.get(subForm)?.invalid && this.cuponCrear.get(subForm)?.touched || this.cuponCrear.get(subForm)?.dirty && this.getErrorMessage(this.cuponCrear, subForm).length !== 0;
     } else {
-      return
+
       return this.formEdit.get(subForm)?.invalid && this.formEdit.get(subForm)?.touched || this.formEdit.get(subForm)?.dirty && this.getErrorMessage(this.formEdit, subForm).length !== 0;
     }
   }
@@ -293,7 +314,7 @@ export class CuponesComponent {
 
           }
           else if (tipo === 'actualizar') {
-            
+
             this.formEdit.get('imagen')?.setValue(file);
             this.fileImagenActualizar = file;
             this.imagenActualizar = imagen.base;
@@ -373,7 +394,8 @@ export class CuponesComponent {
 
       }
       this.pythonAnywhereService.crear_cupon(cupon).subscribe(resp => {
-        console.log(resp)
+        this.limpiarForm('crear');
+        this.mostrarToastInfo('Estado del Cupon ', 'Cupon Creado correctamente', false);
       })
 
 
@@ -402,10 +424,10 @@ export class CuponesComponent {
     const categoria = this.formEdit.get('categoria')?.value;
     const descuento = this.formEdit.get('descuento')?.value;
     const foto = this.formEdit.get('imagen')?.value as File
-    if(this.cupon_seleccionada){
-      cupon.codigo=this.cupon_seleccionada?.codigo
+    if (this.cupon_seleccionada) {
+      cupon.codigo = this.cupon_seleccionada?.codigo
     }
-    
+
     if (titulo && descripcion && inicio && fin && cantidad && puntos && categoria && descuento) {
       cupon.titulo = titulo
       cupon.descripcion = descripcion
@@ -428,7 +450,11 @@ export class CuponesComponent {
     if (this.cupon_seleccionada) {
       const id = this.cupon_seleccionada.id
       console.log(id)
-      this.pythonAnywhereService.actualizar_cupon(cupon, id).subscribe(resp => { console.log(resp); })
+      this.pythonAnywhereService.actualizar_cupon(cupon, id).subscribe(resp => {
+
+        this.limpiarForm('actualizar');
+        this.mostrarToastInfo('Estado del Cupon ', 'Cupon editada correctamente', false);
+      })
 
     }
   }
@@ -460,8 +486,23 @@ export class CuponesComponent {
 
   onDelete() {
     if (this.cupon_seleccionada) {
-      this.pythonAnywhereService.eliminar_cupon(this.cupon_seleccionada.id).subscribe(resp => console.log(resp))
+      this.pythonAnywhereService.eliminar_cupon(this.cupon_seleccionada.id).subscribe(resp => this.mostrarToastInfo('Estado del Cupon ', 'Cupon Eliminado correctamente', false))
     }
 
+  }
+
+  mostrarToastInfo(titulo: string, mensaje: string, isErrorToast: boolean) {
+    this.isErrorToast = isErrorToast;
+    this.tituloToast = titulo;
+    this.mensajeToast = mensaje;
+    const toast = document.getElementById('liveToast');
+    if (toast) {
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 7000);
+    } else {
+      console.log('No hay toast renderizado');
+    }
   }
 }

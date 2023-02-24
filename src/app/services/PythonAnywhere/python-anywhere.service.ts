@@ -1240,12 +1240,6 @@ obtener_politicas(){
    */
   actualizar_plan(bodyActualizar: BodyActualizarPlan) : Observable<Plan> {
 
-
-
-
-
-    
-
     const dataUpdate = new FormData();
     bodyActualizar.id ? dataUpdate.append('id', bodyActualizar.id):null
     bodyActualizar.nombre ? dataUpdate.append('nombre', bodyActualizar.nombre) : null;
@@ -1257,7 +1251,14 @@ obtener_politicas(){
     
     return this.http.put(this.API_URL + '/planes/', dataUpdate) as Observable<Plan>;
   }
+  actualizar_plan_estado(bodyActualizar: BodyActualizarPlan) : Observable<Plan> {
 
+    const dataUpdate = new FormData();
+    bodyActualizar.id ? dataUpdate.append('id', bodyActualizar.id):null
+    bodyActualizar.estado ? dataUpdate.append('estado', bodyActualizar.estado.toString()) : null;
+    
+    return this.http.put(this.API_URL + '/planes/', dataUpdate) as Observable<Plan>;
+  }
 
   /**
    * Funcion que elimina un plan por ID

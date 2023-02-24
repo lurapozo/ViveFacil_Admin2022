@@ -22,7 +22,7 @@
           data-bs-toggle="modal"
           href="#modalCrearProfesion"
           
-        >Agregar profesión</button>
+        >Agregar Plan</button>
       </div>
     </div>
   
@@ -96,7 +96,7 @@
     <div class="modal-content">
       <div class="modal-header align-items-center">
         <h1 class="modal-title fs-5 m-0 p-0 fw-bold"
-          id="modalInformacionProfesionLabel">Información de Insignias</h1>
+          id="modalInformacionProfesionLabel">Información de Planes</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal"
           aria-label="Close"></button>
       </div>
@@ -137,7 +137,7 @@
 
         <div class="row p-2 align-items-center">
           <div class="col-5">
-            <h3 class="m-0 p-0 fw-bold">Duracion</h3>
+            <h3 class="m-0 p-0 fw-bold">Duracion(meses)</h3>
           </div>
           <div class="col-7">
             {{planes_seleccionada?.duracion}}
@@ -195,7 +195,7 @@
     <div class="modal-content">
       <div class="modal-header align-items-center">
         <h1 class="modal-title fs-5 m-0 p-0 fw-bold"
-          id="modalInformacionEdicionProfesionLabel">Edición de Insignias</h1>
+          id="modalInformacionEdicionProfesionLabel">Edición de Planes</h1>
         <!-- (click)="limpiarForm('actualizar')" -->
         <button
           type="button"
@@ -280,7 +280,7 @@
             </div>
             <div class="col-7">
               <input
-              type="number"
+              type="text"
                 class="form-control"
                 formControlName="duracion"
                 [ngClass]="isInvalidForm('duracion', 'actualizar') ?
@@ -300,7 +300,7 @@
             </div>
             <div class="col-7">
               <input
-              type="number"
+              type="text"
                 class="form-control"
                 formControlName="precio"
                 [ngClass]="isInvalidForm('precio', 'actualizar') ?
@@ -420,7 +420,7 @@ aria-labelledby="modalCrearProfesionLabel" tabindex="-1">
           </div>
           <div class="col-7">
             <input
-              type="number"
+              type="text"
               formControlName="precio"
               class="form-control"
               [ngClass]="isInvalidForm('precio', 'crear') ? 'is-invalid'
@@ -437,11 +437,11 @@ aria-labelledby="modalCrearProfesionLabel" tabindex="-1">
         <div class="row p-2 align-items-center">
           <div class="col-5">
             <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
-                fw-bold">Duracion:</h3></label>
+                fw-bold">Duracion(meses):</h3></label>
           </div>
           <div class="col-7">
             <input
-              type="number"
+              type="text"
               formControlName="duracion"
               class="form-control"
               [ngClass]="isInvalidForm('duracion', 'crear') ? 'is-invalid'
@@ -527,5 +527,25 @@ aria-labelledby="modalCrearProfesionLabel" tabindex="-1">
       </div>
     </div>
 
+  </div>
+</div>
+
+<!-- Toast de Información -->
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+  <div #liveToast id="liveToast" class="toast" role="alert"
+    aria-live="assertive" aria-atomic="true">
+    <div class="toast-header" [ngClass]="isErrorToast? ' bg-danger' : '
+      bg-success'">
+      <img src="../../../assets/imagenes/notification_logo.png" class="rounded
+        me-2" width="25px" alt="...">
+      <strong class="me-auto text-light">{{tituloToast}}</strong>
+      <small class="text-light">Ahora</small>
+      <button type="button" class="btn-close" data-bs-dismiss="toast"
+        aria-label="Close"></button>
+    </div>
+    <div class="toast-body bg-opacity-25" [ngClass]="isErrorToast? ' bg-danger'
+      : ' bg-success'">
+      {{mensajeToast}}
+    </div>
   </div>
 </div>
