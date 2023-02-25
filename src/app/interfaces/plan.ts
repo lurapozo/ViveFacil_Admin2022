@@ -18,6 +18,7 @@ export interface BodyCrearPlan {
   imagen?: File;
   precio: number;
   duracion: number;
+  estado:boolean
 }
 
 export interface BodyResponseCrearPlan {
@@ -49,11 +50,11 @@ export interface BodyActualizarPlanProveedor {
 }
 
 export interface BodyActualizarPlan {
-  id: number;
+  id: any;
   nombre?: string;
   descripcion?: string;
   imagen?: File;
-  precio?: number;
-  duracion?: number;
-  estado?: boolean;
+  precio?: any;
+  duracion?: any;
+  estado?: any;
 }

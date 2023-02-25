@@ -5,10 +5,10 @@ import {
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Administrador, AdministradorPaginacion, BodyActualizarAdministrador, BodyCrearAdministrador, BodyResponseCrearAdministrador, } from 'src/app/interfaces/administrador';
-import { map, Observable } from 'rxjs';
+import { map, Observable, pipe, Subject } from 'rxjs';
 import { BodyActualizarInsignia, BodyCrearInsignia, BodyResponseCrearInsignia, Insignia } from 'src/app/interfaces/insignia';
 import { BodyActualizarCargo, BodyCrearCargo, BodyResponseCrearCargo, Cargo } from 'src/app/interfaces/cargo';
-import { BodyPromocionActualizar, BodyResponsePromocionActualizar, Promocion } from 'src/app/interfaces/promocion';
+import { BodyPromocionActualizar, BodyResponsePromocionActualizar, Promocion, PromocionCrear } from 'src/app/interfaces/promocion';
 import { BodyCuponActualizar, BodyResponseCuponActualizar, Cupon, CuponCrear } from 'src/app/interfaces/cupon';
 import { PaymentEfectivo, PaymentPaginacion, PaymentTarjeta } from 'src/app/interfaces/payment';
 import { BodyActualizarProveedor, BodyActualizarProveedorPendiente, BodyCrearProfesionProveedor, BodyCrearProveedor, BodyCrearProveedorPendiente, BodyResponseCrearProfesionProveedor, BodyResponseCrearProveedorPendiente, Proveedor, ProveedorPaginacion, ProveedorPendiente, ProveedorProfesion } from 'src/app/interfaces/proveedor';
@@ -20,7 +20,7 @@ import { BodyActualizarCategoria, BodyCrearCategoria, BodyResponseCrearCategoria
 import { BodyActualizarServicio, Servicio } from 'src/app/interfaces/servicio';
 import { BodyCrearSubCategoria, BodyResponseCrearSubCategoria } from 'src/app/interfaces/sub-categoria';
 import { BodyActualizarPlan, BodyActualizarPlanProveedor, BodyCrearPlan, BodyCrearPlanProveedor, BodyResponseCrearPlan, Plan, PlanProveedor } from 'src/app/interfaces/plan';
-import { BodyCrearPublicidad, BodyResponseCrearPublicidad, Publicidad } from 'src/app/interfaces/publicidad';
+import { BodyActualizarPublicidad, BodyCrearPublicidad, BodyResponseCrearPublicidad, Publicidad } from 'src/app/interfaces/publicidad';
 import { Ciudad } from 'src/app/interfaces/ciudad';
 import { AdminUserPass } from 'src/app/interfaces/admin-user-pass';
 import { BodyCrearNotificacionAnuncio, NotificacionAnuncio } from 'src/app/interfaces/notificacion';
@@ -34,11 +34,16 @@ import { Sugerencia } from 'src/app/interfaces/sugerencia';
 export class PythonAnywhereService {
   API_URL = `https://tomesoft1.pythonanywhere.com`;
   administradores = 'https://tomesoft1.pythonanywhere.com/administradores';
-
+  private _refresh$ = new Subject<void>();
   constructor(private http: HttpClient) { }
 
+get refresh$(){
+    return this._refresh$
+}
 
-
+obtener_politicas(){
+  return this.http.get(`${this.API_URL}/politics/`)
+}
   //------------------------------------------------ SECCIÓN SOLICITANTES -------------------------------------------------
   /**
    * Obtiene todos los solicitantes, y los entrega en un formato con paginación.
@@ -208,7 +213,8 @@ export class PythonAnywhereService {
    * @returns Devuelve un Observable del Objeto Cargo solicitado.
    */
   obtener_cargo(id: string): Observable<Cargo> {
-    return this.http.get(`${this.API_URL}/cargos/${id}`) as Observable<Cargo>;
+    return this.http.get(`${this.API_URL}/cargos/${id}`) as Observable<Cargo>
+    
   }
 
   /**
@@ -329,6 +335,7 @@ export class PythonAnywhereService {
    * @param id Recibe un string perteneciente al ID del cupon la cual sera modificada.
    * @returns Devuelve un Observable con un objeto BodyResponseCuponActualizar.
    */
+  
   actualizar_cupon(bodyActualizar: BodyCuponActualizar, id: any): Observable<BodyResponseCuponActualizar> {
     const dataUpdate = new FormData();
     dataUpdate.append("codigo", bodyActualizar.codigo);
@@ -437,6 +444,10 @@ export class PythonAnywhereService {
    */
   eliminar_administrador(id: string): Observable<any> {
     return this.http.delete(`${this.API_URL}/administrador_delete/${id}`);
+  }
+
+  cambio_administrador_estado(id:any,estado:any){
+    return this.http.put(`${this.API_URL}/administrador_estado/?id=${id}`,{ estado: estado, });
   }
 
   /**
@@ -702,13 +713,21 @@ export class PythonAnywhereService {
    * @param id Recibe un string del ID de la categoria a actualizar el estado.
    * @returns Devuelve un Observable de un Objeto Categoria el cual fue modificado.
    */
-  actualizar_categoria(bodyActualizar: BodyActualizarCategoria, id: string): Observable<Categoria> {
+  actualizar_categoria(bodyActualizar: BodyActualizarCategoria, id: number): Observable<Categoria> {
     const dataUpdate = new FormData();
     bodyActualizar.nombre ? dataUpdate.append('nombre', bodyActualizar.nombre) : null;
     bodyActualizar.descripcion ? dataUpdate.append('descripcion', bodyActualizar.descripcion) : null;
-    dataUpdate.append('estado', bodyActualizar.estado.toString());
     bodyActualizar.foto ? dataUpdate.append('foto', bodyActualizar.foto) : null;
     bodyActualizar.foto2 ? dataUpdate.append('foto2', bodyActualizar.foto2) : null;
+
+    return this.http.put(`${this.API_URL}/categoria_update/${id}`, dataUpdate) as Observable<Categoria>;
+  }
+
+  actualizar_categoria_estado(bodyActualizar: BodyActualizarCategoria, id: number): Observable<Categoria> {
+    const dataUpdate = new FormData();
+  
+    dataUpdate.append('estado', bodyActualizar.estado.toString())
+
 
     return this.http.put(`${this.API_URL}/categoria_update/${id}`, dataUpdate) as Observable<Categoria>;
   }
@@ -720,7 +739,7 @@ export class PythonAnywhereService {
    * @param id Recibe un string perteneciente al ID de la Categorias la cual sera eliminada.
    * @returns Devuelve un Observable con una respuesta OK(204) or Error(500).
    */
-  eliminar_categoria(id: string): Observable<any> {
+  eliminar_categoria(id: number): Observable<any> {
     return this.http.delete(`${this.API_URL}/categoria_delete/${id}`) as Observable<any>;
   }
 
@@ -734,9 +753,10 @@ export class PythonAnywhereService {
   add_categoria(bodyCrear: BodyCrearCategoria): Observable<BodyResponseCrearCategoria> {
     const dataCrear = new FormData();
     dataCrear.append("nombre", bodyCrear.nombre);
-    dataCrear.append("descripcion", bodyCrear.descripcion);
+    dataCrear.append("descripcion", bodyCrear.descripcion);;
     bodyCrear.foto ? dataCrear.append("foto", bodyCrear.foto) : null;
-    return this.http.post(`${this.API_URL}/categorias/`, bodyCrear) as Observable<BodyResponseCrearCategoria>;
+    bodyCrear.foto2 ? dataCrear.append("foto2", bodyCrear.foto2) : null;
+    return this.http.post(`${this.API_URL}/categorias/`, dataCrear) as Observable<BodyResponseCrearCategoria>;
   }
   //-----------------------------------------------------------------------------------------------------------------------
 
@@ -942,8 +962,19 @@ export class PythonAnywhereService {
     "cantidad": 1
       }
   */
-  crear_promocion(data: any) {
-    return this.http.post(this.API_URL + '/promociones/', data);
+  crear_promocion(bodyCrear: PromocionCrear) {
+    const dataCrear = new FormData();
+    dataCrear.append("codigo", bodyCrear.codigo);
+    bodyCrear.foto ? dataCrear.append("foto", bodyCrear.foto) : null;
+    dataCrear.append("titulo", bodyCrear.titulo);
+    dataCrear.append("tipo_categoria", bodyCrear.tipo_categoria);
+    dataCrear.append("cantidad", bodyCrear.cantidad.toString());
+    dataCrear.append("porcentaje", bodyCrear.porcentaje.toString());
+    dataCrear.append("fecha_iniciacion", bodyCrear.fecha_iniciacion);
+    dataCrear.append("fecha_expiracion", bodyCrear.fecha_expiracion);
+    dataCrear.append("descripcion", bodyCrear.descripcion);
+    dataCrear.append("participantes", bodyCrear.participantes);
+    return this.http.post(this.API_URL + '/promociones/', dataCrear);
   }
 
   /**
@@ -966,11 +997,23 @@ export class PythonAnywhereService {
     "tipo_categoria": "Jardineria"
 }
   */
-  crear_cupon(data: any) {
-    return this.http.post(this.API_URL + '/cupones/', data);
+  crear_cupon(bodyCrear: CuponCrear) {
+  
+    const dataCrear = new FormData();
+    dataCrear.append("codigo", bodyCrear.codigo);
+    bodyCrear.foto ? dataCrear.append("foto", bodyCrear.foto) : null;
+    dataCrear.append("titulo", bodyCrear.titulo);
+    dataCrear.append("puntos", bodyCrear.puntos.toString());
+    dataCrear.append("tipo_categoria", bodyCrear.tipo_categoria);
+    dataCrear.append("cantidad", bodyCrear.cantidad.toString());
+    dataCrear.append("porcentaje", bodyCrear.porcentaje.toString());
+    dataCrear.append("fecha_iniciacion", bodyCrear.fecha_iniciacion);
+    dataCrear.append("fecha_expiracion", bodyCrear.fecha_expiracion);
+    dataCrear.append("descripcion", bodyCrear.descripcion);
+    return this.http.post(this.API_URL + '/cupones/', dataCrear);
   }
 
-  //NO SE LO USABA EN LA ANTERIOR APP
+
   obtener_ctgprom(promCode: any) {
     return this.http.get(`${this.API_URL}/promcategorias/${promCode}`);
   }
@@ -1004,6 +1047,7 @@ export class PythonAnywhereService {
  */
   obtener_pagos_tarjetaP(page=1) :  Observable<any>{
     return this.http.get(`${this.API_URL}/pago_tarjetasP/?page=${page}`) as  Observable<any>;
+    
   }
 
   /**
@@ -1179,6 +1223,7 @@ export class PythonAnywhereService {
   crear_plan(bodyCrear: BodyCrearPlan): Observable<BodyResponseCrearPlan> {
     const dataCrear = new FormData();
     dataCrear.append("nombre", bodyCrear.nombre);
+    dataCrear.append("estado", bodyCrear.estado.toString());
     dataCrear.append("descripcion", bodyCrear.descripcion);
     bodyCrear.imagen ? dataCrear.append("imagen", bodyCrear.imagen) : null;
     dataCrear.append("precio", bodyCrear.precio.toString());
@@ -1193,17 +1238,27 @@ export class PythonAnywhereService {
    * @param bodyCrear Recibe un Objeto BodyActualizarPlan la cual se encarga de actualizar un plan con los campos necesarios.
    * @returns Devuelve un Observable con un objeto Plan
    */
-  actualizar_plan(bodyCrear: BodyActualizarPlan) : Observable<Plan> {
-    const dataCrear = new FormData();
-    dataCrear.append("id", bodyCrear.id.toString());
-    bodyCrear.descripcion ? dataCrear.append("descripcion", bodyCrear.descripcion) : null
-    bodyCrear.imagen ? dataCrear.append("imagen", bodyCrear.imagen) : null;
-    bodyCrear.precio ? dataCrear.append("precio", bodyCrear.precio.toString()) : null;
-    bodyCrear.duracion ? dataCrear.append("duracion", bodyCrear.duracion.toString()) : null;
-    bodyCrear.estado ? dataCrear.append("estado", bodyCrear.estado.toString()) : null;
-    return this.http.put(this.API_URL + '/planes/', dataCrear) as Observable<Plan>;
-  }
+  actualizar_plan(bodyActualizar: BodyActualizarPlan) : Observable<Plan> {
 
+    const dataUpdate = new FormData();
+    bodyActualizar.id ? dataUpdate.append('id', bodyActualizar.id):null
+    bodyActualizar.nombre ? dataUpdate.append('nombre', bodyActualizar.nombre) : null;
+    bodyActualizar.imagen ? dataUpdate.append('imagen', bodyActualizar.imagen) : null;
+    bodyActualizar.descripcion ? dataUpdate.append('descripcion', bodyActualizar.descripcion) : null;
+    bodyActualizar.duracion ? dataUpdate.append('duracion', bodyActualizar.duracion) : null;
+    bodyActualizar.precio ? dataUpdate.append('precio', bodyActualizar.precio) : null;
+    bodyActualizar.estado ? dataUpdate.append('estado', bodyActualizar.estado.toString()) : null;
+    
+    return this.http.put(this.API_URL + '/planes/', dataUpdate) as Observable<Plan>;
+  }
+  actualizar_plan_estado(bodyActualizar: BodyActualizarPlan) : Observable<Plan> {
+
+    const dataUpdate = new FormData();
+    bodyActualizar.id ? dataUpdate.append('id', bodyActualizar.id):null
+    bodyActualizar.estado ? dataUpdate.append('estado', bodyActualizar.estado.toString()) : null;
+    
+    return this.http.put(this.API_URL + '/planes/', dataUpdate) as Observable<Plan>;
+  }
 
   /**
    * Funcion que elimina un plan por ID
@@ -1277,15 +1332,23 @@ export class PythonAnywhereService {
 
 /**
  *
- * @param bodyActualizar
+ * @param bodyActualizar                                                                          
  * @returns
  */
-  actualizar_publicidad(bodyActualizar: any) {
-    const dataCrear = new FormData();
+  actualizar_publicidad(bodyActualizar: BodyActualizarPublicidad): Observable<Publicidad> {
+    const dataUpdate = new FormData();
+    bodyActualizar.id ? dataUpdate.append('id', bodyActualizar.id):null
+    bodyActualizar.titulo ? dataUpdate.append('titulo', bodyActualizar.titulo) : null;
+    bodyActualizar.imagen ? dataUpdate.append('imagen', bodyActualizar.imagen) : null;
+    bodyActualizar.descripcion ? dataUpdate.append('descripcion', bodyActualizar.descripcion) : null;
+    bodyActualizar.fecha_inicio ? dataUpdate.append('fecha_inicio', bodyActualizar.fecha_inicio) : null;
+    bodyActualizar.fecha_expiracion ? dataUpdate.append('fecha_expiracion', bodyActualizar.fecha_expiracion) : null;
+    bodyActualizar.url ? dataUpdate.append('url', bodyActualizar.url) : null;
 
-    return this.http.put(this.API_URL + '/publicidades/', dataCrear);
+
+    return this.http.put(this.API_URL + '/publicidades/', dataUpdate) as any;
   }
-
+ 
   /**
    * Funcion que elimna la publicidad por ID especificado
    *
@@ -1643,5 +1706,9 @@ export class PythonAnywhereService {
     return this.http.delete(`${this.API_URL}/profesion_prov/${id}`);
   }
 
+}
+
+function tap(arg0: () => void): import("rxjs").UnaryFunction<unknown, unknown> {
+  throw new Error('Function not implemented.');
 }
 

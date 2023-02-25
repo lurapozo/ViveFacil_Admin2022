@@ -7,7 +7,7 @@ export interface Cupon {
   fecha_iniciacion: string;
   fecha_expiracion: string;
   puntos: number;
-  foto: string;
+  foto?: File
   tipo_categoria: string;
   cantidad: number;
   estado:boolean
@@ -21,7 +21,7 @@ export interface CuponCrear {
   fecha_iniciacion: string;
   fecha_expiracion: string;
   puntos: number;
-  foto: string;
+  foto?:File
   tipo_categoria: string;
   cantidad: number;
 }
@@ -34,7 +34,7 @@ export interface BodyCuponActualizar {
   porcentaje: number;
   cantidad: number;
   puntos: number;
-  foto: File | null;
+  foto?: File ;
   tipo_categoria: string;
 }
 

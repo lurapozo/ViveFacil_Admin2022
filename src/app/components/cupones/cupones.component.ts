@@ -10,16 +10,19 @@ import * as moment from 'moment';
   styleUrls: ['./cupones.component.css']
 })
 export class CuponesComponent {
-  arr_cupon!: Cupon[]  | undefined;
-  arr_filtered_cupon!: Cupon[]  | undefined;
-  imagenCrear: any
+  arr_cupon!: Cupon[] | undefined;
+  arr_filtered_cupon!: Cupon[] | undefined;
   condicionNext = false
   currentPage = 1
   pageNumber: number[] = [];
-  cupon_seleccionada:  Cupon  | undefined;
-  fileImagenActualizar: File = {} as File
-  imagenActualizar: any
-  fileImagenCrear: any
+  cupon_seleccionada: Cupon | undefined;
+  isErrorToast = false;
+  mensajeToast = "";
+  tituloToast = "";
+  fileImagenActualizar: File = {} as File;
+  imagenActualizar: string | undefined;
+  fileImagenCrear: File = {} as File;
+  imagenCrear: string | undefined;
   existImageCrear = false; existImageActualizar = false;
   activo = ''
   activoCond = false
@@ -28,20 +31,21 @@ export class CuponesComponent {
   categoria!: any[];
   constructor(private pythonAnywhereService: PythonAnywhereService, private sanitizer: DomSanitizer) {
     this.pythonAnywhereService.obtener_cupones().subscribe(resp => {
-    this.arr_cupon = Object(resp)
-    this.arr_filtered_cupon = this.arr_cupon
-  
+      this.arr_cupon = Object(resp)
+      this.arr_filtered_cupon = this.arr_cupon
+      console.log(this.arr_filtered_cupon)
+
     });
-    this.pythonAnywhereService.obtener_categorias().subscribe((resp:any[])=>{
-     this.categoria=resp
-     
-  
-      
+    this.pythonAnywhereService.obtener_categorias().subscribe((resp: any[]) => {
+      this.categoria = resp
+
+
+
     })
-  
-   const imagenCrearControl = this.cuponCrear.get('imagen') as FormControl;
-   imagenCrearControl.addValidators(this.createImageValidator(this.cuponCrear.get('imagen') as AbstractControl, 'crear'));
-     const imagenActualizarControl = this.formEdit.get('imagen') as FormControl;
+
+    const imagenCrearControl = this.cuponCrear.get('imagen') as FormControl;
+    imagenCrearControl.addValidators(this.createImageValidator(this.cuponCrear.get('imagen') as AbstractControl, 'crear'));
+    const imagenActualizarControl = this.formEdit.get('imagen') as FormControl;
     imagenActualizarControl.addValidators(this.createImageValidator(this.formEdit.get('imagen') as AbstractControl, 'actualizar'));
   }
 
@@ -50,11 +54,14 @@ export class CuponesComponent {
     titulo: new FormControl('', [Validators.required]),
     codigo: new FormControl('', [Validators.required]),
     descripcion: new FormControl('', [Validators.required]),
-    descuento: new FormControl('', [Validators.required]),
-    cantidad: new FormControl(''),
+    descuento: new FormControl('', [Validators.required, Validators.minLength(1),
+    Validators.maxLength(2), Validators.pattern(/^[0-9]+$/)]),
+    cantidad: new FormControl('', [Validators.required, Validators.minLength(1),
+    Validators.maxLength(2), Validators.pattern(/^[0-9]+$/)]),
     inicio: new FormControl(''),
-    fin: new FormControl('',[Validators.required]),
-    punto: new FormControl('',[Validators.required]),
+    fin: new FormControl('', [Validators.required]),
+    punto: new FormControl('', [Validators.required, Validators.minLength(1),
+    Validators.maxLength(2), Validators.pattern(/^[0-9]+$/)]),
     imagen: new FormControl(this.fileImagenActualizar),
     categoria: new FormControl(''),
 
@@ -62,29 +69,33 @@ export class CuponesComponent {
   });
 
   formEdit: FormGroup = new FormGroup({
-    codigo: new FormControl('', [Validators.required]),
     titulo: new FormControl('', [Validators.required]),
     descripcion: new FormControl('', [Validators.required]),
-    descuento: new FormControl('', [Validators.required]),
-    cantidad: new FormControl(''),
-    inicio: new FormControl(''),
-    fin: new FormControl('',[Validators.required]),
-    punto: new FormControl('',[Validators.required]),
+    descuento: new FormControl('', [Validators.required, Validators.minLength(1),
+    Validators.maxLength(2), Validators.pattern(/^[0-9]+$/)]),
+    cantidad: new FormControl('', [Validators.required, Validators.minLength(1),
+    Validators.maxLength(2), Validators.pattern(/^[0-9]+$/)]),
+    inicio: new FormControl('', [Validators.required]),
+    fin: new FormControl('', [Validators.required]),
+    punto: new FormControl('', [Validators.required, Validators.minLength(1),
+    Validators.maxLength(2), Validators.pattern(/^[0-9]+$/)]),
     imagen: new FormControl(this.fileImagenActualizar),
-    categoria: new FormControl(''),
+    categoria: new FormControl('', [Validators.required]),
 
   });
 
-  cambiarEstado(event:any){
+  cambiarEstado(event: any) {
     let estado = event.srcElement.checked
-    if(this.cupon_seleccionada){
-      this.pythonAnywhereService.cambio_cupon_estado(this.cupon_seleccionada.id,estado).subscribe(resp=>{console.log(resp);});
+    if (this.cupon_seleccionada) {
+      this.pythonAnywhereService.cambio_cupon_estado(this.cupon_seleccionada.id, estado).subscribe(resp => { 
+        this.mostrarToastInfo('Estado de la Insignia ', 'Insignia editada correctamente', false);
+       });
     }
-  
+
 
   }
-  ver(cupon:any){
-    this.cupon_seleccionada=cupon
+  ver(cupon: any) {
+    this.cupon_seleccionada = cupon
     if (this.activoCond) {
       this.activo = 'Activo'
 
@@ -96,22 +107,23 @@ export class CuponesComponent {
   }
 
   limpiarForm(tipo: string) {
-    if(tipo === 'crear') {
+    if (tipo === 'crear') {
       this.existImageCrear = false;
       this.cuponCrear.get('titulo')?.reset();
+      this.cuponCrear.get('imagen')?.reset();
       this.cuponCrear.get('descuento')?.reset();
       this.cuponCrear.get('descripcion')?.reset();
-      this.cuponCrear.get('cantidad')?.setValue('');
-      this.cuponCrear.get('inicio')?.setValue('');
-      this.cuponCrear.get('fin')?.setValue('');
-      this.cuponCrear.get('punto')?.setValue('');
-      this.cuponCrear.get('categoria')?.setValue('');
-      this.cuponCrear.get('imagen')?.setValue('');
-      this.cuponCrear.get('codigo')?.setValue('');
-   
-   
+      this.cuponCrear.get('cantidad')?.reset()
+      this.cuponCrear.get('inicio')?.reset()
+      this.cuponCrear.get('fin')?.reset()
+      this.cuponCrear.get('punto')?.reset()
+      this.cuponCrear.get('categoria')?.reset()
+      this.cuponCrear.get('imagen')?.reset()
+      this.cuponCrear.get('codigo')?.reset()
 
-    } else if(tipo === 'actualizar') {
+
+
+    } else if (tipo === 'actualizar') {
 
       const titulo = this.cupon_seleccionada?.titulo;
       const descripcion = this.cupon_seleccionada?.descripcion;
@@ -121,24 +133,23 @@ export class CuponesComponent {
       const categoria = this.cupon_seleccionada?.tipo_categoria;
       const inicio = this.cupon_seleccionada?.fecha_iniciacion;
       const fin = this.cupon_seleccionada?.fecha_expiracion;
-      const foto = this.cupon_seleccionada?.foto;
-      const codigo = this.cupon_seleccionada?.codigo;
-    
+
+
       this.existImageActualizar = false;
       this.formEdit.get('imagen')?.reset();
-      titulo? this.formEdit.get('titulo')?.setValue(titulo) : this.formEdit.get('nombre')?.reset();
-      descripcion? this.formEdit.get('descripcion')?.setValue(descripcion) : this.formEdit.get('descripcion')?.reset();
-      descuento? this.formEdit.get('descuento')?.setValue(descuento) : this.formEdit.get('descuento')?.reset();
-      cantidad? this.formEdit.get('cantidad')?.setValue(cantidad) : this.formEdit.get('cantidad')?.reset();
-      punto? this.formEdit.get('punto')?.setValue(punto) : this.formEdit.get('punto')?.reset();
-      categoria? this.formEdit.get('categoria')?.setValue(categoria) : this.formEdit.get('categoria')?.reset();
-      inicio? this.formEdit.get('inicio')?.setValue(inicio) : this.formEdit.get('inicio')?.reset();
-      fin? this.formEdit.get('fin')?.setValue(inicio) : this.formEdit.get('fin')?.reset();
-      foto? this.formEdit.get('imagen')?.setValue(inicio) : this.formEdit.get('imagen')?.reset();
-      codigo? this.formEdit.get('codigo')?.setValue(codigo) : this.formEdit.get('codigo')?.reset();
+      titulo ? this.formEdit.get('titulo')?.setValue(titulo) : this.formEdit.get('nombre')?.reset();
+      descripcion ? this.formEdit.get('descripcion')?.setValue(descripcion) : this.formEdit.get('descripcion')?.reset();
+      descuento ? this.formEdit.get('descuento')?.setValue(descuento) : this.formEdit.get('descuento')?.reset();
+      cantidad ? this.formEdit.get('cantidad')?.setValue(cantidad) : this.formEdit.get('cantidad')?.reset();
+      punto ? this.formEdit.get('punto')?.setValue(punto) : this.formEdit.get('punto')?.reset();
+      categoria ? this.formEdit.get('categoria')?.setValue(categoria) : this.formEdit.get('categoria')?.reset();
+      inicio ? this.formEdit.get('inicio')?.setValue(inicio) : this.formEdit.get('inicio')?.reset();
+      fin ? this.formEdit.get('fin')?.setValue(inicio) : this.formEdit.get('fin')?.reset();
 
-   
-  }}
+
+
+    }
+  }
 
 
   getErrorMessage(formGroup: FormGroup, item: string): string {
@@ -152,61 +163,69 @@ export class CuponesComponent {
 
       case 'titulo':
         if (itemControl.hasError('required')) {
-          return 'Debe llenar este campo';
+          return 'El campo Titulo es requerido';
         }
         return '';
 
       case 'descripcion':
         if (itemControl.hasError('required')) {
-          return 'Debe llenar este campo';
+          return 'El campo descripcion es requerido';
         }
         return '';
 
       case 'descuento':
         if (itemControl.hasError('required')) {
-          return 'Debe llenar este campo';
+          return 'El campo descuento es requerido';
+        } else if (itemControl.hasError('maxlength')) {
+          return ' El número máximo  permitido es 99';
+        } else if (itemControl.hasError('pattern')) {
+          return ' Solo se permiten números.';
         }
         return '';
       case 'punto':
         if (itemControl.hasError('required')) {
-          return 'Debe llenar este campo';
-        }
-        return '';
-      case 'foto':
-        if (itemControl.hasError('required')) {
-          return 'Debe llenar este campo';
+          return 'El campo punto es requerido';
+        } else if (itemControl.hasError('maxlength')) {
+          return ' El número máximo  permitido es 99';
+        } else if (itemControl.hasError('pattern')) {
+          return ' Solo se permiten números.';
         }
         return '';
       case 'categoria':
         if (itemControl.hasError('required')) {
-          return 'Debe llenar este campo';
+          return 'El campo categoria es requerido';
         }
         return '';
       case 'rol':
         if (itemControl.hasError('required')) {
-          return 'Debe llenar este campo';
+          return 'el campo rol es requerido';
         }
         return '';
       case 'cantidad':
         if (itemControl.hasError('required')) {
-          return 'Debe llenar este campo';
+          return 'El campo cantidad es requerido';
+        } else if (itemControl.hasError('maxlength')) {
+          return ' El número máximo  permitido es 99';
+        } else if (itemControl.hasError('pattern')) {
+          return ' Solo se permiten números.';
         }
         return '';
       case 'inicio':
         if (itemControl.hasError('required')) {
-          return 'Debe llenar este campo';
+          return 'el campo Inicio es requerido';
         }
         return '';
       case 'fin':
         if (itemControl.hasError('required')) {
-          return 'Debe llenar este campo';
+          return 'El campo fin es requerido';
         }
         return '';
-        case 'codigo':
-          if (itemControl.hasError('required')) {
-            return 'Debe llenar este campo';
-          }
-          return '';
+      case 'codigo':
+        if (itemControl.hasError('required')) {
+          return 'El campo codigo es requerido';
+        }
+        return '';
+
 
       default:
         return '';
@@ -238,10 +257,72 @@ export class CuponesComponent {
 
       return this.cuponCrear.get(subForm)?.invalid && this.cuponCrear.get(subForm)?.touched || this.cuponCrear.get(subForm)?.dirty && this.getErrorMessage(this.cuponCrear, subForm).length !== 0;
     } else {
-      return
-      return this.formEdit.get(subForm)?.invalid && this.formEdit.get(subForm)?.touched || this.formEdit.get(subForm)?.dirty  && this.getErrorMessage(this.formEdit, subForm).length!==0;
+
+      return this.formEdit.get(subForm)?.invalid && this.formEdit.get(subForm)?.touched || this.formEdit.get(subForm)?.dirty && this.getErrorMessage(this.formEdit, subForm).length !== 0;
     }
   }
+
+
+  createImageValidator(controlImage: AbstractControl, tipo: string) {
+    return () => {
+      const file = controlImage.value as File;
+
+      if (file && file.name) {
+        console.log('Ingresa al validator if');
+        console.log(file);
+        const tokensImgName: any[] = file.name.split('.');
+        console.log(tokensImgName);
+        if (tokensImgName.length === 2) {
+          const imgExtension = tokensImgName[1];
+          if (imgExtension !== 'jpg' && imgExtension !== 'jpeg' && imgExtension !== 'png' && imgExtension !== 'jfif') {
+            console.log('Entra en error de imagen');
+            if (tipo === 'crear') {
+              this.cuponCrear.get('imagen')?.setValue(null);
+              this.existImageCrear = false;
+            }
+            else if (tipo === 'actualizar') {
+              this.cuponCrear.get('imagen')?.setValue(null);
+              this.existImageActualizar = false;
+            }
+            return { image_error: 'Solo imágenes con formato jpg, jpeg, png o jfif.' };
+          }
+          console.log('Formato de imagen correcto');
+          if (tipo === 'crear') {
+            this.existImageCrear = true;
+          }
+          else if (tipo === 'actualizar') {
+            console.log("imagen actualizando")
+            this.existImageActualizar = true;
+          }
+        }
+        return null;
+      } else {
+        console.log('No hay imagen seleccionada');
+        return null;
+      }
+    };
+  }
+  loadImageFromDevice(event: any, tipo: string) {
+    const file: File = event.target.files[0];
+    if (file) {
+      this.extraerBase64(file)
+        .then((imagen: any) => {
+          if (tipo === 'crear') {
+            this.cuponCrear.get('imagen')?.setValue(file);
+            this.fileImagenCrear = file;
+            this.imagenCrear = imagen.base;
+
+          }
+          else if (tipo === 'actualizar') {
+
+            this.formEdit.get('imagen')?.setValue(file);
+            this.fileImagenActualizar = file;
+            this.imagenActualizar = imagen.base;
+          }
+        })
+        .catch(err => console.log(err));
+    }
+  };
 
   extraerBase64 = async ($event: any) => new Promise((resolve) => {
     try {
@@ -269,66 +350,8 @@ export class CuponesComponent {
     }
   });
 
-  createImageValidator(controlImage: AbstractControl, tipo: string) {
-    return () => {
-      const file = controlImage.value as File;
-
-      if (file && file.name) {
-        console.log('Ingresa al validator if');
-        console.log(file);
-        const tokensImgName: any[] = file.name.split('.');
-        console.log(tokensImgName);
-        if (tokensImgName.length === 2) {
-          const imgExtension = tokensImgName[1];
-          if (imgExtension !== 'jpg' && imgExtension !== 'jpeg' && imgExtension !== 'png' && imgExtension !== 'jfif') {
-            console.log('Entra en error de imagen');
-            if (tipo === 'crear') {
-              this.cuponCrear.get('imagen')?.setValue(null);
-              this.existImageCrear = false;
-            }
-            else if(tipo === 'actualizar'){
-              this.formEdit.get('imagen')?.setValue(null);
-              this.existImageActualizar = false;
-            }
-            return { image_error: 'Solo imágenes con formato jpg, jpeg, png o jfif.' };
-          }
-          console.log('Formato de imagen correcto');
-          if (tipo === 'crear') {
-            this.existImageCrear = true;
-          }
-          else if (tipo === 'actualizar') {
-            this.existImageActualizar = true;
-          }
-        }
-        return null;
-      } else {
-        console.log('No hay imagen seleccionada');
-        return null;
-      }
-    };
-  }
-  loadImageFromDevice(event: any, tipo: string) {
-    const file: File = event.target.files[0];
-    if (file) {
-      this.extraerBase64(file)
-        .then((imagen: any) => {
-          if (tipo === 'crear') {
-            this.cuponCrear.get('imagen')?.setValue(file);
-            this.fileImagenCrear = file;
-            this.imagenCrear = imagen.base;
-          }
-          else if(tipo === 'actualizar'){
-            this.formEdit.get('imagen')?.setValue(file);
-            this.fileImagenActualizar = file;
-            this.imagenActualizar = imagen.base;
-          }
-        })
-        .catch(err => console.log(err));
-    }
-  };
-
-  onCrear(){
-    let cupon : CuponCrear={
+  onCrear() {
+    let cupon: CuponCrear = {
       codigo: '',
       titulo: '',
       descripcion: '',
@@ -336,7 +359,6 @@ export class CuponesComponent {
       fecha_iniciacion: '',
       fecha_expiracion: '',
       puntos: 0,
-      foto: '',
       tipo_categoria: '',
       cantidad: 0
     }
@@ -349,50 +371,50 @@ export class CuponesComponent {
     const puntos = this.cuponCrear.get('punto')?.value;
     const categoria = this.cuponCrear.get('categoria')?.value;
     const descuento = this.cuponCrear.get('descuento')?.value;
-    const foto = this.cuponCrear.get('imagen')?.value;
+    const foto = this.cuponCrear.get('imagen')?.value
 
-    console.log(  titulo , descripcion , inicio , fin , cantidad , puntos , categoria , descuento)
-    if( codigo && titulo && descripcion && inicio && fin && cantidad && puntos && categoria && descuento ){
-      cupon.codigo=codigo
-      cupon.titulo=titulo
+
+
+    if (titulo && descripcion && inicio && fin && cantidad && puntos && categoria && descuento) {
+      cupon.codigo = codigo
+      cupon.titulo = titulo
       cupon.descripcion = descripcion
       cupon.fecha_iniciacion = inicio
       cupon.fecha_expiracion = fin
       cupon.porcentaje = descuento
-      cupon.cantidad =cantidad
+      cupon.cantidad = cantidad
       cupon.puntos = puntos
       cupon.tipo_categoria = categoria
-      if(foto && this.existImageCrear){
-        cupon.foto = foto; // Si hay foto se le agrega al body.
+      console.log('entre')
+      if (foto && this.existImageCrear) {
+
+        cupon.foto = foto;
+        console.log("nullo", cupon.foto)
+
+
       }
       this.pythonAnywhereService.crear_cupon(cupon).subscribe(resp => {
-        console.log(resp)
+        this.limpiarForm('crear');
+        this.mostrarToastInfo('Estado del Cupon ', 'Cupon Creado correctamente', false);
       })
 
+
     }
-    
- 
-
-  
-    
-   
-
 
   }
-  onActualizar(){
-    let cupon :BodyCuponActualizar ={
+  onActualizar() {
+    let cupon: BodyCuponActualizar = {
       codigo: '',
       titulo: '',
       descripcion: '',
-      fecha_iniciacion: null,
+      fecha_iniciacion: '',
       fecha_expiracion: '',
       porcentaje: 0,
       cantidad: 0,
       puntos: 0,
-      foto: null,
       tipo_categoria: ''
     }
-    const codigo = this.formEdit.get('codigo')?.value;
+
     const titulo = this.formEdit.get('titulo')?.value;
     const descripcion = this.formEdit.get('descripcion')?.value;
     const inicio = this.formEdit.get('inicio')?.value;
@@ -401,46 +423,52 @@ export class CuponesComponent {
     const puntos = this.formEdit.get('punto')?.value;
     const categoria = this.formEdit.get('categoria')?.value;
     const descuento = this.formEdit.get('descuento')?.value;
-    const foto = this.formEdit.get('imagen')?.value;
-    if(codigo && titulo && descripcion && inicio && fin && cantidad && puntos && categoria && descuento ){
-      cupon.codigo=codigo
-      cupon.titulo=titulo
+    const foto = this.formEdit.get('imagen')?.value as File
+    if (this.cupon_seleccionada) {
+      cupon.codigo = this.cupon_seleccionada?.codigo
+    }
+
+    if (titulo && descripcion && inicio && fin && cantidad && puntos && categoria && descuento) {
+      cupon.titulo = titulo
       cupon.descripcion = descripcion
       cupon.fecha_iniciacion = inicio
       cupon.fecha_expiracion = fin
       cupon.porcentaje = descuento
-      cupon.cantidad =cantidad
+      cupon.cantidad = cantidad
       cupon.puntos = puntos
       cupon.tipo_categoria = categoria
 
     }
 
-
-    if(foto && this.existImageCrear){
+    console.log(foto, this.existImageActualizar)
+    if (foto && this.existImageActualizar) {
+      console.log('entre')
       cupon.foto = foto; // Si hay foto se le agrega al body.
+      console.log(cupon.foto)
     }
-    console.log(cupon)
-    if(this.cupon_seleccionada){
+    console.log(this.formEdit)
+    if (this.cupon_seleccionada) {
       const id = this.cupon_seleccionada.id
       console.log(id)
-      this.pythonAnywhereService.actualizar_cupon(cupon,id).subscribe(resp=>{console.log(resp);})
+      this.pythonAnywhereService.actualizar_cupon(cupon, id).subscribe(resp => {
+
+        this.limpiarForm('actualizar');
+        this.mostrarToastInfo('Estado del Cupon ', 'Cupon editada correctamente', false);
+      })
 
     }
-
-  ;
-
   }
 
-  getCurrentDate(): string{
+  getCurrentDate(): string {
     return moment().format('YYYY-MM-DD');
   }
 
-  getMinDateAvailable(): string{
+  getMinDateAvailable(): string {
     const minDate = moment().add(45, 'minutes').format('YYYY-MM-DDTHH:mm:ssZ');
     return minDate;
   }
 
-  getMaxDateAvailable(){
+  getMaxDateAvailable() {
     const maxDate = moment().add(2, 'months').format('YYYY-MM-DDTHH:mm:ssZ');
     return maxDate;
   }
@@ -453,12 +481,28 @@ export class CuponesComponent {
       this.arr_filtered_cupon = this.arr_filtered_cupon?.filter((solicitud) => {
         return solicitud.titulo.toLowerCase().includes(texto.toLowerCase())
       });
-    }}
+    }
+  }
 
-    onDelete(){
-    if(this.cupon_seleccionada){
-      this.pythonAnywhereService.eliminar_cupon(this.cupon_seleccionada.id).subscribe(resp=>console.log(resp))
+  onDelete() {
+    if (this.cupon_seleccionada) {
+      this.pythonAnywhereService.eliminar_cupon(this.cupon_seleccionada.id).subscribe(resp => this.mostrarToastInfo('Estado del Cupon ', 'Cupon Eliminado correctamente', false))
     }
-      
+
+  }
+
+  mostrarToastInfo(titulo: string, mensaje: string, isErrorToast: boolean) {
+    this.isErrorToast = isErrorToast;
+    this.tituloToast = titulo;
+    this.mensajeToast = mensaje;
+    const toast = document.getElementById('liveToast');
+    if (toast) {
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 7000);
+    } else {
+      console.log('No hay toast renderizado');
     }
+  }
 }

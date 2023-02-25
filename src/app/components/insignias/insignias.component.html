@@ -7,25 +7,27 @@
       </div>
     </div>
 
-    <!-- Buscar y agregar admi -->
-    <div class="row p-2 justify-content-center align-items-center">
-      <div class="col-xl-7 col-lg-5"></div>
-      <div class="col-xl-3 col-lg-4">
-        <div class="input-group">
-          <input type="text" class="form-control" placeholder="Buscar" aria-label="Buscar" aria-describedby="basic-addon1" (input)="search($event)">
-          <button class="input-group-text" id="basic-addon1"> <i class="bi bi-search"></i> </button>
-        </div>
-      </div>
-      <div class="col-xl-2 col-lg-3">
-        <button
-          type="button"
-          class="btn btn-primary"
-          data-bs-toggle="modal"
-          href="#modalCrearProfesion"
-          (click)="limpiarForm('crear')"
-        >Agregar Insignia</button>
+  <!-- Buscar y agregar admi -->
+  <div class="row p-2 justify-content-center align-items-center">
+    <div class="col-xl-7 col-lg-5"></div>
+    <div class="col-xl-3 col-lg-4">
+      <div class="input-group">
+        <input type="text" class="form-control" placeholder="Buscar"
+          aria-label="Buscar" aria-describedby="basic-addon1"
+          (input)="search($event)">
+        <button class="input-group-text" id="basic-addon1"> <i class="bi
+            bi-search"></i> </button>
       </div>
     </div>
+    <div class="col-xl-2 col-lg-3">
+      <button
+        type="button"
+        class="btn btn-primary"
+        data-bs-toggle="modal"
+        href="#modalCrearProfesion"
+        (click)="limpiarForm('crear')">Agregar Insignia</button>
+    </div>
+  </div>
 
     <!-- Contenedor de admi -->
     <div class="row justify-content-center align-items-center p-0">
@@ -48,15 +50,15 @@
               <h3 class="p-0 m-0">Tipo</h3>
             </div>
 
-            <div class="col-2 align-self-center">
-                <h3 class="p-0 m-0">Cantidad</h3>
-            </div>
+        <div class="col-2 align-self-center">
+          <h3 class="p-0 m-0">Cantidad</h3>
+        </div>
 
 
 
-            <div class="col-2 align-self-center">
-                <h3 class="p-0 m-0">Estado</h3>
-            </div>
+        <div class="col-2 align-self-center">
+          <h3 class="p-0 m-0">Estado</h3>
+        </div>
 
         </div>
 
@@ -82,26 +84,33 @@
               <h4 class="p-0 m-0">{{a.pedidos}}</h4>
             </div>
 
-            <div class="col-2 align-self-center">
-                <h4 class="p-0 m-0">{{a.estado}}</h4>
-              </div>
-          </div>
+        <div class="col-2 align-self-center">
+          <span *ngIf="!a.estado" class="badge text-bg-danger">Inactivo</span>
+          <span *ngIf="a.estado" class="badge text-bg-success">Activo</span>
         </div>
       </div>
+    </div>
+  </div>
 
 
 </div>
 
-<div class="modal fade" id="modalInformacionProfesion" aria-hidden="true" aria-labelledby="modalInformacionProfesionLabel" tabindex="-1">
+<div class="modal fade" id="modalInformacionProfesion" aria-hidden="true"
+  aria-labelledby="modalInformacionProfesionLabel" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header align-items-center">
-        <h1 class="modal-title fs-5 m-0 p-0 fw-bold" id="modalInformacionProfesionLabel">Información de Insignias</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <h1 class="modal-title fs-5 m-0 p-0 fw-bold"
+          id="modalInformacionProfesionLabel">Información de Insignias</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"
+          aria-label="Close"></button>
       </div>
       <div class="modal-body mb-0">
         <div class="row p-2">
-          <img [src]="insignia_seleccionada?.imagen? 'https://tomesoft1.pythonanywhere.com'+insignia_seleccionada?.imagen : 'assets/imagenes/ProfesionDefault.png'" class="rounded mx-auto d-block img-fluid w-50 image_modal" alt="...">
+          <img [src]="insignia_seleccionada?.imagen?
+            'https://tomesoft1.pythonanywhere.com'+insignia_seleccionada?.imagen
+            : 'assets/imagenes/ProfesionDefault.png'" class="rounded mx-auto
+            d-block img-fluid w-50 image_modal" alt="...">
         </div>
 
         <div class="row p-2 align-items-center">
@@ -159,31 +168,24 @@
         </div>
 
 
-      <div class="row p-2 align-items-center">
-        <div class="col-5">
-          <h3 class="m-0 p-0 fw-bold">Estado</h3>
+        <div class="row p-2 align-items-center">
+          <div class="col-5">
+            <label for="switchEstado" class="form-check-label"><h3 class="m-0
+                p-0 fw-bold">Habilitar/Deshabilitar:</h3></label>
+          </div>
+          <div class="col-7 form-check form-switch d-flex justify-content-end
+            fs-6">
+            <input
+              (change)="cambiarEstado($event)"
+              [checked]="insignia_seleccionada?.estado? true : false"
+              class="form-check-input"
+              id="switchEstado"
+              type="checkbox"
+              role="switch"
+              checked
+              aria-describedby="switchEstadoFeedback">
+          </div>
         </div>
-        <div class="col-7">
-         {{activo}}
-        </div>
-      </div>
-      <div class="row p-2 align-items-center">
-        <div class="col-5">
-          <label for="switchEstado" class="form-check-label"><h3 class="m-0 p-0 fw-bold">Habilitar/Deshabilitar:</h3></label>
-        </div>
-        <div class="col-7 form-check form-switch d-flex justify-content-end fs-6">
-          <input
-          (change)="cambiarEstado($event)"
-          [checked]="insignia_seleccionada?.estado? true : false"
-            class="form-check-input"
-            id="switchEstado"
-            type="checkbox"
-            role="switch"
-            checked
-            aria-describedby="switchEstadoFeedback"
-          >
-        </div>
-      </div>
 
       </div>
       <div class="modal-footer">
@@ -191,87 +193,119 @@
           class="btn btn-success"
           data-bs-target="#modalInformacionEdicionProfesion"
           data-bs-toggle="modal"
-          (click)="limpiarForm('actualizar')"
-        >Editar</button>
+          (click)="limpiarForm('actualizar')">Editar</button>
         <button
           class="btn btn-danger"
           data-bs-target="#modalConfirmacion"
           data-bs-toggle="modal"
-          (click)="establecerMensaje('Está seguro que desea eliminar la insignia?', 'eliminar')"
-        >Eliminar</button>
+          (click)="establecerMensaje('Está seguro que desea eliminar lainsignia?', 'eliminar')">Eliminar</button>
       </div>
     </div>
   </div>
 </div>
 
 <!-- Modal edicion de informacion de profesion -->
-<div class="modal fade" id="modalInformacionEdicionProfesion" aria-hidden="true" aria-labelledby="modalInformacionEdicionProfesionLabel" tabindex="-1">
+<div class="modal fade" id="modalInformacionEdicionProfesion" aria-hidden="true"
+  aria-labelledby="modalInformacionEdicionProfesionLabel" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header align-items-center">
-        <h1 class="modal-title fs-5 m-0 p-0 fw-bold" id="modalInformacionEdicionProfesionLabel">Edición de Insignias</h1>
+        <h1 class="modal-title fs-5 m-0 p-0 fw-bold"
+          id="modalInformacionEdicionProfesionLabel">Edición de Insignias</h1>
         <!-- (click)="limpiarForm('actualizar')" -->
         <button
           type="button"
           class="btn-close"
           data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
+          aria-label="Close"></button>
       </div>
       <div class="modal-body mb-0">
         <form [formGroup]="editarInsignias" class="">
           <div class="row">
             <div class="col d-flex justify-content-center">
-              <img *ngIf="existImageActualizar" class="image_modal rounded mx-auto d-block img-fluid w-50" [src]="imagenActualizar" alt="Archivo incorrecto">
-              <img *ngIf="!existImageActualizar && insignia_seleccionada?.imagen" class="image_modal rounded mx-auto d-block img-fluid w-50" [src]="'https://tomesoft1.pythonanywhere.com'+insignia_seleccionada?.imagen" alt="Archivo incorrecto">
-              <i *ngIf="!existImageActualizar && !insignia_seleccionada?.imagen" class="rounded mx-auto d-block img-fluid w-50 bi bi-upload icono"></i>
+              <img *ngIf="existImageActualizar" class="image_modal rounded
+                mx-auto d-block img-fluid w-50" [src]="imagenActualizar"
+                alt="Archivo incorrecto">
+              <img *ngIf="!existImageActualizar &&
+                insignia_seleccionada?.imagen" class="image_modal rounded
+                mx-auto d-block img-fluid w-50"
+                [src]="'https://tomesoft1.pythonanywhere.com'+insignia_seleccionada?.imagen"
+                alt="Archivo incorrecto">
+              <i *ngIf="!existImageActualizar && !insignia_seleccionada?.imagen"
+                class="rounded mx-auto d-block img-fluid w-50 bi bi-upload
+                icono"></i>
             </div>
             <div class="p-2">
               <input
                 class="w-100 centrar form-control"
-                [ngClass]="editarInsignias.get('imagen')?.hasError('image_error') ? 'is-invalid' : '' || (existImageActualizar)? 'is-valid' : ''"
+                [ngClass]="editarInsignias.get('imagen')?.hasError('image_error')
+                ? 'is-invalid' : '' || (existImageActualizar)? 'is-valid' : ''"
                 type="file"
                 id="file_input"
                 accept="image/png, image/jpeg"
-                (change)="loadImageFromDevice($event, 'actualizar')"
-              >
-              <div class="invalid-feedback">{{getErrorMessage(editarInsignias, 'imagen')}}</div>
+                (change)="loadImageFromDevice($event, 'actualizar')">
+              <div class="invalid-feedback">{{getErrorMessage(editarInsignias,
+                'imagen')}}</div>
             </div>
           </div>
 
           <div class="row p-2 align-items-center">
             <div class="col-5">
-              <label for="inputNombre" class="form-label"><h3 class="m-0 p-0 fw-bold">Nombre:</h3></label>
+              <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
+                  fw-bold">Nombre:</h3></label>
             </div>
             <div class="col-7">
               <input
                 type="text"
                 formControlName="nombre"
                 class="form-control"
-                [ngClass]="isInvalidForm('nombre', 'actualizar') ? 'is-invalid' : ''"
+                [ngClass]="isInvalidForm('nombre', 'actualizar') ? 'is-invalid'
+                : ''"
                 id="inputNombre"
-                value="Mark"
                 [placeholder]="insignia_seleccionada?.nombre"
-                [value]="insignia_seleccionada?.nombre"
-              >
-              <div class="invalid-feedback"> {{getErrorMessage(editarInsignias, 'nombre')}} </div>
+                [value]="insignia_seleccionada?.nombre">
+              <div class="invalid-feedback"> {{getErrorMessage(editarInsignias,
+                'nombre')}} </div>
             </div>
           </div>
 
           <div class="row p-2 align-items-center">
             <div class="col-5">
-              <label for="textareaDescripcion" class="form-label"><h3 class="m-0 p-0 fw-bold">Descripción:</h3></label>
+              <label for="textareaDescripcion" class="form-label"><h3 class="m-0
+                  p-0 fw-bold">Descripción:</h3></label>
             </div>
             <div class="col-7">
               <textarea
                 class="form-control"
                 formControlName="descripcion"
-                [ngClass]="isInvalidForm('descripcion', 'actualizar') ? 'is-invalid' : ''"
+                [ngClass]="isInvalidForm('descripcion', 'actualizar') ?
+                'is-invalid' : ''"
                 id="textareaDescripcion"
                 [placeholder]="insignia_seleccionada?.descripcion"
-                [value]="insignia_seleccionada?.descripcion"
-              ></textarea>
-            <div class="invalid-feedback"> {{getErrorMessage(editarInsignias, 'descripcion')}} </div>
+                [value]="insignia_seleccionada?.descripcion"></textarea>
+              <div class="invalid-feedback"> {{getErrorMessage(editarInsignias,
+                'descripcion')}} </div>
+            </div>
+          </div>
+
+
+          <div class="row p-2 align-items-center">
+            <div class="col-5">
+              <label for="textareaDescripcion" class="form-label"><h3 class="m-0
+                  p-0 fw-bold">Cantidad de pedidos:</h3></label>
+            </div>
+            <div class="col-7">
+              <input
+              type="text"
+                class="form-control"
+                formControlName="pedidos"
+                [ngClass]="isInvalidForm('pedidos', 'actualizar') ?
+                'is-invalid' : ''"
+                id="textareaDescripcion"
+                [placeholder]="insignia_seleccionada?.descripcion"
+                [value]="insignia_seleccionada?.descripcion">
+              <div class="invalid-feedback"> {{getErrorMessage(editarInsignias,
+                'pedidos')}} </div>
             </div>
           </div>
 
@@ -290,7 +324,8 @@
                 [value]="insignia_seleccionada?.servicio"
                 aria-describedby="selectorServicioCrearFeedback">
                 <option selected disabled value="">Elija un servicio...</option>
-                <option *ngFor="let c of arr_servicios" [value]="c.nombre"> {{c.nombre}}
+                <option *ngFor="let c of arr_servicios" [value]="c.nombre">
+                  {{c.nombre}}
                 </option>
               </select>
               <div id="selectorServicioCrearFeedback"
@@ -298,8 +333,6 @@
                 'servicio')}} </div>
             </div>
           </div>
-
-
           <div class="row p-2 align-items-center">
             <div class="col-5">
               <label for="selectorServicioCrear" class="form-label"><h3
@@ -308,17 +341,17 @@
             <div class="col-7">
               <select
                 class="form-select"
-                [ngClass]="isInvalidForm('usuario', 'actualizar') ?
-                'is-invalid' : ''"
+                [ngClass]="isInvalidForm('servicio', 'actualizar')?'is-invalid' :
+                ''"
                 formControlName="usuario"
                 [value]="insignia_seleccionada?.tipo_usuario"
                 aria-describedby="selectorServicioCrearFeedback">
-                <option selected disabled >Elija un tipo de usuario...</option>
-                <option *ngFor="let c of tipo" value="{{c}}"> {{c}}</option>
+                <option selected disabled>Elija un tipo de usuario...</option>
+                <option *ngFor="let ti of arr_tipo" value="{{ti}}"> {{ti}}</option>
               </select>
               <div id="selectorServicioCrearFeedback"
                 class="invalid-feedback"> {{getErrorMessage(editarInsignias,
-                'usuario')}} </div>
+                'servicio')}} </div>
             </div>
           </div>
 
@@ -330,36 +363,33 @@
             <div class="col-7">
               <select
                 class="form-select"
-                [ngClass]="isInvalidForm('tipo', 'actualizar') ?
-                'is-invalid' : ''"
-                formControlName="tipo"
-
+                [ngClass]="isInvalidForm('cat', 'actualizar')?'is-invalid' :
+                ''"
+                formControlName="cat"
+                id="ped"
+                [value]="insignia_seleccionada?.tipo"
                 aria-describedby="selectorServicioCrearFeedback">
-                <option selected disabled >Elija un tipo de usuario...</option>
-                <option *ngFor="let c of profesion" value="{{c}}"> {{c}}</option>
+                <option selected disabled>Elija un tipo de usuario...</option>
+                <option *ngFor="let c of arr_categoria" value="{{c.nombre}}"> {{c.nombre}}</option>
               </select>
               <div id="selectorServicioCrearFeedback"
                 class="invalid-feedback"> {{getErrorMessage(editarInsignias,
-                'tipo')}} </div>
+                'cat')}} </div>
             </div>
           </div>
-
-
-
-
 
 
         </form>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-danger" data-bs-target="#modalInformacionProfesion" data-bs-toggle="modal">Regresar</button>
+        <button class="btn btn-danger"
+          data-bs-target="#modalInformacionProfesion" data-bs-toggle="modal">Regresar</button>
         <button
-          [disabled]="editarInsignias.invalid? true : false"
+
           data-bs-target="#modalConfirmacion"
           data-bs-toggle="modal"
           class="btn btn-success"
-          (click)="establecerMensaje('Está seguro que desea actualizar la información?', 'actualizar')"
-        >Actualizar</button>
+          (click)="establecerMensaje('Está seguro que desea actualizar laminformación?', 'actualizar')">Actualizar</button>
       </div>
 
       <!-- <pre>
@@ -369,189 +399,203 @@
   </div>
 </div>
 
-  <!-- Modal crear profesion -->
-  <div class="modal fade" id="modalCrearProfesion" aria-hidden="true" aria-labelledby="modalCrearProfesionLabel" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header align-items-center">
-          <h1 class="modal-title fs-5 m-0 p-0 fw-bold" id="modalCrearProfesionLabel">Crear Insinia</h1>
-          <!-- (click)="limpiarForm('crear')" -->
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-          ></button>
-        </div>
-        <div class="modal-body mb-0">
-          <form [formGroup]="crearInsignias" class="">
-            <!-- Seccion de imagen -->
-            <div class="row">
-              <div class="col d-flex justify-content-center">
-                <img *ngIf="existImageCrear" class="rounded mx-auto d-block img-fluid w-50 image_modal" [src]="imagenCrear" alt="Archivo incorrecto">
-                <i *ngIf="!existImageCrear" class="rounded mx-auto d-block img-fluid w-50 bi bi-upload icono"></i>
-              </div>
-              <div class="p-2">
-                <input
-                  class="w-100 centrar form-control"
-                  [ngClass]="crearInsignias.get('imagen')?.hasError('image_error') ? 'is-invalid' : '' || (existImageCrear)? 'is-valid' : ''"
-                  type="file"
-                  id="file_input"
-                  accept="image/png, image/jpeg"
-                  (change)="loadImageFromDevice($event, 'crear')"
-                >
-                <div class="invalid-feedback">{{getErrorMessage(crearInsignias, 'imagen')}}</div>
-              </div>
+<!-- Modal crear profesion -->
+<div class="modal fade" id="modalCrearProfesion" aria-hidden="true"
+  aria-labelledby="modalCrearProfesionLabel" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header align-items-center">
+        <h1 class="modal-title fs-5 m-0 p-0 fw-bold"
+          id="modalCrearProfesionLabel">Crear Insinia</h1>
+        <!-- (click)="limpiarForm('crear')" -->
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"></button>
+      </div>
+      <div class="modal-body mb-0">
+        <form [formGroup]="crearInsignias" class="">
+          <!-- Seccion de imagen -->
+          <div class="row">
+            <div class="col d-flex justify-content-center">
+              <img *ngIf="existImageCrear" class="rounded mx-auto d-block
+                img-fluid w-50 image_modal" [src]="imagenCrear" alt="Archivo
+                incorrecto">
+              <i *ngIf="!existImageCrear" class="rounded mx-auto d-block
+                img-fluid w-50 bi bi-upload icono"></i>
             </div>
-
-            <!-- Seccion Nombre -->
-            <div class="row p-2 align-items-center">
-              <div class="col-5">
-                <label for="inputNombre" class="form-label"><h3 class="m-0 p-0 fw-bold">Nombre:</h3></label>
-              </div>
-              <div class="col-7">
-                <input
-                  type="text"
-                  formControlName="nombre"
-                  class="form-control"
-                  [ngClass]="isInvalidForm('nombre', 'crear') ? 'is-invalid' : crearInsignias.get('nombre')?.touched || crearInsignias.get('nombre')?.dirty && !crearInsignias.get('nombre')?.invalid ? 'is-valid' : ''"
-                  id="inputNombre"
-                  placeholder="Nombre de la profesión"
-                >
-                <div class="invalid-feedback"> {{getErrorMessage(crearInsignias, 'nombre')}} </div>
-              </div>
+            <div class="p-2">
+              <input
+                class="w-100 centrar form-control"
+                [ngClass]="crearInsignias.get('imagen')?.hasError('image_error')
+                ? 'is-invalid' : '' || (existImageCrear)? 'is-valid' : ''"
+                type="file"
+                id="file_input"
+                accept="image/png, image/jpeg"
+                (change)="loadImageFromDevice($event, 'crear')">
+              <div class="invalid-feedback">{{getErrorMessage(crearInsignias,
+                'imagen')}}</div>
             </div>
+          </div>
 
-            <!-- Seccion descripcion -->
-            <div class="row p-2 align-items-center">
-              <div class="col-5">
-                <label for="textareaDescripcion" class="form-label"><h3 class="m-0 p-0 fw-bold">Descripción:</h3></label>
-              </div>
-              <div class="col-7">
-                <textarea
-                  class="form-control"
-                  formControlName="descripcion"
-                  [ngClass]="isInvalidForm('descripcion', 'crear') ? 'is-invalid' : ''"
-                  id="textareaDescripcion"
-                  placeholder="Descripción de la profesión"
-                ></textarea>
-                <div class="invalid-feedback"> {{getErrorMessage(crearInsignias, 'descripcion')}} </div>
-              </div>
+          <!-- Seccion Nombre -->
+          <div class="row p-2 align-items-center">
+            <div class="col-5">
+              <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
+                  fw-bold">Nombre:</h3></label>
             </div>
-
-            <div class="row p-2 align-items-center">
-              <div class="col-5">
-                <label for="textareaDescripcion" class="form-label"><h3 class="m-0 p-0 fw-bold">Cantidad de pedidos:</h3></label>
-              </div>
-              <div class="col-7">
-                <input
-                  class="form-control"
-                  formControlName="pedidos"
-                  [ngClass]="isInvalidForm('pedidos', 'crear') ? 'is-invalid' : ''"
-                  id="textareaDescripcion"
-                  placeholder="cantidad de pedidos"
-                >
-                <div class="invalid-feedback"> {{getErrorMessage(crearInsignias, 'pedidos')}} </div>
-              </div>
+            <div class="col-7">
+              <input
+                type="text"
+                formControlName="nombre"
+                class="form-control"
+                [ngClass]="isInvalidForm('nombre', 'crear') ? 'is-invalid' :
+                crearInsignias.get('nombre')?.touched ||
+                crearInsignias.get('nombre')?.dirty &&
+                !crearInsignias.get('nombre')?.invalid ? 'is-valid' : ''"
+                id="inputNombre"
+                placeholder="Nombre de la profesión">
+              <div class="invalid-feedback"> {{getErrorMessage(crearInsignias,
+                'nombre')}} </div>
             </div>
+          </div>
 
-            <!-- Seccion del selector -->
-            <div class="row p-2 align-items-center">
-              <div class="col-5">
-                <label for="selectorServicioCrear" class="form-label"><h3 class="m-0 p-0 fw-bold">Servicio asignado:</h3></label>
-              </div>
-              <div class="col-7">
-                <select
-                  class="form-select"
-                  [ngClass]="isInvalidForm('servicio', 'crear') ? 'is-invalid' : ''"
-                  formControlName="servicio"
-                  id="selectorServicioCrear"
-                  aria-describedby="selectorServicioCrearFeedback"
-                >
-                  <option selected disabled value="">Elija un servicio...</option>
-                  <option *ngFor="let servicio of arr_servicios" [id]="servicio.id" [value]="servicio.nombre"> {{servicio.nombre}} </option>
-                </select>
-                <div id="selectorServicioCrearFeedback" class="invalid-feedback"> {{getErrorMessage(crearInsignias, 'servicio')}} </div>
-              </div>
+          <!-- Seccion descripcion -->
+          <div class="row p-2 align-items-center">
+            <div class="col-5">
+              <label for="textareaDescripcion" class="form-label"><h3 class="m-0
+                  p-0 fw-bold">Descripción:</h3></label>
             </div>
-
-            <div class="row p-2 align-items-center">
-              <div class="col-5">
-                <label for="selectorServicioCrear" class="form-label"><h3 class="m-0 p-0 fw-bold">Usuario:</h3></label>
-              </div>
-              <div class="col-7">
-                <select
-                  class="form-select"
-                  [ngClass]="isInvalidForm('usuario', 'crear') ? 'is-invalid' : ''"
-                  formControlName="usuario"
-                  id="selectorServicioCrear"
-                  aria-describedby="selectorServicioCrearFeedback"
-                >
-                  <option selected disabled value="">Elija un Usuario...</option>
-                  <option  value="Solicitante"> Solicitante
-                  </option>
-                  <option  value="Proveedor"> Proveedor
-                  </option>
-                </select>
-                <div id="selectorServicioCrearFeedback" class="invalid-feedback"> {{getErrorMessage(crearInsignias, 'usuario')}} </div>
-              </div>
+            <div class="col-7">
+              <textarea
+                class="form-control"
+                formControlName="descripcion"
+                [ngClass]="isInvalidForm('descripcion', 'crear') ? 'is-invalid'
+                : ''"
+                id="textareaDescripcion"
+                placeholder="Descripción de la profesión"></textarea>
+              <div class="invalid-feedback"> {{getErrorMessage(crearInsignias,
+                'descripcion')}} </div>
             </div>
+          </div>
 
-
-            <div class="row p-2 align-items-center">
-              <div class="col-5">
-                <label for="selectorServicioCrear" class="form-label"><h3 class="m-0 p-0 fw-bold">Tipo:</h3></label>
-              </div>
-              <div class="col-7">
-                <select
-                  class="form-select"
-                  [ngClass]="isInvalidForm('tipo', 'crear') ? 'is-invalid' : ''"
-                  formControlName="tipo"
-                  id="selectorServicioCrear"
-                  aria-describedby="selectorServicioCrearFeedback"
-                >
-                  <option selected disabled value="">Elija un Tipo...</option>
-                  <option selected disabled value="">Elija un tipo ...</option>
-                  <option  value="Hogar"> Hogar
-                  </option>
-                  <option  value="Automotriz"> Automotriz
-                  </option>
-                  <option  value="Promiciones"> Promiciones
-                  </option>
-                  <option  value="Oficina"> Oficina
-                  </option>
-                </select>
-                <div id="selectorServicioCrearFeedback" class="invalid-feedback"> {{getErrorMessage(crearInsignias, 'tipo')}} </div>
-              </div>
+          <div class="row p-2 align-items-center">
+            <div class="col-5">
+              <label for="textareaDescripcion" class="form-label"><h3 class="m-0
+                  p-0 fw-bold">Cantidad de pedidos:</h3></label>
             </div>
+            <div class="col-7">
+              <input
+              type="text"
+                class="form-control"
+                formControlName="pedidos"
+                [ngClass]="isInvalidForm('pedidos', 'crear') ? 'is-invalid' :
+                ''"
+                id="textareaDescripcion"
+                placeholder="cantidad de pedidos">
+              <div class="invalid-feedback"> {{getErrorMessage(crearInsignias,
+                'pedidos')}} </div>
+            </div>
+          </div>
+
+          <!-- Seccion del selector -->
+          <div class="row p-2 align-items-center">
+            <div class="col-5">
+              <label for="selectorServicioCrear" class="form-label"><h3
+                  class="m-0 p-0 fw-bold">Tipo asignado:</h3></label>
+            </div>
+            <div class="col-7">
+              <select
+                class="form-select"
+                [ngClass]="isInvalidForm('cat', 'crear') ? 'is-invalid' :
+                ''"
+                formControlName="cat"
+                aria-describedby="selectorServicioCrearFeedback">
+                <option selected disabled value="">Elija un servicio...</option>
+                <option *ngFor="let a of arr_categoria"
+                  [id]="a.id" [value]="a.nombre">
+                  {{a.nombre}} </option>
+              </select>
+              <div id="selectorServicioCrearFeedback" class="invalid-feedback">
+                {{getErrorMessage(crearInsignias, 'cat')}} </div>
+            </div>
+          </div>
+
+          <div class="row p-2 align-items-center">
+            <div class="col-5">
+              <label for="selectorServicioCrear" class="form-label"><h3
+                  class="m-0 p-0 fw-bold">Usuario:</h3></label>
+            </div>
+            <div class="col-7">
+              <select
+                class="form-select"
+                [ngClass]="isInvalidForm('usuario', 'crear') ? 'is-invalid' :
+                ''"
+                formControlName="usuario"
+                aria-describedby="selectorServicioCrearFeedback">
+                <option selected disabled value="">Elija un Usuario...</option>
+                <option *ngFor="let ti of arr_tipo" value="{{ti}}"> {{ti}}</option>
+              </select>
+              <div id="selectorServicioCrearFeedback" class="invalid-feedback">
+                {{getErrorMessage(crearInsignias, 'usuario')}} </div>
+            </div>
+          </div>
 
 
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button
-            [disabled]="crearInsignias.invalid? true : false"
-            data-bs-target="#modalConfirmacion"
-            data-bs-toggle="modal"
-            class="btn btn-success"
-            (click)="establecerMensaje('Está seguro que desea crear la profesión?', 'crear')"
-          >Crear</button>
-        </div>
+          <div class="row p-2 align-items-center">
+            <div class="col-5">
+              <label for="selectorServicioCrear" class="form-label"><h3
+                  class="m-0 p-0 fw-bold">Servicio asignado:</h3></label>
+            </div>
+            <div class="col-7">
+              <select
+                class="form-select"
+                [ngClass]="isInvalidForm('servicio', 'crear') ? 'is-invalid' :
+                ''"
+                formControlName="servicio"
 
-        <!-- <pre>
+
+                aria-describedby="selectorServicioCrearFeedback">
+                <option selected disabled value="">Elija un servicio...</option>
+                <option *ngFor="let servicio of arr_servicios"
+                  [id]="servicio.id" [value]="servicio.nombre">
+                  {{servicio.nombre}} </option>
+              </select>
+              <div id="selectorServicioCrearFeedback" class="invalid-feedback">
+                {{getErrorMessage(crearInsignias, 'servicio')}} </div>
+            </div>
+          </div>
+
+
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button
+          [disabled]="crearInsignias.invalid? true : false"
+          data-bs-target="#modalConfirmacion"
+          data-bs-toggle="modal"
+          class="btn btn-success"
+          (click)="establecerMensaje('Está seguro que desea crear la profesión?', 'crear')">Crear</button>
+      </div>
+
+      <!-- <pre>
           {{crearProfesionesForm.value | json}}
         </pre> -->
-      </div>
     </div>
   </div>
+</div>
 <!-- Modal de confirmacion (Alerta) -->
-<div class="modal fade" id="modalConfirmacion" tabindex="-1" aria-labelledby="modalConfirmacionLabel" aria-hidden="true">
+<div class="modal fade" id="modalConfirmacion" tabindex="-1"
+  aria-labelledby="modalConfirmacionLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <!-- Titulo del modal confirmacion -->
       <div class="modal-header">
-        <h1 class="modal-title fs-5 m-0 p-0 fw-bold" id="modalConfirmacionLabel">Confirmar selección</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <h1 class="modal-title fs-5 m-0 p-0 fw-bold"
+          id="modalConfirmacionLabel">Confirmar selección</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"
+          aria-label="Close"></button>
       </div>
 
       <!-- Cuerpo del modal confirmacion -->
@@ -562,10 +606,33 @@
       <!-- Footer del modal confirmacion -->
       <div class="modal-footer">
         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
-        <button *ngIf="isCrear" type="button" class="btn btn-success" (click)="onCrear()" data-bs-dismiss="modal">Confirmar</button>
-        <button *ngIf="isActualizar" type="button" class="btn btn-success" (click)="onActualizar()" data-bs-dismiss="modal">Confirmar</button>
-        <button *ngIf="isEliminar" type="button" class="btn btn-success" (click)="onEliminar()" data-bs-dismiss="modal">Confirmar</button>
+        <button *ngIf="isCrear" type="button" class="btn btn-success"
+          (click)="onCrear()" data-bs-dismiss="modal">Confirmar</button>
+        <button *ngIf="isActualizar" type="button" class="btn btn-success"
+          (click)="onActualizar()" data-bs-dismiss="modal">Confirmar</button>
+        <button *ngIf="isEliminar" type="button" class="btn btn-success"
+          (click)="onEliminar()" data-bs-dismiss="modal">Confirmar</button>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast de Información -->
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+  <div #liveToast id="liveToast" class="toast" role="alert"
+    aria-live="assertive" aria-atomic="true">
+    <div class="toast-header" [ngClass]="isErrorToast? ' bg-danger' : '
+      bg-success'">
+      <img src="../../../assets/imagenes/notification_logo.png" class="rounded
+        me-2" width="25px" alt="...">
+      <strong class="me-auto text-light">{{tituloToast}}</strong>
+      <small class="text-light">Ahora</small>
+      <button type="button" class="btn-close" data-bs-dismiss="toast"
+        aria-label="Close"></button>
+    </div>
+    <div class="toast-body bg-opacity-25" [ngClass]="isErrorToast? ' bg-danger'
+      : ' bg-success'">
+      {{mensajeToast}}
     </div>
   </div>
 </div>

@@ -22,8 +22,9 @@ totalTarjeta:any
 totalBanco:any
 totalSistema:any
 totalPayment:any
-
-
+mensajeToast = "";
+tituloToast = "";
+isErrorToast = false;
 constructor(private pythonAnywhereService: PythonAnywhereService, private sanitizer: DomSanitizer) {
   this.pythonAnywhereService.obtener_pagos_tarjetaP().subscribe(resp => {
   this.arr_tarjeta = resp.results
@@ -110,10 +111,25 @@ cambiarEstado(event:any){
     const id = this.tarjeta_seleccionada.id
     let estado = event.srcElement.checked
     this.pythonAnywhereService.cambio_pago_proveedor_estado(id,estado).subscribe(resp=>{
-      console.log(resp)
+      this.mostrarToastInfo('Estado del Pago', 'se pago con exito', false);
     })
   }
 
 
+}
+
+mostrarToastInfo(titulo: string, mensaje: string, isErrorToast: boolean) {
+  this.isErrorToast = isErrorToast;
+  this.tituloToast = titulo;
+  this.mensajeToast = mensaje;
+  const toast = document.getElementById('liveToast');
+  if(toast){
+    toast.classList.add('show');
+    setTimeout(() => {
+      toast.classList.remove('show');
+    }, 7000);
+  } else {
+    console.log('No hay toast renderizado');
+  }
 }
 }

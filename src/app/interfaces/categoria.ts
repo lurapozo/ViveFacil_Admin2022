@@ -2,8 +2,8 @@ export interface Categoria {
   id: number;
   nombre: string;
   descripcion: string;
-  foto: string;
-  foto2: string;
+  foto?: File;
+  foto2?: File;
   estado: boolean;
 }
 
@@ -18,7 +18,8 @@ export interface BodyActualizarCategoria {
 export interface BodyCrearCategoria {
   nombre: string;
   descripcion: string;
-  foto: File;
+  foto?: File;
+  foto2?: File;
 }
 
 export interface BodyResponseCrearCategoria {

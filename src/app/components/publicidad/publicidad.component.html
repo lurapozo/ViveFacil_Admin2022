@@ -130,6 +130,15 @@ aria-labelledby="modalInformacionProfesionLabel" tabindex="-1">
         </div>
       </div>
 
+      <div class="row p-2 align-items-center">
+        <div class="col-5">
+          <h3 class="m-0 p-0 fw-bold">Descripcion:</h3>
+        </div>
+        <div class="col-7">
+          {{publicidad_seleccionada?.descripcion}}
+        </div>
+      </div>
+
 
       <div class="row p-2 align-items-center">
         <div class="col-5">
@@ -139,8 +148,6 @@ aria-labelledby="modalInformacionProfesionLabel" tabindex="-1">
           {{publicidad_seleccionada?.url}}
         </div>
       </div>
-
-
 
       <div class="row p-2 align-items-center">
         <div class="col-5">
@@ -278,8 +285,6 @@ aria-labelledby="modalInformacionEdicionProfesionLabel" tabindex="-1">
               [ngClass]="isInvalidForm('url', 'actualizar') ?
               'is-invalid' : ''"
 
-              value="Mark"
-
               [value]="publicidad_seleccionada?.url">
             <div class="invalid-feedback"> {{getErrorMessage(formEdit,
               'url')}} </div>
@@ -288,14 +293,18 @@ aria-labelledby="modalInformacionEdicionProfesionLabel" tabindex="-1">
 
         <div class="row p-2 align-items-center">
           <div class="col-5">
+
             <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
-                fw-bold">Fecha de Inicio:</h3></label>
+                fw-bold">Fecha Inicio:</h3>
+
+            </label>
+
           </div>
           <div class="col-7">
-            <input type="date"
-              [value]="publicidad_seleccionada?.fecha_inicio" id="start"
-              required pattern="\d{4}-\d{2}-\d{2}"
-              formControlName="inicio"
+            <input [value]="publicidad_seleccionada?.fecha_inicio"
+            [ngClass]="isInvalidForm('inicio', 'actualizar') ?
+            'is-invalid' : ''"
+              formControlName="inicio" type="datetime-local" format="YYYY-MM-DDTHH:mm:ssZ" id="start" required
               min="{{getCurrentDate()}}">
             <div class="invalid-feedback"> {{getErrorMessage(formEdit,
               'inicio')}} </div>
@@ -313,9 +322,12 @@ aria-labelledby="modalInformacionEdicionProfesionLabel" tabindex="-1">
           </div>
           <div class="col-7">
             <input [value]="publicidad_seleccionada?.fecha_expiracion"
-              formControlName="fin" type="date" id="start" required
-              pattern="\d{4}-\d{2}-\d{2}"
-              min="{{getCurrentDate()}}">
+            [ngClass]="isInvalidForm('fin', 'actualizar') ?
+            'is-invalid' : ''"
+              formControlName="fin"  format="YYYY-MM-DDTHH:mm:ssZ" type="datetime-local" id="start" required
+              min="{{getCurrentDate()}}"
+
+              >
             <div class="invalid-feedback"> {{getErrorMessage(formEdit,
               'fin')}} </div>
           </div>
@@ -328,7 +340,7 @@ aria-labelledby="modalInformacionEdicionProfesionLabel" tabindex="-1">
       <button class="btn btn-danger"
         data-bs-target="#modalInformacionProfesion" data-bs-toggle="modal">Regresar</button>
       <button
-
+      [disabled]="formEdit.invalid? true : false"
         data-bs-target="#modalConfirmacion"
         data-bs-toggle="modal"
         class="btn btn-success"
@@ -370,10 +382,10 @@ aria-labelledby="modalCrearProfesionLabel" tabindex="-1">
           <div class="p-2">
             <input
               class="w-100 centrar form-control"
-              [ngClass]="publicidadCrear.get('imagen')?.hasError('image_error') ?
-              'is-invalid' : '' || (existImageCrear)? 'is-valid' : ''"
+              [ngClass]="publicidadCrear.get('imagen')?.hasError('image_error')
+              ? 'is-invalid' : '' || (existImageCrear)? 'is-valid' : ''"
               type="file"
-
+              id="file_input"
               accept="image/png, image/jpeg"
               (change)="loadImageFromDevice($event, 'crear')">
             <div class="invalid-feedback">{{getErrorMessage(publicidadCrear,
@@ -406,6 +418,28 @@ aria-labelledby="modalCrearProfesionLabel" tabindex="-1">
         <div class="row p-2 align-items-center">
           <div class="col-5">
             <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
+                fw-bold">Descripcion:</h3></label>
+          </div>
+          <div class="col-7">
+            <input
+              type="text"
+              formControlName="descripcion"
+              class="form-control"
+              [ngClass]="isInvalidForm('descripcion', 'crear') ? 'is-invalid' :
+              publicidadCrear.get('descripcion')?.touched ||
+              publicidadCrear.get('descripcion')?.dirty &&
+              !publicidadCrear.get('descripcion')?.invalid ? 'is-valid' : ''"
+              placeholder="Descripcion">
+            <div class="invalid-feedback"> {{getErrorMessage(publicidadCrear,
+              'descripcion')}} </div>
+          </div>
+        </div>
+
+
+
+        <div class="row p-2 align-items-center">
+          <div class="col-5">
+            <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
                 fw-bold">Url:</h3></label>
           </div>
           <div class="col-7">
@@ -431,9 +465,14 @@ aria-labelledby="modalCrearProfesionLabel" tabindex="-1">
                 fw-bold">Fecha de Inicio:</h3></label>
           </div>
           <div class="col-7">
-            <input type="date"
+            <input type="datetime-local"
               id="start"
-              required pattern="\d{4}-\d{2}-\d{2}"
+              required
+              [ngClass]="isInvalidForm('inicio', 'crear') ? 'is-invalid'
+              :
+              publicidadCrear.get('inicio')?.touched ||
+              publicidadCrear.get('inicio')?.dirty &&
+              !publicidadCrear.get('inicio')?.invalid ? 'is-valid' : ''"
               formControlName="inicio"
               min="{{getCurrentDate()}}">
             <div class="invalid-feedback"> {{getErrorMessage(publicidadCrear,
@@ -452,8 +491,12 @@ aria-labelledby="modalCrearProfesionLabel" tabindex="-1">
           </div>
           <div class="col-7">
             <input
-              formControlName="fin" type="date" id="start" required
-              pattern="\d{4}-\d{2}-\d{2}"
+              formControlName="fin" type="datetime-local" id="start" required
+              [ngClass]="isInvalidForm('fin', 'crear') ? 'is-invalid'
+              :
+              publicidadCrear.get('fin')?.touched ||
+              publicidadCrear.get('fin')?.dirty &&
+              !publicidadCrear.get('fin')?.invalid ? 'is-valid' : ''"
               min="{{getCurrentDate()}}">
             <div class="invalid-feedback"> {{getErrorMessage(publicidadCrear,
               'fin')}} </div>
@@ -467,7 +510,7 @@ aria-labelledby="modalCrearProfesionLabel" tabindex="-1">
     </div>
     <div class="modal-footer">
       <button
-
+      [disabled]="publicidadCrear.invalid? true : false"
         data-bs-target="#modalConfirmacion"
         data-bs-toggle="modal"
         class="btn btn-success"

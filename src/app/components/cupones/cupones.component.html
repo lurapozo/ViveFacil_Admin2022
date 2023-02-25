@@ -85,15 +85,17 @@
         </div>
 
         <div class="col-2 align-self-center">
-          <h4 class="p-0 m-0">{{a.fecha_iniciacion}}</h4>
+          <h4 class="p-0 m-0">{{a.fecha_iniciacion  | date: ' MMM d, y, h:mm:ss a'}}</h4>
         </div>
 
         <div class="col-2 align-self-center">
-          <h4 class="p-0 m-0">{{a.fecha_expiracion}}</h4>
+          <h4 class="p-0 m-0">{{a.fecha_expiracion  | date: ' MMM d, y, h:mm:ss a'}}</h4>
         </div>
 
+
         <div class="col-1 align-self-center">
-          <h4 class="p-0 m-0">{{a.estado}}</h4>
+          <span *ngIf="!a.estado" class="badge text-bg-danger">Inactivo</span>
+          <span *ngIf="a.estado" class="badge text-bg-success">Activo</span>
         </div>
       </div>
     </div>
@@ -171,7 +173,7 @@
             <h3 class="m-0 p-0 fw-bold">Fecha inicio</h3>
           </div>
           <div class="col-7">
-            {{cupon_seleccionada?.fecha_iniciacion}}
+            {{cupon_seleccionada?.fecha_iniciacion | date: ' MMM d, y, h:mm:ss a'}}
           </div>
         </div>
 
@@ -180,18 +182,11 @@
             <h3 class="m-0 p-0 fw-bold">Fecha de Expiracion</h3>
           </div>
           <div class="col-7">
-            {{cupon_seleccionada?.fecha_iniciacion}}
+            {{cupon_seleccionada?.fecha_iniciacion | date: ' MMM d, y, h:mm:ss a'}}
           </div>
         </div>
 
-        <div class="row p-2 align-items-center">
-          <div class="col-5">
-            <h3 class="m-0 p-0 fw-bold">Estado</h3>
-          </div>
-          <div class="col-7">
-            {{activo}}
-          </div>
-        </div>
+
 
         <div class="row p-2 align-items-center">
           <div class="col-5">
@@ -250,8 +245,9 @@
               <img *ngIf="existImageActualizar" class="image_modal rounded
                 mx-auto d-block img-fluid w-50" [src]="imagenActualizar"
                 alt="Archivo incorrecto">
-              <img *ngIf="!existImageActualizar && cupon_seleccionada?.foto"
-                class="image_modal rounded mx-auto d-block img-fluid w-50"
+              <img *ngIf="!existImageActualizar &&
+              cupon_seleccionada?.foto" class="image_modal rounded
+                mx-auto d-block img-fluid w-50"
                 [src]="'https://tomesoft1.pythonanywhere.com'+cupon_seleccionada?.foto"
                 alt="Archivo incorrecto">
               <i *ngIf="!existImageActualizar && !cupon_seleccionada?.foto"
@@ -261,8 +257,8 @@
             <div class="p-2">
               <input
                 class="w-100 centrar form-control"
-                [ngClass]="formEdit.get('imagen')?.hasError('image_error') ?
-                'is-invalid' : '' || (existImageActualizar)? 'is-valid' : ''"
+                [ngClass]="formEdit.get('imagen')?.hasError('image_error')
+                ? 'is-invalid' : '' || (existImageActualizar)? 'is-valid' : ''"
                 type="file"
                 id="file_input"
                 accept="image/png, image/jpeg"
@@ -272,26 +268,7 @@
             </div>
           </div>
 
-          <div class="row p-2 align-items-center">
-            <div class="col-5">
-              <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
-                  fw-bold">Codigo:</h3></label>
-            </div>
-            <div class="col-7">
-              <input
-                type="text"
-                formControlName="codigo"
-                class="form-control"
-                [ngClass]="isInvalidForm('codigo', 'actualizar') ? 'is-invalid'
-                : ''"
 
-                value="Mark"
-                [placeholder]="cupon_seleccionada?.titulo"
-                [value]="cupon_seleccionada?.titulo">
-              <div class="invalid-feedback"> {{getErrorMessage(formEdit,
-                'codigo')}} </div>
-            </div>
-          </div>
           <div class="row p-2 align-items-center">
             <div class="col-5">
               <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
@@ -324,9 +301,6 @@
                 class="form-control"
                 [ngClass]="isInvalidForm('descripcion', 'actualizar') ?
                 'is-invalid' : ''"
-
-                value="Mark"
-
                 [value]="cupon_seleccionada?.descripcion"></textarea>
               <div class="invalid-feedback"> {{getErrorMessage(formEdit,
                 'descripcion')}} </div>
@@ -341,14 +315,11 @@
             </div>
             <div class="col-7">
               <input
-                type="number"
+                type="text"
                 formControlName="descuento"
                 class="form-control"
                 [ngClass]="isInvalidForm('descuento', 'actualizar') ?
                 'is-invalid' : ''"
-
-                value="Mark"
-
                 [value]="cupon_seleccionada?.porcentaje">
               <div class="invalid-feedback"> {{getErrorMessage(formEdit,
                 'descuento')}} </div>
@@ -363,14 +334,11 @@
             </div>
             <div class="col-7">
               <input
-                type="number"
+                type="text"
                 formControlName="cantidad"
                 class="form-control"
                 [ngClass]="isInvalidForm('cantidad', 'actualizar') ?
                 'is-invalid' : ''"
-
-                value="Mark"
-
                 [value]="cupon_seleccionada?.cantidad">
               <div class="invalid-feedback"> {{getErrorMessage(formEdit,
                 'cantidad')}} </div>
@@ -378,14 +346,17 @@
           </div>
 
           <div class="row p-2 align-items-center">
+
             <div class="col-5">
               <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
                   fw-bold">Fecha de Inicio:</h3></label>
             </div>
             <div class="col-7">
+              <small>{{cupon_seleccionada?.fecha_iniciacion | date: ' MMM d, y, h:mm:ss a'}}</small>
               <input type="date"
                 [value]="cupon_seleccionada?.fecha_iniciacion" id="start"
-                required pattern="\d{4}-\d{2}-\d{2}"
+                [ngClass]="isInvalidForm('inicio', 'actualizar') ? 'is-invalid' :
+                ''"
                 formControlName="inicio"
                 min="{{getCurrentDate()}}">
               <div class="invalid-feedback"> {{getErrorMessage(formEdit,
@@ -403,9 +374,11 @@
 
             </div>
             <div class="col-7">
+              <small>{{cupon_seleccionada?.fecha_expiracion | date: ' MMM d, y, h:mm:ss a'}}</small>
               <input [value]="cupon_seleccionada?.fecha_expiracion"
+              [ngClass]="isInvalidForm('fin', 'actualizar') ? 'is-invalid' :
+              ''"
                 formControlName="fin" type="date" id="start" required
-                pattern="\d{4}-\d{2}-\d{2}"
                 min="{{getCurrentDate()}}">
               <div class="invalid-feedback"> {{getErrorMessage(formEdit,
                 'fin')}} </div>
@@ -419,13 +392,11 @@
             </div>
             <div class="col-7">
               <input
-                type="number"
+                type="text"
                 formControlName="punto"
                 class="form-control"
                 [ngClass]="isInvalidForm('punto', 'actualizar') ? 'is-invalid' :
                 ''"
-
-
                 [value]="cupon_seleccionada?.puntos">
               <div class="invalid-feedback"> {{getErrorMessage(formEdit,
                 'punto')}} </div>
@@ -440,18 +411,11 @@
             </div>
             <div class="col-7">
               <select
-
-
                 class="form-select"
-                [ngClass]="isInvalidForm('categoria', 'actualizar') ?
-                'is-invalid' : ''"
                 formControlName="categoria"
-
                 class="form-control"
                 [ngClass]="isInvalidForm('categoria', 'actualizar') ? 'is-invalid' :
-                formEdit.get('categoria')?.touched ||
-                formEdit.get('categoria')?.dirty &&
-                !formEdit.get('categoria')?.invalid ? 'is-valid' : ''"
+                ''"
                 aria-describedby="selectorServicioCrearFeedback">
                 <option *ngFor="let c of categoria" [id]="c.nombre"
                   value={{cupon_seleccionada?.tipo_categoria}}> {{c.nombre}}
@@ -471,7 +435,7 @@
         <button class="btn btn-danger"
           data-bs-target="#modalInformacionProfesion" data-bs-toggle="modal">Regresar</button>
         <button
-
+          [disabled]="formEdit.invalid? true : false"
           data-bs-target="#modalConfirmacion"
           data-bs-toggle="modal"
           class="btn btn-success"
@@ -502,6 +466,7 @@
       <div class="modal-body mb-0">
         <form [formGroup]="cuponCrear" class="">
           <!-- Seccion de imagen -->
+
           <div class="row">
             <div class="col d-flex justify-content-center">
               <img *ngIf="existImageCrear" class="rounded mx-auto d-block
@@ -513,10 +478,10 @@
             <div class="p-2">
               <input
                 class="w-100 centrar form-control"
-                [ngClass]="cuponCrear.get('imagen')?.hasError('image_error') ?
-                'is-invalid' : '' || (existImageCrear)? 'is-valid' : ''"
+                [ngClass]="cuponCrear.get('imagen')?.hasError('image_error')
+                ? 'is-invalid' : '' || (existImageCrear)? 'is-valid' : ''"
                 type="file"
-
+                id="file_input"
                 accept="image/png, image/jpeg"
                 (change)="loadImageFromDevice($event, 'crear')">
               <div class="invalid-feedback">{{getErrorMessage(cuponCrear,
@@ -532,13 +497,14 @@
             <div class="col-7">
               <input
                 type="text"
+                placeholder="xyz123"
                 formControlName="codigo"
                 class="form-control"
                 [ngClass]="isInvalidForm('codigo', 'crear') ? 'is-invalid' :
                 cuponCrear.get('codigo')?.touched ||
                 cuponCrear.get('codigo')?.dirty &&
                 !cuponCrear.get('codigo')?.invalid ? 'is-valid' : ''"
-                placeholder="Promocion">
+       >
               <div class="invalid-feedback"> {{getErrorMessage(cuponCrear,
                 'codigo')}} </div>
             </div>
@@ -558,7 +524,7 @@
                 cuponCrear.get('titulo')?.touched ||
                 cuponCrear.get('titulo')?.dirty &&
                 !cuponCrear.get('titulo')?.invalid ? 'is-valid' : ''"
-                placeholder="Promocion">
+                placeholder="cupones">
               <div class="invalid-feedback"> {{getErrorMessage(cuponCrear,
                 'titulo')}} </div>
             </div>
@@ -580,27 +546,28 @@
                 cuponCrear.get('descripcion')?.touched ||
                 cuponCrear.get('descripcion')?.dirty &&
                 !cuponCrear.get('descripcion')?.invalid ? 'is-valid' : ''"
-                placeholder="Promocion"></textarea>
+                placeholder="descripcion"></textarea>
               <div class="invalid-feedback"> {{getErrorMessage(cuponCrear,
                 'descripcion')}} </div>
+
             </div>
           </div>
 
           <div class="row p-2 align-items-center">
             <div class="col-5">
               <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
-                  fw-bold">Descuento:</h3></label>
+                  fw-bold">Descuento(%):</h3></label>
             </div>
             <div class="col-7">
               <input
-                type="number"
+                type="text"
                 formControlName="descuento"
                 class="form-control"
                 [ngClass]="isInvalidForm('descuento', 'crear') ? 'is-invalid' :
                 cuponCrear.get('descuento')?.touched ||
                 cuponCrear.get('descuento')?.dirty &&
                 !cuponCrear.get('descuento')?.invalid ? 'is-valid' : ''"
-                placeholder="Promocion">
+                placeholder="5">
               <div class="invalid-feedback"> {{getErrorMessage(cuponCrear,
                 'descuento')}} </div>
             </div>
@@ -612,14 +579,14 @@
             </div>
             <div class="col-7">
               <input
-                type="number"
+                type="text"
                 formControlName="cantidad"
                 class="form-control"
                 [ngClass]="isInvalidForm('cantidad', 'crear') ? 'is-invalid' :
                 cuponCrear.get('cantidad')?.touched ||
                 cuponCrear.get('cantidad')?.dirty &&
                 !cuponCrear.get('cantidad')?.invalid ? 'is-valid' : ''"
-                placeholder="Promocion">
+                placeholder="1">
               <div class="invalid-feedback"> {{getErrorMessage(cuponCrear,
                 'cantidad')}} </div>
             </div>
@@ -633,16 +600,18 @@
             </div>
             <div class="col-7">
               <input
-                type="number"
+              type="text"
                 formControlName="punto"
                 class="form-control"
                 [ngClass]="isInvalidForm('punto', 'crear') ? 'is-invalid' :
                 cuponCrear.get('punto')?.touched ||
                 cuponCrear.get('punto')?.dirty &&
                 !cuponCrear.get('punto')?.invalid ? 'is-valid' : ''"
-                placeholder="Promocion">
+                placeholder="1">
               <div class="invalid-feedback"> {{getErrorMessage(cuponCrear,
                 'punto')}} </div>
+
+
             </div>
           </div>
 
@@ -684,6 +653,10 @@
             <div class="col-7">
               <input type="date"
                 id="start"
+                [ngClass]="isInvalidForm('inicio', 'crear') ? 'is-invalid' :
+                cuponCrear.get('inicio')?.touched ||
+                cuponCrear.get('inicio')?.dirty &&
+                !cuponCrear.get('inicio')?.invalid ? 'is-valid' : ''"
                 required pattern="\d{4}-\d{2}-\d{2}"
                 formControlName="inicio"
                 min="{{getCurrentDate()}}">
@@ -705,20 +678,21 @@
               <input
                 formControlName="fin" type="date" id="start" required
                 pattern="\d{4}-\d{2}-\d{2}"
+                [ngClass]="isInvalidForm('fin', 'crear') ? 'is-invalid' :
+                cuponCrear.get('fin')?.touched ||
+                cuponCrear.get('fin')?.dirty &&
+                !cuponCrear.get('fin')?.invalid ? 'is-valid' : ''"
                 min="{{getCurrentDate()}}">
               <div class="invalid-feedback"> {{getErrorMessage(cuponCrear,
                 'fin')}} </div>
             </div>
           </div>
 
-
-
-
         </form>
       </div>
       <div class="modal-footer">
         <button
-
+        [disabled]="cuponCrear.invalid? true : false"
           data-bs-target="#modalConfirmacion"
           data-bs-toggle="modal"
           class="btn btn-success"
@@ -762,5 +736,25 @@
       </div>
     </div>
 
+  </div>
+</div>
+
+<!-- Toast de Información -->
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+  <div #liveToast id="liveToast" class="toast" role="alert"
+    aria-live="assertive" aria-atomic="true">
+    <div class="toast-header" [ngClass]="isErrorToast? ' bg-danger' : '
+      bg-success'">
+      <img src="../../../assets/imagenes/notification_logo.png" class="rounded
+        me-2" width="25px" alt="...">
+      <strong class="me-auto text-light">{{tituloToast}}</strong>
+      <small class="text-light">Ahora</small>
+      <button type="button" class="btn-close" data-bs-dismiss="toast"
+        aria-label="Close"></button>
+    </div>
+    <div class="toast-body bg-opacity-25" [ngClass]="isErrorToast? ' bg-danger'
+      : ' bg-success'">
+      {{mensajeToast}}
+    </div>
   </div>
 </div>

@@ -286,7 +286,7 @@ total=0
 
       return this.admiCrear.get(subForm)?.invalid && this.admiCrear.get(subForm)?.touched || this.admiCrear.get(subForm)?.dirty && this.getErrorMessage(this.admiCrear, subForm).length !== 0;
     } else {
-      return
+ 
       return this.formEdit.get(subForm)?.invalid && this.formEdit.get(subForm)?.touched || this.formEdit.get(subForm)?.dirty  && this.getErrorMessage(this.formEdit, subForm).length!==0;
     }
   }
@@ -405,13 +405,13 @@ total=0
       this.admiCrear.get('nombre')?.reset();
       this.admiCrear.get('apellidos')?.reset();
       this.admiCrear.get('ciudad')?.reset();
-      this.admiCrear.get('telefono')?.setValue('');
-      this.admiCrear.get('genero')?.setValue('');
-      this.admiCrear.get('rol')?.setValue('');
-      this.admiCrear.get('correo')?.setValue('');
-      this.admiCrear.get('password')?.setValue('');
-      this.admiCrear.get('confirmPassword')?.setValue('');
-      this.admiCrear.get('imagen')?.setValue('');
+      this.admiCrear.get('telefono')?.reset();
+      this.admiCrear.get('genero')?.reset();
+      this.admiCrear.get('rol')?.reset();
+      this.admiCrear.get('correo')?.reset();
+      this.admiCrear.get('password')?.reset();
+      this.admiCrear.get('confirmPassword')?.reset();
+      this.admiCrear.get('imagen')?.reset();
 
     } else if(tipo === 'actualizar') {
       // console.log(this.profesion_seleccionada);
@@ -453,4 +453,12 @@ total=0
         return solicitud.user_datos.nombres.toLowerCase().includes(texto.toLowerCase())
       });
     }}
+
+    cambiarEstado(event:any){
+      let estado = event.srcElement.checked
+      const id = this.admi_seleccionada.id
+      this.pythonAnywhereService.cambio_administrador_estado(id,estado).subscribe(resp=>{
+        console.log(resp)
+      })
+    }
 }

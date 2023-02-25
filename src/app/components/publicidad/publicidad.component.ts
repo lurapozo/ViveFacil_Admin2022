@@ -4,7 +4,6 @@ import { FormControl, AbstractControl, FormGroup, Validators } from '@angular/fo
 import { DomSanitizer } from '@angular/platform-browser';
 import { PythonAnywhereService } from 'src/app/services/PythonAnywhere/python-anywhere.service';
 import * as moment from 'moment';
-import { PromocionCrear, BodyPromocionActualizar } from 'src/app/interfaces/promocion';
 @Component({
   selector: 'app-publicidad',
   templateUrl: './publicidad.component.html',
@@ -13,16 +12,16 @@ import { PromocionCrear, BodyPromocionActualizar } from 'src/app/interfaces/prom
 export class PublicidadComponent {
 
 
-  arr_publicidad!: Publicidad[]  | undefined;
-  arr_filtered_publicidad!: Publicidad[]  | undefined;
-  imagenCrear: any
+  arr_publicidad?: Publicidad[] 
+  arr_filtered_publicidad?: Publicidad[]
+  imagenCrear: string | undefined;
   condicionNext = false
   currentPage = 1
   pageNumber: number[] = [];
-  publicidad_seleccionada:  Publicidad  | undefined;
-  fileImagenActualizar: File = {} as File
-  imagenActualizar: any
-  fileImagenCrear: any
+  publicidad_seleccionada?:  Publicidad;
+  fileImagenActualizar: File = {} as File;
+  imagenActualizar: string | undefined;
+  fileImagenCrear: File = {} as File;
   existImageCrear = false; existImageActualizar = false;
   activo = ''
   activoCond = false
@@ -63,7 +62,7 @@ export class PublicidadComponent {
 
 publicidadCrear
 : FormGroup = new FormGroup({
-  codigo: new FormControl(),
+
   titulo: new FormControl('', [Validators.required]),
   descripcion: new FormControl('', [Validators.required]),
   inicio: new FormControl(''),
@@ -77,7 +76,7 @@ publicidadCrear
 
 
 formEdit: FormGroup = new FormGroup({
-  codigo: new FormControl(),
+
   titulo: new FormControl('', [Validators.required]),
   descripcion: new FormControl('', [Validators.required]),
   inicio: new FormControl(''),
@@ -110,7 +109,7 @@ limpiarForm(tipo: string) {
     this.publicidadCrear
     .get('punto')?.setValue('');
     this.publicidadCrear
-    .get('imagen')?.setValue('');
+    .get('imagen')?.reset();
     this.publicidadCrear
     .get('url')?.setValue('');
 
@@ -118,17 +117,16 @@ limpiarForm(tipo: string) {
 
     const titulo = this.publicidad_seleccionada?.titulo;
     const descripcion = this.publicidad_seleccionada?.descripcion;
-    const inicio = this.publicidad_seleccionada?.fecha_creacion;
+    const inicio = this.publicidad_seleccionada?.fecha_inicio;
     const fin = this.publicidad_seleccionada?.fecha_expiracion;
-    const foto = this.publicidad_seleccionada?.imagen;
     const url = this.publicidad_seleccionada?.url;
   
     this.existImageActualizar = false;
     this.formEdit.get('imagen')?.reset();
+    inicio?this.formEdit.get('inicio')?.setValue(inicio) : this.formEdit.get('inicio')?.reset();
     titulo? this.formEdit.get('titulo')?.setValue(titulo) : this.formEdit.get('nombre')?.reset();
     descripcion? this.formEdit.get('descripcion')?.setValue(descripcion) : this.formEdit.get('descripcion')?.reset();
-    fin? this.formEdit.get('fin')?.setValue(inicio) : this.formEdit.get('fin')?.reset();
-    foto? this.formEdit.get('imagen')?.setValue(inicio) : this.formEdit.get('imagen')?.reset();
+    fin? this.formEdit.get('fin')?.setValue(fin) : this.formEdit.get('fin')?.reset();
     url? this.formEdit.get('url')?.setValue(url) : this.formEdit.get('url')?.reset();
  
 }}
@@ -212,7 +210,7 @@ isInvalidForm(subForm: string, tipo: string) {
     .get(subForm)?.dirty && this.getErrorMessage(this.publicidadCrear
       , subForm).length !== 0;
   } else {
-    return
+    
     return this.formEdit.get(subForm)?.invalid && this.formEdit.get(subForm)?.touched || this.formEdit.get(subForm)?.dirty  && this.getErrorMessage(this.formEdit, subForm).length!==0;
   }
 }
@@ -325,66 +323,63 @@ onCrear(){
   const url = this.publicidadCrear
   .get('url')?.value;
   const foto = this.publicidadCrear
-  .get('imagen')?.value;
+  .get('imagen')?.value as File;
 
- 
-  if( titulo && descripcion && inicio && fin  && url  ){
 
+   console.log(this.publicidadCrear)
     cupon.descripcion = descripcion
-    cupon.fecha_inicio = inicio
-    cupon.fecha_expiracion = fin
+    cupon.fecha_inicio = moment(inicio).format("YYYY-MM-DDTHH:mm:SS")
+    cupon.fecha_expiracion = moment(fin).format("YYYY-MM-DDTHH:mm:SS")
     cupon.url = url
+    cupon.titulo = titulo
     
     if(foto && this.existImageCrear){
       cupon.imagen = foto; // Si hay foto se le agrega al body.
     }
-    this.pythonAnywhereService.crear_publicidad(cupon).subscribe(resp => {
-      console.log(resp)
-    })
+    // this.pythonAnywhereService.crear_publicidad(cupon).subscribe(resp => {
+    //   console.log(resp)
+    // })
 
-  }
+
   
 }
 
 
 onActualizar(){
   let publi :BodyActualizarPublicidad ={
-    titulo: '',
-    descripcion: '',
-    fecha_expiracion: '',
-    url: '',
-    fecha_inicio: ''
+    id: '',
+    fecha_inicio:this.publicidad_seleccionada?.fecha_inicio,
+    fecha_expiracion:this.publicidad_seleccionada?.fecha_expiracion
   }
- 
+ publi.id=this.publicidad_seleccionada?.id
+ console.log(this.publicidad_seleccionada?.fecha_inicio)
   const titulo = this.formEdit.get('titulo')?.value;
   const descripcion = this.formEdit.get('descripcion')?.value;
   const inicio = this.formEdit.get('inicio')?.value;
   const fin = this.formEdit.get('fin')?.value;
   const url = this.formEdit.get('url')?.value;
-  const foto = this.formEdit.get('imagen')?.value;
-  if( titulo && descripcion && inicio && fin && url ){
-    publi.titulo = titulo
-    publi.descripcion = descripcion
-    publi.fecha_inicio = inicio
-    publi.fecha_expiracion = fin
-    publi.url = url
- 
-
-  }
-
-
+  const foto = this.formEdit.get('imagen')?.value as File;
+  console.log("soy nulo",inicio,fin)
   if(foto && this.existImageCrear){
     publi.imagen = foto;
   }
-  console.log(publi)
+  console.log(inicio)
+if(titulo && descripcion && inicio && fin && url){
+  publi.titulo = titulo
+  publi.descripcion = descripcion           
+  publi.fecha_inicio = moment(inicio).format('YYYY-MM-DDTHH:mm:ssZ')
+  publi.fecha_expiracion = moment(fin).format("YYYY-MM-DDTHH:mm:SS")
+  publi.url = url
+
   if(this.publicidad_seleccionada){
-    const id = this.publicidad_seleccionada.id
-    console.log(this.formEdit)
+
+   
     this.pythonAnywhereService.actualizar_publicidad(publi).subscribe(resp=>{console.log(resp);})
-
-  }
-
-;
+    console.log("soy nulo",inicio,fin)
+  
+}
+}
+   
 
 }
 
@@ -452,4 +447,5 @@ search(evento: any) {
 
   }
 
+  
 }
