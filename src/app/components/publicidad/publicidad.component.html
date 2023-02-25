@@ -5,7 +5,7 @@
         <h2 class="p-0 m-0">Publicidad </h2>
       </div>
     </div>
-  
+
     <!-- Buscar y agregar profesion -->
     <div class="row p-2 justify-content-center align-items-center">
       <div class="col-xl-7 col-lg-5"></div>
@@ -27,7 +27,7 @@
           (click)="limpiarForm('crear')">Agregar Publicidad</button>
       </div>
     </div>
-  
+
     <!-- Contenedor de profesiones -->
     <div class="row justify-content-center align-items-center p-0">
       <div class="col-10 text-center">
@@ -36,50 +36,50 @@
           <div class="col-3 align-self-center">
             <h3 class="p-0 m-0">Imagen</h3>
           </div>
-    
+
           <div class="col-3 align-self-center">
             <h3 class="p-0 m-0">Titulo</h3>
           </div>
-  
-  
+
+
           <div class="col-3 align-self-center">
             <h3 class="p-0 m-0">Fecha Inicio</h3>
           </div>
-  
+
           <div class="col-3 align-self-center">
             <h3 class="p-0 m-0">Fecha Fin</h3>
           </div>
-  
-        
+
+
         </div>
-  
+
         <!-- Profesion -->
         <div (click)="ver(a)" *ngFor="let a of arr_filtered_publicidad" class="row p-2
           bg-light fila_info_profesion" data-bs-toggle="modal"
           href="#modalInformacionProfesion" role="button">
           <div class="col-3 align-self-center">
             <img [src]="a.imagen? 'https://tomesoft1.pythonanywhere.com'+a.imagen :
-              '../../../assets/imagenes/ProfesionDefault.png'" class="rounded
+              'assets/imagenes/ProfesionDefault.png'" class="rounded
               mx-auto d-block img-fluid img_profesion" alt="...">
           </div>
-  
 
-  
+
+
           <div class="col-3 align-self-center">
             <h4 class="p-0 m-0">{{a.titulo}}</h4>
           </div>
-  
-       
-  
+
+
+
           <div class="col-3 align-self-center">
             <h4 class="p-0 m-0">{{a.fecha_inicio}}</h4>
           </div>
-  
+
           <div class="col-3 align-self-center">
             <h4 class="p-0 m-0">{{a.fecha_expiracion}}</h4>
           </div>
-  
-       
+
+
         </div>
       </div>
     </div>
@@ -93,7 +93,7 @@
                 <li class="page-item"><button class="page-link" value="{{n}}"
                     (click)="iteracion($event)">{{n}}</button></li>
               </div>
-    
+
               <li class="page-item"><a class="page-link" (click)="next($event)">Next</a></li>
             </ul>
           </nav>
@@ -117,7 +117,7 @@ aria-labelledby="modalInformacionProfesionLabel" tabindex="-1">
             'https://tomesoft1.pythonanywhere.com'+publicidad_seleccionada?.imagen :
             'assets/imagenes/ProfesionDefault.png'" class="rounded mx-auto
             d-block img-fluid w-50 image_modal" alt="...">
-          
+
         </div>
       </div>
 
@@ -140,7 +140,7 @@ aria-labelledby="modalInformacionProfesionLabel" tabindex="-1">
         </div>
       </div>
 
-   
+
 
       <div class="row p-2 align-items-center">
         <div class="col-5">
@@ -160,7 +160,7 @@ aria-labelledby="modalInformacionProfesionLabel" tabindex="-1">
         </div>
       </div>
 
-      
+
     </div>
     <div class="modal-footer">
       <button
@@ -321,7 +321,7 @@ aria-labelledby="modalInformacionEdicionProfesionLabel" tabindex="-1">
           </div>
         </div>
 
-   
+
       </form>
     </div>
     <div class="modal-footer">
@@ -424,7 +424,7 @@ aria-labelledby="modalCrearProfesionLabel" tabindex="-1">
           </div>
         </div>
 
-     
+
         <div class="row p-2 align-items-center">
           <div class="col-5">
             <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
@@ -470,7 +470,7 @@ aria-labelledby="modalCrearProfesionLabel" tabindex="-1">
 
         data-bs-target="#modalConfirmacion"
         data-bs-toggle="modal"
-        class="btn btn-success" 
+        class="btn btn-success"
         (click)="establecerMensaje('Está seguro que desea crear la  profesión?', 'crear')">Crear</button>
     </div>
 

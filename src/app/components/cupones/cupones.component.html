@@ -68,7 +68,7 @@
         href="#modalInformacionProfesion" role="button">
         <div class="col-2 align-self-center">
           <img [src]="a.foto? 'https://tomesoft1.pythonanywhere.com'+a.foto :
-            '../../../assets/imagenes/ProfesionDefault.png'" class="rounded
+            'assets/imagenes/ProfesionDefault.png'" class="rounded
             mx-auto d-block img-fluid img_profesion" alt="...">
         </div>
 
@@ -117,7 +117,7 @@
               'https://tomesoft1.pythonanywhere.com'+cupon_seleccionada?.foto :
               'assets/imagenes/ProfesionDefault.png'" class="rounded mx-auto
               d-block img-fluid w-50 image_modal" alt="...">
-            
+
           </div>
         </div>
 
@@ -721,7 +721,7 @@
 
           data-bs-target="#modalConfirmacion"
           data-bs-toggle="modal"
-          class="btn btn-success" 
+          class="btn btn-success"
           (click)="establecerMensaje('Está seguro que desea crear la  profesión?', 'crear')">Crear</button>
       </div>
 

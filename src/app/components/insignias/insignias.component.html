@@ -3,7 +3,7 @@
     <div class="row p-2 justify-content-center align-items-center">
       <div class="col text-center">
         <h2 class="p-0 m-0"> Insignias Pendientes</h2>
-       
+
       </div>
     </div>
 
@@ -35,15 +35,15 @@
             <div class="col-2 align-self-center">
               <h3 class="p-0 m-0">Imagen</h3>
             </div>
-    
+
             <div class="col-2 align-self-center">
               <h3 class="p-0 m-0">Nombre</h3>
             </div>
-    
+
             <div class="col-2 align-self-center">
               <h3 class="p-0 m-0">Usuario</h3>
             </div>
-    
+
             <div class="col-2 align-self-center">
               <h3 class="p-0 m-0">Tipo</h3>
             </div>
@@ -52,24 +52,24 @@
                 <h3 class="p-0 m-0">Cantidad</h3>
             </div>
 
-         
+
 
             <div class="col-2 align-self-center">
                 <h3 class="p-0 m-0">Estado</h3>
             </div>
 
         </div>
-    
+
           <!-- Profesion -->
           <div (click)="ver(a)" *ngFor="let a of arr_filtered_insignia" class="row p-2 bg-light fila_info_profesion" data-bs-toggle="modal" href="#modalInformacionProfesion" role="button">
             <div class="col-2 align-self-center">
-              <img [src]="a.imagen? 'https://tomesoft1.pythonanywhere.com'+a.imagen : '../../../assets/imagenes/ProfesionDefault.png'" class="rounded mx-auto d-block img-fluid img_profesion" alt="...">
+              <img [src]="a.imagen? 'https://tomesoft1.pythonanywhere.com'+a.imagen : 'assets/imagenes/ProfesionDefault.png'" class="rounded mx-auto d-block img-fluid img_profesion" alt="...">
             </div>
-    
+
             <div class="col-2 align-self-center">
               <h4 class="p-0 m-0"> {{a.nombre}} </h4>
             </div>
-    
+
             <div class="col-2 align-self-center">
               <h4 class="p-0 m-0">{{a.tipo_usuario}}</h4>
             </div>
@@ -77,7 +77,7 @@
             <div class="col-2 align-self-center">
                 <h4 class="p-0 m-0">{{a.servicio}}</h4>
               </div>
-    
+
             <div class="col-2 align-self-center">
               <h4 class="p-0 m-0">{{a.pedidos}}</h4>
             </div>
@@ -89,7 +89,7 @@
         </div>
       </div>
 
-  
+
 </div>
 
 <div class="modal fade" id="modalInformacionProfesion" aria-hidden="true" aria-labelledby="modalInformacionProfesionLabel" tabindex="-1">
@@ -158,7 +158,7 @@
           </div>
         </div>
 
-        
+
       <div class="row p-2 align-items-center">
         <div class="col-5">
           <h3 class="m-0 p-0 fw-bold">Estado</h3>
@@ -299,7 +299,7 @@
             </div>
           </div>
 
-          
+
           <div class="row p-2 align-items-center">
             <div class="col-5">
               <label for="selectorServicioCrear" class="form-label"><h3
@@ -333,7 +333,7 @@
                 [ngClass]="isInvalidForm('tipo', 'actualizar') ?
                 'is-invalid' : ''"
                 formControlName="tipo"
-          
+
                 aria-describedby="selectorServicioCrearFeedback">
                 <option selected disabled >Elija un tipo de usuario...</option>
                 <option *ngFor="let c of profesion" value="{{c}}"> {{c}}</option>
@@ -345,10 +345,10 @@
           </div>
 
 
-          
-  
 
-          
+
+
+
         </form>
       </div>
       <div class="modal-footer">
@@ -403,7 +403,7 @@
                 <div class="invalid-feedback">{{getErrorMessage(crearInsignias, 'imagen')}}</div>
               </div>
             </div>
-  
+
             <!-- Seccion Nombre -->
             <div class="row p-2 align-items-center">
               <div class="col-5">
@@ -421,7 +421,7 @@
                 <div class="invalid-feedback"> {{getErrorMessage(crearInsignias, 'nombre')}} </div>
               </div>
             </div>
-  
+
             <!-- Seccion descripcion -->
             <div class="row p-2 align-items-center">
               <div class="col-5">
@@ -454,7 +454,7 @@
                 <div class="invalid-feedback"> {{getErrorMessage(crearInsignias, 'pedidos')}} </div>
               </div>
             </div>
-  
+
             <!-- Seccion del selector -->
             <div class="row p-2 align-items-center">
               <div class="col-5">
@@ -497,7 +497,7 @@
               </div>
             </div>
 
-            
+
             <div class="row p-2 align-items-center">
               <div class="col-5">
                 <label for="selectorServicioCrear" class="form-label"><h3 class="m-0 p-0 fw-bold">Tipo:</h3></label>
@@ -537,7 +537,7 @@
             (click)="establecerMensaje('Está seguro que desea crear la profesión?', 'crear')"
           >Crear</button>
         </div>
-  
+
         <!-- <pre>
           {{crearProfesionesForm.value | json}}
         </pre> -->

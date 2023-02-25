@@ -51,7 +51,7 @@
       <!-- Profesion -->
       <div (click)="profesion_seleccionada=profesion" *ngFor="let profesion of arr_filtered_profesiones" class="row p-2 bg-light fila_info_profesion" data-bs-toggle="modal" href="#modalInformacionProfesion" role="button">
         <div class="col-3 align-self-center">
-          <img [src]="profesion.foto? 'https://tomesoft1.pythonanywhere.com'+profesion.foto : '../../../assets/imagenes/ProfesionDefault.png'" class="rounded mx-auto d-block img-fluid img_profesion" alt="...">
+          <img [src]="profesion.foto? 'https://tomesoft1.pythonanywhere.com'+profesion.foto : 'assets/imagenes/ProfesionDefault.png'" class="rounded mx-auto d-block img-fluid img_profesion" alt="...">
         </div>
 
         <div class="col-3 align-self-center">

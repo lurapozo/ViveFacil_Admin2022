@@ -5,7 +5,7 @@
         <h2 class="p-0 m-0">Promociones </h2>
       </div>
     </div>
-  
+
     <!-- Buscar y agregar profesion -->
     <div class="row p-2 justify-content-center align-items-center">
       <div class="col-xl-7 col-lg-5"></div>
@@ -27,7 +27,7 @@
           (click)="limpiarForm('crear')">Agregar Promocion</button>
       </div>
     </div>
-  
+
     <!-- Contenedor de profesiones -->
     <div class="row justify-content-center align-items-center p-0">
       <div class="col-10 text-center">
@@ -36,62 +36,62 @@
           <div class="col-2 align-self-center">
             <h3 class="p-0 m-0">Imagen</h3>
           </div>
-  
+
           <div class="col-1 align-self-center">
             <h3 class="p-0 m-0">Codigo</h3>
           </div>
-  
+
           <div class="col-2 align-self-center">
             <h3 class="p-0 m-0">Titulo</h3>
           </div>
-  
+
           <div class="col-1 align-self-center">
             <h3 class="p-0 m-0">Cantidad</h3>
           </div>
-  
+
           <div class="col-2 align-self-center">
             <h3 class="p-0 m-0">Fecha Inicio</h3>
           </div>
-  
+
           <div class="col-2 align-self-center">
             <h3 class="p-0 m-0">Fecha Fin</h3>
           </div>
-  
+
           <div class="col-1 align-self-center">
             <h3 class="p-0 m-0">Estado</h3>
           </div>
         </div>
-  
+
         <!-- Profesion -->
         <div (click)="ver(a)" *ngFor="let a of arr_filtered_promocion" class="row p-2
           bg-light fila_info_profesion" data-bs-toggle="modal"
           href="#modalInformacionProfesion" role="button">
           <div class="col-2 align-self-center">
             <img [src]="a.foto? 'https://tomesoft1.pythonanywhere.com'+a.foto :
-              '../../../assets/imagenes/ProfesionDefault.png'" class="rounded
+              'assets/imagenes/ProfesionDefault.png'" class="rounded
               mx-auto d-block img-fluid img_profesion" alt="...">
           </div>
-  
+
           <div class="col-1 align-self-center">
             <h4 class="p-0 m-0"> {{a.codigo}} </h4>
           </div>
-  
+
           <div class="col-2 align-self-center">
             <h4 class="p-0 m-0">{{a.titulo}}</h4>
           </div>
-  
+
           <div class="col-1 align-self-center">
             <h4 class="p-0 m-0">{{a.cantidad}}</h4>
           </div>
-  
+
           <div class="col-2 align-self-center">
             <h4 class="p-0 m-0">{{a.fecha_iniciacion}}</h4>
           </div>
-  
+
           <div class="col-2 align-self-center">
             <h4 class="p-0 m-0">{{a.fecha_expiracion}}</h4>
           </div>
-  
+
           <div class="col-1 align-self-center">
             <h4 class="p-0 m-0">{{a.estado}}</h4>
           </div>
@@ -99,7 +99,7 @@
       </div>
     </div>
 </div>
-  
+
   <div class="modal fade" id="modalInformacionProfesion" aria-hidden="true"
     aria-labelledby="modalInformacionProfesionLabel" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
@@ -117,10 +117,10 @@
                 'https://tomesoft1.pythonanywhere.com'+promocion_seleccionada?.foto :
                 'assets/imagenes/ProfesionDefault.png'" class="rounded mx-auto
                 d-block img-fluid w-50 image_modal" alt="...">
-              
+
             </div>
           </div>
-  
+
           <div class="row p-2 align-items-center">
             <div class="col-5">
               <h3 class="m-0 p-0 fw-bold">Titulo:</h3>
@@ -129,7 +129,7 @@
               {{promocion_seleccionada?.titulo}}
             </div>
           </div>
-  
+
           <div class="row p-2 align-items-center">
             <div class="col-5">
               <h3 class="m-0 p-0 fw-bold">Codigo:</h3>
@@ -138,7 +138,7 @@
               {{promocion_seleccionada?.codigo}}
             </div>
           </div>
-  
+
           <div class="row p-2 align-items-center">
             <div class="col-5">
               <h3 class="m-0 p-0 fw-bold">Categoria:</h3>
@@ -147,7 +147,7 @@
               {{promocion_seleccionada?.tipo_categoria}}
             </div>
           </div>
-  
+
           <div class="row p-2 align-items-center">
             <div class="col-5">
               <h3 class="m-0 p-0 fw-bold">Descuento:</h3>
@@ -156,7 +156,7 @@
               {{promocion_seleccionada?.porcentaje}}
             </div>
           </div>
-  
+
           <div class="row p-2 align-items-center">
             <div class="col-5">
               <h3 class="m-0 p-0 fw-bold">Cantidad</h3>
@@ -165,7 +165,7 @@
               {{promocion_seleccionada?.cantidad}}
             </div>
           </div>
-  
+
           <div class="row p-2 align-items-center">
             <div class="col-5">
               <h3 class="m-0 p-0 fw-bold">Fecha inicio</h3>
@@ -174,7 +174,7 @@
               {{promocion_seleccionada?.fecha_iniciacion}}
             </div>
           </div>
-  
+
           <div class="row p-2 align-items-center">
             <div class="col-5">
               <h3 class="m-0 p-0 fw-bold">Fecha de Expiracion</h3>
@@ -183,7 +183,7 @@
               {{promocion_seleccionada?.fecha_iniciacion}}
             </div>
           </div>
-  
+
           <div class="row p-2 align-items-center">
             <div class="col-5">
               <h3 class="m-0 p-0 fw-bold">Estado</h3>
@@ -192,7 +192,7 @@
               {{activo}}
             </div>
           </div>
-  
+
           <div class="row p-2 align-items-center">
             <div class="col-5">
               <label for="switchEstado" class="form-check-label"><h3 class="m-0
@@ -220,7 +220,7 @@
             (click)="establecerMensaje('Está seguro que desea eliminar la profesión?', 'eliminar')">Eliminar</button>
           <button
             (click)="limpiarForm('actualizar')"
-  
+
             class="btn btn-success"
             data-bs-target="#modalInformacionEdicionProfesion"
             data-bs-toggle="modal">Editar</button>
@@ -228,7 +228,7 @@
       </div>
     </div>
   </div>
-  
+
   <div class="modal fade" id="modalInformacionEdicionProfesion" aria-hidden="true"
     aria-labelledby="modalInformacionEdicionProfesionLabel" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
@@ -271,7 +271,7 @@
                   'imagen')}}</div>
               </div>
             </div>
-  
+
             <div class="row p-2 align-items-center">
               <div class="col-5">
                 <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
@@ -284,7 +284,7 @@
                   class="form-control"
                   [ngClass]="isInvalidForm('titulo', 'actualizar') ? 'is-invalid'
                   : ''"
-  
+
                   value="Mark"
                   [placeholder]="promocion_seleccionada?.titulo"
                   [value]="promocion_seleccionada?.titulo">
@@ -292,7 +292,7 @@
                   'titulo')}} </div>
               </div>
             </div>
-  
+
             <div class="row p-2 align-items-center">
               <div class="col-5">
                 <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
@@ -305,16 +305,16 @@
                   class="form-control"
                   [ngClass]="isInvalidForm('descripcion', 'actualizar') ?
                   'is-invalid' : ''"
-  
+
                   value="Mark"
-  
+
                   [value]="promocion_seleccionada?.descripcion"></textarea>
                 <div class="invalid-feedback"> {{getErrorMessage(formEdit,
                   'descripcion')}} </div>
               </div>
             </div>
-  
-  
+
+
             <div class="row p-2 align-items-center">
               <div class="col-5">
                 <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
@@ -327,16 +327,16 @@
                   class="form-control"
                   [ngClass]="isInvalidForm('descuento', 'actualizar') ?
                   'is-invalid' : ''"
-  
+
                   value="Mark"
-  
+
                   [value]="promocion_seleccionada?.porcentaje">
                 <div class="invalid-feedback"> {{getErrorMessage(formEdit,
                   'descuento')}} </div>
               </div>
             </div>
-  
-  
+
+
             <div class="row p-2 align-items-center">
               <div class="col-5">
                 <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
@@ -349,15 +349,15 @@
                   class="form-control"
                   [ngClass]="isInvalidForm('cantidad', 'actualizar') ?
                   'is-invalid' : ''"
-  
+
                   value="Mark"
-  
+
                   [value]="promocion_seleccionada?.cantidad">
                 <div class="invalid-feedback"> {{getErrorMessage(formEdit,
                   'cantidad')}} </div>
               </div>
             </div>
-  
+
             <div class="row p-2 align-items-center">
               <div class="col-5">
                 <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
@@ -373,15 +373,15 @@
                   'descuento')}} </div>
               </div>
             </div>
-  
+
             <div class="row p-2 align-items-center">
               <div class="col-5">
-  
+
                 <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
                     fw-bold">Fecha Expiracion:</h3>
-  
+
                 </label>
-  
+
               </div>
               <div class="col-7">
                 <input [value]="promocion_seleccionada?.fecha_expiracion"
@@ -392,7 +392,7 @@
                   'descuento')}} </div>
               </div>
             </div>
-  
+
             <div class="row p-2 align-items-center">
                 <div class="col-5">
                   <label for="selectorServicioCrear" class="form-label"><h3
@@ -400,8 +400,8 @@
                 </div>
                 <div class="col-7">
                   <select
-    
-    
+
+
                     class="form-select"
                     [ngClass]="isInvalidForm('participante', 'actualizar') ?
                     'is-invalid' : ''"
@@ -422,8 +422,8 @@
                     'participante')}} </div>
                 </div>
               </div>
-  
-  
+
+
             <div class="row p-2 align-items-center">
               <div class="col-5">
                 <label for="selectorServicioCrear" class="form-label"><h3
@@ -431,8 +431,8 @@
               </div>
               <div class="col-7">
                 <select
-  
-  
+
+
                   class="form-select"
                   [ngClass]="isInvalidForm('categoria', 'actualizar') ?
                   'is-invalid' : ''"
@@ -453,22 +453,22 @@
                   'categoria')}} </div>
               </div>
             </div>
-  
-  
-  
+
+
+
           </form>
         </div>
         <div class="modal-footer">
           <button class="btn btn-danger"
             data-bs-target="#modalInformacionProfesion" data-bs-toggle="modal">Regresar</button>
           <button
-  
+
             data-bs-target="#modalConfirmacion"
             data-bs-toggle="modal"
             class="btn btn-success"
             (click)="establecerMensaje('Está seguro que desea actualizar la información?', 'actualizar')">Actualizar</button>
         </div>
-  
+
         <!-- <pre>
           {{actualizarProfesionesForm.value | json}}
         </pre> -->
@@ -507,15 +507,15 @@
                   [ngClass]="promocionCrear.get('imagen')?.hasError('image_error') ?
                   'is-invalid' : '' || (existImageCrear)? 'is-valid' : ''"
                   type="file"
-  
+
                   accept="image/png, image/jpeg"
                   (change)="loadImageFromDevice($event, 'crear')">
                 <div class="invalid-feedback">{{getErrorMessage(promocionCrear,
                   'imagen')}}</div>
               </div>
             </div>
-  
-  
+
+
             <div class="row p-2 align-items-center">
               <div class="col-5">
                 <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
@@ -535,8 +535,8 @@
                   'titulo')}} </div>
               </div>
             </div>
-  
-  
+
+
             <div class="row p-2 align-items-center">
               <div class="col-5">
                 <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
@@ -557,7 +557,7 @@
                   'descripcion')}} </div>
               </div>
             </div>
-  
+
             <div class="row p-2 align-items-center">
               <div class="col-5">
                 <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
@@ -596,8 +596,8 @@
                   'cantidad')}} </div>
               </div>
             </div>
-  
-  
+
+
             <div class="row p-2 align-items-center">
               <div class="col-5">
                 <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
@@ -625,8 +625,8 @@
                   'punto')}} </div>
               </div>
             </div>
-  
-  
+
+
             <div class="row p-2 align-items-center">
               <div class="col-5">
                 <label for="selectorServicioCrear" class="form-label"><h3
@@ -638,7 +638,7 @@
                   [ngClass]="isInvalidForm('categoria', 'crear') ?
                   'is-invalid' : ''"
                   formControlName="categoria"
-  
+
                   class="form-control"
                   [ngClass]="isInvalidForm('categoria', 'crear') ? 'is-invalid' :
                   promocionCrear.get('categoria')?.touched ||
@@ -655,7 +655,7 @@
                   'categoria')}} </div>
               </div>
             </div>
-  
+
             <div class="row p-2 align-items-center">
               <div class="col-5">
                 <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
@@ -671,15 +671,15 @@
                   'inicio')}} </div>
               </div>
             </div>
-  
+
             <div class="row p-2 align-items-center">
               <div class="col-5">
-  
+
                 <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
                     fw-bold">Fecha Expiracion:</h3>
-  
+
                 </label>
-  
+
               </div>
               <div class="col-7">
                 <input
@@ -690,28 +690,28 @@
                   'fin')}} </div>
               </div>
             </div>
-  
-  
-  
-  
+
+
+
+
           </form>
         </div>
         <div class="modal-footer">
           <button
-  
+
             data-bs-target="#modalConfirmacion"
             data-bs-toggle="modal"
-            class="btn btn-success" 
+            class="btn btn-success"
             (click)="establecerMensaje('Está seguro que desea crear la  profesión?', 'crear')">Crear</button>
         </div>
-  
+
         <!-- <pre>
             {{crearProfesionesForm.value | json}}
           </pre> -->
       </div>
     </div>
   </div>
-  
+
   <!-- Modal de confirmacion (Alerta) -->
   <div class="modal fade" id="modalConfirmacion" tabindex="-1"
     aria-labelledby="modalConfirmacionLabel" aria-hidden="true">
@@ -724,12 +724,12 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal"
             aria-label="Close"></button>
         </div>
-  
+
         <!-- Cuerpo del modal confirmacion -->
         <div class="modal-body">
           {{mensajeAlerta}}
         </div>
-  
+
         <!-- Footer del modal confirmacion -->
         <div class="modal-footer">
           <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
@@ -741,6 +741,6 @@
             (click)="onDelete()" data-bs-dismiss="modal">Confirmar</button>
         </div>
       </div>
-  
+
     </div>
   </div>
