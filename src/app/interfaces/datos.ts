@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { User } from './user';
+import { User } from './User';
 export interface Datos {
   id: number;
   user: User;

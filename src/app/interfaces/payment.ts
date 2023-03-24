@@ -1,6 +1,6 @@
 import { Promocion } from './promocion';
 import { Tarjeta } from './tarjeta';
-import { User } from './user';
+import { User } from './User';
 
 export interface PaymentTarjeta {
   id: number;
