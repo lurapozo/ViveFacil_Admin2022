@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
+import { Solicitante2 } from 'src/app/interfaces/solicitante2';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { BodyEmail } from 'src/app/interfaces/email';
 import { BodyActualizarProveedorPendiente, BodyCrearProveedorPendiente, BodyResponseCrearProveedorPendiente, SerializerCrearProveedorPendiente } from 'src/app/interfaces/proveedor';
 import { PythonAnywhereService } from 'src/app/services/PythonAnywhere/python-anywhere.service';
+import { UserService } from 'src/app/services/user/user.service';
 
 @Component({
   selector: 'app-pendientes',
@@ -62,7 +64,12 @@ export class PendientesComponent {
 
   });
 
-  constructor(private pythonAnywhereService: PythonAnywhereService, private sanitizer: DomSanitizer) {
+  constructor(
+    private pythonAnywhereService: PythonAnywhereService,
+    private userService: UserService, 
+    private sanitizer: DomSanitizer
+    ) {
+    
 
     this.pythonAnywhereService.obtener_proveedores_pendientes().subscribe(resp => {
       this.total = Object(resp).total_objects
@@ -98,20 +105,112 @@ export class PendientesComponent {
     if (tipo === 'aceptar') {
       this.isAceptar = true;
       this.isNegar = false;
-
     }
     else if (tipo === 'negar') {
-      this.isNegar = true;
       this.isAceptar = false;
-
+      this.isNegar = true;
     } else if (tipo === 'editar') {
-      this.isNegar = true;
       this.isAceptar = false;
-
+      this.isNegar = false;
     }
 
     this.mensajeAlerta = mensaje;
   }
+
+  onCrear() {
+    let pendiente: BodyCrearProveedorPendiente = {
+      nombres: this.pendiente_seleccionada.nombres+"1",
+      apellidos: this.pendiente_seleccionada.apellidos+"1",
+      genero: this.pendiente_seleccionada.genero,
+      telefono: this.pendiente_seleccionada.telefono,
+      cedula: this.pendiente_seleccionada.cedula,
+      copiaCedula: this.pendiente_seleccionada.copiaCedula,
+      ciudad: this.pendiente_seleccionada.ciudad,
+      direccion: this.pendiente_seleccionada.direccion,
+      email: this.pendiente_seleccionada.email+"1",
+      descripcion: this.pendiente_seleccionada.descripcion,
+      licencia: this.pendiente_seleccionada.licencia,
+      copiaLicencia: this.pendiente_seleccionada.copiaLicencia,
+      profesion: this.pendiente_seleccionada.profesion,
+      ano_experiencia: this.pendiente_seleccionada.ano_experiencia,
+      banco: this.pendiente_seleccionada.banco,
+      numero_cuenta: this.pendiente_seleccionada.numero_cuenta,
+      tipo_cuenta: this.pendiente_seleccionada.tipo_cuenta,
+      planilla_servicios: this.pendiente_seleccionada.planilla_servicios
+    }
+
+    const email = "abababa@ababa.com";
+    const password = "ababa";
+    if (email && password) {
+      this.pythonAnywhereService.getSolicitantePythonAny(email).subscribe((arrSolicitante: Array<Solicitante2>) => {
+        if (arrSolicitante.length === 0) {
+          const dataRegisto = new FormData();
+          dataRegisto.append('tipo', 'Solicitante');
+          dataRegisto.append('email', email);
+          dataRegisto.append('password', password);
+          dataRegisto.append('nombres', "ababa");
+          dataRegisto.append('apellidos', "ababa");
+          dataRegisto.append('telefono', "0987654321");
+          dataRegisto.append('cedula', "0987654321");
+          dataRegisto.append('genero', "Otro");
+          dataRegisto.append('ciudad', "si");
+          dataRegisto.append('foto', "xd.jpg");
+          // Registro PythonAnywhere
+          this.pythonAnywhereService.postRegistro(dataRegisto).subscribe(async (resp: any) => {
+            if (!resp.error) {
+              console.log('Registro pythonanywhere exitoso: ', resp);
+              // Registro Firebase
+              // this.userService
+              //   .register(email, password)
+              //   .then((response) => {
+              //     console.log('Registro firebase exitoso: ', response);
+              //     // this.presentAlert('Completada!', 'El registro se ha completado exitosamente.').then(() => {
+              //     //   console.log('Registro completo...');
+              //     //   this.userService
+              //     //     .logout()
+              //     //     .then(() => {
+              //     //       this.router.navigate(['/login']);
+              //     //       console.log('fuera de sesion');
+              //     //     })
+              //     //     .catch((error) => {
+              //     //       console.log(error);
+              //     //     });
+              //     // });
+              //   })
+              //   .catch((error) => {
+              //     console.log('Error al registrar en firebase: ', error);
+              //     // this.isRegistered = true;
+              //   });
+            } else {
+              console.log('Hubo un error al registrar en PythonAnywhere', resp.error);
+              // this.presentAlert('Error en el registro :(', 'Vuelva a intentarlo pronto...', false);
+            }
+          });
+        } else {
+          console.log('Usuario encontrado en PythonAnywhere');
+          // this.presentAlert(
+          //   'Error en el registro :(',
+          //   'El usuario ya se encuentra registrado en la aplicación.',
+          //   false
+          // );
+          // this.isRegistered = true;
+        }
+      });
+    }
+
+    this.pythonAnywhereService.crear_proveedor_pendiente(pendiente).subscribe(resp => {
+      console.log(resp)
+    })
+    /*let email: BodyEmail = {
+      password: '1234',
+      email: this.pendiente_seleccionada.email,
+      tipo: 'Proveedor'
+    }
+    this.pythonAnywhereService.enviar_email(email).subscribe(resp => {
+      console.log(resp)
+    })*/
+  }
+
   onAceptar() {
     let pendiente: BodyCrearProveedorPendiente = {
       nombres: this.pendiente_seleccionada.nombres,
@@ -134,18 +233,22 @@ export class PendientesComponent {
       planilla_servicios: this.pendiente_seleccionada.planilla_servicios
     }
 
-    this.pythonAnywhereService.crear_proveedor_pendiente(pendiente).subscribe(resp => {
+    this.pythonAnywhereService.crear_proveedor_proveedor(pendiente).subscribe(resp => {
       console.log(resp)
     })
-    let email: BodyEmail = {
+    this.pythonAnywhereService.eliminar_proveedores_pendientes(this.pendiente_seleccionada.id).subscribe(resp => {
+      console.log(resp)
+    })
+    /*let email: BodyEmail = {
       password: '1234',
       email: this.pendiente_seleccionada.email,
       tipo: 'Proveedor'
     }
     this.pythonAnywhereService.enviar_email(email).subscribe(resp => {
       console.log(resp)
-    })
+    })*/
   }
+
   onNegar() {
     let pendiente: BodyCrearProveedorPendiente = {
       nombres: this.pendiente_seleccionada.nombres,

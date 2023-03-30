@@ -718,6 +718,8 @@
           (click)="onNegar()" data-bs-dismiss="modal">Confirmar</button>
         <button *ngIf="isAceptar" type="button" class="btn btn-success"
           (click)="onAceptar()" data-bs-dismiss="modal">Confirmar</button>
+        <button *ngIf="!isAceptar && !isNegar" type="button" class="btn btn-success"
+          (click)="onCrear()" data-bs-dismiss="modal">Confirmar</button>
         <!-- <button *ngIf="isEliminar" type="button" class="btn btn-success" (click)="onDelete()" data-bs-dismiss="modal">Confirmar</button> -->
       </div>
     </div>

@@ -537,6 +537,10 @@ obtener_politicas(){
     return this.http.get(`${this.API_URL}/proveedores_pendientes/?page=${page}`) as Observable<ProveedorPaginacion>;
   }
 
+  obtener_proveedores_proveedores(page = 1): Observable<ProveedorPaginacion> {
+    return this.http.get(`${this.API_URL}/proveedores_proveedores/?page=${page}`) as Observable<ProveedorPaginacion>;
+  }
+
   /**
    * Función que obtiene al proveedor pendiente que se encuentra en la base de datos segun el ID pasado como parametro.
    *
@@ -595,6 +599,17 @@ obtener_politicas(){
     return this.http.post(`${this.API_URL}/proveedor_pendiente/`, data) as Observable<BodyResponseCrearProveedorPendiente>;
   }
 
+  crear_proveedor_proveedor(data: BodyCrearProveedorPendiente): Observable<BodyResponseCrearProveedorPendiente> {
+    return this.http.post(`${this.API_URL}/proveedor_proveedor/`, data) as Observable<BodyResponseCrearProveedorPendiente>;
+  }
+
+  getSolicitantePythonAny(user: string): Observable<Array<Solicitante>> {
+    return this.http.get(`https://tomesoft1.pythonanywhere.com/solicitante/${user}`) as Observable<Array<Solicitante>>;
+  }
+
+  postRegistro(body: any) {
+    return this.http.post('https://tomesoft1.pythonanywhere.com/registro/', body);
+  }
   /**
    * Función que edita la información de un objeto ProveedorPendiente
    *
