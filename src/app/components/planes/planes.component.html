@@ -61,7 +61,7 @@
         <!-- Profesion -->
         <div (click)="ver(a)" *ngFor="let a of arr_filtered_planes" class="row p-2 bg-light fila_info_profesion" data-bs-toggle="modal" href="#modalInformacionProfesion" role="button">
           <div class="col-2 align-self-center">
-            <img [src]="a.imagen? 'https://tomesoft1.pythonanywzhere.com'+a.imagen : 'assets/imagenes/ProfesionDefault.png'" class="rounded mx-auto d-block img-fluid img_profesion" alt="...">
+            <img [src]="a.imagen? 'https://tomesoft1.pythonanywhere.com'+a.imagen : 'assets/imagenes/ProfesionDefault.png'" class="rounded mx-auto d-block img-fluid img_profesion" alt="...">
           </div>
 
           <div class="col-2 align-self-center">
@@ -103,7 +103,7 @@
       <div class="modal-body mb-0">
         <div class="row p-2">
           <img [src]="planes_seleccionada?.imagen?
-            'https://tomesoft1.pythonanywzhere.com'+planes_seleccionada?.imagen
+            'https://tomesoft1.pythonanywhere.com'+planes_seleccionada?.imagen
             : 'assets/imagenes/ProfesionDefault.png'" class="rounded mx-auto
             d-block img-fluid w-50 image_modal" alt="...">
         </div>
@@ -213,7 +213,7 @@
               <img *ngIf="!existImageActualizar &&
                 planes_seleccionada?.imagen" class="image_modal rounded
                 mx-auto d-block img-fluid w-50"
-                [src]="'https://tomesoft1.pythonanywzhere.com'+planes_seleccionada?.imagen"
+                [src]="'https://tomesoft1.pythonanywhere.com'+planes_seleccionada?.imagen"
                 alt="Archivo incorrecto">
               <i *ngIf="!existImageActualizar && !planes_seleccionada?.imagen"
                 class="rounded mx-auto d-block img-fluid w-50 bi bi-upload
