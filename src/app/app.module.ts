@@ -36,6 +36,11 @@ import { SugerenciasNoLeidasComponent } from './components/sugerencias/sugerenci
 import { LoginComponent } from './pages/login/login.component';
 import { SpinnerComponent } from './components/spinner/spinner/spinner.component';
 import { SpinnerInterceptor } from './interceptor/spinner.interceptor';
+import { UserService } from './services/user/user.service';
+import { provideAuth, getAuth} from '@angular/fire/auth';
+import {initializeApp, provideFirebaseApp} from '@angular/fire/app';
+import { environment } from '../environments/environment';
+import { AngularFireModule } from '@angular/fire/compat';
 @NgModule({
   declarations: [
     AppComponent,
@@ -76,8 +81,11 @@ import { SpinnerInterceptor } from './interceptor/spinner.interceptor';
     HttpClientModule,
     ReactiveFormsModule,
     NgxPaginationModule,
+    provideFirebaseApp( () => initializeApp(environment.firebase)),
+    AngularFireModule.initializeApp(environment.firebase),
+    provideAuth(() => getAuth()), // AuthModule
   ],
-  providers: [ {provide: HTTP_INTERCEPTORS,useClass:SpinnerInterceptor,multi:true}],
+  providers: [ UserService, {provide: HTTP_INTERCEPTORS,useClass:SpinnerInterceptor,multi:true}],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -1,0 +1,14 @@
+{
+  "rules": {
+    ".read": true,
+    ".write": true,
+    "id_solicitante": {
+      ".indexOn": "chats",
+    	"$solicitanteID":{
+        "chats": {
+          ".indexOn": ".key",
+        }
+      }
+    }
+  }
+}

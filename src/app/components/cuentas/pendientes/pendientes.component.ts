@@ -139,65 +139,6 @@ export class PendientesComponent {
       planilla_servicios: this.pendiente_seleccionada.planilla_servicios
     }
 
-    const email = "abababa@ababa.com";
-    const password = "ababa";
-    if (email && password) {
-      this.pythonAnywhereService.getSolicitantePythonAny(email).subscribe((arrSolicitante: Array<Solicitante2>) => {
-        if (arrSolicitante.length === 0) {
-          const dataRegisto = new FormData();
-          dataRegisto.append('tipo', 'Solicitante');
-          dataRegisto.append('email', email);
-          dataRegisto.append('password', password);
-          dataRegisto.append('nombres', "ababa");
-          dataRegisto.append('apellidos', "ababa");
-          dataRegisto.append('telefono', "0987654321");
-          dataRegisto.append('cedula', "0987654321");
-          dataRegisto.append('genero', "Otro");
-          dataRegisto.append('ciudad', "si");
-          dataRegisto.append('foto', "xd.jpg");
-          // Registro PythonAnywhere
-          this.pythonAnywhereService.postRegistro(dataRegisto).subscribe(async (resp: any) => {
-            if (!resp.error) {
-              console.log('Registro pythonanywhere exitoso: ', resp);
-              // Registro Firebase
-              // this.userService
-              //   .register(email, password)
-              //   .then((response) => {
-              //     console.log('Registro firebase exitoso: ', response);
-              //     // this.presentAlert('Completada!', 'El registro se ha completado exitosamente.').then(() => {
-              //     //   console.log('Registro completo...');
-              //     //   this.userService
-              //     //     .logout()
-              //     //     .then(() => {
-              //     //       this.router.navigate(['/login']);
-              //     //       console.log('fuera de sesion');
-              //     //     })
-              //     //     .catch((error) => {
-              //     //       console.log(error);
-              //     //     });
-              //     // });
-              //   })
-              //   .catch((error) => {
-              //     console.log('Error al registrar en firebase: ', error);
-              //     // this.isRegistered = true;
-              //   });
-            } else {
-              console.log('Hubo un error al registrar en PythonAnywhere', resp.error);
-              // this.presentAlert('Error en el registro :(', 'Vuelva a intentarlo pronto...', false);
-            }
-          });
-        } else {
-          console.log('Usuario encontrado en PythonAnywhere');
-          // this.presentAlert(
-          //   'Error en el registro :(',
-          //   'El usuario ya se encuentra registrado en la aplicación.',
-          //   false
-          // );
-          // this.isRegistered = true;
-        }
-      });
-    }
-
     this.pythonAnywhereService.crear_proveedor_pendiente(pendiente).subscribe(resp => {
       console.log(resp)
     })
@@ -233,9 +174,71 @@ export class PendientesComponent {
       planilla_servicios: this.pendiente_seleccionada.planilla_servicios
     }
 
-    this.pythonAnywhereService.crear_proveedor_proveedor(pendiente).subscribe(resp => {
-      console.log(resp)
-    })
+    const email = this.pendiente_seleccionada.email;
+    const password = "ababa1234";
+    if (email && password) {
+      this.pythonAnywhereService.getSolicitantePythonAny(email).subscribe((arrSolicitante: Array<Solicitante2>) => {
+        if (arrSolicitante.length === 0) {
+          const dataRegisto = new FormData();
+          dataRegisto.append('tipo', 'Proveedor');
+          dataRegisto.append('email', this.pendiente_seleccionada.email);
+          dataRegisto.append('password', password);
+          dataRegisto.append('nombres', this.pendiente_seleccionada.nombres);
+          dataRegisto.append('apellidos', this.pendiente_seleccionada.apellidos);
+          dataRegisto.append('telefono', this.pendiente_seleccionada.telefono);
+          dataRegisto.append('cedula', this.pendiente_seleccionada.cedula);
+          dataRegisto.append('genero', "Otro");
+          dataRegisto.append('ciudad', this.pendiente_seleccionada.ciudad);
+          dataRegisto.append('foto', "xd.jpg");
+          dataRegisto.append('banco', this.pendiente_seleccionada.banco);
+          dataRegisto.append('numero_cuenta', this.pendiente_seleccionada.numero_cuenta);
+          dataRegisto.append('tipo_cuenta', this.pendiente_seleccionada.tipo_cuenta);
+          // Registro PythonAnywhere
+          this.pythonAnywhereService.postRegistro(dataRegisto).subscribe(async (resp: any) => {
+            if (!resp.error) {
+              console.log('Registro pythonanywhere exitoso: ', resp);
+              // Registro Firebase
+              this.userService
+                .register(email, password)
+                .then((response) => {
+                  console.log('Registro firebase exitoso: ', response);
+                  // this.presentAlert('Completada!', 'El registro se ha completado exitosamente.').then(() => {
+                  //   console.log('Registro completo...');
+                  //   this.userService
+                  //     .logout()
+                  //     .then(() => {
+                  //       this.router.navigate(['/login']);
+                  //       console.log('fuera de sesion');
+                  //     })
+                  //     .catch((error) => {
+                  //       console.log(error);
+                  //     });
+                  // });
+                })
+                .catch((error) => {
+                  console.log('Error al registrar en firebase: ', error);
+                  // this.isRegistered = true;
+                });
+            } else {
+              console.log('Hubo un error al registrar en PythonAnywhere', resp.error);
+              // this.presentAlert('Error en el registro :(', 'Vuelva a intentarlo pronto...', false);
+            }
+          });
+        } else {
+          console.log('Usuario encontrado en PythonAnywhere');
+          // this.presentAlert(
+          //   'Error en el registro :(',
+          //   'El usuario ya se encuentra registrado en la aplicación.',
+          //   false
+          // );
+          // this.isRegistered = true;
+        }
+      });
+    }
+    
+    // this.pythonAnywhereService.crear_proveedor_proveedor(pendiente).subscribe(resp => {
+    //   console.log(resp)
+    // })
     this.pythonAnywhereService.eliminar_proveedores_pendientes(this.pendiente_seleccionada.id).subscribe(resp => {
       console.log(resp)
     })

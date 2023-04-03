@@ -51,7 +51,7 @@
       <!-- Profesion -->
       <div (click)="profesion_seleccionada=profesion" *ngFor="let profesion of arr_filtered_profesiones" class="row p-2 bg-light fila_info_profesion" data-bs-toggle="modal" href="#modalInformacionProfesion" role="button">
         <div class="col-3 align-self-center">
-          <img [src]="profesion.foto? 'https://tomesoft1.pythonanywhere.com'+profesion.foto : 'assets/imagenes/ProfesionDefault.png'" class="rounded mx-auto d-block img-fluid img_profesion" alt="...">
+          <img [src]="profesion.foto? 'https://tomesoft1.pythonanywzhere.com'+profesion.foto : 'assets/imagenes/ProfesionDefault.png'" class="rounded mx-auto d-block img-fluid img_profesion" alt="...">
         </div>
 
         <div class="col-3 align-self-center">
@@ -80,7 +80,7 @@
       </div>
       <div class="modal-body mb-0">
         <div class="row p-2">
-          <img [src]="profesion_seleccionada?.foto? 'https://tomesoft1.pythonanywhere.com'+profesion_seleccionada?.foto : 'assets/imagenes/ProfesionDefault.png'" class="rounded mx-auto d-block img-fluid w-50 image_modal" alt="...">
+          <img [src]="profesion_seleccionada?.foto? 'https://tomesoft1.pythonanywzhere.com'+profesion_seleccionada?.foto : 'assets/imagenes/ProfesionDefault.png'" class="rounded mx-auto d-block img-fluid w-50 image_modal" alt="...">
         </div>
 
         <div class="row p-2 align-items-center">
@@ -146,7 +146,7 @@
           <div class="row">
             <div class="col d-flex justify-content-center">
               <img *ngIf="existImageActualizar" class="image_modal rounded mx-auto d-block img-fluid w-50" [src]="imagenActualizar" alt="Archivo incorrecto">
-              <img *ngIf="!existImageActualizar && profesion_seleccionada?.foto" class="image_modal rounded mx-auto d-block img-fluid w-50" [src]="'https://tomesoft1.pythonanywhere.com'+profesion_seleccionada?.foto" alt="Archivo incorrecto">
+              <img *ngIf="!existImageActualizar && profesion_seleccionada?.foto" class="image_modal rounded mx-auto d-block img-fluid w-50" [src]="'https://tomesoft1.pythonanywzhere.com'+profesion_seleccionada?.foto" alt="Archivo incorrecto">
               <i *ngIf="!existImageActualizar && !profesion_seleccionada?.foto" class="rounded mx-auto d-block img-fluid w-50 bi bi-upload icono"></i>
             </div>
             <div class="p-2">

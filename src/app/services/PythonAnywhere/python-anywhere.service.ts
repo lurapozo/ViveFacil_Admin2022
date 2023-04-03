@@ -32,8 +32,8 @@ import { Sugerencia } from 'src/app/interfaces/sugerencia';
   providedIn: 'root',
 })
 export class PythonAnywhereService {
-  API_URL = `https://tomesoft1.pythonanywhere.com`;
-  administradores = 'https://tomesoft1.pythonanywhere.com/administradores';
+  API_URL = `https://tomesoft1.pythonanywzhere.com`;
+  administradores = 'https://tomesoft1.pythonanywzhere.com/administradores';
   private _refresh$ = new Subject<void>();
   constructor(private http: HttpClient) { }
 
@@ -604,11 +604,11 @@ obtener_politicas(){
   }
 
   getSolicitantePythonAny(user: string): Observable<Array<Solicitante>> {
-    return this.http.get(`https://tomesoft1.pythonanywhere.com/solicitante/${user}`) as Observable<Array<Solicitante>>;
+    return this.http.get(`https://tomesoft1.pythonanywzhere.com/solicitante/${user}`) as Observable<Array<Solicitante>>;
   }
 
   postRegistro(body: any) {
-    return this.http.post('https://tomesoft1.pythonanywhere.com/registro/', body);
+    return this.http.post('https://tomesoft1.pythonanywzhere.com/registro/', body);
   }
   /**
    * Función que edita la información de un objeto ProveedorPendiente
@@ -915,7 +915,7 @@ obtener_politicas(){
   }
 
 
-  //https://tomesoft1.pythonanywhere.com/proveedor_profesiones/melquinto20@gmail.com/128&Jardinero,Pintor|true
+  //https://tomesoft1.pythonanywzhere.com/proveedor_profesiones/melquinto20@gmail.com/128&Jardinero,Pintor|true
   eliminar_proveedores_pendientes(id: any) {//FALTA
     return this.http.delete(
       `${this.API_URL}/proveedores_pendientes/${id}`
@@ -1521,7 +1521,7 @@ obtener_politicas(){
     const dataCrear = new FormData();
     dataCrear.append("nombre", bodyCrear.nombre);
     dataCrear.append("permisos", bodyCrear.permisos);
-    return this.http.post(this.API_URL + 'https://tomesoft1.pythonanywhere.com/planesEstado/', dataCrear) as Observable<Group>;
+    return this.http.post(this.API_URL + 'https://tomesoft1.pythonanywzhere.com/planesEstado/', dataCrear) as Observable<Group>;
   };
 
 
