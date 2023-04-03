@@ -152,6 +152,42 @@ export class PendientesComponent {
     })*/
   }
 
+  onEditar() {
+    let pendiente: BodyActualizarProveedorPendiente = {
+      nombres: this.formEdit.value.nombre,
+      apellidos: this.formEdit.value.apellidos,
+      genero: this.formEdit.value.genero,
+      telefono: this.formEdit.value.telefono,
+      cedula: this.formEdit.value.cedula,
+      copiaCedula: this.formEdit.value.copiaCedula,
+      ciudad: this.formEdit.value.ciudad,
+      direccion: this.formEdit.value.direccion,
+      email: this.formEdit.value.correo,
+      descripcion: this.formEdit.value.descripcion,
+      licencia: this.formEdit.value.licencia,
+      copiaLicencia: this.formEdit.value.copiaLicencia,
+      profesion: this.formEdit.value.profesion,
+      ano_experiencia: this.formEdit.value.ano_experiencia,
+      banco: this.formEdit.value.banco,
+      numero_cuenta: this.formEdit.value.numero_cuenta,
+      tipo_cuenta: this.formEdit.value.tipo_cuenta,
+      //planilla_servicios: this.formEdit.value.planilla_servicios
+      filesDocuments: []
+    }
+    console.log(pendiente)
+    console.log(this.formEdit.value.descripcion)
+    console.log(this.pendiente_seleccionada.descripcion)
+    if(pendiente.descripcion === ""){
+      // if(this.pendiente_seleccionada.descripcion === ""){
+      //   pendiente.descripcion = " "
+      // }
+      pendiente.descripcion = this.pendiente_seleccionada.descripcion
+    }
+    this.pythonAnywhereService.editar_proveedor_pendiente(this.pendiente_seleccionada.id, pendiente).subscribe(resp => {
+      console.log(resp)
+    })
+  }
+
   onAceptar() {
     let pendiente: BodyCrearProveedorPendiente = {
       nombres: this.pendiente_seleccionada.nombres,
@@ -355,6 +391,11 @@ export class PendientesComponent {
         }
         return '';
       case 'experiencia':
+        if (itemControl.hasError('required')) {
+          return 'Debe llenar este campo';
+        }
+        return '';
+      case 'descripcion':
         if (itemControl.hasError('required')) {
           return 'Debe llenar este campo';
         }
