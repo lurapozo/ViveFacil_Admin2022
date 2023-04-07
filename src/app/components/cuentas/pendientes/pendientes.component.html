@@ -69,7 +69,7 @@
           <h4 class="p-0 m-0"> {{a.telefono}}</h4>
         </div>
         <div class="col-2 align-self-center">
-          <h4 class="p-0 m-0"> {{a.fecha_registro}}</h4>
+          <h4 class="p-0 m-0"> {{a.fecha_registro|date:"d/m/Y"}}</h4>
         </div>
 
       </div>
@@ -168,7 +168,7 @@
             <h3 class="m-0 p-0 fw-bold">Fecha Registro:</h3>
           </div>
           <div class="col-7">
-            {{pendiente_seleccionada?.fecha_registro}}
+            {{pendiente_seleccionada?.fecha_registro|date:"d/m/Y"}}
           </div>
         </div>
 
@@ -223,8 +223,8 @@
           data-bs-target="#modalConfirmacion"
           data-bs-toggle="modal"
           class="btn btn-success"
-          (click)="establecerMensaje('Está seguro que desea Aceptar la
-          solicitud?', 'aceptar')">Aceptar</button>
+          (click)="establecerMensaje('Está seguro que desea aprobar la
+          solicitud?', 'aceptar')">Aprobar</button>
 
         <button
 
@@ -262,20 +262,14 @@
               <div class="col-8 align-self-center">
                 <div class="row p-2 align-items-center">
                   <div class="col-5">
-                    <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
-                        fw-bold">Nombre:</h3></label>
+                    <label for="inputNombre" class="form-label"><h3 class="m-0 p-0 fw-bold">Nombre:</h3></label>
                   </div>
                   <div class="col-7">
-                    <input
-                      type="text"
-                      formControlName="nombre"
-                      class="form-control"
-                      [ngClass]="isInvalidForm('nombre') ?
-                      'is-invalid' : ''"
+                    <input type="text" formControlName="nombre" class="form-control"
+                    [ngClass]="isInvalidForm('nombre') ? 'is-invalid' : ''"
                       [placeholder]="pendiente_seleccionada?.nombres"
                       [value]="pendiente_seleccionada?.nombres">
-                    <div class="invalid-feedback"> {{getErrorMessage(formEdit,
-                      'nombre')}} </div>
+                    <div class="invalid-feedback"> {{getErrorMessage(formEdit, 'nombre')}} </div>
                   </div>
                 </div>
       
@@ -331,8 +325,9 @@
                     
                       [value]="pendiente_seleccionada?.genero"
                       aria-describedby="selectorServicioCrearFeedback">
-                      <option selected disabled value="">Elija una genero...</option>
-                      <option *ngFor="let c of generos" [id]="c" [value]="c"> {{c}}
+                      <option selected disabled value="">Elija un genero...</option>
+                      <option *ngFor="let c of generos" [id]="c" [value]="c"> 
+                        {{c}}
                       </option>
                     </select>
                     <div id="selectorServicioCrearFeedback"
@@ -341,11 +336,32 @@
                   </div>
                 </div>
       
+
+                <div class="row p-2 align-items-center">
+                  <div class="col-5">
+                    <label for="inputNombre" class="form-label">
+                      <h3 class="m-0p 0fw bold">Foto:</h3>
+                    </label>
+                  </div>
+                  <div class="col-7">
+                    <input
+                      type="file"
+                      formControlName="foto"
+                      class="formEdit.get('foto') ? 'w-100 centrar color_danger' : 'w-100 centrar'"
+                      [ngClass]="isInvalidForm('foto') ? 'is-invalid' : ''"
+                      [placeholder]="pendiente_seleccionada?.foto"
+                      [value]="pendiente_seleccionada?.foto">
+                    <div class="invalid-feedback"> {{getErrorMessage(formEdit,
+                      'cedula')}} </div>
+                  </div>
+                </div>
+                <!-- <input [class]="formEdit.get('foto') ? 'w-100 centrar color_danger' : 'w-100 centrar'" type="file" id="file_input" accept="image/png, image/jpeg" (change)="pendiente_seleccionada($event)" > -->
       
                 <div class="row p-2 align-items-center">
                   <div class="col-5">
-                    <label for="inputNombre" class="form-label"><h3
-                        class="m-0p-0fw-bold">Cedula:</h3></label>
+                    <label for="inputNombre" class="form-label">
+                      <h3 class="m-0p-0fw-bold">Cedula:</h3>
+                    </label>
                   </div>
                   <div class="col-7">
                     <input
@@ -415,7 +431,7 @@
                       id="ge"
                       [value]="pendiente_seleccionada?.ciudad"
                       aria-describedby="selectorServicioCrearFeedback">
-                      <option selected disabled value="">Elija una genero...</option>
+                      <option selected disabled value="">Elija una ciudad...</option>
                       <option *ngFor="let c of ciudades" [id]="c" [value]="c"> {{c}}
                       </option>
                     </select>
@@ -477,7 +493,7 @@
                 
                       [value]="pendiente_seleccionada?.licencia"
                       aria-describedby="selectorServicioCrearFeedback">
-                      <option selected disabled value="">Elija una genero...</option>
+                      <option selected disabled value="">Elija un genero...</option>
                       <option *ngFor="let c of licencia" [id]="c" [value]="c"> {{c}}
                       </option>
                     </select>
@@ -605,8 +621,8 @@
                         id="ge"
                         [value]="pendiente_seleccionada?.ciudad"
                         aria-describedby="selectorServicioCrearFeedback">
-                        <option selected disabled value="">Elija una genero...</option>
-                        <option *ngFor="let c of ciudades" [id]="c" [value]="c"> {{c}}
+                        <option selected disabled value="">Elija una profesion...</option>
+                        <option *ngFor="let c of profesiones" [id]="c" [value]="c"> {{c}}
                         </option>
                       </select>
                       <div id="selectorServicioCrearFeedback"

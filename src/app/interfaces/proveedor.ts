@@ -75,6 +75,7 @@ export interface BodyActualizarProveedorPendiente {
   tipo_cuenta: string;
   ano_experiencia: number;
   profesion: string;
+  foto: string | null;
 }
 
 export interface BodyActualizarProveedor {

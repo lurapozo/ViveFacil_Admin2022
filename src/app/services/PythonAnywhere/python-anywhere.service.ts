@@ -622,6 +622,10 @@ obtener_politicas(){
     return this.http.put(`${this.API_URL}/proveedores_pendientes/${id}`, data) as Observable<ProveedorPendiente>;
   }
 
+  editar_proveedor_proveedor(id: string, data: BodyActualizarProveedorPendiente): Observable<ProveedorPendiente> {
+    return this.http.put(`${this.API_URL}/proveedores_proveedores/${id}`, data) as Observable<ProveedorPendiente>;
+  }
+
   /**
    * Función que edita la información de un objeto Proveedor registrado en la base de datos.
    *

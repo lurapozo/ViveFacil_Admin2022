@@ -20,7 +20,7 @@ export class ProveedoresComponent {
   condicionNext = false
   currentPage = 1
   pageNumber: number[] = [];
-  pendiente_seleccionada: any
+  proveedor_seleccionado: any
   existImageCrear = false; existImageActualizar = false;
   activo = ''
   activoCond = false
@@ -113,24 +113,24 @@ export class ProveedoresComponent {
 
   onCrear() {
     let pendiente: BodyCrearProveedorPendiente = {
-      nombres: this.pendiente_seleccionada.nombres,
-      apellidos: this.pendiente_seleccionada.apellidos,
-      genero: this.pendiente_seleccionada.genero,
-      telefono: this.pendiente_seleccionada.telefono,
-      cedula: this.pendiente_seleccionada.cedula,
-      copiaCedula: this.pendiente_seleccionada.copiaCedula,
-      ciudad: this.pendiente_seleccionada.ciudad,
-      direccion: this.pendiente_seleccionada.direccion,
-      email: this.pendiente_seleccionada.email,
-      descripcion: this.pendiente_seleccionada.descripcion,
-      licencia: this.pendiente_seleccionada.licencia,
-      copiaLicencia: this.pendiente_seleccionada.copiaLicencia,
-      profesion: this.pendiente_seleccionada.profesion,
-      ano_experiencia: this.pendiente_seleccionada.ano_experiencia,
-      banco: this.pendiente_seleccionada.banco,
-      numero_cuenta: this.pendiente_seleccionada.numero_cuenta,
-      tipo_cuenta: this.pendiente_seleccionada.tipo_cuenta,
-      planilla_servicios: this.pendiente_seleccionada.planilla_servicios
+      nombres: this.proveedor_seleccionado.user_datos.nombres,
+      apellidos: this.proveedor_seleccionado.apellidos,
+      genero: this.proveedor_seleccionado.genero,
+      telefono: this.proveedor_seleccionado.telefono,
+      cedula: this.proveedor_seleccionado.cedula,
+      copiaCedula: this.proveedor_seleccionado.copiaCedula,
+      ciudad: this.proveedor_seleccionado.ciudad,
+      direccion: this.proveedor_seleccionado.direccion,
+      email: this.proveedor_seleccionado.email,
+      descripcion: this.proveedor_seleccionado.descripcion,
+      licencia: this.proveedor_seleccionado.licencia,
+      copiaLicencia: this.proveedor_seleccionado.copiaLicencia,
+      profesion: this.proveedor_seleccionado.profesion,
+      ano_experiencia: this.proveedor_seleccionado.ano_experiencia,
+      banco: this.proveedor_seleccionado.banco,
+      numero_cuenta: this.proveedor_seleccionado.numero_cuenta,
+      tipo_cuenta: this.proveedor_seleccionado.tipo_cuenta,
+      planilla_servicios: this.proveedor_seleccionado.planilla_servicios
     }
 
     this.pythonAnywhereService.crear_proveedor_pendiente(pendiente).subscribe(resp => {
@@ -138,7 +138,7 @@ export class ProveedoresComponent {
     })
     let email: BodyEmail = {
       password: '1234',
-      email: this.pendiente_seleccionada.email,
+      email: this.proveedor_seleccionado.email,
       tipo: 'Proveedor'
     }
     this.pythonAnywhereService.enviar_email(email).subscribe(resp => {
@@ -146,66 +146,103 @@ export class ProveedoresComponent {
     })
   }
 
-  onAceptar() {
-    let pendiente: BodyCrearProveedorPendiente = {
-      nombres: this.pendiente_seleccionada.nombres,
-      apellidos: this.pendiente_seleccionada.apellidos,
-      genero: this.pendiente_seleccionada.genero,
-      telefono: this.pendiente_seleccionada.telefono,
-      cedula: this.pendiente_seleccionada.cedula,
-      copiaCedula: this.pendiente_seleccionada.copiaCedula,
-      ciudad: this.pendiente_seleccionada.ciudad,
-      direccion: this.pendiente_seleccionada.direccion,
-      email: this.pendiente_seleccionada.email,
-      descripcion: this.pendiente_seleccionada.descripcion,
-      licencia: this.pendiente_seleccionada.licencia,
-      copiaLicencia: this.pendiente_seleccionada.copiaLicencia,
-      profesion: this.pendiente_seleccionada.profesion,
-      ano_experiencia: this.pendiente_seleccionada.ano_experiencia,
-      banco: this.pendiente_seleccionada.banco,
-      numero_cuenta: this.pendiente_seleccionada.numero_cuenta,
-      tipo_cuenta: this.pendiente_seleccionada.tipo_cuenta,
-      planilla_servicios: this.pendiente_seleccionada.planilla_servicios
-    }
+  // onAceptar() {
+  //   let pendiente: BodyCrearProveedorPendiente = {
+  //     nombres: this.proveedor_seleccionado.nombres,
+  //     apellidos: this.proveedor_seleccionado.apellidos,
+  //     genero: this.proveedor_seleccionado.genero,
+  //     telefono: this.proveedor_seleccionado.telefono,
+  //     cedula: this.proveedor_seleccionado.cedula,
+  //     copiaCedula: this.proveedor_seleccionado.copiaCedula,
+  //     ciudad: this.proveedor_seleccionado.ciudad,
+  //     direccion: this.proveedor_seleccionado.direccion,
+  //     email: this.proveedor_seleccionado.email,
+  //     descripcion: this.proveedor_seleccionado.descripcion,
+  //     licencia: this.proveedor_seleccionado.licencia,
+  //     copiaLicencia: this.proveedor_seleccionado.copiaLicencia,
+  //     profesion: this.proveedor_seleccionado.profesion,
+  //     ano_experiencia: this.proveedor_seleccionado.ano_experiencia,
+  //     banco: this.proveedor_seleccionado.banco,
+  //     numero_cuenta: this.proveedor_seleccionado.numero_cuenta,
+  //     tipo_cuenta: this.proveedor_seleccionado.tipo_cuenta,
+  //     planilla_servicios: this.proveedor_seleccionado.planilla_servicios
+  //   }
 
-    this.pythonAnywhereService.crear_proveedor_proveedor(pendiente).subscribe(resp => {
-      console.log(resp)
-    })
-    this.pythonAnywhereService.eliminar_proveedores_pendientes(this.pendiente_seleccionada.id).subscribe(resp => {
-      console.log(resp)
-    })
-    /*let email: BodyEmail = {
-      password: '1234',
-      email: this.pendiente_seleccionada.email,
-      tipo: 'Proveedor'
+  //   this.pythonAnywhereService.crear_proveedor_proveedor(pendiente).subscribe(resp => {
+  //     console.log(resp)
+  //   })
+  //   this.pythonAnywhereService.eliminar_proveedores_pendientes(this.proveedor_seleccionado.id).subscribe(resp => {
+  //     console.log(resp)
+  //   })
+  //   /*let email: BodyEmail = {
+  //     password: '1234',
+  //     email: this.proveedor_seleccionado.email,
+  //     tipo: 'Proveedor'
+  //   }
+  //   this.pythonAnywhereService.enviar_email(email).subscribe(resp => {
+  //     console.log(resp)
+  //   })*/
+  // }
+
+  onEditar() {
+    let pendiente: BodyActualizarProveedorPendiente = {
+      nombres: this.formEdit.value.nombre,
+      apellidos: this.formEdit.value.apellidos,
+      genero: this.formEdit.value.genero,
+      telefono: this.formEdit.value.telefono,
+      cedula: this.formEdit.value.cedula,
+      copiaCedula: this.formEdit.value.copiaCedula,
+      ciudad: this.formEdit.value.ciudad,
+      direccion: this.formEdit.value.direccion,
+      email: this.formEdit.value.correo,
+      descripcion: this.formEdit.value.descripcion,
+      licencia: this.formEdit.value.licencia,
+      copiaLicencia: this.formEdit.value.copiaLicencia,
+      profesion: this.formEdit.value.profesion,
+      ano_experiencia: this.formEdit.value.ano_experiencia,
+      banco: this.formEdit.value.banco,
+      numero_cuenta: this.formEdit.value.numero_cuenta,
+      tipo_cuenta: this.formEdit.value.tipo_cuenta,
+      foto: this.formEdit.value.foto,
+      //planilla_servicios: this.formEdit.value.planilla_servicios
+      filesDocuments: []
     }
-    this.pythonAnywhereService.enviar_email(email).subscribe(resp => {
+    console.log(pendiente)
+    console.log(this.formEdit.value.descripcion)
+    console.log(this.proveedor_seleccionado.descripcion)
+    if(pendiente.descripcion === ""){
+      // if(this.proveedor_seleccionado.descripcion === ""){
+      //   pendiente.descripcion = " "
+      // }
+      pendiente.descripcion = this.proveedor_seleccionado.descripcion
+    }
+    this.pythonAnywhereService.editar_proveedor_proveedor(this.proveedor_seleccionado.id, pendiente).subscribe(resp => {
       console.log(resp)
-    })*/
+    })
   }
 
   onNegar() {
     let pendiente: BodyCrearProveedorPendiente = {
-      nombres: this.pendiente_seleccionada.nombres,
-      apellidos: this.pendiente_seleccionada.apellidos,
-      genero: this.pendiente_seleccionada.genero,
-      telefono: this.pendiente_seleccionada.telefono,
-      cedula: this.pendiente_seleccionada.cedula,
-      copiaCedula: this.pendiente_seleccionada.copiaCedula,
-      ciudad: this.pendiente_seleccionada.ciudad,
-      direccion: this.pendiente_seleccionada.direccion,
-      email: this.pendiente_seleccionada.email,
-      descripcion: this.pendiente_seleccionada.descripcion,
-      licencia: this.pendiente_seleccionada.licencia,
-      copiaLicencia: this.pendiente_seleccionada.copiaLicencia,
-      profesion: this.pendiente_seleccionada.profesion,
-      ano_experiencia: this.pendiente_seleccionada.ano_experiencia,
-      banco: this.pendiente_seleccionada.banco,
-      numero_cuenta: this.pendiente_seleccionada.numero_cuenta,
-      tipo_cuenta: this.pendiente_seleccionada.tipo_cuenta,
-      planilla_servicios: this.pendiente_seleccionada.planilla_servicios
+      nombres: this.proveedor_seleccionado.user_datos.nombres,
+      apellidos: this.proveedor_seleccionado.apellidos,
+      genero: this.proveedor_seleccionado.genero,
+      telefono: this.proveedor_seleccionado.telefono,
+      cedula: this.proveedor_seleccionado.cedula,
+      copiaCedula: this.proveedor_seleccionado.copiaCedula,
+      ciudad: this.proveedor_seleccionado.ciudad,
+      direccion: this.proveedor_seleccionado.direccion,
+      email: this.proveedor_seleccionado.email,
+      descripcion: this.proveedor_seleccionado.descripcion,
+      licencia: this.proveedor_seleccionado.licencia,
+      copiaLicencia: this.proveedor_seleccionado.copiaLicencia,
+      profesion: this.proveedor_seleccionado.profesion,
+      ano_experiencia: this.proveedor_seleccionado.ano_experiencia,
+      banco: this.proveedor_seleccionado.banco,
+      numero_cuenta: this.proveedor_seleccionado.numero_cuenta,
+      tipo_cuenta: this.proveedor_seleccionado.tipo_cuenta,
+      planilla_servicios: this.proveedor_seleccionado.planilla_servicios
     }
-    this.pythonAnywhereService.eliminar_proveedores_pendientes(this.pendiente_seleccionada.id).subscribe(resp => {
+    this.pythonAnywhereService.eliminar_proveedores_pendientes(this.proveedor_seleccionado.id).subscribe(resp => {
       console.log(resp)
     })
   }
@@ -299,24 +336,24 @@ export class ProveedoresComponent {
   limpiarForm() {
 
 
-    const nombre = this.pendiente_seleccionada?.nombres;
-    const apellidos = this.pendiente_seleccionada?.apellidos;
-    const telefono = this.pendiente_seleccionada?.telefono;
-    const cedula = this.pendiente_seleccionada?.cedula;
-    const correo = this.pendiente_seleccionada?.email;
-    const genero = this.pendiente_seleccionada?.genero;
-    const ciudad = this.pendiente_seleccionada?.ciudad;
-    const direccion = this.pendiente_seleccionada?.direccion;
-    const licencia = this.pendiente_seleccionada?.licencia;
-    const copiaCedula = this.pendiente_seleccionada?.copiaCedula;
-    const profesion = this.pendiente_seleccionada?.profesion;
-    const experiencia = this.pendiente_seleccionada?.ano_experiencia;
-    const banco = this.pendiente_seleccionada?.banco;
-    const numeroCuenta = this.pendiente_seleccionada?.numero_cuenta;
-    const copiaLicencia = this.pendiente_seleccionada?.copiaLicencia;
-    const tipoCuenta = this.pendiente_seleccionada?.copiaLicencia;
-    const documentos: any[] = this.pendiente_seleccionada?.documentsPendientes;
-    const descripcion = this.pendiente_seleccionada?.descripcion;
+    const nombre = this.proveedor_seleccionado?.nombres;
+    const apellidos = this.proveedor_seleccionado?.apellidos;
+    const telefono = this.proveedor_seleccionado?.telefono;
+    const cedula = this.proveedor_seleccionado?.cedula;
+    const correo = this.proveedor_seleccionado?.email;
+    const genero = this.proveedor_seleccionado?.genero;
+    const ciudad = this.proveedor_seleccionado?.ciudad;
+    const direccion = this.proveedor_seleccionado?.direccion;
+    const licencia = this.proveedor_seleccionado?.licencia;
+    const copiaCedula = this.proveedor_seleccionado?.copiaCedula;
+    const profesion = this.proveedor_seleccionado?.profesion;
+    const experiencia = this.proveedor_seleccionado?.ano_experiencia;
+    const banco = this.proveedor_seleccionado?.banco;
+    const numeroCuenta = this.proveedor_seleccionado?.numero_cuenta;
+    const copiaLicencia = this.proveedor_seleccionado?.copiaLicencia;
+    const tipoCuenta = this.proveedor_seleccionado?.copiaLicencia;
+    const documentos: any[] = this.proveedor_seleccionado?.documentsPendientes;
+    const descripcion = this.proveedor_seleccionado?.descripcion;
 
     nombre ? this.formEdit.get('nombre')?.setValue(nombre) : this.formEdit.get('nombre')?.reset();
     apellidos ? this.formEdit.get('apellidos')?.setValue(apellidos) : this.formEdit.get('apellidos')?.reset();
@@ -358,9 +395,10 @@ export class ProveedoresComponent {
       numero_cuenta: this.formEdit.get('numeroCuenta')?.value,
       tipo_cuenta: this.formEdit.get('tipoCuenta')?.value,
       ano_experiencia: this.formEdit.get('experiencia')?.value,
-      profesion: this.formEdit.get('profesion')?.value
+      profesion: this.formEdit.get('profesion')?.value,
+      foto: this.formEdit.get('foto')?.value
     }
-    const id = this.pendiente_seleccionada.id
+    const id = this.proveedor_seleccionado.id
 
     console.log(this.formEdit)
     if (this.formEdit.status == "INVALID") {

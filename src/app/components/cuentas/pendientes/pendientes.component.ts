@@ -17,6 +17,7 @@ export class PendientesComponent {
   generos = ['Masculino', 'Femenino', 'Otro'];
   ciudades = ['Guayaquil', 'Quito', 'Cuenca', 'Sto. Domingo', 'Ibarra'];
   licencia = ['Si', 'No'];
+  profesiones: string[] = [];
   total = 0
   arr_pendiente!: any[];
   arr_filtered_pendiente!: any[];
@@ -61,7 +62,7 @@ export class PendientesComponent {
     copiaLicencia: new FormControl(''),
     documentos: new FormControl(''),
     descripcion: new FormControl(''),
-
+    foto: new FormControl('', [Validators.required]),
   });
 
   constructor(
@@ -86,6 +87,13 @@ export class PendientesComponent {
 
       }
 
+    });
+
+    this.pythonAnywhereService.obtener_profesiones().subscribe(resp => {
+      console.log(resp)
+      for (let i=0; i<resp.length; i++){
+        this.profesiones.push(resp[i].nombre)
+      }
     });
   }
 
@@ -171,6 +179,7 @@ export class PendientesComponent {
       banco: this.formEdit.value.banco,
       numero_cuenta: this.formEdit.value.numero_cuenta,
       tipo_cuenta: this.formEdit.value.tipo_cuenta,
+      foto: this.formEdit.value.foto,
       //planilla_servicios: this.formEdit.value.planilla_servicios
       filesDocuments: []
     }
@@ -215,51 +224,101 @@ export class PendientesComponent {
     if (email && password) {
       this.pythonAnywhereService.getSolicitantePythonAny(email).subscribe((arrSolicitante: Array<Solicitante2>) => {
         if (arrSolicitante.length === 0) {
+          var validator=0;
           const dataRegisto = new FormData();
           dataRegisto.append('tipo', 'Proveedor');
-          dataRegisto.append('email', this.pendiente_seleccionada.email);
           dataRegisto.append('password', password);
-          dataRegisto.append('nombres', this.pendiente_seleccionada.nombres);
-          dataRegisto.append('apellidos', this.pendiente_seleccionada.apellidos);
-          dataRegisto.append('telefono', this.pendiente_seleccionada.telefono);
-          dataRegisto.append('cedula', this.pendiente_seleccionada.cedula);
-          dataRegisto.append('genero', "Otro");
-          dataRegisto.append('ciudad', this.pendiente_seleccionada.ciudad);
-          dataRegisto.append('foto', "xd.jpg");
-          dataRegisto.append('banco', this.pendiente_seleccionada.banco);
-          dataRegisto.append('numero_cuenta', this.pendiente_seleccionada.numero_cuenta);
-          dataRegisto.append('tipo_cuenta', this.pendiente_seleccionada.tipo_cuenta);
-          // Registro PythonAnywhere
-          this.pythonAnywhereService.postRegistro(dataRegisto).subscribe(async (resp: any) => {
-            if (!resp.error) {
-              console.log('Registro pythonanywhere exitoso: ', resp);
-              // Registro Firebase
-              this.userService
-                .register(email, password)
-                .then((response) => {
-                  console.log('Registro firebase exitoso: ', response);
-                  // this.presentAlert('Completada!', 'El registro se ha completado exitosamente.').then(() => {
-                  //   console.log('Registro completo...');
-                  //   this.userService
-                  //     .logout()
-                  //     .then(() => {
-                  //       this.router.navigate(['/login']);
-                  //       console.log('fuera de sesion');
-                  //     })
-                  //     .catch((error) => {
-                  //       console.log(error);
-                  //     });
-                  // });
-                })
-                .catch((error) => {
-                  console.log('Error al registrar en firebase: ', error);
-                  // this.isRegistered = true;
-                });
-            } else {
-              console.log('Hubo un error al registrar en PythonAnywhere', resp.error);
-              // this.presentAlert('Error en el registro :(', 'Vuelva a intentarlo pronto...', false);
-            }
-          });
+          if(this.pendiente_seleccionada.email != null || this.pendiente_seleccionada.email != ""){
+            dataRegisto.append('email', this.pendiente_seleccionada.email);
+          }else{
+            validator=1;
+          }
+          if(this.pendiente_seleccionada.nombres != null || this.pendiente_seleccionada.nombres != ""){
+            dataRegisto.append('nombres', this.pendiente_seleccionada.nombres);
+          }else{
+            validator=1;
+          }
+          if(this.pendiente_seleccionada.apellidos != null || this.pendiente_seleccionada.apellidos != ""){
+            dataRegisto.append('apellidos', this.pendiente_seleccionada.apellidos);
+          }else{
+            validator=1;
+          }
+          if(this.pendiente_seleccionada.telefono != null || this.pendiente_seleccionada.telefono != ""){
+            dataRegisto.append('telefono', this.pendiente_seleccionada.telefono);
+          }else{
+            validator=1;
+          }
+          if(this.pendiente_seleccionada.cedula != null || this.pendiente_seleccionada.cedula != ""){
+            dataRegisto.append('cedula', this.pendiente_seleccionada.cedula);
+          }else{
+            validator=1;
+          }
+          if(this.pendiente_seleccionada.genero != null || this.pendiente_seleccionada.genero != ""){
+            dataRegisto.append('genero', this.pendiente_seleccionada.genero);
+          }else{
+            validator=1;
+          }
+          if(this.pendiente_seleccionada.ciudad != null || this.pendiente_seleccionada.ciudad != ""){
+            dataRegisto.append('ciudad', this.pendiente_seleccionada.ciudad);
+          }else{
+            validator=1;
+          }
+          if(this.pendiente_seleccionada.foto != null || this.pendiente_seleccionada.foto != ""){
+            dataRegisto.append('foto', this.pendiente_seleccionada.foto);
+          }else{
+            validator=1;
+          }
+          if(this.pendiente_seleccionada.banco != null || this.pendiente_seleccionada.banco != ""){
+            dataRegisto.append('banco', this.pendiente_seleccionada.banco);
+          }else{
+            validator=1;
+          }
+          if(this.pendiente_seleccionada.numero_cuenta != null || this.pendiente_seleccionada.numero_cuenta != ""){
+            dataRegisto.append('numero_cuenta', this.pendiente_seleccionada.numero_cuenta);
+          }else{
+            validator=1;
+          }
+          if(this.pendiente_seleccionada.tipo_cuenta != null || this.pendiente_seleccionada.tipo_cuenta != ""){
+            dataRegisto.append('tipo_cuenta', this.pendiente_seleccionada.tipo_cuenta);
+          }else{
+            validator=1;
+          }
+          
+          if(validator = 0){
+            // Registro PythonAnywhere
+            this.pythonAnywhereService.postRegistro(dataRegisto).subscribe(async (resp: any) => {
+              if (!resp.error) {
+                console.log('Registro pythonanywhere exitoso: ', resp);
+                // Registro Firebase
+                this.userService
+                  .register(email, password)
+                  .then((response) => {
+                    console.log('Registro firebase exitoso: ', response);
+                    // this.presentAlert('Completada!', 'El registro se ha completado exitosamente.').then(() => {
+                    //   console.log('Registro completo...');
+                    //   this.userService
+                    //     .logout()
+                    //     .then(() => {
+                    //       this.router.navigate(['/login']);
+                    //       console.log('fuera de sesion');
+                    //     })
+                    //     .catch((error) => {
+                    //       console.log(error);
+                    //     });
+                    // });
+                  })
+                  .catch((error) => {
+                    console.log('Error al registrar en firebase: ', error);
+                    // this.isRegistered = true;
+                  });
+              } else {
+                console.log('Hubo un error al registrar en PythonAnywhere', resp.error);
+                // this.presentAlert('Error en el registro :(', 'Vuelva a intentarlo pronto...', false);
+              }
+            });
+          }else{
+            console.log('ERROR: Faltan datos');
+          }
         } else {
           console.log('Usuario encontrado en PythonAnywhere');
           // this.presentAlert(
@@ -467,7 +526,8 @@ export class PendientesComponent {
       numero_cuenta: this.formEdit.get('numeroCuenta')?.value,
       tipo_cuenta: this.formEdit.get('tipoCuenta')?.value,
       ano_experiencia: this.formEdit.get('experiencia')?.value,
-      profesion: this.formEdit.get('profesion')?.value
+      profesion: this.formEdit.get('profesion')?.value,
+      foto: this.formEdit.get('foto')?.value
     }
     const id = this.pendiente_seleccionada.id
 

@@ -70,7 +70,6 @@ total=0
     password: new FormControl('',[Validators.required, Validators.minLength(6)]),
     confirmPassword: new FormControl('',[Validators.required, Validators.minLength(6)]),
     imagen: new FormControl(this.fileImagenActualizar),
-
   });
   admiCrear: FormGroup = new FormGroup({
     nombre: new FormControl('', [Validators.required]),
