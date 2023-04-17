@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Solicitante2 } from 'src/app/interfaces/solicitante2';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -13,7 +13,6 @@ import { UserService } from 'src/app/services/user/user.service';
   styleUrls: ['./pendientes.component.css']
 })
 export class PendientesComponent {
-
   generos = ['Masculino', 'Femenino', 'Otro'];
   ciudades = ['Guayaquil', 'Quito', 'Cuenca', 'Sto. Domingo', 'Ibarra'];
   licencia = ['Si', 'No'];
@@ -29,10 +28,17 @@ export class PendientesComponent {
   activo = ''
   activoCond = false
   mensajeAlerta: string = '';
-  isAceptar = false; isNegar = false;
+  isAceptar = true; isNegar = true;
   habilitar = ''
-  mostrar1=false
-  mostrar2=false
+  mostrar1=false;
+  mostrar2=false;
+  fileImgPerfil: File| null = null;
+  filePDF: File| null = null;
+  filePDF2: File| null = null;
+  copiaCedulaNombre= null;
+  copiaLicenciaNombre= null;
+  // imgPerfil: string| null = null;
+  
   formEdit: FormGroup = new FormGroup({
     nombre: new FormControl('', [Validators.required]),
     apellidos: new FormControl('', [Validators.required]),
@@ -54,17 +60,17 @@ export class PendientesComponent {
     genero: new FormControl('', [Validators.required]),
     profesion: new FormControl('', [Validators.required]),
     licencia: new FormControl('', [Validators.required]),
-    copiaCedula: new FormControl('', [Validators.required]),
+    copiaCedula: new FormControl(this.filePDF),
     TipoCuenta: new FormControl('', [Validators.required]),
     numeroCuenta: new FormControl('', [Validators.required]),
     banco: new FormControl('', [Validators.required]),
     experiencia: new FormControl('', [Validators.required]),
-    copiaLicencia: new FormControl(''),
+    copiaLicencia: new FormControl(this.filePDF2),
     documentos: new FormControl(''),
     descripcion: new FormControl(''),
-    foto: new FormControl('', [Validators.required]),
+    foto: new FormControl(this.fileImgPerfil),
+    // foto: new FormControl('', [Validators.required]),
   });
-
   constructor(
     private pythonAnywhereService: PythonAnywhereService,
     private userService: UserService, 
@@ -75,7 +81,6 @@ export class PendientesComponent {
     this.pythonAnywhereService.obtener_proveedores_pendientes().subscribe(resp => {
       this.total = Object(resp).total_objects
       this.arr_pendiente = Object(resp).results;
-
       this.arr_filtered_pendiente = this.arr_pendiente;
       console.log(this.arr_filtered_pendiente)
       if (Object(resp).next != null) {
@@ -84,9 +89,7 @@ export class PendientesComponent {
       console.log(Object(resp).total_pages)
       for (let index = 1; index <= Object(resp).total_pages; index++) {
         this.pageNumber.push(index)
-
       }
-
     });
 
     this.pythonAnywhereService.obtener_profesiones().subscribe(resp => {
@@ -109,7 +112,6 @@ export class PendientesComponent {
   }
 
   establecerMensaje(mensaje: string, tipo: string) {
-
     if (tipo === 'aceptar') {
       this.isAceptar = true;
       this.isNegar = false;
@@ -117,7 +119,7 @@ export class PendientesComponent {
     else if (tipo === 'negar') {
       this.isAceptar = false;
       this.isNegar = true;
-    } else if (tipo === 'editar') {
+    } else if (tipo === 'actualizar') {
       this.isAceptar = false;
       this.isNegar = false;
     }
@@ -167,25 +169,28 @@ export class PendientesComponent {
       genero: this.formEdit.value.genero,
       telefono: this.formEdit.value.telefono,
       cedula: this.formEdit.value.cedula,
-      copiaCedula: this.formEdit.value.copiaCedula,
+      copiaCedula: this.filePDF,
       ciudad: this.formEdit.value.ciudad,
       direccion: this.formEdit.value.direccion,
       email: this.formEdit.value.correo,
       descripcion: this.formEdit.value.descripcion,
       licencia: this.formEdit.value.licencia,
-      copiaLicencia: this.formEdit.value.copiaLicencia,
+      copiaLicencia: this.filePDF2,
       profesion: this.formEdit.value.profesion,
       ano_experiencia: this.formEdit.value.ano_experiencia,
       banco: this.formEdit.value.banco,
       numero_cuenta: this.formEdit.value.numero_cuenta,
       tipo_cuenta: this.formEdit.value.tipo_cuenta,
-      foto: this.formEdit.value.foto,
+      foto: this.fileImgPerfil,
       //planilla_servicios: this.formEdit.value.planilla_servicios
       filesDocuments: []
     }
+    console.log("LA COSAS ESAS LASMASD")
     console.log(pendiente)
-    console.log(this.formEdit.value.descripcion)
-    console.log(this.pendiente_seleccionada.descripcion)
+    console.log(this.filePDF)
+    console.log(pendiente.copiaCedula)
+    // console.log(this.formEdit.value.descripcion)
+    // console.log(this.pendiente_seleccionada.descripcion)
     if(pendiente.descripcion === ""){
       // if(this.pendiente_seleccionada.descripcion === ""){
       //   pendiente.descripcion = " "
@@ -196,6 +201,77 @@ export class PendientesComponent {
       console.log(resp)
     })
   }
+
+  isURL(stringImage: string): boolean {
+    // console.log(stringImage);
+    return stringImage.match(new RegExp('https?.*')) !== null;
+  }
+
+  loadImageFromDevice(event:any) {
+    const file: File = event.target.files[0];
+    if(file){
+      this.extraerBase64(file)
+      .then((imagen: any) => {
+        this.formEdit.value.foto=file;
+        this.fileImgPerfil = file;
+        // this.imgPerfil = imagen.base;
+      })
+      .catch(err => console.log(err));
+    }
+  };
+
+  extraerBase64 = async ($event: any) => new Promise((resolve, reject) => {
+    try {
+      const unsafeImg = window.URL.createObjectURL($event);
+      const image = this.sanitizer.bypassSecurityTrustUrl(unsafeImg);
+      const reader = new FileReader();
+      reader.readAsDataURL($event);
+      reader.onload = () => {
+        resolve({
+          blob: $event,
+          image,
+          base: reader.result
+        });
+      };
+      reader.onerror = error => {
+        resolve({
+          blob: $event,
+          image,
+          base: null
+        });
+      };
+      return null;
+
+    } catch (e) {
+      return null;
+    }
+  });
+
+  loadPdfFromDevice(event:any) {
+    const file: File = event.target.files[0];
+    if(file){
+      this.extraerBase64(file)
+      .then((imagen: any) => {
+        this.formEdit.value.copiaCedula=file;
+        this.filePDF = file;
+        // this.imgPerfil = imagen.base;
+      })
+      .catch(err => console.log(err));
+    }
+  };
+
+  loadPdf2FromDevice(event:any) {
+    const file: File = event.target.files[0];
+    if(file){
+      this.extraerBase64(file)
+      .then((imagen: any) => {
+        this.formEdit.value.copiaLicencia=file;
+        this.filePDF2 = file;
+        // this.imgPerfil = imagen.base;
+      })
+      .catch(err => console.log(err));
+    }
+  };
 
   onAceptar() {
     let pendiente: BodyCrearProveedorPendiente = {
@@ -228,63 +304,130 @@ export class PendientesComponent {
           const dataRegisto = new FormData();
           dataRegisto.append('tipo', 'Proveedor');
           dataRegisto.append('password', password);
-          if(this.pendiente_seleccionada.email != null || this.pendiente_seleccionada.email != ""){
+          console.log(this.pendiente_seleccionada)
+          if(this.pendiente_seleccionada.email != null && this.pendiente_seleccionada.email != ""){
             dataRegisto.append('email', this.pendiente_seleccionada.email);
           }else{
+            console.log("QQQQQQQQQQ")
             validator=1;
           }
-          if(this.pendiente_seleccionada.nombres != null || this.pendiente_seleccionada.nombres != ""){
+          if(this.pendiente_seleccionada.nombres != null && this.pendiente_seleccionada.nombres != ""){
             dataRegisto.append('nombres', this.pendiente_seleccionada.nombres);
           }else{
+            console.log("WWWWWWWWWWWWWWWWWW")
             validator=1;
           }
-          if(this.pendiente_seleccionada.apellidos != null || this.pendiente_seleccionada.apellidos != ""){
+          if(this.pendiente_seleccionada.apellidos != null && this.pendiente_seleccionada.apellidos != ""){
             dataRegisto.append('apellidos', this.pendiente_seleccionada.apellidos);
           }else{
+            console.log("EEEEEEEEEEEEEEEE")
             validator=1;
           }
-          if(this.pendiente_seleccionada.telefono != null || this.pendiente_seleccionada.telefono != ""){
+          if(this.pendiente_seleccionada.telefono != null && this.pendiente_seleccionada.telefono != ""){
             dataRegisto.append('telefono', this.pendiente_seleccionada.telefono);
           }else{
+            console.log("RRRRRRRRRRRRRR")
             validator=1;
           }
-          if(this.pendiente_seleccionada.cedula != null || this.pendiente_seleccionada.cedula != ""){
+          if(this.pendiente_seleccionada.cedula != null && this.pendiente_seleccionada.cedula != ""){
             dataRegisto.append('cedula', this.pendiente_seleccionada.cedula);
           }else{
+            console.log("TTTTTTTTTTTTTTTT")
             validator=1;
           }
-          if(this.pendiente_seleccionada.genero != null || this.pendiente_seleccionada.genero != ""){
+          if(this.pendiente_seleccionada.genero != null && this.pendiente_seleccionada.genero != ""){
             dataRegisto.append('genero', this.pendiente_seleccionada.genero);
           }else{
+            console.log("YYYYYYYYYYYYYY")
             validator=1;
           }
-          if(this.pendiente_seleccionada.ciudad != null || this.pendiente_seleccionada.ciudad != ""){
+          if(this.pendiente_seleccionada.ciudad != null && this.pendiente_seleccionada.ciudad != ""){
             dataRegisto.append('ciudad', this.pendiente_seleccionada.ciudad);
           }else{
+            console.log("UUUUUUUUUUUUU")
             validator=1;
           }
-          if(this.pendiente_seleccionada.foto != null || this.pendiente_seleccionada.foto != ""){
+          if(this.pendiente_seleccionada.foto != null && this.pendiente_seleccionada.foto != ""){
             dataRegisto.append('foto', this.pendiente_seleccionada.foto);
           }else{
+            console.log("IIIIIIIIIIIIIIII")
             validator=1;
           }
-          if(this.pendiente_seleccionada.banco != null || this.pendiente_seleccionada.banco != ""){
+          if(this.pendiente_seleccionada.banco != null && this.pendiente_seleccionada.banco != ""){
             dataRegisto.append('banco', this.pendiente_seleccionada.banco);
           }else{
+            console.log("OOOOOOOOOOOOO")
             validator=1;
           }
-          if(this.pendiente_seleccionada.numero_cuenta != null || this.pendiente_seleccionada.numero_cuenta != ""){
+          if(this.pendiente_seleccionada.numero_cuenta != null && this.pendiente_seleccionada.numero_cuenta != ""){
             dataRegisto.append('numero_cuenta', this.pendiente_seleccionada.numero_cuenta);
           }else{
+            console.log("PPPPPPPPPPPPPPP")
             validator=1;
           }
-          if(this.pendiente_seleccionada.tipo_cuenta != null || this.pendiente_seleccionada.tipo_cuenta != ""){
+          if(this.pendiente_seleccionada.tipo_cuenta != null && this.pendiente_seleccionada.tipo_cuenta != ""){
             dataRegisto.append('tipo_cuenta', this.pendiente_seleccionada.tipo_cuenta);
           }else{
+            console.log("AAAAAAAAAAAAAAA")
             validator=1;
           }
-          
-          if(validator = 0){
+          if(this.pendiente_seleccionada.ano_experiencia != null && this.pendiente_seleccionada.ano_experiencia != ""){
+            dataRegisto.append('ano_experiencia', this.pendiente_seleccionada.ano_experiencia);
+          }else{
+            console.log("SSSSSSSSSSSSSSS")
+            validator=1;
+          }
+          // if(this.pendiente_seleccionada.estado != null && this.pendiente_seleccionada.estado != ""){
+          //   dataRegisto.append('estado', this.pendiente_seleccionada.estado);
+          // }else{
+          //   console.log("DDDDDDDDDDDDDDDD")
+          //   validator=1;
+          // }
+          if(this.pendiente_seleccionada.profesion != null && this.pendiente_seleccionada.profesion != ""){
+            dataRegisto.append('profesion', this.pendiente_seleccionada.profesion);
+          }else{
+            console.log("FFFFFFFFFFFFFFFFFFF")
+            validator=1;
+          }
+          if(this.pendiente_seleccionada.direccion != null && this.pendiente_seleccionada.direccion != ""){
+            dataRegisto.append('direccion', this.pendiente_seleccionada.direccion);
+          }else{
+            console.log("GGGGGGGGGGGGG")
+            validator=1;
+          }
+          if(this.pendiente_seleccionada.licencia != null && this.pendiente_seleccionada.licencia != ""){
+            dataRegisto.append('licencia', this.pendiente_seleccionada.licencia);
+          }else{
+            console.log("HHHHHHHHHHHHHHH")
+            validator=1;
+          }
+          if(this.pendiente_seleccionada.copiaCedula != null && this.pendiente_seleccionada.copiaCedula != ""){
+            dataRegisto.append('copiaCedula', this.pendiente_seleccionada.copiaCedula);
+          }else{
+            console.log("JJJJJJJJJJJJJJJ")
+            validator=1;
+          }
+          if(this.pendiente_seleccionada.copiaLicencia != null && this.pendiente_seleccionada.copiaLicencia != ""){
+            dataRegisto.append('copiaLicencia', this.pendiente_seleccionada.copiaLicencia);
+          }else{
+            console.log("KKKKKKKKKKKK")
+            validator=1;
+          }
+          // if(this.pendiente_seleccionada.copiaCedula != null || this.pendiente_seleccionada.copiaCedula != ""){
+          //   dataRegisto.append('copiaCedula', this.pendiente_seleccionada.copiaCedula);
+          // }else{
+          //   validator=1;
+          // }
+          // if(this.pendiente_seleccionada.copiaCedula != null || this.pendiente_seleccionada.copiaCedula != ""){
+          //   dataRegisto.append('copiaCedula', this.pendiente_seleccionada.copiaCedula);
+          // }else{
+          //   validator=1;
+          // }
+
+          console.log("DDDDDDDDDdataRegisto")
+          console.log(dataRegisto)
+          console.log("validator " + validator)
+          if(validator == 0){
             // Registro PythonAnywhere
             this.pythonAnywhereService.postRegistro(dataRegisto).subscribe(async (resp: any) => {
               if (!resp.error) {
@@ -294,6 +437,9 @@ export class PendientesComponent {
                   .register(email, password)
                   .then((response) => {
                     console.log('Registro firebase exitoso: ', response);
+                    this.pythonAnywhereService.eliminar_proveedores_pendientes(this.pendiente_seleccionada.id).subscribe(resp => {
+                      console.log(resp)
+                    })
                     // this.presentAlert('Completada!', 'El registro se ha completado exitosamente.').then(() => {
                     //   console.log('Registro completo...');
                     //   this.userService
@@ -334,9 +480,7 @@ export class PendientesComponent {
     // this.pythonAnywhereService.crear_proveedor_proveedor(pendiente).subscribe(resp => {
     //   console.log(resp)
     // })
-    this.pythonAnywhereService.eliminar_proveedores_pendientes(this.pendiente_seleccionada.id).subscribe(resp => {
-      console.log(resp)
-    })
+    
     /*let email: BodyEmail = {
       password: '1234',
       email: this.pendiente_seleccionada.email,
@@ -465,8 +609,6 @@ export class PendientesComponent {
   }
 
   limpiarForm() {
-
-
     const nombre = this.pendiente_seleccionada?.nombres;
     const apellidos = this.pendiente_seleccionada?.apellidos;
     const telefono = this.pendiente_seleccionada?.telefono;
@@ -485,6 +627,7 @@ export class PendientesComponent {
     const tipoCuenta = this.pendiente_seleccionada?.copiaLicencia;
     const documentos: any[] = this.pendiente_seleccionada?.documentsPendientes;
     const descripcion = this.pendiente_seleccionada?.descripcion;
+    const foto = this.pendiente_seleccionada?.foto;
 
     nombre ? this.formEdit.get('nombre')?.setValue(nombre) : this.formEdit.get('nombre')?.reset();
     apellidos ? this.formEdit.get('apellidos')?.setValue(apellidos) : this.formEdit.get('apellidos')?.reset();
@@ -504,47 +647,20 @@ export class PendientesComponent {
     tipoCuenta ? this.formEdit.get('tipoCuenta')?.setValue(ciudad) : this.formEdit.get('tipoCuenta')?.reset();
     documentos ? this.formEdit.get('documentos')?.setValue(ciudad) : this.formEdit.get('documentos')?.reset();
     descripcion ? this.formEdit.get('descripcion')?.setValue(ciudad) : this.formEdit.get('descripcion')?.reset();
-
+    foto ? this.formEdit.get('foto')?.setValue(ciudad) : this.formEdit.get('foto')?.reset();
   }
 
-  onActualizar() {
-    const pendiente: BodyActualizarProveedorPendiente = {
-      nombres: this.formEdit.get('nombre')?.value,
-      apellidos: this.formEdit.get('apellidos')?.value,
-      ciudad: this.formEdit.get('ciudad')?.value,
-      direccion: this.formEdit.get('direccion')?.value,
-      genero: this.formEdit.get('apellidos')?.value,
-      licencia: this.formEdit.get('licencia')?.value,
-      copiaLicencia: this.formEdit.get('copiaLicencia')?.value,
-      copiaCedula: this.formEdit.get('copiaCedula')?.value,
-      filesDocuments: this.formEdit.get('documentos')?.value,
-      cedula: this.formEdit.get('cedula')?.value,
-      telefono: this.formEdit.get('telefono')?.value,
-      descripcion: this.formEdit.get('descripcion')?.value,
-      email: this.formEdit.get('correo')?.value,
-      banco: this.formEdit.get('banco')?.value,
-      numero_cuenta: this.formEdit.get('numeroCuenta')?.value,
-      tipo_cuenta: this.formEdit.get('tipoCuenta')?.value,
-      ano_experiencia: this.formEdit.get('experiencia')?.value,
-      profesion: this.formEdit.get('profesion')?.value,
-      foto: this.formEdit.get('foto')?.value
-    }
-    const id = this.pendiente_seleccionada.id
-
-    console.log(this.formEdit)
-    if (this.formEdit.status == "INVALID") {
-
-      return;
-    } else {
-      this.pythonAnywhereService.editar_proveedor_pendiente(id, pendiente).subscribe(resp => console.log(resp)
-      )
-    }
-  }
 
   isInvalidForm(subForm: string) {
 
 
     return this.formEdit.get(subForm)?.invalid && this.formEdit.get(subForm)?.touched || this.formEdit.get(subForm)?.dirty && this.getErrorMessage(this.formEdit, subForm).length !== 0;
 
+  }
+  
+  funcionMostar(){
+    console.log("asdasdasdasdasxzczxcfwef")
+    console.log(this.pendiente_seleccionada)
+    console.log(this.pendiente_seleccionada.copiaLicencia)
   }
 }

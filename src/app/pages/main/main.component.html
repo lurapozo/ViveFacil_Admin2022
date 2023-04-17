@@ -48,8 +48,8 @@
           <div id="panelsStayOpen-collapseSix" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingSix">
             <div class="accordion-body p-0">
               <div class="list-group rounded-0">
-                <a (click)="setSelection('profesion')" [ngClass]="selection==='profesion'? 'active':''" class="list-group-item list-group-item-action ps-4">Profesiones disponibles</a>
-                <a (click)="setSelection('solicitud_profesion')" [ngClass]="selection==='solicitud_profesion'? 'active':''" class="list-group-item list-group-item-action ps-4">Solicitud de profesiones</a>
+                <a (click)="setSelection('profesion')" [ngClass]="selection==='profesion'? 'active':''" class="list-group-item list-group-item-action ps-4" style="cursor: pointer;">Profesiones disponibles</a>
+                <a (click)="setSelection('solicitud_profesion')" [ngClass]="selection==='solicitud_profesion'? 'active':''" class="list-group-item list-group-item-action ps-4" style="cursor: pointer;">Solicitud de profesiones</a>
               </div>
             </div>
           </div>
@@ -65,10 +65,11 @@
           <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingOne">
             <div class="accordion-body p-0">
               <div class="list-group rounded-0">
-                <a (click)="setSelection('admin')" [ngClass]="selection==='admin'? 'active':''" class="list-group-item list-group-item-action ps-4">Administrador</a>
-                <a (click)="setSelection('pendiente')" [ngClass]="selection==='pendiente'? 'active':''" class="list-group-item list-group-item-action ps-4">Pendientes</a>
-                <a (click)="setSelection('proveedor')" [ngClass]="selection==='proveedor'? 'active':''" class="list-group-item list-group-item-action ps-4">Proveedores</a>
-                <a (click)="setSelection('solicitante')" [ngClass]="selection==='solicitante'? 'active':''" class="list-group-item list-group-item-action ps-4">Solicitantes</a>
+                <a (click)="setSelection('admin')" [ngClass]="selection==='admin'? 'active':''" class="list-group-item list-group-item-action ps-4" style="cursor: pointer;">Administrador</a>
+                <a (click)="setSelection('pendiente')" [ngClass]="selection==='pendiente'? 'active':''" class="list-group-item list-group-item-action ps-4" style="cursor: pointer;">Pendientes</a>
+                <a (click)="setSelection('proveedor')" [ngClass]="selection==='proveedor'? 'active':''" class="list-group-item list-group-item-action ps-4" style="cursor: pointer;">Proveedores</a>
+                <a (click)="setSelection('rechazado')" [ngClass]="selection==='rechazado'? 'active':''" class="list-group-item list-group-item-action ps-4" style="cursor: pointer;">Rechazados</a>
+                <a (click)="setSelection('solicitante')" [ngClass]="selection==='solicitante'? 'active':''" class="list-group-item list-group-item-action ps-4" style="cursor: pointer;">Solicitantes</a>
                 <!-- <a class="list-group-item list-group-item-action disabled">A disabled link item</a> -->
               </div>
             </div>
@@ -85,8 +86,8 @@
           <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTwo">
             <div class="accordion-body p-0">
               <div class="list-group rounded-0">
-                <a (click)="setSelection('categoria')" [ngClass]="selection==='categoria'? 'active':''" class="list-group-item list-group-item-action ps-4">Categorias</a>
-                <a (click)="setSelection('sub_categoria')" [ngClass]="selection==='sub_categoria'? 'active':''" class="list-group-item list-group-item-action ps-4">Sub-categorias</a>
+                <a (click)="setSelection('categoria')" [ngClass]="selection==='categoria'? 'active':''" class="list-group-item list-group-item-action ps-4" style="cursor: pointer;">Categorias</a>
+                <a (click)="setSelection('sub_categoria')" [ngClass]="selection==='sub_categoria'? 'active':''" class="list-group-item list-group-item-action ps-4" style="cursor: pointer;">Sub-categorias</a>
               </div>
             </div>
           </div>
@@ -102,9 +103,9 @@
           <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingThree">
             <div class="accordion-body p-0">
               <div class="list-group rounded-0">
-                <a (click)="setSelection('cargo')" [ngClass]="selection==='cargo'? 'active':''" class="list-group-item list-group-item-action ps-4">Cargos</a>
-                <a (click)="setSelection('efectivo')" [ngClass]="selection==='efectivo'? 'active':''" class="list-group-item list-group-item-action ps-4">Efectivo</a>
-                <a (click)="setSelection('tarjeta')" [ngClass]="selection==='tarjeta'? 'active':''" class="list-group-item list-group-item-action ps-4">Tarjeta</a>
+                <a (click)="setSelection('cargo')" [ngClass]="selection==='cargo'? 'active':''" class="list-group-item list-group-item-action ps-4" style="cursor: pointer;">Cargos</a>
+                <a (click)="setSelection('efectivo')" [ngClass]="selection==='efectivo'? 'active':''" class="list-group-item list-group-item-action ps-4" style="cursor: pointer;">Efectivo</a>
+                <a (click)="setSelection('tarjeta')" [ngClass]="selection==='tarjeta'? 'active':''" class="list-group-item list-group-item-action ps-4" style="cursor: pointer;">Tarjeta</a>
               </div>
             </div>
           </div>
@@ -120,8 +121,8 @@
           <div id="panelsStayOpen-collapseFour" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingFour">
             <div class="accordion-body p-0">
               <div class="list-group rounded-0">
-                <a (click)="setSelection('plan_general')" [ngClass]="selection==='plan_general'? 'active':''" class="list-group-item list-group-item-action ps-4">Planes generales</a>
-                <a (click)="setSelection('plan_proveedor')" [ngClass]="selection==='plan_proveedor'? 'active':''" class="list-group-item list-group-item-action ps-4">Planes de proveedores</a>
+                <a (click)="setSelection('plan_general')" [ngClass]="selection==='plan_general'? 'active':''" class="list-group-item list-group-item-action ps-4" style="cursor: pointer;">Planes generales</a>
+                <a (click)="setSelection('plan_proveedor')" [ngClass]="selection==='plan_proveedor'? 'active':''" class="list-group-item list-group-item-action ps-4" style="cursor: pointer;">Planes de proveedores</a>
               </div>
             </div>
           </div>
@@ -137,8 +138,8 @@
           <div id="panelsStayOpen-collapseFive" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingFive">
             <div class="accordion-body p-0">
               <div class="list-group rounded-0">
-                <a (click)="setSelection('sugerencia_leida')" [ngClass]="selection==='sugerencia_leida'? 'active':''" class="list-group-item list-group-item-action ps-4">Sugerencias leídas</a>
-                <a (click)="setSelection('sugerencia_no_leida')" [ngClass]="selection==='sugerencia_no_leida'? 'active':''" class="list-group-item list-group-item-action ps-4">Sugerencias no leídas</a>
+                <a (click)="setSelection('sugerencia_leida')" [ngClass]="selection==='sugerencia_leida'? 'active':''" class="list-group-item list-group-item-action ps-4" style="cursor: pointer;">Sugerencias leídas</a>
+                <a (click)="setSelection('sugerencia_no_leida')" [ngClass]="selection==='sugerencia_no_leida'? 'active':''" class="list-group-item list-group-item-action ps-4" style="cursor: pointer;">Sugerencias no leídas</a>
               </div>
             </div>
           </div>
@@ -248,6 +249,8 @@
         <app-pendientes *ngIf="selection === 'pendiente'" identificador="2" ></app-pendientes>
         <!-- Inyeccion Vista PROVEEDORES -->
         <app-proveedores *ngIf="selection === 'proveedor'" identificador="2" ></app-proveedores>
+        <!-- Inyeccion Vista RECHAZADOS -->
+        <app-rechazados *ngIf="selection === 'rechazado'" identificador="2" ></app-rechazados>
         <!-- Inyeccion Vista SOLICITANTES -->
         <app-solicitantes *ngIf="selection === 'solicitante'" identificador="2" ></app-solicitantes>
 

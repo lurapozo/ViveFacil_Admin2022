@@ -28,6 +28,7 @@ import { CargosComponent } from './components/pagos/cargos/cargos.component';
 import { EfectivoComponent } from './components/pagos/efectivo/efectivo.component';
 import { TarjetaComponent } from './components/pagos/tarjeta/tarjeta.component';
 import { PendientesComponent } from './components/cuentas/pendientes/pendientes.component';
+import { RechazadosComponent } from './components/cuentas/rechazados/rechazados.component';
 import { ProveedoresComponent } from './components/cuentas/proveedores/proveedores.component';
 import { SolicitantesComponent } from './components/cuentas/solicitantes/solicitantes.component';
 import { AdministradoresComponent } from './components/cuentas/administradores/administradores.component';
@@ -63,6 +64,7 @@ import { AngularFireModule } from '@angular/fire/compat';
     TarjetaComponent,
     PendientesComponent,
     ProveedoresComponent,
+    RechazadosComponent,
     SolicitantesComponent,
     AdministradoresComponent,
     SugerenciasLeidasComponent,

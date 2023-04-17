@@ -64,7 +64,7 @@ export interface BodyActualizarProveedorPendiente {
   genero: string;
   licencia: string;
   copiaLicencia: File | null;
-  copiaCedula: File| null; //Required, quitar Null
+  copiaCedula: File; //Required
   filesDocuments: File[]; //Required
   cedula: string;
   telefono: string;
@@ -75,7 +75,7 @@ export interface BodyActualizarProveedorPendiente {
   tipo_cuenta: string;
   ano_experiencia: number;
   profesion: string;
-  foto: File | null;
+  foto: string | null;
 }
 
 export interface BodyActualizarProveedor {
