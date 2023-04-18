@@ -1,213 +1,267 @@
 <div class="container-fluid">
-    <!-- Titulo principal -->
-      <div class="row p-2 justify-content-center align-items-center">
-           <div class="col text-center">
-                <h2 class="p-0 m-0">Solicitantes</h2>
-                <h2 class="p-0 m-0">Total de solicitantes: {{total}}</h2>
-           </div>
+  <!-- Titulo principal -->
+  <div class="row p-2 justify-content-center align-items-center">
+    <div class="col text-center">
+      <h2 class="p-0 m-0">Solicitantes</h2>
+      <h2 class="p-0 m-0">Total de solicitantes: {{ total }}</h2>
+    </div>
+  </div>
+
+  <!-- Buscar y agregar admi -->
+  <div class="row p-2 justify-content-center align-items-center">
+    <div class="col-xl-7 col-lg-5"></div>
+    <div class="col-xl-3 col-lg-4">
+      <div class="input-group">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Buscar"
+          aria-label="Buscar"
+          aria-describedby="basic-addon1"
+          (input)="search($event)"
+        />
+        <button class="input-group-text" id="basic-addon1">
+          <i class="bi bi-search"></i>
+        </button>
       </div>
-  
-      <!-- Buscar y agregar admi -->
-      <div class="row p-2 justify-content-center align-items-center">
-        <div class="col-xl-7 col-lg-5"></div>
-        <div class="col-xl-3 col-lg-4">
-          <div class="input-group">
-            <input type="text" class="form-control" placeholder="Buscar"
-              aria-label="Buscar" aria-describedby="basic-addon1" (input)="search($event)">
-            <button class="input-group-text" id="basic-addon1"> <i class="bi
-                bi-search" ></i> </button>
-          </div>
+    </div>
+  </div>
+  <!-- Contenedor de admi -->
+  <div class="row justify-content-center align-items-center p-0">
+    <div class="col-10 text-center">
+      <!-- Titulo -->
+      <div class="row p-2 bg-primary text-white">
+        <div class="col-2 align-self-center">
+          <h3 class="p-0 m-0">Nombres</h3>
         </div>
-    
-      </div>
-      <!-- Contenedor de admi -->
-      <div class="row justify-content-center align-items-center p-0">
-        <div class="col-10 text-center">
-          <!-- Titulo -->
-          <div class="row p-2 bg-primary text-white">
-            <div class="col-2 align-self-center">
-              <h3 class="p-0 m-0">Nombres</h3>
-            </div>
-  
-            <div class="col-2 align-self-center">
-              <h3 class="p-0 m-0">Cedula</h3>
-            </div>
-  
-            <div class="col-2 align-self-center">
-              <h3 class="p-0 m-0">Correo Electronico</h3>
-            </div>
-  
-            <div class="col-2 align-self-center">
-              <h3 class="p-0 m-0">Telefono</h3>
-            </div>
-            <div class="col-2 align-self-center">
-              <h3 class="p-0 m-0">Fecha Creacion</h3>
-            </div>
-            <div class="col-2 align-self-center">
-              <h3 class="p-0 m-0">Estado</h3>
-            </div>
-          </div>
-  
-          <!-- Profesion -->
-          <div (click)="ver(a)" *ngFor="let a of arr_filtered_soli"
-            class="row p-2 bg-light fila_info_profesion" data-bs-toggle="modal"
-            href="#modalInformacionProfesion" role="button">
-            <div class="col-2 align-self-center">
-              <h4 class="p-0 m-0"> {{a.user_datos.nombres}}
-                {{a.user_datos.apellidos}}</h4>
-            </div>
-  
-            <div class="col-2 align-self-center">
-              <h4 class="p-0 m-0"> {{a.user_datos.cedula}} </h4>
-            </div>
-  
-            <div class="col-2 align-self-center">
-              <h4 class="p-0 m-0">{{a.user_datos.user.username}}</h4>
-            </div>
-  
-            <div class="col-2 align-self-center">
-              <h4 class="p-0 m-0"> {{a.user_datos.telefono}}</h4>
-            </div>
-            <div class="col-2 align-self-center">
-              <h4 class="p-0 m-0"> {{a.user_datos.fecha_creacion | date: ' MMM d, y, h:mm:ss a'}} </h4>
-            </div>
-            <div class="col-2 align-self-center">
-              <span *ngIf="!a.estado" class="badge text-bg-danger">Inactivo</span>
-              <span *ngIf="a.estado" class="badge text-bg-success">Activo</span>
-            </div>
-          </div>
+
+        <div class="col-2 align-self-center">
+          <h3 class="p-0 m-0">Cedula</h3>
+        </div>
+
+        <div class="col-2 align-self-center">
+          <h3 class="p-0 m-0">Correo Electronico</h3>
+        </div>
+
+        <div class="col-2 align-self-center">
+          <h3 class="p-0 m-0">Telefono</h3>
+        </div>
+        <div class="col-2 align-self-center">
+          <h3 class="p-0 m-0">Fecha Creacion</h3>
+        </div>
+        <div class="col-2 align-self-center">
+          <h3 class="p-0 m-0">Estado</h3>
         </div>
       </div>
-  
+
+      <!-- Profesion -->
+      <div
+        (click)="ver(a)"
+        *ngFor="let a of arr_filtered_soli"
+        class="row p-2 bg-light fila_info_profesion"
+        data-bs-toggle="modal"
+        href="#modalInformacionProfesion"
+        role="button"
+      >
+        <div class="col-2 align-self-center">
+          <h4 class="p-0 m-0">
+            {{ a.user_datos.nombres }} {{ a.user_datos.apellidos }}
+          </h4>
+        </div>
+
+        <div class="col-2 align-self-center">
+          <h4 class="p-0 m-0">{{ a.user_datos.cedula }}</h4>
+        </div>
+
+        <div class="col-2 align-self-center">
+          <h4 class="p-0 m-0">{{ a.user_datos.user.username }}</h4>
+        </div>
+
+        <div class="col-2 align-self-center">
+          <h4 class="p-0 m-0">{{ a.user_datos.telefono }}</h4>
+        </div>
+        <div class="col-2 align-self-center">
+          <h4 class="p-0 m-0">
+            {{ a.user_datos.fecha_creacion | date : " MMM d, y, h:mm:ss a" }}
+          </h4>
+        </div>
+        <div class="col-2 align-self-center">
+          <span *ngIf="!a.estado" class="badge text-bg-danger">Inactivo</span>
+          <span *ngIf="a.estado" class="badge text-bg-success">Activo</span>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
-  <!-- Modal informacion de soli -->
-  <div class="modal fade" id="modalInformacionProfesion" aria-hidden="true"
-    aria-labelledby="modalInformacionProfesionLabel" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-      <div class="modal-content">
-        <div class="modal-header align-items-center">
-          <h1 class="modal-title fs-5 m-0 p-0 fw-bold"
-            id="modalInformacionProfesionLabel">Información de Administradores</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"
-            aria-label="Close"></button>
-        </div>
-        <div class="modal-body mb-0">
+<!-- Modal informacion de soli -->
+<div
+  class="modal fade"
+  id="modalInformacionProfesion"
+  aria-hidden="true"
+  aria-labelledby="modalInformacionProfesionLabel"
+  tabindex="-1"
+>
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header align-items-center">
+        <h1
+          class="modal-title fs-5 m-0 p-0 fw-bold"
+          id="modalInformacionProfesionLabel"
+        >
+          Información de Administradores
+        </h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body mb-0">
+        <div class="row p-2">
           <div class="row p-2">
-            <div class="row p-2">
-              <img [src]="soli_seleccionada?.user_datos.foto?
-                'https://tomesoft1.pythonanywhere.com'+soli_seleccionada?.foto :
-                'assets/imagenes/ProfesionDefault.png'" class="rounded mx-auto
-                d-block img-fluid w-50 image_modal" alt="...">
-            </div>
+            <img
+              [src]="
+                soli_seleccionada?.user_datos.foto
+                  ? 'http://127.0.0.1:8000' + soli_seleccionada?.foto
+                  : 'assets/imagenes/ProfesionDefault.png'
+              "
+              class="rounded mx-auto d-block img-fluid w-50 image_modal"
+              alt="..."
+            />
           </div>
+        </div>
 
-          <div class="row p-2 align-items-center">
-            <div class="col-5">
-              <h3 class="m-0 p-0 fw-bold">Nombre:</h3>
-            </div>
-            <div class="col-7">
-              {{soli_seleccionada?.user_datos.nombres}}
-            </div>
+        <div class="row p-2 align-items-center">
+          <div class="col-5">
+            <h3 class="m-0 p-0 fw-bold">Nombre:</h3>
           </div>
-
-          <div class="row p-2 align-items-center">
-            <div class="col-5">
-              <h3 class="m-0 p-0 fw-bold">Apellidos:</h3>
-            </div>
-            <div class="col-7">
-              {{soli_seleccionada?.user_datos.apellidos}}
-            </div>
+          <div class="col-7">
+            {{ soli_seleccionada?.user_datos.nombres }}
           </div>
+        </div>
 
-
-
-          <div class="row p-2 align-items-center">
-            <div class="col-5">
-              <h3 class="m-0 p-0 fw-bold">Cedula</h3>
-            </div>
-            <div class="col-7">
-              {{soli_seleccionada?.user_datos.cedula}}
-            </div>
+        <div class="row p-2 align-items-center">
+          <div class="col-5">
+            <h3 class="m-0 p-0 fw-bold">Apellidos:</h3>
           </div>
-
-          <div class="row p-2 align-items-center">
-            <div class="col-5">
-              <h3 class="m-0 p-0 fw-bold">Telefono</h3>
-            </div>
-            <div class="col-7">
-              {{soli_seleccionada?.user_datos.telefono}}
-            </div>
+          <div class="col-7">
+            {{ soli_seleccionada?.user_datos.apellidos }}
           </div>
+        </div>
 
-          <div class="row p-2 align-items-center">
-            <div class="col-5">
-              <h3 class="m-0 p-0 fw-bold">Genero</h3>
-            </div>
-            <div class="col-7">
-              {{soli_seleccionada?.user_datos.genero}}
-            </div>
+        <div class="row p-2 align-items-center">
+          <div class="col-5">
+            <h3 class="m-0 p-0 fw-bold">Cedula</h3>
           </div>
+          <div class="col-7">
+            {{ soli_seleccionada?.user_datos.cedula }}
+          </div>
+        </div>
 
-          <div class="row p-2 align-items-center">
-            <div class="col-5">
-              <h3 class="m-0 p-0 fw-bold">Rol</h3>
-            </div>
-            <div class="col-7">
-              {{soli_seleccionada?.user_datos.user.groups[0].name}}
-            </div>
+        <div class="row p-2 align-items-center">
+          <div class="col-5">
+            <h3 class="m-0 p-0 fw-bold">Telefono</h3>
           </div>
+          <div class="col-7">
+            {{ soli_seleccionada?.user_datos.telefono }}
+          </div>
+        </div>
 
-          <div class="row p-2 align-items-center">
-            <div class="col-5">
-              <h3 class="m-0 p-0 fw-bold">Estado</h3>
-            </div>
-            <div class="col-7">
-             {{activo}}
-            </div>
+        <div class="row p-2 align-items-center">
+          <div class="col-5">
+            <h3 class="m-0 p-0 fw-bold">Genero</h3>
           </div>
-          <div class="row p-2 align-items-center">
-            <div class="col-5">
-              <label for="switchEstado" class="form-check-label"><h3 class="m-0 p-0 fw-bold">Habilitar/Deshabilitar:</h3></label>
-            </div>
-            <div class="col-7 form-check form-switch d-flex justify-content-end fs-6">
-              <input
+          <div class="col-7">
+            {{ soli_seleccionada?.user_datos.genero }}
+          </div>
+        </div>
+
+        <div class="row p-2 align-items-center">
+          <div class="col-5">
+            <h3 class="m-0 p-0 fw-bold">Rol</h3>
+          </div>
+          <div class="col-7">
+            {{ soli_seleccionada?.user_datos.user.groups[0].name }}
+          </div>
+        </div>
+
+        <div class="row p-2 align-items-center">
+          <div class="col-5">
+            <h3 class="m-0 p-0 fw-bold">Estado</h3>
+          </div>
+          <div class="col-7">
+            {{ activo }}
+          </div>
+        </div>
+        <div class="row p-2 align-items-center">
+          <div class="col-5">
+            <label for="switchEstado" class="form-check-label"
+              ><h3 class="m-0 p-0 fw-bold">Habilitar/Deshabilitar:</h3></label
+            >
+          </div>
+          <div
+            class="col-7 form-check form-switch d-flex justify-content-end fs-6"
+          >
+            <input
               (change)="cambiarEstado($event)"
-              [checked]="activo? true : false"
-                class="form-check-input"
-                id="switchEstado"
-                type="checkbox"
-                role="switch"
-                checked
-                aria-describedby="switchEstadoFeedback"
-              >
-            </div>
+              [checked]="activo ? true : false"
+              class="form-check-input"
+              id="switchEstado"
+              type="checkbox"
+              role="switch"
+              checked
+              aria-describedby="switchEstadoFeedback"
+            />
           </div>
         </div>
-        <div class="modal-footer">
-          <button
-            class="btn btn-danger"
-            data-bs-target="#modalConfirmacion"
-            data-bs-toggle="modal">Cerrar</button>
-        </div>
+      </div>
+      <div class="modal-footer">
+        <button
+          class="btn btn-danger"
+          data-bs-target="#modalConfirmacion"
+          data-bs-toggle="modal"
+        >
+          Cerrar
+        </button>
       </div>
     </div>
   </div>
+</div>
 
+<div class="container-fluid">
+  <div class="row p-2 justify-content-center align-items-center">
+    <nav aria-label="Page navigation example">
+      <ul class="pagination">
+        <li class="page-item">
+          <a class="page-link" (click)="previous($event)">Previous</a>
+        </li>
+        <div *ngFor="let n of pageNumber; let i = index">
+          <li class="page-item">
+            <button 
+              class="page-link azul"
+              value="{{ n }}"
+              (click)="iteracion($event)"
+              *ngIf="n == currentPage"
+            >
+              {{ n }}
+            </button>
+            <button 
+              class="page-link"
+              value="{{ n }}"
+              (click)="iteracion($event)"
+              *ngIf="n != currentPage"
+            >
+              {{ n }}
+            </button>
+          </li>
+        </div>
 
-  <div  class="container-fluid">
-    <div class="row p-2 justify-content-center align-items-center">
-      <nav aria-label="Page navigation example">
-        <ul class="pagination">
-          <li class="page-item"><a class="page-link" (click)="previous($event)">Previous</a></li>
-          <div *ngFor="let n of pageNumber; let i=index;">
-            <li class="page-item"><button class="page-link" value="{{n}}"
-                (click)="iteracion($event)">{{n}}</button></li>
-          </div>
-    
-          <li class="page-item"><a class="page-link" (click)="next($event)">Next</a></li>
-        </ul>
-      </nav>
-    </div>
+        <li class="page-item">
+          <a class="page-link" (click)="next($event)">Next</a>
+        </li>
+      </ul>
+    </nav>
   </div>
-  
+</div>

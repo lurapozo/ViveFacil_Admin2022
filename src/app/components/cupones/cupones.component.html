@@ -2,7 +2,7 @@
   <!-- Titulo principal -->
   <div class="row p-2 justify-content-center align-items-center">
     <div class="col text-center">
-      <h2 class="p-0 m-0">Cupones </h2>
+      <h2 class="p-0 m-0">Cupones</h2>
     </div>
   </div>
 
@@ -11,11 +11,17 @@
     <div class="col-xl-7 col-lg-5"></div>
     <div class="col-xl-3 col-lg-4">
       <div class="input-group">
-        <input type="text" (input)="search($event)" class="form-control"
-          placeholder="Buscar" aria-label="Buscar"
-          aria-describedby="basic-addon1">
-        <button class="input-group-text" id="basic-addon1"> <i class="bi
-            bi-search"></i> </button>
+        <input
+          type="text"
+          (input)="search($event)"
+          class="form-control"
+          placeholder="Buscar"
+          aria-label="Buscar"
+          aria-describedby="basic-addon1"
+        />
+        <button class="input-group-text" id="basic-addon1">
+          <i class="bi bi-search"></i>
+        </button>
       </div>
     </div>
     <div class="col-xl-2 col-lg-3">
@@ -24,7 +30,10 @@
         class="btn btn-primary"
         data-bs-toggle="modal"
         href="#modalCrearProfesion"
-        (click)="limpiarForm('crear')">Agregar Cupon</button>
+        (click)="limpiarForm('crear')"
+      >
+        Agregar Cupon
+      </button>
     </div>
   </div>
 
@@ -63,35 +72,49 @@
       </div>
 
       <!-- Profesion -->
-      <div (click)="ver(a)" *ngFor="let a of arr_filtered_cupon" class="row p-2
-        bg-light fila_info_profesion" data-bs-toggle="modal"
-        href="#modalInformacionProfesion" role="button">
+      <div
+        (click)="ver(a)"
+        *ngFor="let a of arr_filtered_cupon"
+        class="row p-2 bg-light fila_info_profesion"
+        data-bs-toggle="modal"
+        href="#modalInformacionProfesion"
+        role="button"
+      >
         <div class="col-2 align-self-center">
-          <img [src]="a.foto? 'https://tomesoft1.pythonanywhere.com'+a.foto :
-            'assets/imagenes/ProfesionDefault.png'" class="rounded
-            mx-auto d-block img-fluid img_profesion" alt="...">
+          <img
+            [src]="
+              a.foto
+                ? 'http://127.0.0.1:8000' + a.foto
+                : 'assets/imagenes/ProfesionDefault.png'
+            "
+            class="rounded mx-auto d-block img-fluid img_profesion"
+            alt="..."
+          />
         </div>
 
         <div class="col-1 align-self-center">
-          <h4 class="p-0 m-0"> {{a.codigo}} </h4>
+          <h4 class="p-0 m-0">{{ a.codigo }}</h4>
         </div>
 
         <div class="col-2 align-self-center">
-          <h4 class="p-0 m-0">{{a.titulo}}</h4>
+          <h4 class="p-0 m-0">{{ a.titulo }}</h4>
         </div>
 
         <div class="col-1 align-self-center">
-          <h4 class="p-0 m-0">{{a.cantidad}}</h4>
+          <h4 class="p-0 m-0">{{ a.cantidad }}</h4>
         </div>
 
         <div class="col-2 align-self-center">
-          <h4 class="p-0 m-0">{{a.fecha_iniciacion  | date: ' MMM d, y, h:mm:ss a'}}</h4>
+          <h4 class="p-0 m-0">
+            {{ a.fecha_iniciacion | date : " MMM d, y, h:mm:ss a" }}
+          </h4>
         </div>
 
         <div class="col-2 align-self-center">
-          <h4 class="p-0 m-0">{{a.fecha_expiracion  | date: ' MMM d, y, h:mm:ss a'}}</h4>
+          <h4 class="p-0 m-0">
+            {{ a.fecha_expiracion | date : " MMM d, y, h:mm:ss a" }}
+          </h4>
         </div>
-
 
         <div class="col-1 align-self-center">
           <span *ngIf="!a.estado" class="badge text-bg-danger">Inactivo</span>
@@ -102,24 +125,41 @@
   </div>
 </div>
 
-<div class="modal fade" id="modalInformacionProfesion" aria-hidden="true"
-  aria-labelledby="modalInformacionProfesionLabel" tabindex="-1">
+<div
+  class="modal fade"
+  id="modalInformacionProfesion"
+  aria-hidden="true"
+  aria-labelledby="modalInformacionProfesionLabel"
+  tabindex="-1"
+>
   <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header align-items-center">
-        <h1 class="modal-title fs-5 m-0 p-0 fw-bold"
-          id="modalInformacionProfesionLabel">Información de cupones</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"
-          aria-label="Close"></button>
+        <h1
+          class="modal-title fs-5 m-0 p-0 fw-bold"
+          id="modalInformacionProfesionLabel"
+        >
+          Información de cupones
+        </h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
       </div>
       <div class="modal-body mb-0">
         <div class="row p-2">
           <div class="row p-2">
-            <img [src]="cupon_seleccionada?.foto?
-              'https://tomesoft1.pythonanywhere.com'+cupon_seleccionada?.foto :
-              'assets/imagenes/ProfesionDefault.png'" class="rounded mx-auto
-              d-block img-fluid w-50 image_modal" alt="...">
-
+            <img
+              [src]="
+                cupon_seleccionada?.foto
+                  ? 'http://127.0.0.1:8000' + cupon_seleccionada?.foto
+                  : 'assets/imagenes/ProfesionDefault.png'
+              "
+              class="rounded mx-auto d-block img-fluid w-50 image_modal"
+              alt="..."
+            />
           </div>
         </div>
 
@@ -128,7 +168,7 @@
             <h3 class="m-0 p-0 fw-bold">Titulo:</h3>
           </div>
           <div class="col-7">
-            {{cupon_seleccionada?.titulo}}
+            {{ cupon_seleccionada?.titulo }}
           </div>
         </div>
 
@@ -137,7 +177,7 @@
             <h3 class="m-0 p-0 fw-bold">Codigo:</h3>
           </div>
           <div class="col-7">
-            {{cupon_seleccionada?.codigo}}
+            {{ cupon_seleccionada?.codigo }}
           </div>
         </div>
 
@@ -146,7 +186,7 @@
             <h3 class="m-0 p-0 fw-bold">Categoria:</h3>
           </div>
           <div class="col-7">
-            {{cupon_seleccionada?.tipo_categoria}}
+            {{ cupon_seleccionada?.tipo_categoria }}
           </div>
         </div>
 
@@ -155,7 +195,7 @@
             <h3 class="m-0 p-0 fw-bold">Descuento:</h3>
           </div>
           <div class="col-7">
-            {{cupon_seleccionada?.porcentaje}}
+            {{ cupon_seleccionada?.porcentaje }}
           </div>
         </div>
 
@@ -164,7 +204,7 @@
             <h3 class="m-0 p-0 fw-bold">Cantidad</h3>
           </div>
           <div class="col-7">
-            {{cupon_seleccionada?.cantidad}}
+            {{ cupon_seleccionada?.cantidad }}
           </div>
         </div>
 
@@ -173,7 +213,10 @@
             <h3 class="m-0 p-0 fw-bold">Fecha inicio</h3>
           </div>
           <div class="col-7">
-            {{cupon_seleccionada?.fecha_iniciacion | date: ' MMM d, y, h:mm:ss a'}}
+            {{
+              cupon_seleccionada?.fecha_iniciacion
+                | date : " MMM d, y, h:mm:ss a"
+            }}
           </div>
         </div>
 
@@ -182,28 +225,32 @@
             <h3 class="m-0 p-0 fw-bold">Fecha de Expiracion</h3>
           </div>
           <div class="col-7">
-            {{cupon_seleccionada?.fecha_iniciacion | date: ' MMM d, y, h:mm:ss a'}}
+            {{
+              cupon_seleccionada?.fecha_iniciacion
+                | date : " MMM d, y, h:mm:ss a"
+            }}
           </div>
         </div>
 
-
-
         <div class="row p-2 align-items-center">
           <div class="col-5">
-            <label for="switchEstado" class="form-check-label"><h3 class="m-0
-                p-0 fw-bold">Habilitar/Deshabilitar:</h3></label>
+            <label for="switchEstado" class="form-check-label"
+              ><h3 class="m-0 p-0 fw-bold">Habilitar/Deshabilitar:</h3></label
+            >
           </div>
-          <div class="col-7 form-check form-switch d-flex justify-content-end
-            fs-6">
+          <div
+            class="col-7 form-check form-switch d-flex justify-content-end fs-6"
+          >
             <input
               (change)="cambiarEstado($event)"
-              [checked]="cupon_seleccionada?.estado? true : false"
+              [checked]="cupon_seleccionada?.estado ? true : false"
               class="form-check-input"
               id="switchEstado"
               type="checkbox"
               role="switch"
               checked
-              aria-describedby="switchEstadoFeedback">
+              aria-describedby="switchEstadoFeedback"
+            />
           </div>
         </div>
       </div>
@@ -212,234 +259,314 @@
           class="btn btn-danger"
           data-bs-target="#modalConfirmacion"
           data-bs-toggle="modal"
-          (click)="establecerMensaje('Está seguro que desea eliminar la profesión?', 'eliminar')">Eliminar</button>
+          (click)="
+            establecerMensaje(
+              'Está seguro que desea eliminar la profesión?',
+              'eliminar'
+            )
+          "
+        >
+          Eliminar
+        </button>
         <button
           (click)="limpiarForm('actualizar')"
-
           class="btn btn-success"
           data-bs-target="#modalInformacionEdicionProfesion"
-          data-bs-toggle="modal">Editar</button>
+          data-bs-toggle="modal"
+        >
+          Editar
+        </button>
       </div>
     </div>
   </div>
 </div>
 
-<div class="modal fade" id="modalInformacionEdicionProfesion" aria-hidden="true"
-  aria-labelledby="modalInformacionEdicionProfesionLabel" tabindex="-1">
+<div
+  class="modal fade"
+  id="modalInformacionEdicionProfesion"
+  aria-hidden="true"
+  aria-labelledby="modalInformacionEdicionProfesionLabel"
+  tabindex="-1"
+>
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header align-items-center">
-        <h1 class="modal-title fs-5 m-0 p-0 fw-bold"
-          id="modalInformacionEdicionProfesionLabel">Edición de Cupones</h1>
+        <h1
+          class="modal-title fs-5 m-0 p-0 fw-bold"
+          id="modalInformacionEdicionProfesionLabel"
+        >
+          Edición de Cupones
+        </h1>
         <!-- (click)="limpiarForm('actualizar')" -->
         <button
           type="button"
           class="btn-close"
           data-bs-dismiss="modal"
-          aria-label="Close"></button>
+          aria-label="Close"
+        ></button>
       </div>
       <div class="modal-body mb-0">
         <form [formGroup]="formEdit" class="">
           <div class="row">
             <div class="col d-flex justify-content-center">
-              <img *ngIf="existImageActualizar" class="image_modal rounded
-                mx-auto d-block img-fluid w-50" [src]="imagenActualizar"
-                alt="Archivo incorrecto">
-              <img *ngIf="!existImageActualizar &&
-              cupon_seleccionada?.foto" class="image_modal rounded
-                mx-auto d-block img-fluid w-50"
-                [src]="'https://tomesoft1.pythonanywhere.com'+cupon_seleccionada?.foto"
-                alt="Archivo incorrecto">
-              <i *ngIf="!existImageActualizar && !cupon_seleccionada?.foto"
-                class="rounded mx-auto d-block img-fluid w-50 bi bi-upload
-                icono"></i>
+              <img
+                *ngIf="existImageActualizar"
+                class="image_modal rounded mx-auto d-block img-fluid w-50"
+                [src]="imagenActualizar"
+                alt="Archivo incorrecto"
+              />
+              <img
+                *ngIf="!existImageActualizar && cupon_seleccionada?.foto"
+                class="image_modal rounded mx-auto d-block img-fluid w-50"
+                [src]="'http://127.0.0.1:8000' + cupon_seleccionada?.foto"
+                alt="Archivo incorrecto"
+              />
+              <i
+                *ngIf="!existImageActualizar && !cupon_seleccionada?.foto"
+                class="rounded mx-auto d-block img-fluid w-50 bi bi-upload icono"
+              ></i>
             </div>
             <div class="p-2">
               <input
                 class="w-100 centrar form-control"
-                [ngClass]="formEdit.get('imagen')?.hasError('image_error')
-                ? 'is-invalid' : '' || (existImageActualizar)? 'is-valid' : ''"
+                [ngClass]="
+                  formEdit.get('imagen')?.hasError('image_error')
+                    ? 'is-invalid'
+                    : '' || existImageActualizar
+                    ? 'is-valid'
+                    : ''
+                "
                 type="file"
                 id="file_input"
                 accept="image/png, image/jpeg"
-                (change)="loadImageFromDevice($event, 'actualizar')">
-              <div class="invalid-feedback">{{getErrorMessage(formEdit,
-                'imagen')}}</div>
+                (change)="loadImageFromDevice($event, 'actualizar')"
+              />
+              <div class="invalid-feedback">
+                {{ getErrorMessage(formEdit, "imagen") }}
+              </div>
             </div>
           </div>
 
-
           <div class="row p-2 align-items-center">
             <div class="col-5">
-              <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
-                  fw-bold">Titulo:</h3></label>
+              <label for="inputNombre" class="form-label"
+                ><h3 class="m-0 p-0 fw-bold">Titulo:</h3></label
+              >
             </div>
             <div class="col-7">
               <input
                 type="text"
                 formControlName="titulo"
                 class="form-control"
-                [ngClass]="isInvalidForm('titulo', 'actualizar') ? 'is-invalid'
-                : ''"
+                [ngClass]="
+                  isInvalidForm('titulo', 'actualizar') ? 'is-invalid' : ''
+                "
                 value="Mark"
                 [placeholder]="cupon_seleccionada?.titulo"
-                [value]="cupon_seleccionada?.titulo">
-              <div class="invalid-feedback"> {{getErrorMessage(formEdit,
-                'titulo')}} </div>
+                [value]="cupon_seleccionada?.titulo"
+              />
+              <div class="invalid-feedback">
+                {{ getErrorMessage(formEdit, "titulo") }}
+              </div>
             </div>
           </div>
 
           <div class="row p-2 align-items-center">
             <div class="col-5">
-              <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
-                  fw-bold">Descripcion:</h3></label>
+              <label for="inputNombre" class="form-label"
+                ><h3 class="m-0 p-0 fw-bold">Descripcion:</h3></label
+              >
             </div>
             <div class="col-7">
               <textarea
                 type="text"
                 formControlName="descripcion"
                 class="form-control"
-                [ngClass]="isInvalidForm('descripcion', 'actualizar') ?
-                'is-invalid' : ''"
-                [value]="cupon_seleccionada?.descripcion"></textarea>
-              <div class="invalid-feedback"> {{getErrorMessage(formEdit,
-                'descripcion')}} </div>
+                [ngClass]="
+                  isInvalidForm('descripcion', 'actualizar') ? 'is-invalid' : ''
+                "
+                [value]="cupon_seleccionada?.descripcion"
+              ></textarea>
+              <div class="invalid-feedback">
+                {{ getErrorMessage(formEdit, "descripcion") }}
+              </div>
             </div>
           </div>
 
-
           <div class="row p-2 align-items-center">
             <div class="col-5">
-              <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
-                  fw-bold">Descuento:</h3></label>
+              <label for="inputNombre" class="form-label"
+                ><h3 class="m-0 p-0 fw-bold">Descuento:</h3></label
+              >
             </div>
             <div class="col-7">
               <input
                 type="text"
                 formControlName="descuento"
                 class="form-control"
-                [ngClass]="isInvalidForm('descuento', 'actualizar') ?
-                'is-invalid' : ''"
-                [value]="cupon_seleccionada?.porcentaje">
-              <div class="invalid-feedback"> {{getErrorMessage(formEdit,
-                'descuento')}} </div>
+                [ngClass]="
+                  isInvalidForm('descuento', 'actualizar') ? 'is-invalid' : ''
+                "
+                [value]="cupon_seleccionada?.porcentaje"
+              />
+              <div class="invalid-feedback">
+                {{ getErrorMessage(formEdit, "descuento") }}
+              </div>
             </div>
           </div>
 
-
           <div class="row p-2 align-items-center">
             <div class="col-5">
-              <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
-                  fw-bold">Cantidad:</h3></label>
+              <label for="inputNombre" class="form-label"
+                ><h3 class="m-0 p-0 fw-bold">Cantidad:</h3></label
+              >
             </div>
             <div class="col-7">
               <input
                 type="text"
                 formControlName="cantidad"
                 class="form-control"
-                [ngClass]="isInvalidForm('cantidad', 'actualizar') ?
-                'is-invalid' : ''"
-                [value]="cupon_seleccionada?.cantidad">
-              <div class="invalid-feedback"> {{getErrorMessage(formEdit,
-                'cantidad')}} </div>
+                [ngClass]="
+                  isInvalidForm('cantidad', 'actualizar') ? 'is-invalid' : ''
+                "
+                [value]="cupon_seleccionada?.cantidad"
+              />
+              <div class="invalid-feedback">
+                {{ getErrorMessage(formEdit, "cantidad") }}
+              </div>
             </div>
           </div>
 
           <div class="row p-2 align-items-center">
-
             <div class="col-5">
-              <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
-                  fw-bold">Fecha de Inicio:</h3></label>
+              <label for="inputNombre" class="form-label"
+                ><h3 class="m-0 p-0 fw-bold">Fecha de Inicio:</h3></label
+              >
             </div>
             <div class="col-7">
-              <small>{{cupon_seleccionada?.fecha_iniciacion | date: ' MMM d, y, h:mm:ss a'}}</small>
-              <input type="date"
-                [value]="cupon_seleccionada?.fecha_iniciacion" id="start"
-                [ngClass]="isInvalidForm('inicio', 'actualizar') ? 'is-invalid' :
-                ''"
+              <small>{{
+                cupon_seleccionada?.fecha_iniciacion
+                  | date : " MMM d, y, h:mm:ss a"
+              }}</small>
+              <input
+                type="date"
+                [value]="cupon_seleccionada?.fecha_iniciacion"
+                id="start"
+                [ngClass]="
+                  isInvalidForm('inicio', 'actualizar') ? 'is-invalid' : ''
+                "
                 formControlName="inicio"
-                min="{{getCurrentDate()}}">
-              <div class="invalid-feedback"> {{getErrorMessage(formEdit,
-                'inicio')}} </div>
+                min="{{ getCurrentDate() }}"
+              />
+              <div class="invalid-feedback">
+                {{ getErrorMessage(formEdit, "inicio") }}
+              </div>
             </div>
           </div>
 
           <div class="row p-2 align-items-center">
             <div class="col-5">
-
-              <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
-                  fw-bold">Fecha Expiracion:</h3>
-
+              <label for="inputNombre" class="form-label"
+                ><h3 class="m-0 p-0 fw-bold">Fecha Expiracion:</h3>
               </label>
-
             </div>
             <div class="col-7">
-              <small>{{cupon_seleccionada?.fecha_expiracion | date: ' MMM d, y, h:mm:ss a'}}</small>
-              <input [value]="cupon_seleccionada?.fecha_expiracion"
-              [ngClass]="isInvalidForm('fin', 'actualizar') ? 'is-invalid' :
-              ''"
-                formControlName="fin" type="date" id="start" required
-                min="{{getCurrentDate()}}">
-              <div class="invalid-feedback"> {{getErrorMessage(formEdit,
-                'fin')}} </div>
+              <small>{{
+                cupon_seleccionada?.fecha_expiracion
+                  | date : " MMM d, y, h:mm:ss a"
+              }}</small>
+              <input
+                [value]="cupon_seleccionada?.fecha_expiracion"
+                [ngClass]="
+                  isInvalidForm('fin', 'actualizar') ? 'is-invalid' : ''
+                "
+                formControlName="fin"
+                type="date"
+                id="start"
+                required
+                min="{{ getCurrentDate() }}"
+              />
+              <div class="invalid-feedback">
+                {{ getErrorMessage(formEdit, "fin") }}
+              </div>
             </div>
           </div>
 
           <div class="row p-2 align-items-center">
             <div class="col-5">
-              <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
-                  fw-bold">Puntos:</h3></label>
+              <label for="inputNombre" class="form-label"
+                ><h3 class="m-0 p-0 fw-bold">Puntos:</h3></label
+              >
             </div>
             <div class="col-7">
               <input
                 type="text"
                 formControlName="punto"
                 class="form-control"
-                [ngClass]="isInvalidForm('punto', 'actualizar') ? 'is-invalid' :
-                ''"
-                [value]="cupon_seleccionada?.puntos">
-              <div class="invalid-feedback"> {{getErrorMessage(formEdit,
-                'punto')}} </div>
+                [ngClass]="
+                  isInvalidForm('punto', 'actualizar') ? 'is-invalid' : ''
+                "
+                [value]="cupon_seleccionada?.puntos"
+              />
+              <div class="invalid-feedback">
+                {{ getErrorMessage(formEdit, "punto") }}
+              </div>
             </div>
           </div>
 
-
           <div class="row p-2 align-items-center">
             <div class="col-5">
-              <label for="selectorServicioCrear" class="form-label"><h3
-                  class="m-0 p-0 fw-bold">Categoria:</h3></label>
+              <label for="selectorServicioCrear" class="form-label"
+                ><h3 class="m-0 p-0 fw-bold">Categoria:</h3></label
+              >
             </div>
             <div class="col-7">
               <select
                 class="form-select"
                 formControlName="categoria"
                 class="form-control"
-                [ngClass]="isInvalidForm('categoria', 'actualizar') ? 'is-invalid' :
-                ''"
-                aria-describedby="selectorServicioCrearFeedback">
-                <option *ngFor="let c of categoria" [id]="c.nombre"
-                  value={{cupon_seleccionada?.tipo_categoria}}> {{c.nombre}}
+                [ngClass]="
+                  isInvalidForm('categoria', 'actualizar') ? 'is-invalid' : ''
+                "
+                aria-describedby="selectorServicioCrearFeedback"
+              >
+                <option
+                  *ngFor="let c of categoria"
+                  [id]="c.nombre"
+                  value="{{ cupon_seleccionada?.tipo_categoria }}"
+                >
+                  {{ c.nombre }}
                 </option>
               </select>
-              <div id="selectorServicioCrearFeedback"
-                class="invalid-feedback"> {{getErrorMessage(formEdit,
-                'categoria')}} </div>
+              <div id="selectorServicioCrearFeedback" class="invalid-feedback">
+                {{ getErrorMessage(formEdit, "categoria") }}
+              </div>
             </div>
           </div>
-
-
-
         </form>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-danger"
-          data-bs-target="#modalInformacionProfesion" data-bs-toggle="modal">Regresar</button>
         <button
-          [disabled]="formEdit.invalid? true : false"
+          class="btn btn-danger"
+          data-bs-target="#modalInformacionProfesion"
+          data-bs-toggle="modal"
+        >
+          Regresar
+        </button>
+        <button
+          [disabled]="formEdit.invalid ? true : false"
           data-bs-target="#modalConfirmacion"
           data-bs-toggle="modal"
           class="btn btn-success"
-          (click)="establecerMensaje('Está seguro que desea actualizar la información?', 'actualizar')">Actualizar</button>
+          (click)="
+            establecerMensaje(
+              'Está seguro que desea actualizar la información?',
+              'actualizar'
+            )
+          "
+        >
+          Actualizar
+        </button>
       </div>
 
       <!-- <pre>
@@ -449,19 +576,29 @@
   </div>
 </div>
 <!-- Modal crear admi -->
-<div class="modal fade" id="modalCrearProfesion" aria-hidden="true"
-  aria-labelledby="modalCrearProfesionLabel" tabindex="-1">
+<div
+  class="modal fade"
+  id="modalCrearProfesion"
+  aria-hidden="true"
+  aria-labelledby="modalCrearProfesionLabel"
+  tabindex="-1"
+>
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header align-items-center">
-        <h1 class="modal-title fs-5 m-0 p-0 fw-bold"
-          id="modalCrearProfesionLabel">Crear Cupon</h1>
+        <h1
+          class="modal-title fs-5 m-0 p-0 fw-bold"
+          id="modalCrearProfesionLabel"
+        >
+          Crear Cupon
+        </h1>
         <!-- (click)="limpiarForm('crear')" -->
         <button
           type="button"
           class="btn-close"
           data-bs-dismiss="modal"
-          aria-label="Close"></button>
+          aria-label="Close"
+        ></button>
       </div>
       <div class="modal-body mb-0">
         <form [formGroup]="cuponCrear" class="">
@@ -469,30 +606,44 @@
 
           <div class="row">
             <div class="col d-flex justify-content-center">
-              <img *ngIf="existImageCrear" class="rounded mx-auto d-block
-                img-fluid w-50 image_modal" [src]="imagenCrear" alt="Archivo
-                incorrecto">
-              <i *ngIf="!existImageCrear" class="rounded mx-auto d-block
-                img-fluid w-50 bi bi-upload icono"></i>
+              <img
+                *ngIf="existImageCrear"
+                class="rounded mx-auto d-block img-fluid w-50 image_modal"
+                [src]="imagenCrear"
+                alt="Archivo
+                incorrecto"
+              />
+              <i
+                *ngIf="!existImageCrear"
+                class="rounded mx-auto d-block img-fluid w-50 bi bi-upload icono"
+              ></i>
             </div>
             <div class="p-2">
               <input
                 class="w-100 centrar form-control"
-                [ngClass]="cuponCrear.get('imagen')?.hasError('image_error')
-                ? 'is-invalid' : '' || (existImageCrear)? 'is-valid' : ''"
+                [ngClass]="
+                  cuponCrear.get('imagen')?.hasError('image_error')
+                    ? 'is-invalid'
+                    : '' || existImageCrear
+                    ? 'is-valid'
+                    : ''
+                "
                 type="file"
                 id="file_input"
                 accept="image/png, image/jpeg"
-                (change)="loadImageFromDevice($event, 'crear')">
-              <div class="invalid-feedback">{{getErrorMessage(cuponCrear,
-                'imagen')}}</div>
+                (change)="loadImageFromDevice($event, 'crear')"
+              />
+              <div class="invalid-feedback">
+                {{ getErrorMessage(cuponCrear, "imagen") }}
+              </div>
             </div>
           </div>
 
           <div class="row p-2 align-items-center">
             <div class="col-5">
-              <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
-                  fw-bold">Codigo:</h3></label>
+              <label for="inputNombre" class="form-label"
+                ><h3 class="m-0 p-0 fw-bold">Codigo:</h3></label
+              >
             </div>
             <div class="col-7">
               <input
@@ -500,203 +651,279 @@
                 placeholder="xyz123"
                 formControlName="codigo"
                 class="form-control"
-                [ngClass]="isInvalidForm('codigo', 'crear') ? 'is-invalid' :
-                cuponCrear.get('codigo')?.touched ||
-                cuponCrear.get('codigo')?.dirty &&
-                !cuponCrear.get('codigo')?.invalid ? 'is-valid' : ''"
-       >
-              <div class="invalid-feedback"> {{getErrorMessage(cuponCrear,
-                'codigo')}} </div>
+                [ngClass]="
+                  isInvalidForm('codigo', 'crear')
+                    ? 'is-invalid'
+                    : cuponCrear.get('codigo')?.touched ||
+                      (cuponCrear.get('codigo')?.dirty &&
+                        !cuponCrear.get('codigo')?.invalid)
+                    ? 'is-valid'
+                    : ''
+                "
+              />
+              <div class="invalid-feedback">
+                {{ getErrorMessage(cuponCrear, "codigo") }}
+              </div>
             </div>
           </div>
 
           <div class="row p-2 align-items-center">
             <div class="col-5">
-              <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
-                  fw-bold">Titulo:</h3></label>
+              <label for="inputNombre" class="form-label"
+                ><h3 class="m-0 p-0 fw-bold">Titulo:</h3></label
+              >
             </div>
             <div class="col-7">
               <input
                 type="text"
                 formControlName="titulo"
                 class="form-control"
-                [ngClass]="isInvalidForm('titulo', 'crear') ? 'is-invalid' :
-                cuponCrear.get('titulo')?.touched ||
-                cuponCrear.get('titulo')?.dirty &&
-                !cuponCrear.get('titulo')?.invalid ? 'is-valid' : ''"
-                placeholder="cupones">
-              <div class="invalid-feedback"> {{getErrorMessage(cuponCrear,
-                'titulo')}} </div>
+                [ngClass]="
+                  isInvalidForm('titulo', 'crear')
+                    ? 'is-invalid'
+                    : cuponCrear.get('titulo')?.touched ||
+                      (cuponCrear.get('titulo')?.dirty &&
+                        !cuponCrear.get('titulo')?.invalid)
+                    ? 'is-valid'
+                    : ''
+                "
+                placeholder="cupones"
+              />
+              <div class="invalid-feedback">
+                {{ getErrorMessage(cuponCrear, "titulo") }}
+              </div>
             </div>
           </div>
 
-
           <div class="row p-2 align-items-center">
             <div class="col-5">
-              <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
-                  fw-bold">Descripcion:</h3></label>
+              <label for="inputNombre" class="form-label"
+                ><h3 class="m-0 p-0 fw-bold">Descripcion:</h3></label
+              >
             </div>
             <div class="col-7">
               <textarea
                 type="text"
                 formControlName="descripcion"
                 class="form-control"
-                [ngClass]="isInvalidForm('descripcion', 'crear') ? 'is-invalid'
-                :
-                cuponCrear.get('descripcion')?.touched ||
-                cuponCrear.get('descripcion')?.dirty &&
-                !cuponCrear.get('descripcion')?.invalid ? 'is-valid' : ''"
-                placeholder="descripcion"></textarea>
-              <div class="invalid-feedback"> {{getErrorMessage(cuponCrear,
-                'descripcion')}} </div>
-
+                [ngClass]="
+                  isInvalidForm('descripcion', 'crear')
+                    ? 'is-invalid'
+                    : cuponCrear.get('descripcion')?.touched ||
+                      (cuponCrear.get('descripcion')?.dirty &&
+                        !cuponCrear.get('descripcion')?.invalid)
+                    ? 'is-valid'
+                    : ''
+                "
+                placeholder="descripcion"
+              ></textarea>
+              <div class="invalid-feedback">
+                {{ getErrorMessage(cuponCrear, "descripcion") }}
+              </div>
             </div>
           </div>
 
           <div class="row p-2 align-items-center">
             <div class="col-5">
-              <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
-                  fw-bold">Descuento(%):</h3></label>
+              <label for="inputNombre" class="form-label"
+                ><h3 class="m-0 p-0 fw-bold">Descuento(%):</h3></label
+              >
             </div>
             <div class="col-7">
               <input
                 type="text"
                 formControlName="descuento"
                 class="form-control"
-                [ngClass]="isInvalidForm('descuento', 'crear') ? 'is-invalid' :
-                cuponCrear.get('descuento')?.touched ||
-                cuponCrear.get('descuento')?.dirty &&
-                !cuponCrear.get('descuento')?.invalid ? 'is-valid' : ''"
-                placeholder="5">
-              <div class="invalid-feedback"> {{getErrorMessage(cuponCrear,
-                'descuento')}} </div>
+                [ngClass]="
+                  isInvalidForm('descuento', 'crear')
+                    ? 'is-invalid'
+                    : cuponCrear.get('descuento')?.touched ||
+                      (cuponCrear.get('descuento')?.dirty &&
+                        !cuponCrear.get('descuento')?.invalid)
+                    ? 'is-valid'
+                    : ''
+                "
+                placeholder="5"
+              />
+              <div class="invalid-feedback">
+                {{ getErrorMessage(cuponCrear, "descuento") }}
+              </div>
             </div>
           </div>
           <div class="row p-2 align-items-center">
             <div class="col-5">
-              <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
-                  fw-bold">Cantidad:</h3></label>
+              <label for="inputNombre" class="form-label"
+                ><h3 class="m-0 p-0 fw-bold">Cantidad:</h3></label
+              >
             </div>
             <div class="col-7">
               <input
                 type="text"
                 formControlName="cantidad"
                 class="form-control"
-                [ngClass]="isInvalidForm('cantidad', 'crear') ? 'is-invalid' :
-                cuponCrear.get('cantidad')?.touched ||
-                cuponCrear.get('cantidad')?.dirty &&
-                !cuponCrear.get('cantidad')?.invalid ? 'is-valid' : ''"
-                placeholder="1">
-              <div class="invalid-feedback"> {{getErrorMessage(cuponCrear,
-                'cantidad')}} </div>
+                [ngClass]="
+                  isInvalidForm('cantidad', 'crear')
+                    ? 'is-invalid'
+                    : cuponCrear.get('cantidad')?.touched ||
+                      (cuponCrear.get('cantidad')?.dirty &&
+                        !cuponCrear.get('cantidad')?.invalid)
+                    ? 'is-valid'
+                    : ''
+                "
+                placeholder="1"
+              />
+              <div class="invalid-feedback">
+                {{ getErrorMessage(cuponCrear, "cantidad") }}
+              </div>
             </div>
           </div>
 
-
           <div class="row p-2 align-items-center">
             <div class="col-5">
-              <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
-                  fw-bold">Puntos:</h3></label>
+              <label for="inputNombre" class="form-label"
+                ><h3 class="m-0 p-0 fw-bold">Puntos:</h3></label
+              >
             </div>
             <div class="col-7">
               <input
-              type="text"
+                type="text"
                 formControlName="punto"
                 class="form-control"
-                [ngClass]="isInvalidForm('punto', 'crear') ? 'is-invalid' :
-                cuponCrear.get('punto')?.touched ||
-                cuponCrear.get('punto')?.dirty &&
-                !cuponCrear.get('punto')?.invalid ? 'is-valid' : ''"
-                placeholder="1">
-              <div class="invalid-feedback"> {{getErrorMessage(cuponCrear,
-                'punto')}} </div>
-
-
+                [ngClass]="
+                  isInvalidForm('punto', 'crear')
+                    ? 'is-invalid'
+                    : cuponCrear.get('punto')?.touched ||
+                      (cuponCrear.get('punto')?.dirty &&
+                        !cuponCrear.get('punto')?.invalid)
+                    ? 'is-valid'
+                    : ''
+                "
+                placeholder="1"
+              />
+              <div class="invalid-feedback">
+                {{ getErrorMessage(cuponCrear, "punto") }}
+              </div>
             </div>
           </div>
 
-
           <div class="row p-2 align-items-center">
             <div class="col-5">
-              <label for="selectorServicioCrear" class="form-label"><h3
-                  class="m-0 p-0 fw-bold">Categoria:</h3></label>
+              <label for="selectorServicioCrear" class="form-label"
+                ><h3 class="m-0 p-0 fw-bold">Categoria:</h3></label
+              >
             </div>
             <div class="col-7">
               <select
                 class="form-select"
-                [ngClass]="isInvalidForm('categoria', 'crear') ?
-                'is-invalid' : ''"
+                [ngClass]="
+                  isInvalidForm('categoria', 'crear') ? 'is-invalid' : ''
+                "
                 formControlName="categoria"
-
                 class="form-control"
-                [ngClass]="isInvalidForm('categoria', 'crear') ? 'is-invalid' :
-                cuponCrear.get('categoria')?.touched ||
-                cuponCrear.get('categoria')?.dirty &&
-                !cuponCrear.get('categoria')?.invalid ? 'is-valid' : ''"
-                aria-describedby="selectorServicioCrearFeedback">
-                <option selected disabled value="">Elija una Categoria...</option>
-                <option *ngFor="let c of categoria" [id]="c.nombre"
-                  [value]="c.nombre"> {{c.nombre}}
+                [ngClass]="
+                  isInvalidForm('categoria', 'crear')
+                    ? 'is-invalid'
+                    : cuponCrear.get('categoria')?.touched ||
+                      (cuponCrear.get('categoria')?.dirty &&
+                        !cuponCrear.get('categoria')?.invalid)
+                    ? 'is-valid'
+                    : ''
+                "
+                aria-describedby="selectorServicioCrearFeedback"
+              >
+                <option selected disabled value="">
+                  Elija una Categoria...
+                </option>
+                <option
+                  *ngFor="let c of categoria"
+                  [id]="c.nombre"
+                  [value]="c.nombre"
+                >
+                  {{ c.nombre }}
                 </option>
               </select>
-              <div id="selectorServicioCrearFeedback"
-                class="invalid-feedback"> {{getErrorMessage(cuponCrear,
-                'categoria')}} </div>
+              <div id="selectorServicioCrearFeedback" class="invalid-feedback">
+                {{ getErrorMessage(cuponCrear, "categoria") }}
+              </div>
             </div>
           </div>
 
           <div class="row p-2 align-items-center">
             <div class="col-5">
-              <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
-                  fw-bold">Fecha de Inicio:</h3></label>
-            </div>
-            <div class="col-7">
-              <input type="date"
-                id="start"
-                [ngClass]="isInvalidForm('inicio', 'crear') ? 'is-invalid' :
-                cuponCrear.get('inicio')?.touched ||
-                cuponCrear.get('inicio')?.dirty &&
-                !cuponCrear.get('inicio')?.invalid ? 'is-valid' : ''"
-                required pattern="\d{4}-\d{2}-\d{2}"
-                formControlName="inicio"
-                min="{{getCurrentDate()}}">
-              <div class="invalid-feedback"> {{getErrorMessage(cuponCrear,
-                'inicio')}} </div>
-            </div>
-          </div>
-
-          <div class="row p-2 align-items-center">
-            <div class="col-5">
-
-              <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
-                  fw-bold">Fecha Expiracion:</h3>
-
-              </label>
-
+              <label for="inputNombre" class="form-label"
+                ><h3 class="m-0 p-0 fw-bold">Fecha de Inicio:</h3></label
+              >
             </div>
             <div class="col-7">
               <input
-                formControlName="fin" type="date" id="start" required
+                type="date"
+                id="start"
+                [ngClass]="
+                  isInvalidForm('inicio', 'crear')
+                    ? 'is-invalid'
+                    : cuponCrear.get('inicio')?.touched ||
+                      (cuponCrear.get('inicio')?.dirty &&
+                        !cuponCrear.get('inicio')?.invalid)
+                    ? 'is-valid'
+                    : ''
+                "
+                required
                 pattern="\d{4}-\d{2}-\d{2}"
-                [ngClass]="isInvalidForm('fin', 'crear') ? 'is-invalid' :
-                cuponCrear.get('fin')?.touched ||
-                cuponCrear.get('fin')?.dirty &&
-                !cuponCrear.get('fin')?.invalid ? 'is-valid' : ''"
-                min="{{getCurrentDate()}}">
-              <div class="invalid-feedback"> {{getErrorMessage(cuponCrear,
-                'fin')}} </div>
+                formControlName="inicio"
+                min="{{ getCurrentDate() }}"
+              />
+              <div class="invalid-feedback">
+                {{ getErrorMessage(cuponCrear, "inicio") }}
+              </div>
             </div>
           </div>
 
+          <div class="row p-2 align-items-center">
+            <div class="col-5">
+              <label for="inputNombre" class="form-label"
+                ><h3 class="m-0 p-0 fw-bold">Fecha Expiracion:</h3>
+              </label>
+            </div>
+            <div class="col-7">
+              <input
+                formControlName="fin"
+                type="date"
+                id="start"
+                required
+                pattern="\d{4}-\d{2}-\d{2}"
+                [ngClass]="
+                  isInvalidForm('fin', 'crear')
+                    ? 'is-invalid'
+                    : cuponCrear.get('fin')?.touched ||
+                      (cuponCrear.get('fin')?.dirty &&
+                        !cuponCrear.get('fin')?.invalid)
+                    ? 'is-valid'
+                    : ''
+                "
+                min="{{ getCurrentDate() }}"
+              />
+              <div class="invalid-feedback">
+                {{ getErrorMessage(cuponCrear, "fin") }}
+              </div>
+            </div>
+          </div>
         </form>
       </div>
       <div class="modal-footer">
         <button
-        [disabled]="cuponCrear.invalid? true : false"
+          [disabled]="cuponCrear.invalid ? true : false"
           data-bs-target="#modalConfirmacion"
           data-bs-toggle="modal"
           class="btn btn-success"
-          (click)="establecerMensaje('Está seguro que desea crear la  profesión?', 'crear')">Crear</button>
+          (click)="
+            establecerMensaje(
+              'Está seguro que desea crear la  profesión?',
+              'crear'
+            )
+          "
+        >
+          Crear
+        </button>
       </div>
 
       <!-- <pre>
@@ -707,54 +934,112 @@
 </div>
 
 <!-- Modal de confirmacion (Alerta) -->
-<div class="modal fade" id="modalConfirmacion" tabindex="-1"
-  aria-labelledby="modalConfirmacionLabel" aria-hidden="true">
+<div
+  class="modal fade"
+  id="modalConfirmacion"
+  tabindex="-1"
+  aria-labelledby="modalConfirmacionLabel"
+  aria-hidden="true"
+>
   <div class="modal-dialog">
     <div class="modal-content">
       <!-- Titulo del modal confirmacion -->
       <div class="modal-header">
-        <h1 class="modal-title fs-5 m-0 p-0 fw-bold"
-          id="modalConfirmacionLabel">Confirmar selección</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"
-          aria-label="Close"></button>
+        <h1
+          class="modal-title fs-5 m-0 p-0 fw-bold"
+          id="modalConfirmacionLabel"
+        >
+          Confirmar selección
+        </h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
       </div>
 
       <!-- Cuerpo del modal confirmacion -->
       <div class="modal-body">
-        {{mensajeAlerta}}
+        {{ mensajeAlerta }}
       </div>
 
       <!-- Footer del modal confirmacion -->
       <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
-        <button *ngIf="isCrear" type="button" class="btn btn-success"
-          (click)="onCrear()" data-bs-dismiss="modal">Confirmar</button>
-        <button *ngIf="isActualizar" type="button" class="btn btn-success"
-          (click)="onActualizar()" data-bs-dismiss="modal">Confirmar</button>
-        <button *ngIf="isEliminar" type="button" class="btn btn-success"
-          (click)="onDelete()" data-bs-dismiss="modal">Confirmar</button>
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+          Cancelar
+        </button>
+        <button
+          *ngIf="isCrear"
+          type="button"
+          class="btn btn-success"
+          (click)="onCrear()"
+          data-bs-dismiss="modal"
+        >
+          Confirmar
+        </button>
+        <button
+          *ngIf="isActualizar"
+          type="button"
+          class="btn btn-success"
+          (click)="onActualizar()"
+          data-bs-dismiss="modal"
+        >
+          Confirmar
+        </button>
+        <button
+          *ngIf="isEliminar"
+          type="button"
+          class="btn btn-success"
+          (click)="onDelete()"
+          data-bs-dismiss="modal"
+        >
+          Confirmar
+        </button>
       </div>
     </div>
-
   </div>
 </div>
 
 <!-- Toast de Información -->
 <div class="toast-container position-fixed bottom-0 end-0 p-3">
-  <div #liveToast id="liveToast" class="toast" role="alert"
-    aria-live="assertive" aria-atomic="true">
-    <div class="toast-header" [ngClass]="isErrorToast? ' bg-danger' : '
-      bg-success'">
-      <img src="../../../assets/imagenes/notification_logo.png" class="rounded
-        me-2" width="25px" alt="...">
-      <strong class="me-auto text-light">{{tituloToast}}</strong>
+  <div
+    #liveToast
+    id="liveToast"
+    class="toast"
+    role="alert"
+    aria-live="assertive"
+    aria-atomic="true"
+  >
+    <div
+      class="toast-header"
+      [ngClass]="
+        isErrorToast
+          ? ' bg-danger'
+          : '
+      bg-success'
+      "
+    >
+      <img
+        src="../../../assets/imagenes/notification_logo.png"
+        class="rounded me-2"
+        width="25px"
+        alt="..."
+      />
+      <strong class="me-auto text-light">{{ tituloToast }}</strong>
       <small class="text-light">Ahora</small>
-      <button type="button" class="btn-close" data-bs-dismiss="toast"
-        aria-label="Close"></button>
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="toast"
+        aria-label="Close"
+      ></button>
     </div>
-    <div class="toast-body bg-opacity-25" [ngClass]="isErrorToast? ' bg-danger'
-      : ' bg-success'">
-      {{mensajeToast}}
+    <div
+      class="toast-body bg-opacity-25"
+      [ngClass]="isErrorToast ? ' bg-danger' : ' bg-success'"
+    >
+      {{ mensajeToast }}
     </div>
   </div>
 </div>

@@ -1,138 +1,167 @@
 <div class="container-fluid">
-    <!-- Titulo principal -->
-      <div class="row p-2 justify-content-center align-items-center">
-           <div class="col text-center">
-                <h2 class="p-0 m-0">Sugerencias Leídas</h2>
-                <h3 class="p-0 m-0">Total Sugerencias Leídas: {{total}}</h3>
-           </div>
-      </div>
-  
-      <!-- Buscar y agregar admi -->
+  <!-- Titulo principal -->
+  <div class="row p-2 justify-content-center align-items-center">
+    <div class="col text-center">
+      <h2 class="p-0 m-0">Sugerencias Leídas</h2>
+      <h3 class="p-0 m-0">Total Sugerencias Leídas: {{ total }}</h3>
+    </div>
+  </div>
 
-      <!-- Contenedor de admi -->
-      <div class="row justify-content-center align-items-center p-0">
-        <div class="col-10 text-center">
-          <!-- Titulo -->
-          <div class="row p-2 bg-primary text-white">
-            <div class="col-3 align-self-center">
-              <h3 class="p-0 m-0">Usuario</h3>
-            </div>
-  
-            <div class="col-6 align-self-center">
-              <h3 class="p-0 m-0">Descripcion</h3>
-            </div>
-  
-            <div class="col-3 align-self-center">
-              <h3 class="p-0 m-0">Fecha creacion</h3>
-            </div>
-  
-          </div>
-  
-          <!-- Profesion -->
-          <div (click)="sugerencia_seleccionada=a" *ngFor="let a of arr_filtered_sugerencias"
-            class="row p-2 bg-light fila_info_profesion" data-bs-toggle="modal"
-            href="#modalInformacionProfesion" role="button">
-            <div class="col-3 align-self-center">
-              <h4 class="p-0 m-0"> {{a.usuario}}</h4>
-            </div>
-  
-            <div class="col-6 align-self-center">
-              <h4 class="p-0 m-0"> {{a.descripcion}} </h4>
-            </div>
-  
-            <div class="col-3 align-self-center">
-              <h4 class="p-0 m-0">{{a.fecha_creacion}}</h4>
-            </div>
-  
-       
+  <!-- Buscar y agregar admi -->
 
-          </div>
+  <!-- Contenedor de admi -->
+  <div class="row justify-content-center align-items-center p-0">
+    <div class="col-10 text-center">
+      <!-- Titulo -->
+      <div class="row p-2 bg-primary text-white">
+        <div class="col-3 align-self-center">
+          <h3 class="p-0 m-0">Usuario</h3>
+        </div>
+
+        <div class="col-6 align-self-center">
+          <h3 class="p-0 m-0">Descripcion</h3>
+        </div>
+
+        <div class="col-3 align-self-center">
+          <h3 class="p-0 m-0">Fecha creacion</h3>
         </div>
       </div>
-  
+
+      <!-- Profesion -->
+      <div
+        (click)="sugerencia_seleccionada = a"
+        *ngFor="let a of arr_filtered_sugerencias"
+        class="row p-2 bg-light fila_info_profesion"
+        data-bs-toggle="modal"
+        href="#modalInformacionProfesion"
+        role="button"
+      >
+        <div class="col-3 align-self-center">
+          <h4 class="p-0 m-0">{{ a.usuario }}</h4>
+        </div>
+
+        <div class="col-6 align-self-center">
+          <h4 class="p-0 m-0">{{ a.descripcion }}</h4>
+        </div>
+
+        <div class="col-3 align-self-center">
+          <h4 class="p-0 m-0">{{ a.fecha_creacion }}</h4>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
-<div class="modal fade" id="modalInformacionProfesion" aria-hidden="true"
-aria-labelledby="modalInformacionProfesionLabel" tabindex="-1">
-<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-  <div class="modal-content">
-    <div class="modal-header align-items-center">
-      <h1 class="modal-title fs-5 m-0 p-0 fw-bold"
-        id="modalInformacionProfesionLabel">Información Sugerencia</h1>
-      <button type="button" class="btn-close" data-bs-dismiss="modal"
-        aria-label="Close"></button>
-    </div>
-    <div class="modal-body mb-0">
-      <div class="row p-2">
+<div
+  class="modal fade"
+  id="modalInformacionProfesion"
+  aria-hidden="true"
+  aria-labelledby="modalInformacionProfesionLabel"
+  tabindex="-1"
+>
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header align-items-center">
+        <h1
+          class="modal-title fs-5 m-0 p-0 fw-bold"
+          id="modalInformacionProfesionLabel"
+        >
+          Información Sugerencia
+        </h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body mb-0">
         <div class="row p-2">
-          <img [src]="sugerencia_seleccionada?.foto?
-            'https://tomesoft1.pythonanywhere.com'+sugerencia_seleccionada?.foto :
-            'assets/imagenes/ProfesionDefault.png'" class="rounded mx-auto
-            d-block img-fluid w-50 image_modal" alt="...">
-        </div>
-      </div>
-
-      <div class="row p-2 align-items-center">
-        <div class="col-5">
-          <h3 class="m-0 p-0 fw-bold">Usuario:</h3>
-        </div>
-        <div class="col-7">
-          {{sugerencia_seleccionada?.usuario}}
-        </div>
-      </div>
-
-      <div class="row p-2 align-items-center">
-        <div class="col-5">
-          <h3 class="m-0 p-0 fw-bold">Correo:</h3>
-        </div>
-        <div class="col-7">
-          {{sugerencia_seleccionada?.correo}}
-        </div>
-      </div>
-
-
-
-      <div class="row p-2 align-items-center">
-        <div class="col-5">
-          <h3 class="m-0 p-0 fw-bold">Descripcion:</h3>
-        </div>
-        <div class="col-7">
-          {{sugerencia_seleccionada?.descripcion}}
-        </div>
-      </div>
-
-      <div class="row p-2 align-items-center">
-        <div class="col-5">
-          <h3 class="m-0 p-0 fw-bold">Fecha:</h3>
-        </div>
-        <div class="col-7">
-          {{sugerencia_seleccionada?.fecha_creacion}}
-        </div>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button
-        class="btn btn-danger"
-        data-bs-target="#modalConfirmacion"
-        data-bs-toggle="modal">Cerrar</button>
-    </div>
-  </div>
-</div>
-</div>
-
-<div  class="container-fluid">
-    <div class="row p-2 justify-content-center align-items-center">
-      <nav aria-label="Page navigation example">
-        <ul class="pagination">
-          <li class="page-item"><a class="page-link" (click)="previous($event)">Previous</a></li>
-          <div *ngFor="let n of pageNumber; let i=index;">
-            <li class="page-item"><button class="page-link" value="{{n}}"
-                (click)="iteracion($event)">{{n}}</button></li>
+          <div class="row p-2">
+            <img
+              [src]="
+                sugerencia_seleccionada?.foto
+                  ? 'http://127.0.0.1:8000' + sugerencia_seleccionada?.foto
+                  : 'assets/imagenes/ProfesionDefault.png'
+              "
+              class="rounded mx-auto d-block img-fluid w-50 image_modal"
+              alt="..."
+            />
           </div>
-    
-          <li class="page-item"><a class="page-link" (click)="next($event)">Next</a></li>
-        </ul>
-      </nav>
+        </div>
+
+        <div class="row p-2 align-items-center">
+          <div class="col-5">
+            <h3 class="m-0 p-0 fw-bold">Usuario:</h3>
+          </div>
+          <div class="col-7">
+            {{ sugerencia_seleccionada?.usuario }}
+          </div>
+        </div>
+
+        <div class="row p-2 align-items-center">
+          <div class="col-5">
+            <h3 class="m-0 p-0 fw-bold">Correo:</h3>
+          </div>
+          <div class="col-7">
+            {{ sugerencia_seleccionada?.correo }}
+          </div>
+        </div>
+
+        <div class="row p-2 align-items-center">
+          <div class="col-5">
+            <h3 class="m-0 p-0 fw-bold">Descripcion:</h3>
+          </div>
+          <div class="col-7">
+            {{ sugerencia_seleccionada?.descripcion }}
+          </div>
+        </div>
+
+        <div class="row p-2 align-items-center">
+          <div class="col-5">
+            <h3 class="m-0 p-0 fw-bold">Fecha:</h3>
+          </div>
+          <div class="col-7">
+            {{ sugerencia_seleccionada?.fecha_creacion }}
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button
+          class="btn btn-danger"
+          data-bs-target="#modalConfirmacion"
+          data-bs-toggle="modal"
+        >
+          Cerrar
+        </button>
+      </div>
     </div>
   </div>
-  
+</div>
+
+<div class="container-fluid">
+  <div class="row p-2 justify-content-center align-items-center">
+    <nav aria-label="Page navigation example">
+      <ul class="pagination">
+        <li class="page-item">
+          <a class="page-link" (click)="previous($event)">Previous</a>
+        </li>
+        <div *ngFor="let n of pageNumber; let i = index">
+          <li class="page-item">
+            <button
+              class="page-link"
+              value="{{ n }}"
+              (click)="iteracion($event)"
+            >
+              {{ n }}
+            </button>
+          </li>
+        </div>
+
+        <li class="page-item">
+          <a class="page-link" (click)="next($event)">Next</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>

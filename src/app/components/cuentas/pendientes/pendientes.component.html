@@ -801,3 +801,38 @@
     </div>
   </div>
 </div>
+<div class="container-fluid">
+  <div class="row p-2 justify-content-center align-items-center">
+    <nav aria-label="Page navigation example">
+      <ul class="pagination">
+        <li class="page-item">
+          <a class="page-link" (click)="previous($event)">Previous</a>
+        </li>
+        <div *ngFor="let n of pageNumber; let i = index">
+          <li class="page-item">
+            <button 
+              class="page-link azul"
+              value="{{ n }}"
+              (click)="iteracion($event)"
+              *ngIf="n == currentPage"
+            >
+              {{ n }}
+            </button>
+            <button 
+              class="page-link"
+              value="{{ n }}"
+              (click)="iteracion($event)"
+              *ngIf="n != currentPage"
+            >
+              {{ n }}
+            </button>
+          </li>
+        </div>
+
+        <li class="page-item">
+          <a class="page-link" (click)="next($event)">Next</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>

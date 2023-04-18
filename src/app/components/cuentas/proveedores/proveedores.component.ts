@@ -66,7 +66,7 @@ export class ProveedoresComponent {
     this.pythonAnywhereService.obtener_proveedores_proveedores().subscribe(resp => {
       this.total = Object(resp).total_objects
       this.arr_proveedor = Object(resp).results;
-
+      console.log(resp, "resp")
       this.arr_filtered_proveedor = this.arr_proveedor;
       console.log(this.arr_filtered_proveedor)
       if (Object(resp).next != null) {
@@ -411,9 +411,36 @@ export class ProveedoresComponent {
   }
 
   isInvalidForm(subForm: string) {
-
-
     return this.formEdit.get(subForm)?.invalid && this.formEdit.get(subForm)?.touched || this.formEdit.get(subForm)?.dirty && this.getErrorMessage(this.formEdit, subForm).length !== 0;
+  }
+  next(event: any) {
+
+    this.currentPage = this.currentPage + 1
+    this.pythonAnywhereService.obtener_proveedores_proveedores(this.currentPage).subscribe(resp => {
+      this.arr_proveedor = resp.results;
+      this.arr_filtered_proveedor = this.arr_proveedor;
+    })
+  }
+
+  previous(event: any) {
+
+    this.currentPage = this.currentPage - 1
+    this.pythonAnywhereService.obtener_proveedores_proveedores(this.currentPage).subscribe(resp => {
+      this.arr_proveedor = resp.results;
+      this.arr_filtered_proveedor = this.arr_proveedor;
+    })
+  }
+
+  iteracion(event: any) {
+    this.pythonAnywhereService.obtener_proveedores_proveedores(event.target.value).subscribe(resp => {
+      this.arr_proveedor = resp.results;
+      this.arr_filtered_proveedor = this.arr_proveedor;
+      this.currentPage = resp.current_page_number
+      if (resp.next != null) {
+        this.condicionNext = true
+      }
+
+    })
 
   }
 }

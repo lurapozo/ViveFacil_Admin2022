@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Solicitante2 } from 'src/app/interfaces/solicitante2';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { BodyEmail } from 'src/app/interfaces/email';
 import { BodyActualizarProveedorPendiente, BodyCrearProveedorPendiente, BodyResponseCrearProveedorPendiente, SerializerCrearProveedorPendiente } from 'src/app/interfaces/proveedor';
+import { Solicitante2 } from 'src/app/interfaces/solicitante2';
 import { PythonAnywhereService } from 'src/app/services/PythonAnywhere/python-anywhere.service';
 import { UserService } from 'src/app/services/user/user.service';
 
@@ -82,6 +82,7 @@ export class PendientesComponent {
       this.total = Object(resp).total_objects
       this.arr_pendiente = Object(resp).results;
       this.arr_filtered_pendiente = this.arr_pendiente;
+      console.log(resp, "resp");
       console.log(this.arr_filtered_pendiente)
       if (Object(resp).next != null) {
         this.condicionNext = true
@@ -662,5 +663,37 @@ export class PendientesComponent {
     console.log("asdasdasdasdasxzczxcfwef")
     console.log(this.pendiente_seleccionada)
     console.log(this.pendiente_seleccionada.copiaLicencia)
+  }
+
+
+  next(event: any) {
+
+    this.currentPage = this.currentPage + 1
+    this.pythonAnywhereService.obtener_proveedores_pendientes(this.currentPage).subscribe(resp => {
+      this.arr_pendiente = resp.results;
+      this.arr_filtered_pendiente = this.arr_pendiente;
+    })
+  }
+
+  previous(event: any) {
+
+    this.currentPage = this.currentPage - 1
+    this.pythonAnywhereService.obtener_proveedores_pendientes(this.currentPage).subscribe(resp => {
+      this.arr_pendiente = resp.results;
+      this.arr_filtered_pendiente = this.arr_pendiente;
+    })
+  }
+
+  iteracion(event: any) {
+    this.pythonAnywhereService.obtener_proveedores_pendientes(event.target.value).subscribe(resp => {
+      this.arr_pendiente = resp.results;
+      this.arr_filtered_pendiente = this.arr_pendiente;
+      this.currentPage = resp.current_page_number
+      if (resp.next != null) {
+        this.condicionNext = true
+      }
+
+    })
+
   }
 }
