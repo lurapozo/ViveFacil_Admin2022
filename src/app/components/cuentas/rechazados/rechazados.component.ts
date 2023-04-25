@@ -366,7 +366,8 @@ export class RechazadosComponent {
       banco: this.pendiente_seleccionada.banco,
       numero_cuenta: this.pendiente_seleccionada.numero_cuenta,
       tipo_cuenta: this.pendiente_seleccionada.tipo_cuenta,
-      planilla_servicios: this.pendiente_seleccionada.planilla_servicios
+      planilla_servicios: this.pendiente_seleccionada.planilla_servicios,
+      foto: this.pendiente_seleccionada.foto
     }
     this.pythonAnywhereService.eliminar_proveedores_rechazados(this.pendiente_seleccionada.id).subscribe(resp => {
       console.log(resp)

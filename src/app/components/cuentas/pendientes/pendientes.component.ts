@@ -61,10 +61,10 @@ export class PendientesComponent {
     profesion: new FormControl('', [Validators.required]),
     licencia: new FormControl('', [Validators.required]),
     copiaCedula: new FormControl(this.filePDF),
-    TipoCuenta: new FormControl('', [Validators.required]),
-    numeroCuenta: new FormControl('', [Validators.required]),
+    tipo_cuenta: new FormControl('', [Validators.required]),
+    numero_cuenta: new FormControl('', [Validators.required]),
     banco: new FormControl('', [Validators.required]),
-    experiencia: new FormControl('', [Validators.required]),
+    ano_experiencia: new FormControl('', [Validators.required]),
     copiaLicencia: new FormControl(this.filePDF2),
     documentos: new FormControl(''),
     descripcion: new FormControl(''),
@@ -147,8 +147,10 @@ export class PendientesComponent {
       banco: this.pendiente_seleccionada.banco,
       numero_cuenta: this.pendiente_seleccionada.numero_cuenta,
       tipo_cuenta: this.pendiente_seleccionada.tipo_cuenta,
-      planilla_servicios: this.pendiente_seleccionada.planilla_servicios
+      planilla_servicios: this.pendiente_seleccionada.planilla_servicios,
+      foto: this.pendiente_seleccionada.foto
     }
+    console.log(pendiente.profesion)
 
     this.pythonAnywhereService.crear_proveedor_pendiente(pendiente).subscribe(resp => {
       console.log(resp)
@@ -188,10 +190,7 @@ export class PendientesComponent {
     }
     console.log("LA COSAS ESAS LASMASD")
     console.log(pendiente)
-    console.log(this.filePDF)
-    console.log(pendiente.copiaCedula)
-    // console.log(this.formEdit.value.descripcion)
-    // console.log(this.pendiente_seleccionada.descripcion)
+    console.log("profesion: " + pendiente.profesion)
     if(pendiente.descripcion === ""){
       // if(this.pendiente_seleccionada.descripcion === ""){
       //   pendiente.descripcion = " "
@@ -293,7 +292,8 @@ export class PendientesComponent {
       banco: this.pendiente_seleccionada.banco,
       numero_cuenta: this.pendiente_seleccionada.numero_cuenta,
       tipo_cuenta: this.pendiente_seleccionada.tipo_cuenta,
-      planilla_servicios: this.pendiente_seleccionada.planilla_servicios
+      planilla_servicios: this.pendiente_seleccionada.planilla_servicios,
+      foto: this.pendiente_seleccionada.foto
     }
 
     const email = this.pendiente_seleccionada.email;
@@ -372,62 +372,47 @@ export class PendientesComponent {
             console.log("AAAAAAAAAAAAAAA")
             validator=1;
           }
-          if(this.pendiente_seleccionada.ano_experiencia != null && this.pendiente_seleccionada.ano_experiencia != ""){
+          if(this.pendiente_seleccionada.ano_experiencia != null && this.pendiente_seleccionada.ano_experiencia >= 0){
             dataRegisto.append('ano_experiencia', this.pendiente_seleccionada.ano_experiencia);
           }else{
-            console.log("SSSSSSSSSSSSSSS")
+            console.log("ERROR EN ano_experienccia")
             validator=1;
           }
-          // if(this.pendiente_seleccionada.estado != null && this.pendiente_seleccionada.estado != ""){
-          //   dataRegisto.append('estado', this.pendiente_seleccionada.estado);
-          // }else{
-          //   console.log("DDDDDDDDDDDDDDDD")
-          //   validator=1;
-          // }
           if(this.pendiente_seleccionada.profesion != null && this.pendiente_seleccionada.profesion != ""){
             dataRegisto.append('profesion', this.pendiente_seleccionada.profesion);
           }else{
-            console.log("FFFFFFFFFFFFFFFFFFF")
+            console.log("ERROR EN profesion")
             validator=1;
           }
           if(this.pendiente_seleccionada.direccion != null && this.pendiente_seleccionada.direccion != ""){
             dataRegisto.append('direccion', this.pendiente_seleccionada.direccion);
           }else{
-            console.log("GGGGGGGGGGGGG")
+            console.log("ERROR EN direccion")
             validator=1;
           }
           if(this.pendiente_seleccionada.licencia != null && this.pendiente_seleccionada.licencia != ""){
             dataRegisto.append('licencia', this.pendiente_seleccionada.licencia);
           }else{
-            console.log("HHHHHHHHHHHHHHH")
+            console.log("ERROR EN licencia")
             validator=1;
           }
           if(this.pendiente_seleccionada.copiaCedula != null && this.pendiente_seleccionada.copiaCedula != ""){
             dataRegisto.append('copiaCedula', this.pendiente_seleccionada.copiaCedula);
           }else{
-            console.log("JJJJJJJJJJJJJJJ")
+            console.log("ERROR EN copiaCedula")
             validator=1;
           }
           if(this.pendiente_seleccionada.copiaLicencia != null && this.pendiente_seleccionada.copiaLicencia != ""){
             dataRegisto.append('copiaLicencia', this.pendiente_seleccionada.copiaLicencia);
           }else{
-            console.log("KKKKKKKKKKKK")
+            console.log("ERROR EN copiaLicencia")
             validator=1;
           }
-          // if(this.pendiente_seleccionada.copiaCedula != null || this.pendiente_seleccionada.copiaCedula != ""){
-          //   dataRegisto.append('copiaCedula', this.pendiente_seleccionada.copiaCedula);
-          // }else{
-          //   validator=1;
-          // }
-          // if(this.pendiente_seleccionada.copiaCedula != null || this.pendiente_seleccionada.copiaCedula != ""){
-          //   dataRegisto.append('copiaCedula', this.pendiente_seleccionada.copiaCedula);
-          // }else{
-          //   validator=1;
-          // }
 
-          console.log("DDDDDDDDDdataRegisto")
+          console.log("dataRegisto")
           console.log(dataRegisto)
           console.log("validator " + validator)
+          console.log(this.pendiente_seleccionada.profesion)
           if(validator == 0){
             // Registro PythonAnywhere
             this.pythonAnywhereService.postRegistro(dataRegisto).subscribe(async (resp: any) => {
@@ -511,7 +496,8 @@ export class PendientesComponent {
       banco: this.pendiente_seleccionada.banco,
       numero_cuenta: this.pendiente_seleccionada.numero_cuenta,
       tipo_cuenta: this.pendiente_seleccionada.tipo_cuenta,
-      planilla_servicios: this.pendiente_seleccionada.planilla_servicios
+      planilla_servicios: this.pendiente_seleccionada.planilla_servicios,
+      foto: this.pendiente_seleccionada.foto
     }
     this.pythonAnywhereService.eliminar_proveedores_pendientes(this.pendiente_seleccionada.id).subscribe(resp => {
       console.log(resp)
@@ -574,17 +560,17 @@ export class PendientesComponent {
           return 'Debe llenar este campo';
         }
         return '';
-      case 'tipoCuenta':
+      case 'tipo_cuenta':
         if (itemControl.hasError('required')) {
           return 'Debe llenar este campo';
         }
         return '';
-      case 'numeroCuenta':
+      case 'numero_cuenta':
         if (itemControl.hasError('required')) {
           return 'Debe llenar este campo';
         }
         return '';
-      case 'experiencia':
+      case 'ano_experiencia':
         if (itemControl.hasError('required')) {
           return 'Debe llenar este campo';
         }
@@ -594,7 +580,7 @@ export class PendientesComponent {
           return 'Debe llenar este campo';
         }
         return '';
-      case 'experiencia':
+      case 'ano_experiencia':
         if (itemControl.hasError('required')) {
           return 'Debe llenar este campo';
         }
@@ -621,11 +607,11 @@ export class PendientesComponent {
     const licencia = this.pendiente_seleccionada?.licencia;
     const copiaCedula = this.pendiente_seleccionada?.copiaCedula;
     const profesion = this.pendiente_seleccionada?.profesion;
-    const experiencia = this.pendiente_seleccionada?.ano_experiencia;
+    const ano_experiencia = this.pendiente_seleccionada?.ano_experiencia;
     const banco = this.pendiente_seleccionada?.banco;
-    const numeroCuenta = this.pendiente_seleccionada?.numero_cuenta;
+    const numero_cuenta = this.pendiente_seleccionada?.numero_cuenta;
     const copiaLicencia = this.pendiente_seleccionada?.copiaLicencia;
-    const tipoCuenta = this.pendiente_seleccionada?.copiaLicencia;
+    const tipo_cuenta = this.pendiente_seleccionada?.copiaLicencia;
     const documentos: any[] = this.pendiente_seleccionada?.documentsPendientes;
     const descripcion = this.pendiente_seleccionada?.descripcion;
     const foto = this.pendiente_seleccionada?.foto;
@@ -641,11 +627,11 @@ export class PendientesComponent {
     licencia ? this.formEdit.get('licencia')?.setValue(ciudad) : this.formEdit.get('licencia')?.reset();
     copiaCedula ? this.formEdit.get('copiaCedula')?.setValue(ciudad) : this.formEdit.get('copiaCedula')?.reset();
     profesion ? this.formEdit.get('profesion')?.setValue(ciudad) : this.formEdit.get('profesion')?.reset();
-    experiencia ? this.formEdit.get('experiencia')?.setValue(ciudad) : this.formEdit.get('experiencia')?.reset();
+    ano_experiencia ? this.formEdit.get('ano_experiencia')?.setValue(ciudad) : this.formEdit.get('ano_experiencia')?.reset();
     banco ? this.formEdit.get('banco')?.setValue(ciudad) : this.formEdit.get('banco')?.reset();
-    numeroCuenta ? this.formEdit.get('numeroCuenta')?.setValue(ciudad) : this.formEdit.get('numeroCuenta')?.reset();
+    numero_cuenta ? this.formEdit.get('numero_cuenta')?.setValue(ciudad) : this.formEdit.get('numero_cuenta')?.reset();
     copiaLicencia ? this.formEdit.get('copiaLicencia')?.setValue(ciudad) : this.formEdit.get('copiaLicencia')?.reset();
-    tipoCuenta ? this.formEdit.get('tipoCuenta')?.setValue(ciudad) : this.formEdit.get('tipoCuenta')?.reset();
+    tipo_cuenta ? this.formEdit.get('tipo_cuenta')?.setValue(ciudad) : this.formEdit.get('tipo_cuenta')?.reset();
     documentos ? this.formEdit.get('documentos')?.setValue(ciudad) : this.formEdit.get('documentos')?.reset();
     descripcion ? this.formEdit.get('descripcion')?.setValue(ciudad) : this.formEdit.get('descripcion')?.reset();
     foto ? this.formEdit.get('foto')?.setValue(ciudad) : this.formEdit.get('foto')?.reset();

@@ -130,7 +130,8 @@ export class ProveedoresComponent {
       banco: this.proveedor_seleccionado.banco,
       numero_cuenta: this.proveedor_seleccionado.numero_cuenta,
       tipo_cuenta: this.proveedor_seleccionado.tipo_cuenta,
-      planilla_servicios: this.proveedor_seleccionado.planilla_servicios
+      planilla_servicios: this.proveedor_seleccionado.planilla_servicios,
+      foto: this.proveedor_seleccionado.foto
     }
 
     this.pythonAnywhereService.crear_proveedor_pendiente(pendiente).subscribe(resp => {
@@ -240,7 +241,8 @@ export class ProveedoresComponent {
       banco: this.proveedor_seleccionado.banco,
       numero_cuenta: this.proveedor_seleccionado.numero_cuenta,
       tipo_cuenta: this.proveedor_seleccionado.tipo_cuenta,
-      planilla_servicios: this.proveedor_seleccionado.planilla_servicios
+      planilla_servicios: this.proveedor_seleccionado.planilla_servicios,
+      foto: this.proveedor_seleccionado.foto
     }
     this.pythonAnywhereService.eliminar_proveedores_pendientes(this.proveedor_seleccionado.id).subscribe(resp => {
       console.log(resp)

@@ -295,7 +295,7 @@
                     </label>
                   </div>
                   <div class="col-7">
-                    <img src="https://tomesoft1.pythonanywhere.com{{pendiente_seleccionada?.foto}}" alt="no se encontró foto de perfil" width="50" height="60">
+                    <img src="http://127.0.0.1:8000{{pendiente_seleccionada?.foto}}" alt="no se encontró foto de perfil" width="50" height="60">
                     <input
                       type="file"
                       formControlName="foto"
@@ -380,7 +380,7 @@
                     </label>
                   </div>
                   <div class="col-7">
-                    <a href="https://tomesoft1.pythonanywhere.com{{pendiente_seleccionada?.copiaLicencia}}" download="newfilename2.pdf">
+                    <a href="http://127.0.0.1:8000{{pendiente_seleccionada?.copiaLicencia}}" download="newfilename2.pdf">
                       <p>
                         {{copiaLicenciaNombre}}
                       </p>
@@ -406,7 +406,7 @@
                     </label>
                   </div>
                   <div class="col-7">
-                    <a href="https://tomesoft1.pythonanywhere.com{{pendiente_seleccionada?.copiaCedula}}" download="newfilename.pdf">
+                    <a href="http://127.0.0.1:8000{{pendiente_seleccionada?.copiaCedula}}" download="newfilename.pdf">
                       <p>
                         {{copiaCedulaNombre}}
                       </p>
@@ -423,6 +423,7 @@
                     </div>
                   </div>
                 </div>
+
                 <div class="row p-2 align-items-center">
                   <div class="col-5">
                     <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
@@ -527,30 +528,25 @@
                       'licencia')}} </div>
                   </div>
                 </div>
-      
-                
               </div>
 
               
               <div class="col-4 align-self-center">
                 <h2> Cuenta Bancaria</h2>
-
                 <div class="row  align-items-center">
                   <div class="col-5">
-                    <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
-                        fw-bold">Tipo Cuenta:</h3></label>
+                    <label for="inputNombre" class="form-label"><h3 class="m-0 p-0 fw-bold">Tipo Cuenta:</h3></label>
                   </div>
                   <div class="col-7">
                     <input
                       type="text"
-                      formControlName="tipoCuenta"
+                      formControlName="tipo_cuenta"
                       class="form-control"
-                      [ngClass]="isInvalidForm('tipoCuenta') ?
+                      [ngClass]="isInvalidForm('tipo_cuenta') ?
                       'is-invalid' : ''"
                       [placeholder]="pendiente_seleccionada?.tipo_cuenta"
                       [value]="pendiente_seleccionada?.tipo_cuenta">
-                    <div class="invalid-feedback"> {{getErrorMessage(formEdit,
-                      'tipoCuenta)}} </div>
+                    <div class="invalid-feedback"> {{getErrorMessage(formEdit,'tipo_cuenta')}} </div>
                   </div>
                 </div>
 
@@ -562,14 +558,13 @@
                   <div class="col-7">
                     <input
                       type="text"
-                      formControlName="numeroCuenta"
+                      formControlName="numero_cuenta"
                       class="form-control"
-                      [ngClass]="isInvalidForm('numeroCuenta') ?
+                      [ngClass]="isInvalidForm('numero_cuenta') ?
                       'is-invalid' : ''"
                       [placeholder]="pendiente_seleccionada?.numero_cuenta"
                       [value]="pendiente_seleccionada?.numero_cuenta">
-                    <div class="invalid-feedback"> {{getErrorMessage(formEdit,
-                      'numeroCuenta)}} </div>
+                    <div class="invalid-feedback"> {{getErrorMessage(formEdit, 'numero_cuenta')}} </div>
                   </div>
                 </div>
               
@@ -587,29 +582,25 @@
                       'is-invalid' : ''"
                       [placeholder]="pendiente_seleccionada?.banco"
                       [value]="pendiente_seleccionada?.banco">
-                    <div class="invalid-feedback"> {{getErrorMessage(formEdit,
-                      'banco)}} </div>
+                    <div class="invalid-feedback"> {{getErrorMessage(formEdit, 'banco')}} </div>
                   </div>
                 </div>
 
-                <h2> Profersion</h2>
+                <h2> Profesion</h2>
                 <div>
                   <div class="row p-2 align-items-center">
                     <div class="col-5">
-                      <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
-                          fw-bold">Años de Experiencia:</h3></label>
+                      <label for="inputNombre" class="form-label"><h3 class="m-0 p-0 fw-bold">Años de Experiencia:</h3></label>
                     </div>
                     <div class="col-7">
                       <input
                         type="number"
-                        formControlName="experiencia"
+                        formControlName="ano_experiencia"
                         class="form-control"
-                        [ngClass]="isInvalidForm('experiencia') ?
-                        'is-invalid' : ''"
+                        [ngClass]="isInvalidForm('ano_experiencia') ? 'is-invalid' : ''"
                         [placeholder]="pendiente_seleccionada?.ano_experiencia"
                         [value]="pendiente_seleccionada?.ano_experiencia">
-                      <div class="invalid-feedback"> {{getErrorMessage(formEdit,
-                        'experiencia)}} </div>
+                      <div class="invalid-feedback"> {{getErrorMessage(formEdit, 'ano_experiencia')}} </div>
                     </div>
                   </div>
 
@@ -621,19 +612,18 @@
                     <div class="col-7">
                       <select
                         class="form-select"
-                        [ngClass]="isInvalidForm('ciudad') ?
+                        [ngClass]="isInvalidForm('profesion') ?
                         'is-invalid' : ''"
-                        formControlName="ciudad"
+                        formControlName="profesion"
                         id="ge"
-                        [value]="pendiente_seleccionada?.ciudad"
+                        [value]="pendiente_seleccionada?.profesion"
                         aria-describedby="selectorServicioCrearFeedback">
                         <option selected disabled value="">Elija una profesion...</option>
                         <option *ngFor="let c of profesiones" [id]="c" [value]="c"> {{c}}
                         </option>
                       </select>
                       <div id="selectorServicioCrearFeedback"
-                        class="invalid-feedback"> {{getErrorMessage(formEdit,
-                        'ciudad')}} </div>
+                        class="invalid-feedback"> {{getErrorMessage(formEdit, 'profesion')}} </div>
                     </div>
                   </div>
     
@@ -689,14 +679,14 @@
                       disable
                       disable
                         type="file"
-                        formControlName="experiencia"
+                        formControlName="ano_experiencia"
                         class="form-control"
-                        [ngClass]="isInvalidForm('experiencia') ?
+                        [ngClass]="isInvalidForm('ano_experiencia') ?
                         'is-invalid' : ''"
                         [placeholder]="pendiente_seleccionada?.banco"
                         [value]="pendiente_seleccionada?.banco">
                       <div class="invalid-feedback"> {{getErrorMessage(formEdit,
-                        'experiencia')}} </div>
+                        'ano_experiencia')}} </div>
                     </div>
                   </div>
                 </div>
