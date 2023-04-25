@@ -86,8 +86,8 @@
     <div class="modal-content">
       <div class="modal-header align-items-center">
         <h1 class="modal-title fs-5 m-0 p-0 fw-bold"
-          id="modalInformacionProfesionLabel">Información de Proveedores
-          pendientes</h1>
+          id="modalInformacionProfesionLabel">Información de Proveedores pendientes
+        </h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal"
           aria-label="Close"></button>
       </div>
@@ -126,7 +126,11 @@
             <h3 class="m-0 p-0 fw-bold">Documento cedula:</h3>
           </div>
           <div class="col-7">
-
+            <a href="http://127.0.0.1:8000{{pendiente_seleccionada?.copiaCedula}}" download="newfilename.pdf">
+              <p>
+                {{copiaCedulaNombre}}
+              </p>
+            </a>
           </div>
         </div>
 
@@ -206,7 +210,11 @@
             <h3 class="m-0 p-0 fw-bold">Documentacion Licenciada:</h3>
           </div>
           <div class="col-7">
-
+            <a href="http://127.0.0.1:8000{{pendiente_seleccionada?.copiaLicencia}}" download="newfilename2.pdf">
+              <p>
+                {{copiaLicenciaNombre}}
+              </p>
+            </a>
           </div>
         </div>
       </div>
@@ -445,8 +453,9 @@
       
                 <div class="row p-2 align-items-center">
                   <div class="col-5">
-                    <label for="selectorServicioCrear" class="form-label"><h3
-                        class="m-0 p-0 fw-bold">Ciudad:</h3></label>
+                    <label for="selectorServicioCrear" class="form-label">
+                      <h3 class="m-0 p-0 fw-bold">Ciudad:</h3>
+                    </label>
                   </div>
                   <div class="col-7">
                     <select
@@ -516,7 +525,7 @@
                       [ngClass]="isInvalidForm('licencia') ?
                       'is-invalid' : ''"
                       formControlName="licencia"
-                
+                      id="tienelicencia"
                       [value]="pendiente_seleccionada?.licencia"
                       aria-describedby="selectorServicioCrearFeedback">
                       <option selected disabled value="">¿Posee una licencia?...</option>
@@ -524,8 +533,7 @@
                       </option>
                     </select>
                     <div id="selectorServicioCrearFeedback"
-                      class="invalid-feedback"> {{getErrorMessage(formEdit,
-                      'licencia')}} </div>
+                      class="invalid-feedback"> {{getErrorMessage(formEdit, 'licencia')}} </div>
                   </div>
                 </div>
               </div>
