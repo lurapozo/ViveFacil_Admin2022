@@ -79,7 +79,7 @@
           <img
             [src]="
               a.imagen
-                ? 'http://127.0.0.1:8000' + a.imagen
+                ? 'https://tomesoft1.pythonanywhere.com' + a.imagen
                 : 'assets/imagenes/ProfesionDefault.png'
             "
             class="rounded mx-auto d-block img-fluid img_profesion"
@@ -139,7 +139,7 @@
           <img
             [src]="
               planes_seleccionada?.imagen
-                ? 'http://127.0.0.1:8000' + planes_seleccionada?.imagen
+                ? 'https://tomesoft1.pythonanywhere.com' + planes_seleccionada?.imagen
                 : 'assets/imagenes/ProfesionDefault.png'
             "
             class="rounded mx-auto d-block img-fluid w-50 image_modal"
@@ -277,7 +277,7 @@
               <img
                 *ngIf="!existImageActualizar && planes_seleccionada?.imagen"
                 class="image_modal rounded mx-auto d-block img-fluid w-50"
-                [src]="'http://127.0.0.1:8000' + planes_seleccionada?.imagen"
+                [src]="'https://tomesoft1.pythonanywhere.com' + planes_seleccionada?.imagen"
                 alt="Archivo incorrecto"
               />
               <i

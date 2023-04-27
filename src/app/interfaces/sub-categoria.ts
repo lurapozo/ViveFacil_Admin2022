@@ -4,12 +4,14 @@ export interface SubCategoria {
     descripcion: string,
     categoria: number,
     estado: boolean
+    foto: any;
 }
 
 export interface BodyCrearSubCategoria {
+    foto: any;
     nombre: string,
     descripcion: string,
-    categoria: number,
+    categoria: string,
   }
 
   export interface BodyResponseCrearSubCategoria {
