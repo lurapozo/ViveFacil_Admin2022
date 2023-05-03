@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormControl, AbstractControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { PythonAnywhereService } from 'src/app/services/PythonAnywhere/python-anywhere.service';
 import { BodyActualizarCategoria, BodyCrearCategoria, Categoria } from '../../../interfaces/categoria';
@@ -31,7 +31,6 @@ export class CategoriasComponent {
     this.pythonAnywhereService.obtener_categorias().subscribe((resp: any[]) => {
       this.categoria = resp
       console.log(resp)
-
     })
 
     const imagenCrearControl = this.crearCategoria.get('imagen') as FormControl;
@@ -268,10 +267,6 @@ export class CategoriasComponent {
 
 
 
-        if (itemControl.hasError('required')) {
-          console.log('entre')
-          return 'Debe seleccionar un estado';
-        }
         return '';
       default:
         return '';
@@ -312,6 +307,10 @@ export class CategoriasComponent {
       this.pythonAnywhereService.actualizar_categoria_estado(categoria,this.categoria_seleccionada?.id).subscribe(
         resp=>{
           this.mostrarToastInfo('Estado de la Categoria ', 'Categoria editada correctamente', false)
+          this.pythonAnywhereService.obtener_categorias().subscribe((resp: any[]) => {
+            this.categoria = resp
+            console.log(resp)
+          })
         }
       )
     }
@@ -346,6 +345,10 @@ export class CategoriasComponent {
       console.log(categoria)
       this.pythonAnywhereService.add_categoria(categoria).subscribe(resp => {
         this.mostrarToastInfo('Estado de la Categoria ', 'Categoria Creada  correctamente', false)
+        this.pythonAnywhereService.obtener_categorias().subscribe((resp: any[]) => {
+          this.categoria = resp
+          console.log(resp)
+        })
       })
 
     }
@@ -380,6 +383,10 @@ export class CategoriasComponent {
         this.pythonAnywhereService.actualizar_categoria(categoria,this.categoria_seleccionada?.id).subscribe(
           resp=>{
             this.mostrarToastInfo('Estado de la  Categoria ', 'Categoria Editada correctamente', false)
+            this.pythonAnywhereService.obtener_categorias().subscribe((resp: any[]) => {
+              this.categoria = resp
+              console.log(resp)
+            })
           }
         )
       }
@@ -393,6 +400,10 @@ export class CategoriasComponent {
     if (this.categoria_seleccionada?.id) {
       this.pythonAnywhereService.eliminar_categoria(this.categoria_seleccionada?.id).subscribe(resp => {
         this.mostrarToastInfo('Estado de la Categoria ', 'Categoria Eliminada correctamente', false)
+        this.pythonAnywhereService.obtener_categorias().subscribe((resp: any[]) => {
+          this.categoria = resp
+          console.log(resp)
+        })
       }
 
       )

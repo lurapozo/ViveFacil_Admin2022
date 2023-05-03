@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
+import * as moment from 'moment';
 import { BodyCuponActualizar, Cupon, CuponCrear } from 'src/app/interfaces/cupon';
 import { PythonAnywhereService } from 'src/app/services/PythonAnywhere/python-anywhere.service';
-import * as moment from 'moment';
 @Component({
   selector: 'app-cupones',
   templateUrl: './cupones.component.html',
@@ -38,9 +38,6 @@ export class CuponesComponent {
     });
     this.pythonAnywhereService.obtener_categorias().subscribe((resp: any[]) => {
       this.categoria = resp
-
-
-
     })
 
     const imagenCrearControl = this.cuponCrear.get('imagen') as FormControl;
@@ -396,6 +393,12 @@ export class CuponesComponent {
       this.pythonAnywhereService.crear_cupon(cupon).subscribe(resp => {
         this.limpiarForm('crear');
         this.mostrarToastInfo('Estado del Cupon ', 'Cupon Creado correctamente', false);
+        this.pythonAnywhereService.obtener_cupones().subscribe(resp => {
+          this.arr_cupon = Object(resp)
+          this.arr_filtered_cupon = this.arr_cupon
+          console.log(this.arr_filtered_cupon)
+    
+        });
       })
 
 

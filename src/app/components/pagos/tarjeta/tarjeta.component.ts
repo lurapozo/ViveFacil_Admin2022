@@ -111,7 +111,14 @@ cambiarEstado(event:any){
     const id = this.tarjeta_seleccionada.id
     let estado = event.srcElement.checked
     this.pythonAnywhereService.cambio_pago_proveedor_estado(id,estado).subscribe(resp=>{
+      this.pythonAnywhereService.obtener_pagos_tarjetaP().subscribe(resp => {
+        this.arr_tarjeta = resp.results
+        this.arr_filtered_tarjeta =  this.arr_tarjeta
+        console.log(this.arr_filtered_tarjeta)
+        this.currentPage = 1;
+      })  
       this.mostrarToastInfo('Estado del Pago', 'se pago con exito', false);
+      
     })
   }
 

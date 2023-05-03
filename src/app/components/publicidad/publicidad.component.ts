@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { BodyActualizarPublicidad, BodyCrearPublicidad, Publicidad } from '../../interfaces/publicidad';
-import { FormControl, AbstractControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
-import { PythonAnywhereService } from 'src/app/services/PythonAnywhere/python-anywhere.service';
 import * as moment from 'moment';
+import { PythonAnywhereService } from 'src/app/services/PythonAnywhere/python-anywhere.service';
+import { BodyActualizarPublicidad, BodyCrearPublicidad, Publicidad } from '../../interfaces/publicidad';
 @Component({
   selector: 'app-publicidad',
   templateUrl: './publicidad.component.html',
@@ -42,9 +42,7 @@ export class PublicidadComponent {
     }
     for (let index = 1; index <= resp.total_pages; index++) {
       this.pageNumber.push(index)
-
     }
-  
     });
     this.pythonAnywhereService.obtener_categorias().subscribe((resp:any[])=>{
      this.categoria=resp
@@ -336,9 +334,16 @@ onCrear(){
     if(foto && this.existImageCrear){
       cupon.imagen = foto; // Si hay foto se le agrega al body.
     }
-    // this.pythonAnywhereService.crear_publicidad(cupon).subscribe(resp => {
-    //   console.log(resp)
-    // })
+    this.pythonAnywhereService.crear_publicidad(cupon).subscribe(resp => {
+      console.log(resp)
+      this.pythonAnywhereService.obtener_publicidades().subscribe((resp:any )=> {
+        this.arr_publicidad = resp.results
+        this.arr_filtered_publicidad = this.arr_publicidad
+        console.log(this.arr_filtered_publicidad)
+        this.currentPage = 1;
+
+        });
+    })
 
 
   
@@ -374,7 +379,16 @@ if(titulo && descripcion && inicio && fin && url){
   if(this.publicidad_seleccionada){
 
    
-    this.pythonAnywhereService.actualizar_publicidad(publi).subscribe(resp=>{console.log(resp);})
+    this.pythonAnywhereService.actualizar_publicidad(publi).subscribe(resp=>{
+      console.log(resp);
+      this.pythonAnywhereService.obtener_publicidades().subscribe((resp:any )=> {
+        this.arr_publicidad = resp.results
+        this.arr_filtered_publicidad = this.arr_publicidad
+        console.log(this.arr_filtered_publicidad)
+        this.currentPage = 1;
+
+        });
+    })
     console.log("soy nulo",inicio,fin)
   
 }
@@ -410,7 +424,16 @@ search(evento: any) {
 
   onDelete(){
   if(this.publicidad_seleccionada){
-    this.pythonAnywhereService.borrar_publicidad(this.publicidad_seleccionada.id).subscribe(resp=>console.log(resp))
+    this.pythonAnywhereService.borrar_publicidad(this.publicidad_seleccionada.id).subscribe(resp=>{
+      console.log(resp)
+      this.pythonAnywhereService.obtener_publicidades().subscribe((resp:any )=> {
+        this.arr_publicidad = resp.results
+        this.arr_filtered_publicidad = this.arr_publicidad
+        console.log(this.arr_filtered_publicidad)
+        this.currentPage = 1;
+
+        });
+    })
   }
     
   }

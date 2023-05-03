@@ -22,8 +22,8 @@ import { BodyActualizarProveedor, BodyActualizarProveedorPendiente, BodyCrearPro
 import { BodyActualizarPublicidad, BodyCrearPublicidad, BodyResponseCrearPublicidad, Publicidad } from 'src/app/interfaces/publicidad';
 import { BodyActualizarServicio, Servicio } from 'src/app/interfaces/servicio';
 import {
-  Solicitante,
-  SolicitantePaginacion,
+    Solicitante,
+    SolicitantePaginacion,
 } from 'src/app/interfaces/solicitante';
 import { SolicitudProfesion, SolicitudProfesionPaginacion } from 'src/app/interfaces/solicitud';
 import { BodyCrearSubCategoria, BodyResponseCrearSubCategoria } from 'src/app/interfaces/sub-categoria';
@@ -33,8 +33,8 @@ import { PagosTarjetaUser } from 'src/app/interfaces/tarjeta';
   providedIn: 'root',
 })
 export class PythonAnywhereService {
-  API_URL = `https://tomesoft1.pythonanywhere.com`;
-  administradores = 'https://tomesoft1.pythonanywhere.com/administradores';
+  API_URL = `http://127.0.0.1:8000`;
+  administradores = 'http://127.0.0.1:8000/administradores';
   private _refresh$ = new Subject<void>();
   constructor(private http: HttpClient) { }
 
@@ -609,11 +609,11 @@ obtener_politicas(){
   }
 
   getSolicitantePythonAny(user: string): Observable<Array<Solicitante>> {
-    return this.http.get(`https://tomesoft1.pythonanywhere.com/solicitante/${user}`) as Observable<Array<Solicitante>>;
+    return this.http.get(`http://127.0.0.1:8000/solicitante/${user}`) as Observable<Array<Solicitante>>;
   }
 
   postRegistro(body: any) {
-    return this.http.post('https://tomesoft1.pythonanywhere.com/registro/', body);
+    return this.http.post('http://127.0.0.1:8000/registro/', body);
   }
   /**
    * Función que edita la información de un objeto ProveedorPendiente
@@ -961,7 +961,7 @@ obtener_politicas(){
   }
 
 
-  //https://tomesoft1.pythonanywhere.com/proveedor_profesiones/melquinto20@gmail.com/128&Jardinero,Pintor|true
+  //http://127.0.0.1:8000/proveedor_profesiones/melquinto20@gmail.com/128&Jardinero,Pintor|true
   eliminar_proveedores_pendientes(id: any) {//FALTA
     return this.http.delete(
       `${this.API_URL}/proveedores_pendientes/${id}`
@@ -1572,7 +1572,7 @@ obtener_politicas(){
     const dataCrear = new FormData();
     dataCrear.append("nombre", bodyCrear.nombre);
     dataCrear.append("permisos", bodyCrear.permisos);
-    return this.http.post(this.API_URL + 'https://tomesoft1.pythonanywhere.com/planesEstado/', dataCrear) as Observable<Group>;
+    return this.http.post(this.API_URL + 'http://127.0.0.1:8000/planesEstado/', dataCrear) as Observable<Group>;
   };
 
 
@@ -1784,7 +1784,7 @@ obtener_politicas(){
   }
 
   getAdminByCorreo(correo: string){
-    return this.http.get("https://tomesoft1.pythonanywhere.com/datos-admin/" + correo);
+    return this.http.get("http://127.0.0.1:8000/datos-admin/" + correo);
   }
 }
 

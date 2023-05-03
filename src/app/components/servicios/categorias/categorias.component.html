@@ -71,7 +71,7 @@
           <img
             [src]="
               a.foto
-                ? 'https://tomesoft1.pythonanywhere.com' + a.foto
+                ? 'http://127.0.0.1:8000' + a.foto
                 : '../../../assets/imagenes/ProfesionDefault.png'
             "
             class="rounded mx-auto d-block img-fluid img_profesion"
@@ -124,7 +124,7 @@
           <img
             [src]="
               categoria_seleccionada?.foto2
-                ? 'https://tomesoft1.pythonanywhere.com' + categoria_seleccionada?.foto2
+                ? 'http://127.0.0.1:8000' + categoria_seleccionada?.foto2
                 : 'assets/imagenes/ProfesionDefault.png'
             "
             class="rounded mx-auto d-block img-fluid w-50 image_modal"
@@ -235,7 +235,7 @@
               <img
                 *ngIf="!existImageActualizar && categoria_seleccionada?.foto"
                 class="image_modal rounded mx-auto d-block img-fluid w-50"
-                [src]="'https://tomesoft1.pythonanywhere.com' + categoria_seleccionada?.foto"
+                [src]="'http://127.0.0.1:8000' + categoria_seleccionada?.foto"
                 alt="Archivo incorrecto"
               />
               <i
@@ -275,7 +275,7 @@
               <img
                 *ngIf="!existImageActualizar2 && categoria_seleccionada?.foto"
                 class="image_modal rounded mx-auto d-block img-fluid w-50"
-                [src]="'https://tomesoft1.pythonanywhere.com' + categoria_seleccionada?.foto2"
+                [src]="'http://127.0.0.1:8000' + categoria_seleccionada?.foto2"
                 alt="Archivo incorrecto"
               />
               <i

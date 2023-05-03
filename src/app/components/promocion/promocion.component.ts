@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { BodyPromocionActualizar, Promocion, PromocionCrear } from '../../interfaces/promocion';
+import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
-import { PythonAnywhereService } from 'src/app/services/PythonAnywhere/python-anywhere.service';
-import { FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
 import * as moment from 'moment';
+import { PythonAnywhereService } from 'src/app/services/PythonAnywhere/python-anywhere.service';
+import { BodyPromocionActualizar, Promocion, PromocionCrear } from '../../interfaces/promocion';
 @Component({
   selector: 'app-promocion',
   templateUrl: './promocion.component.html',
@@ -38,7 +38,6 @@ export class PromocionComponent {
     this.arr_promocion = Object(resp)
     this.arr_filtered_promocion = this.arr_promocion
     console.log(this.arr_filtered_promocion)
-  
     });
     this.pythonAnywhereService.obtener_categorias().subscribe((resp:any[])=>{
      this.categoria=resp
@@ -90,7 +89,13 @@ cambiarEstado(event:any){
   let estado = event.srcElement.checked
   if(this.promocion_seleccionada){
     this.pythonAnywhereService.cambio_promocion_estado(this.promocion_seleccionada.id,estado).subscribe(resp=>{
-      this.mostrarToastInfo('Estado de la Promocion ', 'Promocion Editada correctamente', false);});
+      this.mostrarToastInfo('Estado de la Promocion ', 'Promocion Editada correctamente', false);
+      this.pythonAnywhereService.obtener_promociones().subscribe(resp => {
+        this.arr_promocion = Object(resp)
+        this.arr_filtered_promocion = this.arr_promocion
+        console.log(this.arr_filtered_promocion)
+        });
+      });
   }
 
 
@@ -379,6 +384,11 @@ onCrear(){
   
   this.pythonAnywhereService.crear_promocion(cupon).subscribe(resp => {
     this.mostrarToastInfo('Estado de la Promocion ', 'Promocion creada correctamente', false)
+    this.pythonAnywhereService.obtener_promociones().subscribe(resp => {
+      this.arr_promocion = Object(resp)
+      this.arr_filtered_promocion = this.arr_promocion
+      console.log(this.arr_filtered_promocion)
+      });
   })
   
 }
@@ -437,6 +447,11 @@ if(this.promocion_seleccionada){
     console.log(this.formEdit)
     this.pythonAnywhereService.actualizar_promocion(promo,id).subscribe(resp=>{
       this.mostrarToastInfo('Estado de la Promocion ', 'Promocion Editada correctamente', false)
+      this.pythonAnywhereService.obtener_promociones().subscribe(resp => {
+        this.arr_promocion = Object(resp)
+        this.arr_filtered_promocion = this.arr_promocion
+        console.log(this.arr_filtered_promocion)
+        });
     })
 
   }
@@ -472,8 +487,14 @@ search(evento: any) {
 
   onDelete(){
   if(this.promocion_seleccionada){
-    this.pythonAnywhereService.eliminar_promocion(this.promocion_seleccionada.id).subscribe(resp=>
-      this.mostrarToastInfo('Estado de la Promocion ', 'Promocion Eliminado correctamente', false))
+    this.pythonAnywhereService.eliminar_promocion(this.promocion_seleccionada.id).subscribe(resp=>{      
+      this.mostrarToastInfo('Estado de la Promocion ', 'Promocion Eliminado correctamente', false)
+      this.pythonAnywhereService.obtener_promociones().subscribe(resp => {
+        this.arr_promocion = Object(resp)
+        this.arr_filtered_promocion = this.arr_promocion
+        console.log(this.arr_filtered_promocion)
+        });
+      })
   }
     
   }

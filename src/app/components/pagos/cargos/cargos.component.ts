@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormControl, AbstractControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { BodyActualizarCargo, BodyCrearCargo, Cargo } from 'src/app/interfaces/cargo';
 import { Publicidad } from 'src/app/interfaces/publicidad';
@@ -29,8 +29,6 @@ export class CargosComponent {
     this.arr_cargo = resp
     this.arr_filtered_cargo = this.arr_cargo
     console.log(this.arr_filtered_cargo)
-  
-  
     });
    
 }
@@ -167,6 +165,11 @@ onCrear(){
   
     this.pythonAnywhereService.crear_cargo(cupon).subscribe(resp => {
       this.mostrarToastInfo('Estado de la solicitud profesion', 'El cargo ha sido creado con exito', false);
+      this.pythonAnywhereService.obtener_cargos().subscribe((resp:any )=> {
+        this.arr_cargo = resp
+        this.arr_filtered_cargo = this.arr_cargo
+        console.log(this.arr_filtered_cargo)
+        });
     })
 
   }
@@ -201,6 +204,11 @@ onActualizar(){
   if(this.cargo_seleccionada){
     this.pythonAnywhereService.actualizar_cargo(cupon, this.cargo_seleccionada.id).subscribe(resp => {
       this.mostrarToastInfo('Estado de la solicitud profesion', 'El cargo ha sido actualizada con exito', false);
+      this.pythonAnywhereService.obtener_cargos().subscribe((resp:any )=> {
+        this.arr_cargo = resp
+        this.arr_filtered_cargo = this.arr_cargo
+        console.log(this.arr_filtered_cargo)
+        });
     })
   }
   
@@ -221,7 +229,14 @@ search(evento: any) {
 
   onDelete(){
   if(this.cargo_seleccionada){
-    this.pythonAnywhereService.eliminar_cargo(this.cargo_seleccionada.id).subscribe(resp=>console.log(resp))
+    this.pythonAnywhereService.eliminar_cargo(this.cargo_seleccionada.id).subscribe(resp=>{
+      console.log(resp)
+      this.pythonAnywhereService.obtener_cargos().subscribe((resp:any )=> {
+        this.arr_cargo = resp
+        this.arr_filtered_cargo = this.arr_cargo
+        console.log(this.arr_filtered_cargo)
+        });
+    })
   }
     
   }

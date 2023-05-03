@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { FormControl, AbstractControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { PythonAnywhereService } from 'src/app/services/PythonAnywhere/python-anywhere.service';
 import { BodyActualizarCategoria, BodyCrearCategoria, Categoria } from '../../../interfaces/categoria';
-import { SubCategoria, BodyCrearSubCategoria, BodyResponseCrearSubCategoria } from '../../../interfaces/sub-categoria';
+import { BodyCrearSubCategoria, BodyResponseCrearSubCategoria, SubCategoria } from '../../../interfaces/sub-categoria';
 
 @Component({
   selector: 'app-sub-categorias',
@@ -34,7 +34,6 @@ export class SubCategoriasComponent {
     this.pythonAnywhereService.obtener_servicios().subscribe((resp: any[]) => {
       this.categoria = resp
       console.log(resp)
-
     })
 
     this.pythonAnywhereService.obtener_categorias().subscribe((resp: any[]) => {
@@ -284,10 +283,6 @@ export class SubCategoriasComponent {
 
 
 
-        if (itemControl.hasError('required')) {
-          console.log('entre')
-          return 'Debe seleccionar un estado';
-        }
         return '';
       default:
         return '';
@@ -329,6 +324,10 @@ export class SubCategoriasComponent {
       this.pythonAnywhereService.actualizar_categoria_estado(categoria,this.categoria_seleccionada?.id).subscribe(
         resp=>{
           this.mostrarToastInfo('Estado de la Categoria ', 'Categoria editada correctamente', false)
+          this.pythonAnywhereService.obtener_servicios().subscribe((resp: any[]) => {
+            this.categoria = resp
+            console.log(resp)
+          })
         }
       )
     }
@@ -369,6 +368,10 @@ export class SubCategoriasComponent {
       console.log(subcategoria)
       this.pythonAnywhereService.crear_servicios(subcategoria).subscribe(resp => {
         this.mostrarToastInfo('Estado de la Categoria ', 'Categoria Creada  correctamente', false)
+        this.pythonAnywhereService.obtener_servicios().subscribe((resp: any[]) => {
+          this.categoria = resp
+          console.log(resp)
+        })
       })
 
     }
@@ -404,6 +407,10 @@ export class SubCategoriasComponent {
         this.pythonAnywhereService.actualizar_servicios(subCategoria,this.categoria_seleccionada?.id.toString()).subscribe(
           resp=>{
             this.mostrarToastInfo('Estado de la  Categoria ', 'Categoria Editada correctamente', false)
+            this.pythonAnywhereService.obtener_servicios().subscribe((resp: any[]) => {
+              this.categoria = resp
+              console.log(resp)
+            })
           }
         )
       }
@@ -417,6 +424,10 @@ export class SubCategoriasComponent {
     if (this.categoria_seleccionada?.id) {
       this.pythonAnywhereService.eliminar_categoria(this.categoria_seleccionada?.id).subscribe(resp => {
         this.mostrarToastInfo('Estado de la Categoria ', 'Categoria Eliminada correctamente', false)
+        this.pythonAnywhereService.obtener_servicios().subscribe((resp: any[]) => {
+          this.categoria = resp
+          console.log(resp)
+        })
       }
 
       )

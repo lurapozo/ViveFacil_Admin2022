@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { BodyActualizarPlan, BodyCrearPlan, BodyCrearPlanProveedor, Plan } from '../../interfaces/plan';
-import { FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { PythonAnywhereService } from 'src/app/services/PythonAnywhere/python-anywhere.service';
+import { BodyActualizarPlan, BodyCrearPlan, BodyCrearPlanProveedor, Plan } from '../../interfaces/plan';
 import { ProfesionesComponent } from '../profesiones/profesiones.component';
 
 @Component({
@@ -307,6 +307,10 @@ estadoActual=false
 
       this.pythonAnywhereService.crear_plan(crearPlan).subscribe(resp=>{
         this.mostrarToastInfo('Estado del Plan ', 'Plan Creado correctamente', false);
+        this.pythonAnywhereService.obtener_planes().subscribe(resp => {
+          this.arr_planes = resp;
+          this.arr_filtered_planes = this.arr_planes;
+        });
       })
     }
 
@@ -315,6 +319,10 @@ estadoActual=false
     if(this.planes_seleccionada){
       this.pythonAnywhereService.borrar_plan(this.planes_seleccionada.id).subscribe(resp=>{
         this.mostrarToastInfo('Estado del Plan ', 'Plan  eliminado correctamente', false);
+        this.pythonAnywhereService.obtener_planes().subscribe(resp => {
+          this.arr_planes = resp;
+          this.arr_filtered_planes = this.arr_planes;
+        });
       })
     }
 
@@ -346,6 +354,10 @@ console.log(nombre,precio,duracion,descripcion)
       }
           this.pythonAnywhereService.actualizar_plan(actualizar).subscribe(resp=>{
             this.mostrarToastInfo('Estado del Plan ', 'Plan editado correctamente', false);
+            this.pythonAnywhereService.obtener_planes().subscribe(resp => {
+              this.arr_planes = resp;
+              this.arr_filtered_planes = this.arr_planes;
+            });
          })
 
      

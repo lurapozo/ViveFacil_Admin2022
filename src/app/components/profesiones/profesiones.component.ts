@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
-import { Profesion, BodyCrearProfesion, BodyActualizarProfesion } from 'src/app/interfaces/profesion';
+import { BodyActualizarProfesion, BodyCrearProfesion, Profesion } from 'src/app/interfaces/profesion';
 import { Servicio } from 'src/app/interfaces/servicio';
 import { PythonAnywhereService } from 'src/app/services/PythonAnywhere/python-anywhere.service';
 
@@ -170,6 +170,10 @@ export class ProfesionesComponent {
           console.log(resp.mensaje);
           console.log('Profesion creada: ', resp.profesion);
           this.limpiarForm('crear');
+          this.pythonAnywhereService.obtener_profesiones().subscribe(resp => {
+            this.arr_profesiones = resp;
+            this.arr_filtered_profesiones = this.arr_profesiones;
+          });
         }
         else {
           console.log(resp.mensaje);
@@ -205,6 +209,10 @@ export class ProfesionesComponent {
         if(resp) {
           console.log('Profesion actualizada: ', resp);
           this.limpiarForm('actualizar');
+          this.pythonAnywhereService.obtener_profesiones().subscribe(resp => {
+            this.arr_profesiones = resp;
+            this.arr_filtered_profesiones = this.arr_profesiones;
+          });
         }
         else {
           console.log(resp);
@@ -220,6 +228,10 @@ export class ProfesionesComponent {
     if(this.profesion_seleccionada){
       this.pythonAnywhereService.delete_profesion(this.profesion_seleccionada.id.toString()).subscribe(resp => {
         console.log('Profesion eliminada correctamente: ', resp);
+        this.pythonAnywhereService.obtener_profesiones().subscribe(resp => {
+          this.arr_profesiones = resp;
+          this.arr_filtered_profesiones = this.arr_profesiones;
+        });
       });
     }
   }
