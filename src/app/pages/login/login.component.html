@@ -1,28 +1,27 @@
-<div class="container-fluid align-items-center">
-    <div id="padre" class="row justify-content-center align-items-center p-0">
-        <div class="p-0 m-0 justify-content-center align-items-center">
-            <div id="logo-img-container" class="form-row col-md-12">
-                <div class="col-md-8 form-group">
-                    <img id="logo" src='assets/imagenes/logo-inicio.png'>
-                </div>
+<body>
+<div class="d-flex justify-content-center p-2">
+    <div class="p-0 my-5 justify-content-center align-items-center">
+        <div id="logo-img-container" class="form-row col-md-12">
+            <div class="col-md-8 form-group">
+                <img id="logo" src='assets/imagenes/logo-inicio.png'>
             </div>
-            <form [formGroup]="loginForm" class="w-100 d-flex flex-column pt-3 rounded-2">
+        </div>
+        <div id="logo-img-container" class="form-row col-md-12">
+            <form [formGroup]="loginForm" class="w-100 d-flex flex-column pt-3 rounded-2 justify-content-center">
                 
-                <div class="form-row col-md-12">
-                    <div class="col-md-4 form-group contTexto">
-                        <input id="id_correo" type="text" class="form-control" placeholder="Usuario" formControlName="email">
-                        <!-- <input [ngClass]="isInvalidForm('nombre', 'actualizar') ? 'is-invalid' : '' " id="inputNombre" [placeholder] ="categoria_seleccionada?.nombre" /> 
-                            <div class="invalid-feedback">
-                                {{ getErrorMessage(formEdit, "nombre") }}
-                            </div>-->
-                    </div>
+                
+                <div class="form-group contTexto my-2">
+                    <input id="id_correo" type="text" class="form-control" placeholder="Usuario" formControlName="email">
                 </div>
+                
+                <br>
 
-                <div class="form-row col-md-12">
-                    <div class="col-md-4 form-group contTexto">
-                        <input id="id_password" type="password" class="form-control" placeholder="Contraseña" formControlName="password">
-                    </div>
+
+            
+                <div class="form-group contTexto my-2">
+                    <input id="id_password" type="password" class="form-control" placeholder="Contraseña" formControlName="password">
                 </div>
+                
 
                 <!-- <div class="form-row col-md-12">
                     <div class="col-md-8 form-group labelDiv">
@@ -30,88 +29,12 @@
                     </div>
                 </div> -->
             </form>
-            <div class="form-row col-md-12">
-                <button (click)="onSubmit()" class="btn btn-primary">
-                    INICIAR SESIÓN
-                </button>
-            </div>
+        </div>
+        <div class="form-row my-2">
+            <button (click)="onSubmit()" class="btn btn-primary">
+                INICIAR SESIÓN
+            </button>
         </div>
     </div>
-
-    <!-- <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-body mb-0">
-                <form [formGroup]="formEdit" class="">
-                    <div class="row">
-                        <div class="col d-flex justify-content-center">
-                            <img *ngIf="existImageActualizar" class="image_modal rounded mx-auto d-block img-fluid w-50"
-                                alt="Archivo incorrecto" />
-                            <img class="image_modal rounded mx-auto d-block img-fluid w-50"
-                                [src]="'https://tomesoft1.pythonanywhere.com'" alt="Archivo incorrecto" />
-                            <i class="rounded mx-auto d-block img-fluid w-50 bi bi-upload icono"></i>
-                        </div>
-                        <div class="p-2">
-                            <input class="w-100 centrar form-control" [ngClass]="
-                                formEdit.get('imagen')?.hasError('image_error')
-                                ? 'is-invalid'
-                                : '' || existImageActualizar
-                                ? 'is-valid'
-                                : ''
-                                " type="file" id="file_input" accept="image/png, image/jpeg"
-                                (change)="loadImageFromDevice($event, 'actualizar')" />
-                            <div class="invalid-feedback">
-                                {{ getErrorMessage(formEdit, "imagen") }}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row p-2 align-items-center">
-                        <div class="col-5">
-                            <label for="inputNombre" class="form-label">
-                                <h3 class="m-0 p-0 fw-bold">Nombre:</h3>
-                            </label>
-                        </div>
-                        <div class="col-7">
-                            <input type="text" formControlName="nombre" class="form-control" [ngClass]="
-                    isInvalidForm('nombre', 'actualizar') ? 'is-invalid' : ''
-                  " id="inputNombre" [placeholder]="categoria_seleccionada?.nombre"
-                                [value]="categoria_seleccionada?.nombre" />
-                            <div class="invalid-feedback">
-                                {{ getErrorMessage(formEdit, "nombre") }}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row p-2 align-items-center">
-                        <div class="col-5">
-                            <label for="textareaDescripcion" class="form-label">
-                                <h3 class="m-0 p-0 fw-bold">Descripción:</h3>
-                            </label>
-                        </div>
-                        <div class="col-7">
-                            <textarea class="form-control" formControlName="descripcion" [ngClass]="
-                    isInvalidForm('descripcion', 'actualizar') ? 'is-invalid' : ''
-                  " id="textareaDescripcion" [placeholder]="categoria_seleccionada?.descripcion"
-                                [value]="categoria_seleccionada?.descripcion"></textarea>
-                            <div class="invalid-feedback">
-                                {{ getErrorMessage(formEdit, "descripcion") }}
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-danger" data-bs-target="#modalInformacionProfesion" data-bs-toggle="modal">
-                    Regresar
-                </button>
-                <button data-bs-target="#modalConfirmacion" data-bs-toggle="modal" class="btn btn-success" (click)="
-              establecerMensaje(
-                'Está seguro que desea actualizar laminformación?',
-                'actualizar'
-              )
-            ">
-                    Actualizar
-                </button>
-            </div>
-        </div>
-    </div> -->
+</div>
+</body>
