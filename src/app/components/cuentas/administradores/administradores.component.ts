@@ -1,9 +1,9 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, Validators, FormBuilder, AbstractControl } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { DomSanitizer } from '@angular/platform-browser';
 import { Administrador, BodyActualizarAdministrador, BodyCrearAdministrador } from 'src/app/interfaces/administrador';
 import { Cargo } from 'src/app/interfaces/cargo';
 import { PythonAnywhereService } from 'src/app/services/PythonAnywhere/python-anywhere.service';
-import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-administradores',
@@ -347,12 +347,19 @@ total=0
     }
 
     if (this.admiCrear.status == "INVALID") {
-
+      console.log("Invalid")
       return;
     } else {
       this.pythonAnywhereService.crear_administrador(this.admi).subscribe(resp => {
-
         console.log(resp)
+        this.pythonAnywhereService.obtener_administradores().subscribe(resp => {
+          this.total = resp.total_objects
+          this.arr_admi = resp.results;
+          this.arr_filtered_admi = this.arr_admi;
+          console.log(resp, "resp");
+          console.log(this.arr_filtered_admi)
+          this.currentPage = 1;
+        });
       })
     }
   }
@@ -389,12 +396,19 @@ total=0
     admiEditar.estado = this.formEdit.get('estado')?.value;
      console.log( this.formEdit)
     if (this.formEdit.status == "INVALID") {
-      this.pythonAnywhereService.actualizar_administrador(id, admiEditar).subscribe(resp => console.log(resp)
-      )
+      console.log("Invalid")
       return;
     } else {
-      this.pythonAnywhereService.actualizar_administrador(id, admiEditar).subscribe(resp => console.log(resp)
-      )
+      this.pythonAnywhereService.actualizar_administrador(id, admiEditar).subscribe(resp => {console.log(resp)
+        this.pythonAnywhereService.obtener_administradores().subscribe(resp => {
+          this.total = resp.total_objects
+          this.arr_admi = resp.results;
+          this.arr_filtered_admi = this.arr_admi;
+          console.log(resp, "resp");
+          console.log(this.arr_filtered_admi)
+          this.currentPage = 1;
+        });
+      })
     }
   }
 
@@ -458,6 +472,14 @@ total=0
       const id = this.admi_seleccionada.id
       this.pythonAnywhereService.cambio_administrador_estado(id,estado).subscribe(resp=>{
         console.log(resp)
+        this.pythonAnywhereService.obtener_administradores().subscribe(resp => {
+          this.total = resp.total_objects
+          this.arr_admi = resp.results;
+          this.arr_filtered_admi = this.arr_admi;
+          console.log(resp, "resp");
+          console.log(this.arr_filtered_admi)
+          this.currentPage = 1;
+        });
       })
     }
 }

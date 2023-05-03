@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { Solicitante2 } from 'src/app/interfaces/solicitante2';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { BodyEmail } from 'src/app/interfaces/email';
 import { BodyActualizarProveedorPendiente, BodyCrearProveedorPendiente, BodyResponseCrearProveedorPendiente, SerializerCrearProveedorPendiente } from 'src/app/interfaces/proveedor';
+import { Solicitante2 } from 'src/app/interfaces/solicitante2';
 import { PythonAnywhereService } from 'src/app/services/PythonAnywhere/python-anywhere.service';
 import { UserService } from 'src/app/services/user/user.service';
 
@@ -371,6 +371,15 @@ export class RechazadosComponent {
     }
     this.pythonAnywhereService.eliminar_proveedores_rechazados(this.pendiente_seleccionada.id).subscribe(resp => {
       console.log(resp)
+      this.pythonAnywhereService.obtener_proveedores_rechazados().subscribe(resp => {
+        this.total = Object(resp).total_objects
+        this.arr_pendiente = Object(resp).results;
+        this.arr_filtered_pendiente = this.arr_pendiente;
+        console.log(resp, "resp");
+        console.log(this.arr_filtered_pendiente)
+        this.currentPage = 1;
+  
+      });
     })
   }
 
@@ -537,8 +546,18 @@ export class RechazadosComponent {
 
       return;
     } else {
-      this.pythonAnywhereService.editar_proveedor_pendiente(id, pendiente).subscribe(resp => console.log(resp)
-      )
+      this.pythonAnywhereService.editar_proveedor_pendiente(id, pendiente).subscribe(resp => {
+        console.log(resp)
+        this.pythonAnywhereService.obtener_proveedores_rechazados().subscribe(resp => {
+          this.total = Object(resp).total_objects
+          this.arr_pendiente = Object(resp).results;
+          this.arr_filtered_pendiente = this.arr_pendiente;
+          console.log(resp, "resp");
+          console.log(this.arr_filtered_pendiente)
+          this.currentPage = 1;
+    
+        });
+      })
     }
   }
 

@@ -136,6 +136,14 @@ export class ProveedoresComponent {
 
     this.pythonAnywhereService.crear_proveedor_pendiente(pendiente).subscribe(resp => {
       console.log(resp)
+      this.pythonAnywhereService.obtener_proveedores_proveedores().subscribe(resp => {
+        this.total = Object(resp).total_objects
+        this.arr_proveedor = Object(resp).results;
+        console.log(resp, "resp")
+        this.arr_filtered_proveedor = this.arr_proveedor;
+        console.log(this.arr_filtered_proveedor)
+        this.currentPage = 1;  
+      });
     })
     let email: BodyEmail = {
       password: '1234',
@@ -219,6 +227,14 @@ export class ProveedoresComponent {
     }
     this.pythonAnywhereService.editar_proveedor_proveedor(this.proveedor_seleccionado.id, pendiente).subscribe(resp => {
       console.log(resp)
+      this.pythonAnywhereService.obtener_proveedores_proveedores().subscribe(resp => {
+        this.total = Object(resp).total_objects
+        this.arr_proveedor = Object(resp).results;
+        console.log(resp, "resp")
+        this.arr_filtered_proveedor = this.arr_proveedor;
+        console.log(this.arr_filtered_proveedor)
+        this.currentPage = 1;  
+      });
     })
   }
 
@@ -246,6 +262,14 @@ export class ProveedoresComponent {
     }
     this.pythonAnywhereService.eliminar_proveedores_pendientes(this.proveedor_seleccionado.id).subscribe(resp => {
       console.log(resp)
+      this.pythonAnywhereService.obtener_proveedores_proveedores().subscribe(resp => {
+        this.total = Object(resp).total_objects
+        this.arr_proveedor = Object(resp).results;
+        this.arr_filtered_proveedor = this.arr_proveedor;
+        console.log(resp, "resp")
+        console.log(this.arr_filtered_proveedor)
+        this.currentPage = 1;  
+      });
     })
   }
 
@@ -404,11 +428,20 @@ export class ProveedoresComponent {
 
     console.log(this.formEdit)
     if (this.formEdit.status == "INVALID") {
-
+      console.log("Invalido")
       return;
     } else {
-      this.pythonAnywhereService.editar_proveedor_pendiente(id, pendiente).subscribe(resp => console.log(resp)
-      )
+      this.pythonAnywhereService.editar_proveedor_pendiente(id, pendiente).subscribe(resp => {
+        console.log(resp)
+        this.pythonAnywhereService.obtener_proveedores_proveedores().subscribe(resp => {
+          this.total = Object(resp).total_objects
+          this.arr_proveedor = Object(resp).results;
+          console.log(resp, "resp")
+          this.arr_filtered_proveedor = this.arr_proveedor;
+          console.log(this.arr_filtered_proveedor)
+          this.currentPage = 1;  
+        });
+      })
     }
   }
 

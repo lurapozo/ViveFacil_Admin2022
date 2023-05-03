@@ -3,7 +3,7 @@
   <div class="row p-2 justify-content-center align-items-center">
     <div class="col text-center">
       <h2 class="p-0 m-0">Pendientes</h2>
-      <h2 class="p-0 m-0">Total de Pendientes: {{total}}</h2>
+      <h2 class="p-0 m-0">Total de Pendientes: {{ total }}</h2>
     </div>
   </div>
 
@@ -12,14 +12,19 @@
     <div class="col-xl-7 col-lg-5"></div>
     <div class="col-xl-3 col-lg-4">
       <div class="input-group">
-        <input type="text" class="form-control" placeholder="Buscar"
-          aria-label="Buscar" aria-describedby="basic-addon1"
-          (input)="search($event)">
-        <button class="input-group-text" id="basic-addon1"> <i class="bi
-            bi-search"></i> </button>
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Buscar"
+          aria-label="Buscar"
+          aria-describedby="basic-addon1"
+          (input)="search($event)"
+        />
+        <button class="input-group-text" id="basic-addon1">
+          <i class="bi bi-search"></i>
+        </button>
       </div>
     </div>
-
   </div>
   <!-- Contenedor de admi -->
   <div class="row justify-content-center align-items-center p-0">
@@ -44,61 +49,78 @@
         <div class="col-2 align-self-center">
           <h3 class="p-0 m-0">Fecha Registro</h3>
         </div>
-
       </div>
 
       <!-- Profesion -->
-      <div (click)=" pendiente_seleccionada=a; 
-      copiaCedulaNombre=pendiente_seleccionada?.copiaLicencia.substring(pendiente_seleccionada?.copiaLicencia.lastIndexOf('/') + 1);
-      copiaLicenciaNombre=pendiente_seleccionada?.copiaLicencia.substring(pendiente_seleccionada?.copiaLicencia.lastIndexOf('/') + 1); 
-      funcionMostar()" 
-      *ngFor="let a of arr_filtered_pendiente"
-      class="row p-2 bg-light fila_info_profesion" data-bs-toggle="modal"
-      href="#modalInformacionProfesion" role="button">
+      <div
+        (click)="
+          pendiente_seleccionada = a;
+          copiaCedulaNombre = pendiente_seleccionada?.copiaLicencia.substring(
+            pendiente_seleccionada?.copiaLicencia.lastIndexOf('/') + 1
+          );
+          copiaLicenciaNombre = pendiente_seleccionada?.copiaLicencia.substring(
+            pendiente_seleccionada?.copiaLicencia.lastIndexOf('/') + 1
+          );
+          funcionMostar()
+        "
+        *ngFor="let a of arr_filtered_pendiente"
+        class="row p-2 bg-light fila_info_profesion"
+        data-bs-toggle="modal"
+        href="#modalInformacionProfesion"
+        role="button"
+      >
         <div class="col-2 align-self-center">
-          <h4 class="p-0 m-0"> {{a.nombres}}
-            {{a.apellidos}}</h4>
+          <h4 class="p-0 m-0">{{ a.nombres }} {{ a.apellidos }}</h4>
         </div>
 
         <div class="col-2 align-self-center">
-          <h4 class="p-0 m-0"> {{a.cedula}} </h4>
+          <h4 class="p-0 m-0">{{ a.cedula }}</h4>
         </div>
 
         <div class="col-4 align-self-center">
-          <h4 class="p-0 m-0">{{a.email}}</h4>
+          <h4 class="p-0 m-0">{{ a.email }}</h4>
         </div>
 
         <div class="col-2 align-self-center">
-          <h4 class="p-0 m-0"> {{a.telefono}}</h4>
+          <h4 class="p-0 m-0">{{ a.telefono }}</h4>
         </div>
         <div class="col-2 align-self-center">
-          <h4 class="p-0 m-0"> {{a.fecha_registro|date:"d/M/Y"}}</h4>
+          <h4 class="p-0 m-0">{{ a.fecha_registro | date : "d/M/Y" }}</h4>
         </div>
-
       </div>
     </div>
   </div>
-
 </div>
-<div class="modal fade" id="modalInformacionProfesion" aria-hidden="true"
-  aria-labelledby="modalInformacionProfesionLabel" tabindex="-1">
+<div
+  class="modal fade"
+  id="modalInformacionProfesion"
+  aria-hidden="true"
+  aria-labelledby="modalInformacionProfesionLabel"
+  tabindex="-1"
+>
   <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header align-items-center">
-        <h1 class="modal-title fs-5 m-0 p-0 fw-bold"
-          id="modalInformacionProfesionLabel">Información de Proveedores pendientes
+        <h1
+          class="modal-title fs-5 m-0 p-0 fw-bold"
+          id="modalInformacionProfesionLabel"
+        >
+          Información de Proveedores pendientes
         </h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"
-          aria-label="Close"></button>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
       </div>
       <div class="modal-body mb-0">
-
         <div class="row p-2 align-items-center">
           <div class="col-5">
             <h3 class="m-0 p-0 fw-bold">Nombres:</h3>
           </div>
           <div class="col-7">
-            {{pendiente_seleccionada?.nombres}}
+            {{ pendiente_seleccionada?.nombres }}
           </div>
         </div>
 
@@ -107,7 +129,7 @@
             <h3 class="m-0 p-0 fw-bold">Apellidos:</h3>
           </div>
           <div class="col-7">
-            {{pendiente_seleccionada?.apellidos}}
+            {{ pendiente_seleccionada?.apellidos }}
           </div>
         </div>
 
@@ -116,19 +138,23 @@
             <h3 class="m-0 p-0 fw-bold">Cedula:</h3>
           </div>
           <div class="col-7">
-            {{pendiente_seleccionada?.cedula}}
+            {{ pendiente_seleccionada?.cedula }}
           </div>
         </div>
-
 
         <div class="row p-2 align-items-center">
           <div class="col-5">
             <h3 class="m-0 p-0 fw-bold">Documento cedula:</h3>
           </div>
           <div class="col-7">
-            <a href="https://tomesoft1.pythonanywhere.com{{pendiente_seleccionada?.copiaCedula}}" download="newfilename.pdf">
+            <a
+              href="https://tomesoft1.pythonanywhere.com{{
+                pendiente_seleccionada?.copiaCedula
+              }}"
+              download="newfilename.pdf"
+            >
               <p>
-                {{copiaCedulaNombre}}
+                {{ copiaCedulaNombre }}
               </p>
             </a>
           </div>
@@ -139,7 +165,7 @@
             <h3 class="m-0 p-0 fw-bold">Ciudad:</h3>
           </div>
           <div class="col-7">
-            {{pendiente_seleccionada?.ciudad}}
+            {{ pendiente_seleccionada?.ciudad }}
           </div>
         </div>
 
@@ -148,7 +174,7 @@
             <h3 class="m-0 p-0 fw-bold">Direccion:</h3>
           </div>
           <div class="col-7">
-            {{pendiente_seleccionada?.direccion}}
+            {{ pendiente_seleccionada?.direccion }}
           </div>
         </div>
 
@@ -157,7 +183,7 @@
             <h3 class="m-0 p-0 fw-bold">Telefono:</h3>
           </div>
           <div class="col-7">
-            {{pendiente_seleccionada?.telefono}}
+            {{ pendiente_seleccionada?.telefono }}
           </div>
         </div>
 
@@ -166,7 +192,7 @@
             <h3 class="m-0 p-0 fw-bold">Genero:</h3>
           </div>
           <div class="col-7">
-            {{pendiente_seleccionada?.genero}}
+            {{ pendiente_seleccionada?.genero }}
           </div>
         </div>
 
@@ -175,7 +201,7 @@
             <h3 class="m-0 p-0 fw-bold">Fecha Registro:</h3>
           </div>
           <div class="col-7">
-            {{pendiente_seleccionada?.fecha_registro|date:"d/M/Y"}}
+            {{ pendiente_seleccionada?.fecha_registro | date : "d/M/Y" }}
           </div>
         </div>
 
@@ -184,7 +210,7 @@
             <h3 class="m-0 p-0 fw-bold">Correo:</h3>
           </div>
           <div class="col-7">
-            {{pendiente_seleccionada?.email}}
+            {{ pendiente_seleccionada?.email }}
           </div>
         </div>
 
@@ -193,7 +219,7 @@
             <h3 class="m-0 p-0 fw-bold">Descripcion:</h3>
           </div>
           <div class="col-7">
-            {{pendiente_seleccionada?.descripcion}}
+            {{ pendiente_seleccionada?.descripcion }}
           </div>
         </div>
 
@@ -202,7 +228,7 @@
             <h3 class="m-0 p-0 fw-bold">Licencia:</h3>
           </div>
           <div class="col-7">
-            {{pendiente_seleccionada?.licencia}}
+            {{ pendiente_seleccionada?.licencia }}
           </div>
         </div>
         <div class="row p-2 align-items-center">
@@ -210,9 +236,14 @@
             <h3 class="m-0 p-0 fw-bold">Documentacion Licenciada:</h3>
           </div>
           <div class="col-7">
-            <a href="https://tomesoft1.pythonanywhere.com{{pendiente_seleccionada?.copiaLicencia}}" download="newfilename2.pdf">
+            <a
+              href="https://tomesoft1.pythonanywhere.com{{
+                pendiente_seleccionada?.copiaLicencia
+              }}"
+              download="newfilename2.pdf"
+            >
               <p>
-                {{copiaLicenciaNombre}}
+                {{ copiaLicenciaNombre }}
               </p>
             </a>
           </div>
@@ -222,43 +253,72 @@
         <button
           class="btn btn-warning"
           data-bs-target="#modalConfirmacion"
-          data-bs-toggle="modal">Cerrar</button>
+          data-bs-toggle="modal"
+        >
+          Cerrar
+        </button>
         <button
           (click)="limpiarForm()"
           class="btn btn-info"
           data-target=".bd-example-modal-xl"
           data-bs-target="#modalInformacionEdicionProfesion"
-          data-bs-toggle="modal">Editar</button>
+          data-bs-toggle="modal"
+        >
+          Editar
+        </button>
         <button
           data-bs-target="#modalConfirmacion1"
           data-bs-toggle="modal"
           class="btn btn-success"
-          (click)="isAceptar = true; isNegar = false; mensajeAlerta='Está seguro que desea aprobar la solicitud?'">Aprobar</button>
+          (click)="
+            isAceptar = true;
+            isNegar = false;
+            mensajeAlerta = 'Está seguro que desea aprobar la solicitud?'
+          "
+        >
+          Aprobar
+        </button>
         <button
           data-bs-target="#modalConfirmacion"
           data-bs-toggle="modal"
           class="btn btn-danger"
-          (click)="establecerMensaje('Está seguro que desea Negar la información?', 'negar')">Negar</button>
-
+          (click)="
+            establecerMensaje(
+              'Está seguro que desea Negar la información?',
+              'negar'
+            )
+          "
+        >
+          Negar
+        </button>
       </div>
     </div>
   </div>
 </div>
 <!-- Modal edicion de informacion de admi -->
-<div class="modal fade modal-xl" id="modalInformacionEdicionProfesion"
-  aria-hidden="true" aria-labelledby="modalInformacionEdicionProfesionLabel"
-  tabindex="-1">
+<div
+  class="modal fade modal-xl"
+  id="modalInformacionEdicionProfesion"
+  aria-hidden="true"
+  aria-labelledby="modalInformacionEdicionProfesionLabel"
+  tabindex="-1"
+>
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header align-items-center">
-        <h1 class="modal-title fs-5 m-0 p-0 fw-bold"
-          id="modalInformacionEdicionProfesionLabel">Edición Pendientes</h1>
+        <h1
+          class="modal-title fs-5 m-0 p-0 fw-bold"
+          id="modalInformacionEdicionProfesionLabel"
+        >
+          Edición Pendientes
+        </h1>
 
         <button
           type="button"
           class="btn-close"
           data-bs-dismiss="modal"
-          aria-label="Close"></button>
+          aria-label="Close"
+        ></button>
       </div>
       <div class="modal-body mb-0">
         <form [formGroup]="formEdit" class="">
@@ -267,32 +327,43 @@
               <div class="col-8 align-self-center">
                 <div class="row p-2 align-items-center">
                   <div class="col-5">
-                    <label for="inputNombre" class="form-label"><h3 class="m-0 p-0 fw-bold">Nombre:</h3></label>
+                    <label for="inputNombre" class="form-label"
+                      ><h3 class="m-0 p-0 fw-bold">Nombre:</h3></label
+                    >
                   </div>
                   <div class="col-7">
-                    <input type="text" formControlName="nombre" class="form-control"
-                    [ngClass]="isInvalidForm('nombre') ? 'is-invalid' : ''"
+                    <input
+                      type="text"
+                      formControlName="nombre"
+                      class="form-control"
+                      [ngClass]="isInvalidForm('nombre') ? 'is-invalid' : ''"
                       [placeholder]="pendiente_seleccionada?.nombres"
-                      [value]="pendiente_seleccionada?.nombres">
-                    <div class="invalid-feedback"> {{getErrorMessage(formEdit, 'nombre')}} </div>
+                      [value]="pendiente_seleccionada?.nombres"
+                    />
+                    <div class="invalid-feedback">
+                      {{ getErrorMessage(formEdit, "nombre") }}
+                    </div>
                   </div>
                 </div>
-      
+
                 <div class="row p-2 align-items-center">
                   <div class="col-5">
-                    <label for="inputNombre" class="form-label"><h3 class="m-0 p-0 fw-bold">Apellidos:</h3></label>
+                    <label for="inputNombre" class="form-label"
+                      ><h3 class="m-0 p-0 fw-bold">Apellidos:</h3></label
+                    >
                   </div>
                   <div class="col-7">
                     <input
                       type="text"
                       formControlName="apellidos"
                       class="form-control"
-                      [ngClass]="isInvalidForm('apellidos') ?
-                      'is-invalid' : ''"
+                      [ngClass]="isInvalidForm('apellidos') ? 'is-invalid' : ''"
                       [placeholder]="pendiente_seleccionada?.apellidos"
-                      [value]="pendiente_seleccionada?.apellidos">
-                    <div class="invalid-feedback"> {{getErrorMessage(formEdit,
-                      'apellidos')}} </div>
+                      [value]="pendiente_seleccionada?.apellidos"
+                    />
+                    <div class="invalid-feedback">
+                      {{ getErrorMessage(formEdit, "apellidos") }}
+                    </div>
                   </div>
                 </div>
 
@@ -303,61 +374,76 @@
                     </label>
                   </div>
                   <div class="col-7">
-                    <img src="https://tomesoft1.pythonanywhere.com{{pendiente_seleccionada?.foto}}" alt="no se encontró foto de perfil" width="50" height="60">
+                    <img
+                      src="https://tomesoft1.pythonanywhere.com{{
+                        pendiente_seleccionada?.foto
+                      }}"
+                      alt="no se encontró foto de perfil"
+                      width="50"
+                      height="60"
+                    />
                     <input
                       type="file"
                       formControlName="foto"
                       accept="image/*"
                       class="form-control"
                       [ngClass]="isInvalidForm('foto') ? 'is-invalid' : ''"
-                      (change)="loadImageFromDevice($event)">
+                      (change)="loadImageFromDevice($event)"
+                    />
                     <div class="invalid-feedback">
-                      {{getErrorMessage(formEdit, 'copiaCedula')}}  
+                      {{ getErrorMessage(formEdit, "copiaCedula") }}
                     </div>
                   </div>
                 </div>
-      
+
                 <div class="row p-2 align-items-center">
                   <div class="col-5">
-                    <label for="inputCorreo" class="form-label"><h3 class="m-0 p-0
-                        fw-bold">Correo:</h3></label>
+                    <label for="inputCorreo" class="form-label"
+                      ><h3 class="m-0 p-0 fw-bold">Correo:</h3></label
+                    >
                   </div>
                   <div class="col-7">
                     <input
                       type="text"
                       formControlName="correo"
                       class="form-control"
-                      [ngClass]="isInvalidForm('email') ?
-                      'is-invalid' : ''"
+                      [ngClass]="isInvalidForm('email') ? 'is-invalid' : ''"
                       [placeholder]="pendiente_seleccionada?.correo"
-                      [value]="pendiente_seleccionada?.correo">
-                    <div class="invalid-feedback"> {{getErrorMessage(formEdit,
-                      'nombre')}} </div>
+                      [value]="pendiente_seleccionada?.correo"
+                    />
+                    <div class="invalid-feedback">
+                      {{ getErrorMessage(formEdit, "nombre") }}
+                    </div>
                   </div>
                 </div>
-      
+
                 <div class="row p-2 align-items-center">
                   <div class="col-5">
-                    <label for="selectorServicioCrear" class="form-label"><h3
-                        class="m-0 p-0 fw-bold">Genero:</h3></label>
+                    <label for="selectorServicioCrear" class="form-label"
+                      ><h3 class="m-0 p-0 fw-bold">Genero:</h3></label
+                    >
                   </div>
                   <div class="col-7">
                     <select
                       class="form-select"
-                      [ngClass]="isInvalidForm('genero') ?
-                      'is-invalid' : ''"
+                      [ngClass]="isInvalidForm('genero') ? 'is-invalid' : ''"
                       formControlName="genero"
-                    
                       [value]="pendiente_seleccionada?.genero"
-                      aria-describedby="selectorServicioCrearFeedback">
-                      <option selected disabled value="">Elija un genero...</option>
-                      <option *ngFor="let c of generos" [id]="c" [value]="c"> 
-                        {{c}}
+                      aria-describedby="selectorServicioCrearFeedback"
+                    >
+                      <option selected disabled value="">
+                        Elija un genero...
+                      </option>
+                      <option *ngFor="let c of generos" [id]="c" [value]="c">
+                        {{ c }}
                       </option>
                     </select>
-                    <div id="selectorServicioCrearFeedback"
-                      class="invalid-feedback"> {{getErrorMessage(formEdit,
-                      'genero')}} </div>
+                    <div
+                      id="selectorServicioCrearFeedback"
+                      class="invalid-feedback"
+                    >
+                      {{ getErrorMessage(formEdit, "genero") }}
+                    </div>
                   </div>
                 </div>
 
@@ -372,15 +458,16 @@
                       type="text"
                       formControlName="cedula"
                       class="form-control"
-                      [ngClass]="isInvalidForm('cedula') ?
-                      'is-invalid' : ''"
+                      [ngClass]="isInvalidForm('cedula') ? 'is-invalid' : ''"
                       [placeholder]="pendiente_seleccionada?.cedula"
-                      [value]="pendiente_seleccionada?.cedula">
-                    <div class="invalid-feedback"> {{getErrorMessage(formEdit,
-                      'cedula')}} </div>
+                      [value]="pendiente_seleccionada?.cedula"
+                    />
+                    <div class="invalid-feedback">
+                      {{ getErrorMessage(formEdit, "cedula") }}
+                    </div>
                   </div>
                 </div>
-      
+
                 <div class="row p-2 align-items-center">
                   <div class="col-5">
                     <label for="inputNombre" class="form-label">
@@ -388,9 +475,14 @@
                     </label>
                   </div>
                   <div class="col-7">
-                    <a href="https://tomesoft1.pythonanywhere.com{{pendiente_seleccionada?.copiaLicencia}}" download="newfilename2.pdf">
+                    <a
+                      href="https://tomesoft1.pythonanywhere.com{{
+                        pendiente_seleccionada?.copiaLicencia
+                      }}"
+                      download="newfilename2.pdf"
+                    >
                       <p>
-                        {{copiaLicenciaNombre}}
+                        {{ copiaLicenciaNombre }}
                       </p>
                     </a>
                     <input
@@ -398,11 +490,13 @@
                       accept=".pdf"
                       formControlName="copiaLicencia"
                       class="form-control"
-                      [ngClass]="isInvalidForm('copiaLicencia') ? 'is-invalid' : ''"
-                      (change)="loadPdf2FromDevice($event)">
-                    <div class="invalid-feedback"> 
-                      {{getErrorMessage(formEdit,
-                      'copiaLicencia')}} 
+                      [ngClass]="
+                        isInvalidForm('copiaLicencia') ? 'is-invalid' : ''
+                      "
+                      (change)="loadPdf2FromDevice($event)"
+                    />
+                    <div class="invalid-feedback">
+                      {{ getErrorMessage(formEdit, "copiaLicencia") }}
                     </div>
                   </div>
                 </div>
@@ -414,9 +508,14 @@
                     </label>
                   </div>
                   <div class="col-7">
-                    <a href="https://tomesoft1.pythonanywhere.com{{pendiente_seleccionada?.copiaCedula}}" download="newfilename.pdf">
+                    <a
+                      href="https://tomesoft1.pythonanywhere.com{{
+                        pendiente_seleccionada?.copiaCedula
+                      }}"
+                      download="newfilename.pdf"
+                    >
                       <p>
-                        {{copiaCedulaNombre}}
+                        {{ copiaCedulaNombre }}
                       </p>
                     </a>
                     <input
@@ -424,33 +523,38 @@
                       accept=".pdf"
                       formControlName="copiaCedula"
                       class="form-control"
-                      [ngClass]="isInvalidForm('copiaCedula') ?'is-invalid' : ''"
-                      (change)="loadPdfFromDevice($event)">
-                    <div class="invalid-feedback"> 
-                      {{getErrorMessage(formEdit, 'copiaCedula')}} 
+                      [ngClass]="
+                        isInvalidForm('copiaCedula') ? 'is-invalid' : ''
+                      "
+                      (change)="loadPdfFromDevice($event)"
+                    />
+                    <div class="invalid-feedback">
+                      {{ getErrorMessage(formEdit, "copiaCedula") }}
                     </div>
                   </div>
                 </div>
 
                 <div class="row p-2 align-items-center">
                   <div class="col-5">
-                    <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
-                        fw-bold">Telefono:</h3></label>
+                    <label for="inputNombre" class="form-label"
+                      ><h3 class="m-0 p-0 fw-bold">Telefono:</h3></label
+                    >
                   </div>
                   <div class="col-7">
                     <input
                       type="text"
                       formControlName="telefono"
                       class="form-control"
-                      [ngClass]="isInvalidForm('telefono') ?
-                      'is-invalid' : ''"
+                      [ngClass]="isInvalidForm('telefono') ? 'is-invalid' : ''"
                       [placeholder]="pendiente_seleccionada?.telefono"
-                      [value]="pendiente_seleccionada?.telefono">
-                    <div class="invalid-feedback"> {{getErrorMessage(formEdit,
-                      'telefono')}} </div>
+                      [value]="pendiente_seleccionada?.telefono"
+                    />
+                    <div class="invalid-feedback">
+                      {{ getErrorMessage(formEdit, "telefono") }}
+                    </div>
                   </div>
                 </div>
-      
+
                 <div class="row p-2 align-items-center">
                   <div class="col-5">
                     <label for="selectorServicioCrear" class="form-label">
@@ -460,185 +564,242 @@
                   <div class="col-7">
                     <select
                       class="form-select"
-                      [ngClass]="isInvalidForm('ciudad') ?
-                      'is-invalid' : ''"
+                      [ngClass]="isInvalidForm('ciudad') ? 'is-invalid' : ''"
                       formControlName="ciudad"
                       id="ge"
                       [value]="pendiente_seleccionada?.ciudad"
-                      aria-describedby="selectorServicioCrearFeedback">
-                      <option selected disabled value="">Elija una ciudad...</option>
-                      <option *ngFor="let c of ciudades" [id]="c" [value]="c"> {{c}}
+                      aria-describedby="selectorServicioCrearFeedback"
+                    >
+                      <option selected disabled value="">
+                        Elija una ciudad...
+                      </option>
+                      <option *ngFor="let c of ciudades" [id]="c" [value]="c">
+                        {{ c }}
                       </option>
                     </select>
-                    <div id="selectorServicioCrearFeedback"
-                      class="invalid-feedback"> {{getErrorMessage(formEdit,
-                      'ciudad')}} </div>
+                    <div
+                      id="selectorServicioCrearFeedback"
+                      class="invalid-feedback"
+                    >
+                      {{ getErrorMessage(formEdit, "ciudad") }}
+                    </div>
                   </div>
                 </div>
-              
+
                 <div class="row p-2 align-items-center">
                   <div class="col-5">
-                    <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
-                        fw-bold">Direccion:</h3></label>
+                    <label for="inputNombre" class="form-label"
+                      ><h3 class="m-0 p-0 fw-bold">Direccion:</h3></label
+                    >
                   </div>
                   <div class="col-7">
                     <input
                       type="text"
                       formControlName="direccion"
                       class="form-control"
-                      [ngClass]="isInvalidForm('direccion') ?
-                      'is-invalid' : ''"
+                      [ngClass]="isInvalidForm('direccion') ? 'is-invalid' : ''"
                       [placeholder]="pendiente_seleccionada?.direccion"
-                      [value]="pendiente_seleccionada?.direccion">
-                    <div class="invalid-feedback"> {{getErrorMessage(formEdit,
-                      'direccion')}} </div>
+                      [value]="pendiente_seleccionada?.direccion"
+                    />
+                    <div class="invalid-feedback">
+                      {{ getErrorMessage(formEdit, "direccion") }}
+                    </div>
                   </div>
                 </div>
-      
+
                 <div class="row p-2 align-items-center">
                   <div class="col-5">
-                    <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
-                        fw-bold">Descripcion:</h3></label>
+                    <label for="inputNombre" class="form-label"
+                      ><h3 class="m-0 p-0 fw-bold">Descripcion:</h3></label
+                    >
                   </div>
                   <div class="col-7">
                     <input
                       type="text"
                       formControlName="descripcion"
                       class="form-control"
-                      [ngClass]="isInvalidForm('descripcion') ?
-                      'is-invalid' : ''"
+                      [ngClass]="
+                        isInvalidForm('descripcion') ? 'is-invalid' : ''
+                      "
                       [placeholder]="pendiente_seleccionada?.descripcion"
-                      [value]="pendiente_seleccionada?.descripcion">
-                    <div class="invalid-feedback"> {{getErrorMessage(formEdit,
-                      'descripcion')}} </div>
+                      [value]="pendiente_seleccionada?.descripcion"
+                    />
+                    <div class="invalid-feedback">
+                      {{ getErrorMessage(formEdit, "descripcion") }}
+                    </div>
                   </div>
                 </div>
-      
+
                 <div class="row p-2 align-items-center">
                   <div class="col-5">
-                    <label for="selectorServicioCrear" class="form-label"><h3
-                        class="m-0 p-0 fw-bold">Licencia:</h3></label>
+                    <label for="selectorServicioCrear" class="form-label"
+                      ><h3 class="m-0 p-0 fw-bold">Licencia:</h3></label
+                    >
                   </div>
                   <div class="col-7">
                     <select
                       class="form-select"
-                      [ngClass]="isInvalidForm('licencia') ?
-                      'is-invalid' : ''"
+                      [ngClass]="isInvalidForm('licencia') ? 'is-invalid' : ''"
                       formControlName="licencia"
                       id="tienelicencia"
                       [value]="pendiente_seleccionada?.licencia"
-                      aria-describedby="selectorServicioCrearFeedback">
-                      <option selected disabled value="">¿Posee una licencia?...</option>
-                      <option *ngFor="let c of licencia" [id]="c" [value]="c"> {{c}}
+                      aria-describedby="selectorServicioCrearFeedback"
+                    >
+                      <option selected disabled value="">
+                        ¿Posee una licencia?...
+                      </option>
+                      <option *ngFor="let c of licencia" [id]="c" [value]="c">
+                        {{ c }}
                       </option>
                     </select>
-                    <div id="selectorServicioCrearFeedback"
-                      class="invalid-feedback"> {{getErrorMessage(formEdit, 'licencia')}} </div>
+                    <div
+                      id="selectorServicioCrearFeedback"
+                      class="invalid-feedback"
+                    >
+                      {{ getErrorMessage(formEdit, "licencia") }}
+                    </div>
                   </div>
                 </div>
               </div>
 
-              
               <div class="col-4 align-self-center">
-                <h2> Cuenta Bancaria</h2>
-                <div class="row  align-items-center">
+                <h2>Cuenta Bancaria</h2>
+                <div class="row align-items-center">
                   <div class="col-5">
-                    <label for="inputNombre" class="form-label"><h3 class="m-0 p-0 fw-bold">Tipo Cuenta:</h3></label>
+                    <label for="inputNombre" class="form-label"
+                      ><h3 class="m-0 p-0 fw-bold">Tipo Cuenta:</h3></label
+                    >
                   </div>
                   <div class="col-7">
                     <input
                       type="text"
                       formControlName="tipo_cuenta"
                       class="form-control"
-                      [ngClass]="isInvalidForm('tipo_cuenta') ?
-                      'is-invalid' : ''"
+                      [ngClass]="
+                        isInvalidForm('tipo_cuenta') ? 'is-invalid' : ''
+                      "
                       [placeholder]="pendiente_seleccionada?.tipo_cuenta"
-                      [value]="pendiente_seleccionada?.tipo_cuenta">
-                    <div class="invalid-feedback"> {{getErrorMessage(formEdit,'tipo_cuenta')}} </div>
+                      [value]="pendiente_seleccionada?.tipo_cuenta"
+                    />
+                    <div class="invalid-feedback">
+                      {{ getErrorMessage(formEdit, "tipo_cuenta") }}
+                    </div>
                   </div>
                 </div>
 
                 <div class="row p-2 align-items-center">
                   <div class="col-5">
-                    <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
-                        fw-bold">Numero Cuenta:</h3></label>
+                    <label for="inputNombre" class="form-label"
+                      ><h3 class="m-0 p-0 fw-bold">Numero Cuenta:</h3></label
+                    >
                   </div>
                   <div class="col-7">
                     <input
                       type="text"
                       formControlName="numero_cuenta"
                       class="form-control"
-                      [ngClass]="isInvalidForm('numero_cuenta') ?
-                      'is-invalid' : ''"
+                      [ngClass]="
+                        isInvalidForm('numero_cuenta') ? 'is-invalid' : ''
+                      "
                       [placeholder]="pendiente_seleccionada?.numero_cuenta"
-                      [value]="pendiente_seleccionada?.numero_cuenta">
-                    <div class="invalid-feedback"> {{getErrorMessage(formEdit, 'numero_cuenta')}} </div>
+                      [value]="pendiente_seleccionada?.numero_cuenta"
+                    />
+                    <div class="invalid-feedback">
+                      {{ getErrorMessage(formEdit, "numero_cuenta") }}
+                    </div>
                   </div>
                 </div>
-              
+
                 <div class="row p-2 align-items-center">
                   <div class="col-5">
-                    <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
-                        fw-bold">Banco:</h3></label>
+                    <label for="inputNombre" class="form-label"
+                      ><h3 class="m-0 p-0 fw-bold">Banco:</h3></label
+                    >
                   </div>
                   <div class="col-7">
                     <input
                       type="text"
                       formControlName="banco"
                       class="form-control"
-                      [ngClass]="isInvalidForm('banco') ?
-                      'is-invalid' : ''"
+                      [ngClass]="isInvalidForm('banco') ? 'is-invalid' : ''"
                       [placeholder]="pendiente_seleccionada?.banco"
-                      [value]="pendiente_seleccionada?.banco">
-                    <div class="invalid-feedback"> {{getErrorMessage(formEdit, 'banco')}} </div>
+                      [value]="pendiente_seleccionada?.banco"
+                    />
+                    <div class="invalid-feedback">
+                      {{ getErrorMessage(formEdit, "banco") }}
+                    </div>
                   </div>
                 </div>
 
-                <h2> Profesion</h2>
+                <h2>Profesion</h2>
                 <div>
                   <div class="row p-2 align-items-center">
                     <div class="col-5">
-                      <label for="inputNombre" class="form-label"><h3 class="m-0 p-0 fw-bold">Años de Experiencia:</h3></label>
+                      <label for="inputNombre" class="form-label"
+                        ><h3 class="m-0 p-0 fw-bold">
+                          Años de Experiencia:
+                        </h3></label
+                      >
                     </div>
                     <div class="col-7">
                       <input
                         type="number"
                         formControlName="ano_experiencia"
                         class="form-control"
-                        [ngClass]="isInvalidForm('ano_experiencia') ? 'is-invalid' : ''"
+                        [ngClass]="
+                          isInvalidForm('ano_experiencia') ? 'is-invalid' : ''
+                        "
                         [placeholder]="pendiente_seleccionada?.ano_experiencia"
-                        [value]="pendiente_seleccionada?.ano_experiencia">
-                      <div class="invalid-feedback"> {{getErrorMessage(formEdit, 'ano_experiencia')}} </div>
+                        [value]="pendiente_seleccionada?.ano_experiencia"
+                      />
+                      <div class="invalid-feedback">
+                        {{ getErrorMessage(formEdit, "ano_experiencia") }}
+                      </div>
                     </div>
                   </div>
 
                   <div class="row p-2 align-items-center">
                     <div class="col-5">
-                      <label for="selectorServicioCrear" class="form-label"><h3
-                          class="m-0 p-0 fw-bold">Profesion:</h3></label>
+                      <label for="selectorServicioCrear" class="form-label"
+                        ><h3 class="m-0 p-0 fw-bold">Profesion:</h3></label
+                      >
                     </div>
                     <div class="col-7">
                       <select
                         class="form-select"
-                        [ngClass]="isInvalidForm('profesion') ?
-                        'is-invalid' : ''"
+                        [ngClass]="
+                          isInvalidForm('profesion') ? 'is-invalid' : ''
+                        "
                         formControlName="profesion"
                         id="ge"
                         [value]="pendiente_seleccionada?.profesion"
-                        aria-describedby="selectorServicioCrearFeedback">
-                        <option selected disabled value="">Elija una profesion...</option>
-                        <option *ngFor="let c of profesiones" [id]="c" [value]="c"> {{c}}
+                        aria-describedby="selectorServicioCrearFeedback"
+                      >
+                        <option selected disabled value="">
+                          Elija una profesion...
+                        </option>
+                        <option
+                          *ngFor="let c of profesiones"
+                          [id]="c"
+                          [value]="c"
+                        >
+                          {{ c }}
                         </option>
                       </select>
-                      <div id="selectorServicioCrearFeedback"
-                        class="invalid-feedback"> {{getErrorMessage(formEdit, 'profesion')}} </div>
+                      <div
+                        id="selectorServicioCrearFeedback"
+                        class="invalid-feedback"
+                      >
+                        {{ getErrorMessage(formEdit, "profesion") }}
+                      </div>
                     </div>
                   </div>
-    
+
                   <div class="row p-2 align-items-center">
                     <div class="col-5">
-                      <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
-                          fw-bold">Documentacion:</h3></label>
+                      <label for="inputNombre" class="form-label"
+                        ><h3 class="m-0 p-0 fw-bold">Documentacion:</h3></label
+                      >
                     </div>
                     <div class="col-7">
                       <input
@@ -646,72 +807,97 @@
                         accept="pdf"
                         formControlName="documentos"
                         class="form-control"
-                        [ngClass]="isInvalidForm('copiaLicencia') ?
-                        'is-invalid' : ''"
+                        [ngClass]="
+                          isInvalidForm('copiaLicencia') ? 'is-invalid' : ''
+                        "
                         [placeholder]="pendiente_seleccionada?.copiaLicencia"
-                        [value]="pendiente_seleccionada?.copiaCedula">
-                      <div class="invalid-feedback"> {{getErrorMessage(formEdit,
-                        'documentos')}} </div>
+                        [value]="pendiente_seleccionada?.copiaCedula"
+                      />
+                      <div class="invalid-feedback">
+                        {{ getErrorMessage(formEdit, "documentos") }}
+                      </div>
                     </div>
                   </div>
                 </div>
 
-                <div *ngIf="mostrar2" >
+                <div *ngIf="mostrar2">
                   <div class="row p-2 align-items-center">
                     <div class="col-5">
-                      <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
-                          fw-bold">Profesion:</h3></label>
+                      <label for="inputNombre" class="form-label"
+                        ><h3 class="m-0 p-0 fw-bold">Profesion:</h3></label
+                      >
                     </div>
                     <div class="col-7">
                       <input
-                      disable
+                        disable
                         type="text"
                         formControlName="profesion"
                         class="form-control"
-                        [ngClass]="isInvalidForm('profesion') ?
-                        'is-invalid' : ''"
+                        [ngClass]="
+                          isInvalidForm('profesion') ? 'is-invalid' : ''
+                        "
                         [placeholder]="pendiente_seleccionada?.profesion"
-                        [value]="pendiente_seleccionada?.profesion">
-                      <div class="invalid-feedback"> {{getErrorMessage(formEdit,
-                        'profesion'} </div>
+                        [value]="pendiente_seleccionada?.profesion"
+                      />
+                      <div class="invalid-feedback">
+                        {{getErrorMessage(formEdit, 'profesion'}
+                      </div>
                     </div>
                   </div>
-    
+
                   <div class="row p-2 align-items-center">
                     <div class="col-5">
-                      <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
-                          fw-bold">Años de Experiencia:</h3></label>
+                      <label for="inputNombre" class="form-label"
+                        ><h3 class="m-0 p-0 fw-bold">
+                          Años de Experiencia:
+                        </h3></label
+                      >
                     </div>
                     <div class="col-7">
                       <input
-                      disable
-                      disable
+                        disable
+                        disable
                         type="file"
                         formControlName="ano_experiencia"
                         class="form-control"
-                        [ngClass]="isInvalidForm('ano_experiencia') ?
-                        'is-invalid' : ''"
+                        [ngClass]="
+                          isInvalidForm('ano_experiencia') ? 'is-invalid' : ''
+                        "
                         [placeholder]="pendiente_seleccionada?.banco"
-                        [value]="pendiente_seleccionada?.banco">
-                      <div class="invalid-feedback"> {{getErrorMessage(formEdit,
-                        'ano_experiencia')}} </div>
+                        [value]="pendiente_seleccionada?.banco"
+                      />
+                      <div class="invalid-feedback">
+                        {{ getErrorMessage(formEdit, "ano_experiencia") }}
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          
         </form>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-danger"
-          data-bs-target="#modalInformacionProfesion" data-bs-toggle="modal">Regresar</button>
+        <button
+          class="btn btn-danger"
+          data-bs-target="#modalInformacionProfesion"
+          data-bs-toggle="modal"
+        >
+          Regresar
+        </button>
         <button
           data-bs-target="#modalConfirmacion2"
           data-bs-toggle="modal"
           class="btn btn-success"
-          (click)="establecerMensaje('Está seguro que desea actualizar la información?', 'actualizar')">Actualizar</button>
+          (click)="
+            establecerMensaje(
+              'Está seguro que desea actualizar la información?',
+              'actualizar'
+            )
+          "
+        >
+          Actualizar
+        </button>
       </div>
 
       <!-- <pre>
@@ -720,69 +906,120 @@
     </div>
   </div>
 </div>
-<div class="modal fade" id="modalConfirmacion" tabindex="-1"
-  aria-labelledby="modalConfirmacionLabel" aria-hidden="true">
+<div
+  class="modal fade"
+  id="modalConfirmacion"
+  tabindex="-1"
+  aria-labelledby="modalConfirmacionLabel"
+  aria-hidden="true"
+>
   <div class="modal-dialog">
     <div class="modal-content">
       <!-- Titulo del modal confirmacion -->
       <div class="modal-header">
-        <h1 class="modal-title fs-5 m-0 p-0 fw-bold"
-          id="modalConfirmacionLabel">Confirmar selección</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"
-          aria-label="Close"></button>
+        <h1
+          class="modal-title fs-5 m-0 p-0 fw-bold"
+          id="modalConfirmacionLabel"
+        >
+          Confirmar selección
+        </h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
       </div>
 
       <!-- Cuerpo del modal confirmacion -->
-      <div class="modal-body">
-        Está seguro que desea Negar la información?
-      </div>
+      <div class="modal-body">Está seguro que desea Negar la información?</div>
       <!-- Footer del modal confirmacion -->
       <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-success"
-          (click)="onNegar()" data-bs-dismiss="modal">Negar</button>
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+          Cancelar
+        </button>
+        <button
+          type="button"
+          class="btn btn-success"
+          (click)="onNegar()"
+          data-bs-dismiss="modal"
+        >
+          Negar
+        </button>
       </div>
     </div>
   </div>
 </div>
 
-<div class="modal fade" id="modalConfirmacion1" tabindex="-1"
-  aria-labelledby="modalConfirmacionLabel" aria-hidden="true">
+<div
+  class="modal fade"
+  id="modalConfirmacion1"
+  tabindex="-1"
+  aria-labelledby="modalConfirmacionLabel"
+  aria-hidden="true"
+>
   <div class="modal-dialog">
     <div class="modal-content">
       <!-- Titulo del modal confirmacion -->
       <div class="modal-header">
-        <h1 class="modal-title fs-5 m-0 p-0 fw-bold"
-          id="modalConfirmacionLabel">Confirmar selección</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"
-          aria-label="Close"></button>
+        <h1
+          class="modal-title fs-5 m-0 p-0 fw-bold"
+          id="modalConfirmacionLabel"
+        >
+          Confirmar selección
+        </h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
       </div>
 
       <!-- Cuerpo del modal confirmacion -->
-      <div class="modal-body">
-        Está seguro que desea aprobar la solicitud?
-      </div>
+      <div class="modal-body">Está seguro que desea aprobar la solicitud?</div>
 
       <!-- Footer del modal confirmacion -->
       <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-success"
-          (click)="onAceptar()" data-bs-dismiss="modal">Aceptar</button>
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+          Cancelar
+        </button>
+        <button
+          type="button"
+          class="btn btn-success"
+          (click)="onAceptar()"
+          data-bs-dismiss="modal"
+        >
+          Aceptar
+        </button>
       </div>
     </div>
   </div>
 </div>
 
-<div class="modal fade" id="modalConfirmacion2" tabindex="-1"
-  aria-labelledby="modalConfirmacionLabel" aria-hidden="true">
+<div
+  class="modal fade"
+  id="modalConfirmacion2"
+  tabindex="-1"
+  aria-labelledby="modalConfirmacionLabel"
+  aria-hidden="true"
+>
   <div class="modal-dialog">
     <div class="modal-content">
       <!-- Titulo del modal confirmacion -->
       <div class="modal-header">
-        <h1 class="modal-title fs-5 m-0 p-0 fw-bold"
-          id="modalConfirmacionLabel">Confirmar selección</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"
-          aria-label="Close"></button>
+        <h1
+          class="modal-title fs-5 m-0 p-0 fw-bold"
+          id="modalConfirmacionLabel"
+        >
+          Confirmar selección
+        </h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
       </div>
 
       <!-- Cuerpo del modal confirmacion -->
@@ -792,9 +1029,17 @@
 
       <!-- Footer del modal confirmacion -->
       <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-success"
-          (click)="onEditar()" data-bs-dismiss="modal">Editar</button>
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+          Cancelar
+        </button>
+        <button
+          type="button"
+          class="btn btn-success"
+          (click)="onEditar()"
+          data-bs-dismiss="modal"
+        >
+          Editar
+        </button>
       </div>
     </div>
   </div>
@@ -808,7 +1053,7 @@
         </li>
         <div *ngFor="let n of pageNumber; let i = index">
           <li class="page-item">
-            <button 
+            <button
               class="page-link azul"
               value="{{ n }}"
               (click)="iteracion($event)"
@@ -816,7 +1061,7 @@
             >
               {{ n }}
             </button>
-            <button 
+            <button
               class="page-link"
               value="{{ n }}"
               (click)="iteracion($event)"

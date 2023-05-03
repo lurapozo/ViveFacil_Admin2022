@@ -42,7 +42,6 @@ export class SolicitantesComponent {
     this.pythonAnywhereService.obtener_solicitantes().subscribe(resp => {
       this.total = resp.total_objects
       this.arr_soli = resp.results;
-
       this.arr_filtered_soli = this.arr_soli;
       if (resp.next != null) {
         this.condicionNext = true
@@ -50,9 +49,7 @@ export class SolicitantesComponent {
       console.log( resp.total_pages)
       for (let index = 1; index <= resp.total_pages; index++) {
         this.pageNumber.push(index)
-
       }
-
     });
   }
   search(evento: any) {
@@ -71,6 +68,14 @@ export class SolicitantesComponent {
 
     this.pythonAnywhereService.cambio_solicitante_estado(estado,id).subscribe(resp=>{
       console.log(resp)
+      this.pythonAnywhereService.obtener_solicitantes().subscribe(resp => {
+        this.total = resp.total_objects
+        this.arr_soli = resp.results;
+        this.arr_filtered_soli = this.arr_soli;
+        console.log(resp, "resp");
+        console.log(this.arr_filtered_soli)
+        this.currentPage = 1;
+      });
     })
   }
   ver(event: any) {

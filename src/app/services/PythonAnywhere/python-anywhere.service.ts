@@ -1,34 +1,34 @@
-import {
-  SolicitantePaginacion,
-  Solicitante,
-} from 'src/app/interfaces/solicitante';
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Administrador, AdministradorPaginacion, BodyActualizarAdministrador, BodyCrearAdministrador, BodyResponseCrearAdministrador, } from 'src/app/interfaces/administrador';
-import { map, Observable, pipe, Subject } from 'rxjs';
-import { BodyActualizarInsignia, BodyCrearInsignia, BodyResponseCrearInsignia, Insignia } from 'src/app/interfaces/insignia';
-import { BodyActualizarCargo, BodyCrearCargo, BodyResponseCrearCargo, Cargo } from 'src/app/interfaces/cargo';
-import { BodyPromocionActualizar, BodyResponsePromocionActualizar, Promocion, PromocionCrear } from 'src/app/interfaces/promocion';
-import { BodyCuponActualizar, BodyResponseCuponActualizar, Cupon, CuponCrear } from 'src/app/interfaces/cupon';
-import { PaymentEfectivo, PaymentPaginacion, PaymentTarjeta } from 'src/app/interfaces/payment';
-import { BodyActualizarProveedor, BodyActualizarProveedorPendiente, BodyCrearProfesionProveedor, BodyCrearProveedor, BodyCrearProveedorPendiente, BodyResponseCrearProfesionProveedor, BodyResponseCrearProveedorPendiente, Proveedor, ProveedorPaginacion, ProveedorPendiente, ProveedorProfesion } from 'src/app/interfaces/proveedor';
-import { Documento, DocumentoPendiente } from 'src/app/interfaces/documento';
-import { CuentaBancariaProveedor } from 'src/app/interfaces/cuenta-bancaria';
-import { BodyActualizarProfesion, BodyCrearProfesion, BodyResponseActualizarProfesion, BodyResponseCrearProfesion, Profesion } from 'src/app/interfaces/profesion';
-import { BodyEmail, BodyResponseEmail } from 'src/app/interfaces/email';
-import { BodyActualizarCategoria, BodyCrearCategoria, BodyResponseCrearCategoria, Categoria } from 'src/app/interfaces/categoria';
-import { BodyActualizarServicio, Servicio } from 'src/app/interfaces/servicio';
-import { BodyCrearSubCategoria, BodyResponseCrearSubCategoria } from 'src/app/interfaces/sub-categoria';
-import { BodyActualizarPlan, BodyActualizarPlanProveedor, BodyCrearPlan, BodyCrearPlanProveedor, BodyResponseCrearPlan, Plan, PlanProveedor } from 'src/app/interfaces/plan';
-import { BodyActualizarPublicidad, BodyCrearPublicidad, BodyResponseCrearPublicidad, Publicidad } from 'src/app/interfaces/publicidad';
-import { Ciudad } from 'src/app/interfaces/ciudad';
+import { Injectable } from '@angular/core';
+import { Observable, Subject, map, pipe } from 'rxjs';
 import { AdminUserPass } from 'src/app/interfaces/admin-user-pass';
-import { BodyCrearNotificacionAnuncio, NotificacionAnuncio } from 'src/app/interfaces/notificacion';
+import { Administrador, AdministradorPaginacion, BodyActualizarAdministrador, BodyCrearAdministrador, BodyResponseCrearAdministrador, } from 'src/app/interfaces/administrador';
+import { BodyActualizarCargo, BodyCrearCargo, BodyResponseCrearCargo, Cargo } from 'src/app/interfaces/cargo';
+import { BodyActualizarCategoria, BodyCrearCategoria, BodyResponseCrearCategoria, Categoria } from 'src/app/interfaces/categoria';
+import { Ciudad } from 'src/app/interfaces/ciudad';
+import { CuentaBancariaProveedor } from 'src/app/interfaces/cuenta-bancaria';
+import { BodyCuponActualizar, BodyResponseCuponActualizar, Cupon, CuponCrear } from 'src/app/interfaces/cupon';
+import { Documento, DocumentoPendiente } from 'src/app/interfaces/documento';
+import { BodyEmail, BodyResponseEmail } from 'src/app/interfaces/email';
 import { BodyActualizarGroup, BodyCrearGroup, Group, Permission } from 'src/app/interfaces/group';
-import { SolicitudProfesion, SolicitudProfesionPaginacion } from 'src/app/interfaces/solicitud';
-import { PagosTarjetaUser } from 'src/app/interfaces/tarjeta';
-import { Sugerencia } from 'src/app/interfaces/sugerencia';
+import { BodyActualizarInsignia, BodyCrearInsignia, BodyResponseCrearInsignia, Insignia } from 'src/app/interfaces/insignia';
 import { BodyLogin, BodyLoginResponse } from 'src/app/interfaces/login';
+import { BodyCrearNotificacionAnuncio, NotificacionAnuncio } from 'src/app/interfaces/notificacion';
+import { PaymentEfectivo, PaymentPaginacion, PaymentTarjeta } from 'src/app/interfaces/payment';
+import { BodyActualizarPlan, BodyActualizarPlanProveedor, BodyCrearPlan, BodyCrearPlanProveedor, BodyResponseCrearPlan, Plan, PlanProveedor } from 'src/app/interfaces/plan';
+import { BodyActualizarProfesion, BodyCrearProfesion, BodyResponseActualizarProfesion, BodyResponseCrearProfesion, Profesion } from 'src/app/interfaces/profesion';
+import { BodyPromocionActualizar, BodyResponsePromocionActualizar, Promocion, PromocionCrear } from 'src/app/interfaces/promocion';
+import { BodyActualizarProveedor, BodyActualizarProveedorPendiente, BodyCrearProfesionProveedor, BodyCrearProveedor, BodyCrearProveedorPendiente, BodyResponseCrearProfesionProveedor, BodyResponseCrearProveedorPendiente, Proveedor, ProveedorPaginacion, ProveedorPendiente, ProveedorProfesion } from 'src/app/interfaces/proveedor';
+import { BodyActualizarPublicidad, BodyCrearPublicidad, BodyResponseCrearPublicidad, Publicidad } from 'src/app/interfaces/publicidad';
+import { BodyActualizarServicio, Servicio } from 'src/app/interfaces/servicio';
+import {
+  Solicitante,
+  SolicitantePaginacion,
+} from 'src/app/interfaces/solicitante';
+import { SolicitudProfesion, SolicitudProfesionPaginacion } from 'src/app/interfaces/solicitud';
+import { BodyCrearSubCategoria, BodyResponseCrearSubCategoria } from 'src/app/interfaces/sub-categoria';
+import { Sugerencia } from 'src/app/interfaces/sugerencia';
+import { PagosTarjetaUser } from 'src/app/interfaces/tarjeta';
 @Injectable({
   providedIn: 'root',
 })

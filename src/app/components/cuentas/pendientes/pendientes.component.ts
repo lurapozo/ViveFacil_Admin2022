@@ -154,6 +154,14 @@ export class PendientesComponent {
 
     this.pythonAnywhereService.crear_proveedor_pendiente(pendiente).subscribe(resp => {
       console.log(resp)
+      this.pythonAnywhereService.obtener_proveedores_pendientes().subscribe(resp => {
+        this.total = Object(resp).total_objects
+        this.arr_pendiente = Object(resp).results;
+        this.arr_filtered_pendiente = this.arr_pendiente;
+        console.log(resp, "resp");
+        console.log(this.arr_filtered_pendiente)
+        this.currentPage = 1;
+      });
     })
     /*let email: BodyEmail = {
       password: '1234',
@@ -163,6 +171,7 @@ export class PendientesComponent {
     this.pythonAnywhereService.enviar_email(email).subscribe(resp => {
       console.log(resp)
     })*/
+
   }
 
   onEditar() {
@@ -199,7 +208,17 @@ export class PendientesComponent {
     }
     this.pythonAnywhereService.editar_proveedor_pendiente(this.pendiente_seleccionada.id, pendiente).subscribe(resp => {
       console.log(resp)
+      this.pythonAnywhereService.obtener_proveedores_pendientes().subscribe(resp => {
+        this.total = Object(resp).total_objects
+        this.arr_pendiente = Object(resp).results;
+        this.arr_filtered_pendiente = this.arr_pendiente;
+        console.log(resp, "resp");
+        console.log(this.arr_filtered_pendiente)
+        this.currentPage = 1;
+      });
     })
+
+    
   }
 
   isURL(stringImage: string): boolean {
@@ -425,6 +444,14 @@ export class PendientesComponent {
                     console.log('Registro firebase exitoso: ', response);
                     this.pythonAnywhereService.eliminar_proveedores_pendientes(this.pendiente_seleccionada.id).subscribe(resp => {
                       console.log(resp)
+                      this.pythonAnywhereService.obtener_proveedores_pendientes().subscribe(resp => {
+                        this.total = Object(resp).total_objects
+                        this.arr_pendiente = Object(resp).results;
+                        this.arr_filtered_pendiente = this.arr_pendiente;
+                        console.log(resp, "resp");
+                        console.log(this.arr_filtered_pendiente)
+                        this.currentPage = 1;
+                      });
                     })
                     // this.presentAlert('Completada!', 'El registro se ha completado exitosamente.').then(() => {
                     //   console.log('Registro completo...');
@@ -501,6 +528,14 @@ export class PendientesComponent {
     }
     this.pythonAnywhereService.eliminar_proveedores_pendientes(this.pendiente_seleccionada.id).subscribe(resp => {
       console.log(resp)
+      this.pythonAnywhereService.obtener_proveedores_pendientes().subscribe(resp => {
+        this.total = Object(resp).total_objects
+        this.arr_pendiente = Object(resp).results;
+        this.arr_filtered_pendiente = this.arr_pendiente;
+        console.log(resp, "resp");
+        console.log(this.arr_filtered_pendiente)
+        this.currentPage = 1;
+      });
     })
   }
 
