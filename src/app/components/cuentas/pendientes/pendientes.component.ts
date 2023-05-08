@@ -15,6 +15,7 @@ import { UserService } from 'src/app/services/user/user.service';
 export class PendientesComponent {
   generos = ['Masculino', 'Femenino', 'Otro'];
   ciudades = ['Guayaquil', 'Quito', 'Cuenca', 'Sto. Domingo', 'Ibarra'];
+  tipoCuentas = ['Ahorro', 'Corriente'];
   licencia = ['Si', 'No'];
   profesiones: string[] = [];
   total = 0
@@ -138,7 +139,7 @@ export class PendientesComponent {
       copiaCedula: this.pendiente_seleccionada.copiaCedula,
       ciudad: this.pendiente_seleccionada.ciudad,
       direccion: this.pendiente_seleccionada.direccion,
-      email: this.pendiente_seleccionada.email+"1",
+      email: this.pendiente_seleccionada.email,
       descripcion: this.pendiente_seleccionada.descripcion,
       licencia: this.pendiente_seleccionada.licencia,
       copiaLicencia: this.pendiente_seleccionada.copiaLicencia,
@@ -197,6 +198,8 @@ export class PendientesComponent {
       //planilla_servicios: this.formEdit.value.planilla_servicios
       filesDocuments: []
     }
+    console.log("VALORES DEL COSO")
+    console.log(this.formEdit)
     console.log("LA COSAS ESAS LASMASD")
     console.log(pendiente)
     console.log("profesion: " + pendiente.profesion)
@@ -658,18 +661,18 @@ export class PendientesComponent {
     correo ? this.formEdit.get('correo')?.setValue(correo) : this.formEdit.get('correo')?.reset();
     genero ? this.formEdit.get('genero')?.setValue(genero) : this.formEdit.get('genero')?.reset();
     ciudad ? this.formEdit.get('ciudad')?.setValue(ciudad) : this.formEdit.get('ciudad')?.reset();
-    direccion ? this.formEdit.get('direccion')?.setValue(ciudad) : this.formEdit.get('direccion')?.reset();
-    licencia ? this.formEdit.get('licencia')?.setValue(ciudad) : this.formEdit.get('licencia')?.reset();
-    copiaCedula ? this.formEdit.get('copiaCedula')?.setValue(ciudad) : this.formEdit.get('copiaCedula')?.reset();
-    profesion ? this.formEdit.get('profesion')?.setValue(ciudad) : this.formEdit.get('profesion')?.reset();
-    ano_experiencia ? this.formEdit.get('ano_experiencia')?.setValue(ciudad) : this.formEdit.get('ano_experiencia')?.reset();
-    banco ? this.formEdit.get('banco')?.setValue(ciudad) : this.formEdit.get('banco')?.reset();
-    numero_cuenta ? this.formEdit.get('numero_cuenta')?.setValue(ciudad) : this.formEdit.get('numero_cuenta')?.reset();
-    copiaLicencia ? this.formEdit.get('copiaLicencia')?.setValue(ciudad) : this.formEdit.get('copiaLicencia')?.reset();
-    tipo_cuenta ? this.formEdit.get('tipo_cuenta')?.setValue(ciudad) : this.formEdit.get('tipo_cuenta')?.reset();
-    documentos ? this.formEdit.get('documentos')?.setValue(ciudad) : this.formEdit.get('documentos')?.reset();
-    descripcion ? this.formEdit.get('descripcion')?.setValue(ciudad) : this.formEdit.get('descripcion')?.reset();
-    foto ? this.formEdit.get('foto')?.setValue(ciudad) : this.formEdit.get('foto')?.reset();
+    direccion ? this.formEdit.get('direccion')?.setValue(direccion) : this.formEdit.get('direccion')?.reset();
+    licencia ? this.formEdit.get('licencia')?.setValue(licencia) : this.formEdit.get('licencia')?.reset();
+    copiaCedula ? this.formEdit.get('copiaCedula')?.setValue(copiaCedula) : this.formEdit.get('copiaCedula')?.reset();
+    profesion ? this.formEdit.get('profesion')?.setValue(profesion) : this.formEdit.get('profesion')?.reset();
+    ano_experiencia ? this.formEdit.get('ano_experiencia')?.setValue(ano_experiencia) : this.formEdit.get('ano_experiencia')?.reset();
+    banco ? this.formEdit.get('banco')?.setValue(banco) : this.formEdit.get('banco')?.reset();
+    numero_cuenta ? this.formEdit.get('numero_cuenta')?.setValue(numero_cuenta) : this.formEdit.get('numero_cuenta')?.reset();
+    copiaLicencia ? this.formEdit.get('copiaLicencia')?.setValue(copiaLicencia) : this.formEdit.get('copiaLicencia')?.reset();
+    tipo_cuenta ? this.formEdit.get('tipo_cuenta')?.setValue(tipo_cuenta) : this.formEdit.get('tipo_cuenta')?.reset();
+    documentos ? this.formEdit.get('documentos')?.setValue(documentos) : this.formEdit.get('documentos')?.reset();
+    descripcion ? this.formEdit.get('descripcion')?.setValue(descripcion) : this.formEdit.get('descripcion')?.reset();
+    foto ? this.formEdit.get('foto')?.setValue(foto) : this.formEdit.get('foto')?.reset();
   }
 
 
@@ -716,5 +719,13 @@ export class PendientesComponent {
 
     })
 
+  }
+
+  numberOnly(event:any): boolean {
+    const charCode = (event.which) ? event.which : event.keyCode;
+    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+      return false;
+    }
+    return true;
   }
 }

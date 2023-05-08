@@ -450,12 +450,34 @@
                 <div class="row p-2 align-items-center">
                   <div class="col-5">
                     <label for="inputNombre" class="form-label">
-                      <h3 class="m-0p-0fw-bold">Cedula:</h3>
+                      <h3 class="m-0 p-0 fw-bold">Cedula:</h3>
                     </label>
                   </div>
                   <div class="col-7">
                     <input
                       type="text"
+                      formControlName="cedula"
+                      class="form-control"
+                      (keypress)="numberOnly($event)"
+                      [ngClass]="isInvalidForm('cedula') ? 'is-invalid' : ''"
+                      [placeholder]="pendiente_seleccionada?.cedula"
+                      [value]="pendiente_seleccionada?.cedula"
+                    />
+                    <div class="invalid-feedback">
+                      {{ getErrorMessage(formEdit, "cedula") }}
+                    </div>
+                  </div>
+                </div>
+
+                <!-- <div class="row p-2 align-items-center">
+                  <div class="col-5">
+                    <label for="inputNombre" class="form-label">
+                      <h3 class="m-0 p-0 fw-bold">Cedula:</h3>
+                    </label>
+                  </div>
+                  <div class="col-7">
+                    <input
+                      type="number"
                       formControlName="cedula"
                       class="form-control"
                       [ngClass]="isInvalidForm('cedula') ? 'is-invalid' : ''"
@@ -466,7 +488,7 @@
                       {{ getErrorMessage(formEdit, "cedula") }}
                     </div>
                   </div>
-                </div>
+                </div> -->
 
                 <div class="row p-2 align-items-center">
                   <div class="col-5">
@@ -545,6 +567,7 @@
                       type="text"
                       formControlName="telefono"
                       class="form-control"
+                      (keypress)="numberOnly($event)"
                       [ngClass]="isInvalidForm('telefono') ? 'is-invalid' : ''"
                       [placeholder]="pendiente_seleccionada?.telefono"
                       [value]="pendiente_seleccionada?.telefono"
@@ -568,8 +591,7 @@
                       formControlName="ciudad"
                       id="ge"
                       [value]="pendiente_seleccionada?.ciudad"
-                      aria-describedby="selectorServicioCrearFeedback"
-                    >
+                      aria-describedby="selectorServicioCrearFeedback">
                       <option selected disabled value="">
                         Elija una ciudad...
                       </option>
@@ -588,9 +610,9 @@
 
                 <div class="row p-2 align-items-center">
                   <div class="col-5">
-                    <label for="inputNombre" class="form-label"
-                      ><h3 class="m-0 p-0 fw-bold">Direccion:</h3></label
-                    >
+                    <label for="inputNombre" class="form-label">
+                      <h3 class="m-0 p-0 fw-bold">Dirección:</h3>
+                    </label>
                   </div>
                   <div class="col-7">
                     <input
@@ -598,7 +620,6 @@
                       formControlName="direccion"
                       class="form-control"
                       [ngClass]="isInvalidForm('direccion') ? 'is-invalid' : ''"
-                      [placeholder]="pendiente_seleccionada?.direccion"
                       [value]="pendiente_seleccionada?.direccion"
                     />
                     <div class="invalid-feedback">
@@ -664,40 +685,52 @@
 
               <div class="col-4 align-self-center">
                 <h2>Cuenta Bancaria</h2>
-                <div class="row align-items-center">
+                <div class="row p-2 align-items-center">
                   <div class="col-5">
-                    <label for="inputNombre" class="form-label"
-                      ><h3 class="m-0 p-0 fw-bold">Tipo Cuenta:</h3></label
-                    >
+                    <label for="selectorServicioCrear" class="form-label">
+                      <h3 class="m-0 p-0 fw-bold">Tipo Cuenta:</h3>
+                    </label>
                   </div>
                   <div class="col-7">
-                    <input
-                      type="text"
+                    <select
                       formControlName="tipo_cuenta"
-                      class="form-control"
-                      [ngClass]="
-                        isInvalidForm('tipo_cuenta') ? 'is-invalid' : ''
-                      "
-                      [placeholder]="pendiente_seleccionada?.tipo_cuenta"
+                      class="form-select"
+                      [ngClass]="isInvalidForm('tipo_cuenta') ? 'is-invalid' : ''"
                       [value]="pendiente_seleccionada?.tipo_cuenta"
-                    />
-                    <div class="invalid-feedback">
-                      {{ getErrorMessage(formEdit, "tipo_cuenta") }}
+                      aria-describedby="selectorServicioCrearFeedback"
+                    >
+                      <option selected disabled value="">
+                        Elija un tipo de cuenta...
+                      </option>
+                      <option
+                        *ngFor="let c of tipoCuentas"
+                        [id]="c"
+                        [value]="c"
+                      >
+                        {{ c }}
+                      </option>
+                    </select>
+                    <div
+                      id="selectorServicioCrearFeedback"
+                      class="invalid-feedback"
+                    >
+                      {{ getErrorMessage(formEdit, "profesion") }}
                     </div>
                   </div>
                 </div>
 
                 <div class="row p-2 align-items-center">
                   <div class="col-5">
-                    <label for="inputNombre" class="form-label"
-                      ><h3 class="m-0 p-0 fw-bold">Numero Cuenta:</h3></label
-                    >
+                    <label for="inputNombre" class="form-label">
+                      <h3 class="m-0 p-0 fw-bold">Numero Cuenta:</h3>
+                    </label>
                   </div>
                   <div class="col-7">
                     <input
                       type="text"
                       formControlName="numero_cuenta"
                       class="form-control"
+                      (keypress)="numberOnly($event)"
                       [ngClass]="
                         isInvalidForm('numero_cuenta') ? 'is-invalid' : ''
                       "
@@ -731,7 +764,7 @@
                   </div>
                 </div>
 
-                <h2>Profesion</h2>
+                <h2>Profesión</h2>
                 <div>
                   <div class="row p-2 align-items-center">
                     <div class="col-5">
@@ -798,7 +831,7 @@
                   <div class="row p-2 align-items-center">
                     <div class="col-5">
                       <label for="inputNombre" class="form-label"
-                        ><h3 class="m-0 p-0 fw-bold">Documentacion:</h3></label
+                        ><h3 class="m-0 p-0 fw-bold">Documentación:</h3></label
                       >
                     </div>
                     <div class="col-7">
@@ -863,8 +896,8 @@
                         [ngClass]="
                           isInvalidForm('ano_experiencia') ? 'is-invalid' : ''
                         "
-                        [placeholder]="pendiente_seleccionada?.banco"
-                        [value]="pendiente_seleccionada?.banco"
+                        [placeholder]="pendiente_seleccionada?.ano_experiencia"
+                        [value]="pendiente_seleccionada?.ano_experiencia"
                       />
                       <div class="invalid-feedback">
                         {{ getErrorMessage(formEdit, "ano_experiencia") }}

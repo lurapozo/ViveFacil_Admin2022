@@ -42,6 +42,9 @@ import { provideAuth, getAuth} from '@angular/fire/auth';
 import {initializeApp, provideFirebaseApp} from '@angular/fire/app';
 import { environment } from '../environments/environment';
 import { AngularFireModule } from '@angular/fire/compat';
+// import { IgxComboModule } from "igniteui-angular";  
+// // to use ngModel in page  
+// import { FormsModule } from "@angular/forms"; 
 @NgModule({
   declarations: [
     AppComponent,
