@@ -45,6 +45,9 @@ import { AngularFireModule } from '@angular/fire/compat';
 // import { IgxComboModule } from "igniteui-angular";  
 // // to use ngModel in page  
 // import { FormsModule } from "@angular/forms"; 
+
+import { NgSelectModule } from '@ng-select/ng-select';
+import { FormsModule } from '@angular/forms';
 @NgModule({
   declarations: [
     AppComponent,
@@ -86,6 +89,8 @@ import { AngularFireModule } from '@angular/fire/compat';
     HttpClientModule,
     ReactiveFormsModule,
     NgxPaginationModule,
+    NgSelectModule,
+    FormsModule,
     provideFirebaseApp( () => initializeApp(environment.firebase)),
     AngularFireModule.initializeApp(environment.firebase),
     provideAuth(() => getAuth()), // AuthModule

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { BodyEmail } from 'src/app/interfaces/email';
@@ -12,7 +12,7 @@ import { UserService } from 'src/app/services/user/user.service';
   templateUrl: './pendientes.component.html',
   styleUrls: ['./pendientes.component.css']
 })
-export class PendientesComponent {
+export class PendientesComponent{
   generos = ['Masculino', 'Femenino', 'Otro'];
   ciudades = ['Guayaquil', 'Quito', 'Cuenca', 'Sto. Domingo', 'Ibarra'];
   tipoCuentas = ['Ahorro', 'Corriente'];
@@ -77,6 +77,7 @@ export class PendientesComponent {
     private userService: UserService, 
     private sanitizer: DomSanitizer
     ) {
+
     
 
     this.pythonAnywhereService.obtener_proveedores_pendientes().subscribe(resp => {
@@ -97,10 +98,28 @@ export class PendientesComponent {
     this.pythonAnywhereService.obtener_profesiones().subscribe(resp => {
       console.log(resp)
       for (let i=0; i<resp.length; i++){
-        this.profesiones.push(resp[i].nombre)
+        this.profesiones= [...this.profesiones, resp[i].nombre];
       }
     });
   }
+  // ngOnInit(): void {
+  //   // this.pythonAnywhereService.obtener_profesiones().subscribe(resp => {
+  //   //   console.log(resp)
+  //   //   for (let i=0; i<resp.length; i++){
+  //   //     this.profesiones.push(resp[i].nombre)
+  //   //     this.profesiones= [...this.profesiones, resp[i].nombre];
+  //   //   }
+  //     // console.log("this.profesiones")
+  //     // console.log(this.profesiones)
+  //   // });
+  // }
+
+
+  // ngOnChanges(changes: any) {
+  //   if (changes.hasOwnProperty('options')) {
+  //      this.updateOptionsList(changes['options'].isFirstChange());
+  //     }
+  //   }
 
   search(evento: any) {
     const texto = evento.target.value;

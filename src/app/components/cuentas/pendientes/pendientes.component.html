@@ -769,6 +769,30 @@
                   <div class="row p-2 align-items-center">
                     <div class="col-5">
                       <label for="inputNombre" class="form-label"
+                        ><h3 class="m-0 p-0 fw-bold">Documentación:</h3></label
+                      >
+                    </div>
+                    <div class="col-7">
+                      <input
+                        type="file"
+                        accept="pdf"
+                        formControlName="documentos"
+                        class="form-control"
+                        [ngClass]="
+                          isInvalidForm('copiaLicencia') ? 'is-invalid' : ''
+                        "
+                        [placeholder]="pendiente_seleccionada?.copiaLicencia"
+                        [value]="pendiente_seleccionada?.copiaCedula"
+                      />
+                      <div class="invalid-feedback">
+                        {{ getErrorMessage(formEdit, "documentos") }}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row p-2 align-items-center">
+                    <div class="col-5">
+                      <label for="inputNombre" class="form-label"
                         ><h3 class="m-0 p-0 fw-bold">
                           Años de Experiencia:
                         </h3></label
@@ -798,17 +822,24 @@
                       >
                     </div>
                     <div class="col-7">
-                      <select
+                      <p>
+                        <span class="m-0 p-0 fw-bold">profesiones actuales:</span>  {{pendiente_seleccionada?.profesion}}
+                      </p>
+                      
+                      <ng-select
+                        [items]="profesiones"
                         class="form-select"
                         [ngClass]="
                           isInvalidForm('profesion') ? 'is-invalid' : ''
                         "
                         formControlName="profesion"
                         id="ge"
-                        [value]="pendiente_seleccionada?.profesion"
+                        
                         aria-describedby="selectorServicioCrearFeedback"
+                        [multiple]="true"
+                        
                       >
-                        <option selected disabled value="">
+                        <!-- <option selected disabled value="">
                           Elija una profesion...
                         </option>
                         <option
@@ -817,8 +848,8 @@
                           [value]="c"
                         >
                           {{ c }}
-                        </option>
-                      </select>
+                        </option> -->
+                      </ng-select>
                       <div
                         id="selectorServicioCrearFeedback"
                         class="invalid-feedback"
@@ -828,29 +859,7 @@
                     </div>
                   </div>
 
-                  <div class="row p-2 align-items-center">
-                    <div class="col-5">
-                      <label for="inputNombre" class="form-label"
-                        ><h3 class="m-0 p-0 fw-bold">Documentación:</h3></label
-                      >
-                    </div>
-                    <div class="col-7">
-                      <input
-                        type="file"
-                        accept="pdf"
-                        formControlName="documentos"
-                        class="form-control"
-                        [ngClass]="
-                          isInvalidForm('copiaLicencia') ? 'is-invalid' : ''
-                        "
-                        [placeholder]="pendiente_seleccionada?.copiaLicencia"
-                        [value]="pendiente_seleccionada?.copiaCedula"
-                      />
-                      <div class="invalid-feedback">
-                        {{ getErrorMessage(formEdit, "documentos") }}
-                      </div>
-                    </div>
-                  </div>
+                  
                 </div>
 
                 <div *ngIf="mostrar2">
