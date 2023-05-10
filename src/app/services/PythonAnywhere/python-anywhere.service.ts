@@ -654,7 +654,7 @@ obtener_politicas(){
     }
     //ARREGLAR
     if( data.filesDocuments != null){
-      pendiente.append('filesDocuments', data.filesDocuments  as any)
+      pendiente.append('filesDocuments', data.filesDocuments[0]  as any)
     }
     //planilla_servicios: data.planilla_servicios
     console.log("LA COSAS ESAS LASMASD")
@@ -664,7 +664,43 @@ obtener_politicas(){
   }
 
   editar_proveedor_proveedor(id: string, data: BodyActualizarProveedorPendiente): Observable<ProveedorPendiente> {
-    return this.http.put(`${this.API_URL}/proveedores_proveedores/${id}`, data) as Observable<ProveedorPendiente>;
+    const pendiente = new FormData();
+    pendiente.append('nombres', data.nombres)
+    pendiente.append('apellidos', data.apellidos)
+    pendiente.append('genero', data.genero)
+    pendiente.append('telefono', data.telefono)
+    pendiente.append('cedula', data.cedula)
+    if(  data.copiaCedula != null){
+      pendiente.append('copiaCedula', data.copiaCedula as any)
+    }
+    pendiente.append('ciudad', data.ciudad)
+    pendiente.append('direccion', data.direccion)
+    pendiente.append('email', data.email)
+    pendiente.append('descripcion', data.descripcion)
+    pendiente.append('licencia', data.licencia)
+    if(  data.copiaLicencia != null){
+      pendiente.append('copiaLicencia', data.copiaLicencia)
+    }
+    pendiente.append('profesion', data.profesion)
+    //ARREGLAR
+    if( data.ano_experiencia != null){
+      pendiente.append('ano_experiencia', data.ano_experiencia  as any)
+    }
+    pendiente.append('banco', data.banco)
+    pendiente.append('numero_cuenta', data.numero_cuenta)
+    pendiente.append('tipo_cuenta', data.tipo_cuenta)
+    if(  data.foto != null){
+      pendiente.append( 'foto', data.foto)
+    }
+    //ARREGLAR
+    if( data.filesDocuments != null){
+      pendiente.append('filesDocuments', data.filesDocuments[0]  as any)
+    }
+    //planilla_servicios: data.planilla_servicios
+    console.log("LA COSAS ESAS LASMASD")
+    console.log(pendiente)
+    console.log(pendiente.get("foto"))
+    return this.http.put(`${this.API_URL}/proveedores_proveedores/${id}`, pendiente) as Observable<ProveedorPendiente>;
   }
 
   /**

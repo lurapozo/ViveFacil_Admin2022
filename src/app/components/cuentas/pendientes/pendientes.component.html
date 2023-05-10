@@ -55,11 +55,14 @@
       <div
         (click)="
           pendiente_seleccionada = a;
-          copiaCedulaNombre = pendiente_seleccionada?.copiaLicencia.substring(
-            pendiente_seleccionada?.copiaLicencia.lastIndexOf('/') + 1
+          copiaCedulaNombre = pendiente_seleccionada?.copiaCedula.substring(
+            pendiente_seleccionada?.copiaCedula.lastIndexOf('/') + 1
           );
           copiaLicenciaNombre = pendiente_seleccionada?.copiaLicencia.substring(
             pendiente_seleccionada?.copiaLicencia.lastIndexOf('/') + 1
+          );
+          copiaDocumentosNombre = pendiente_seleccionada?.documentsPendientes[0].document.substring(
+            pendiente_seleccionada?.documentsPendientes[0].document.lastIndexOf('/') + 1
           );
           funcionMostar()
         "
@@ -370,7 +373,7 @@
                 <div class="row p-2 align-items-center">
                   <div class="col-5">
                     <label for="inputNombre" class="form-label">
-                      <h3 class="m-0p 0fw bold">Foto:</h3>
+                      <h3 class="m-0p 0 fw-bold">Foto:</h3>
                     </label>
                   </div>
                   <div class="col-7">
@@ -512,9 +515,7 @@
                       accept=".pdf"
                       formControlName="copiaLicencia"
                       class="form-control"
-                      [ngClass]="
-                        isInvalidForm('copiaLicencia') ? 'is-invalid' : ''
-                      "
+                      [ngClass]="isInvalidForm('copiaLicencia') ? 'is-invalid' : ''"
                       (change)="loadPdf2FromDevice($event)"
                     />
                     <div class="invalid-feedback">
@@ -567,7 +568,7 @@
                       type="text"
                       formControlName="telefono"
                       class="form-control"
-                      (keypress)="numberOnly($event)"
+                      (keypress)="numberOnlyPluss($event)"
                       [ngClass]="isInvalidForm('telefono') ? 'is-invalid' : ''"
                       [placeholder]="pendiente_seleccionada?.telefono"
                       [value]="pendiente_seleccionada?.telefono"
@@ -773,16 +774,22 @@
                       >
                     </div>
                     <div class="col-7">
+                      <a
+                        href="http://127.0.0.1:8000{{
+                          pendiente_seleccionada?.documentsPendientes[0].document
+                        }}"
+                        download="newfilename3.pdf">
+                        <p>
+                          {{ copiaDocumentosNombre }}
+                        </p>
+                      </a>
                       <input
                         type="file"
                         accept="pdf"
                         formControlName="documentos"
                         class="form-control"
-                        [ngClass]="
-                          isInvalidForm('copiaLicencia') ? 'is-invalid' : ''
-                        "
-                        [placeholder]="pendiente_seleccionada?.copiaLicencia"
-                        [value]="pendiente_seleccionada?.copiaCedula"
+                        [ngClass]="isInvalidForm('copiaLicencia') ? 'is-invalid' : ''"
+                        (change)="loadPdf3FromDevice($event)"
                       />
                       <div class="invalid-feedback">
                         {{ getErrorMessage(formEdit, "documentos") }}
@@ -818,14 +825,13 @@
                   <div class="row p-2 align-items-center">
                     <div class="col-5">
                       <label for="selectorServicioCrear" class="form-label"
-                        ><h3 class="m-0 p-0 fw-bold">Profesion:</h3></label
+                        ><h3 class="m-0 p-0 fw-bold">Profesión:</h3></label
                       >
                     </div>
                     <div class="col-7">
                       <p>
                         <span class="m-0 p-0 fw-bold">profesiones actuales:</span>  {{pendiente_seleccionada?.profesion}}
                       </p>
-                      
                       <ng-select
                         [items]="profesiones"
                         class="form-select"
@@ -836,80 +842,13 @@
                         id="ge"
                         
                         aria-describedby="selectorServicioCrearFeedback"
-                        [multiple]="true"
-                        
-                      >
-                        <!-- <option selected disabled value="">
-                          Elija una profesion...
-                        </option>
-                        <option
-                          *ngFor="let c of profesiones"
-                          [id]="c"
-                          [value]="c"
-                        >
-                          {{ c }}
-                        </option> -->
+                        [multiple]="true">
                       </ng-select>
                       <div
                         id="selectorServicioCrearFeedback"
                         class="invalid-feedback"
                       >
                         {{ getErrorMessage(formEdit, "profesion") }}
-                      </div>
-                    </div>
-                  </div>
-
-                  
-                </div>
-
-                <div *ngIf="mostrar2">
-                  <div class="row p-2 align-items-center">
-                    <div class="col-5">
-                      <label for="inputNombre" class="form-label"
-                        ><h3 class="m-0 p-0 fw-bold">Profesion:</h3></label
-                      >
-                    </div>
-                    <div class="col-7">
-                      <input
-                        disable
-                        type="text"
-                        formControlName="profesion"
-                        class="form-control"
-                        [ngClass]="
-                          isInvalidForm('profesion') ? 'is-invalid' : ''
-                        "
-                        [placeholder]="pendiente_seleccionada?.profesion"
-                        [value]="pendiente_seleccionada?.profesion"
-                      />
-                      <div class="invalid-feedback">
-                        {{getErrorMessage(formEdit, 'profesion'}
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="row p-2 align-items-center">
-                    <div class="col-5">
-                      <label for="inputNombre" class="form-label"
-                        ><h3 class="m-0 p-0 fw-bold">
-                          Años de Experiencia:
-                        </h3></label
-                      >
-                    </div>
-                    <div class="col-7">
-                      <input
-                        disable
-                        disable
-                        type="file"
-                        formControlName="ano_experiencia"
-                        class="form-control"
-                        [ngClass]="
-                          isInvalidForm('ano_experiencia') ? 'is-invalid' : ''
-                        "
-                        [placeholder]="pendiente_seleccionada?.ano_experiencia"
-                        [value]="pendiente_seleccionada?.ano_experiencia"
-                      />
-                      <div class="invalid-feedback">
-                        {{ getErrorMessage(formEdit, "ano_experiencia") }}
                       </div>
                     </div>
                   </div>

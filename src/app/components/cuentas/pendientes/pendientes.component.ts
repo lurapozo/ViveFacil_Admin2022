@@ -36,8 +36,10 @@ export class PendientesComponent{
   fileImgPerfil: File| null = null;
   filePDF: File| null = null;
   filePDF2: File| null = null;
+  filePDF3: File| null = null;
   copiaCedulaNombre= null;
   copiaLicenciaNombre= null;
+  copiaDocumentosNombre= null;
   // imgPerfil: string| null = null;
   
   formEdit: FormGroup = new FormGroup({
@@ -70,6 +72,7 @@ export class PendientesComponent{
     documentos: new FormControl(''),
     descripcion: new FormControl(''),
     foto: new FormControl(this.fileImgPerfil),
+    filesDocuments: new FormControl([this.filePDF3]),
     // foto: new FormControl('', [Validators.required]),
   });
   constructor(
@@ -102,24 +105,6 @@ export class PendientesComponent{
       }
     });
   }
-  // ngOnInit(): void {
-  //   // this.pythonAnywhereService.obtener_profesiones().subscribe(resp => {
-  //   //   console.log(resp)
-  //   //   for (let i=0; i<resp.length; i++){
-  //   //     this.profesiones.push(resp[i].nombre)
-  //   //     this.profesiones= [...this.profesiones, resp[i].nombre];
-  //   //   }
-  //     // console.log("this.profesiones")
-  //     // console.log(this.profesiones)
-  //   // });
-  // }
-
-
-  // ngOnChanges(changes: any) {
-  //   if (changes.hasOwnProperty('options')) {
-  //      this.updateOptionsList(changes['options'].isFirstChange());
-  //     }
-  //   }
 
   search(evento: any) {
     const texto = evento.target.value;
@@ -144,7 +129,6 @@ export class PendientesComponent{
       this.isAceptar = false;
       this.isNegar = false;
     }
-
     this.mensajeAlerta = mensaje;
   }
 
@@ -215,7 +199,7 @@ export class PendientesComponent{
       tipo_cuenta: this.formEdit.value.tipo_cuenta,
       foto: this.fileImgPerfil,
       //planilla_servicios: this.formEdit.value.planilla_servicios
-      filesDocuments: []
+      filesDocuments: [this.filePDF3]
     }
     console.log("VALORES DEL COSO")
     console.log(this.formEdit)
@@ -290,6 +274,8 @@ export class PendientesComponent{
 
   loadPdfFromDevice(event:any) {
     const file: File = event.target.files[0];
+    console.log("Archivo de Copia de Cedula")
+    console.log(event.target.files)
     if(file){
       this.extraerBase64(file)
       .then((imagen: any) => {
@@ -303,11 +289,26 @@ export class PendientesComponent{
 
   loadPdf2FromDevice(event:any) {
     const file: File = event.target.files[0];
+    console.log("Archivo de Copia de Licencia")
+    console.log(event.target.files)
     if(file){
       this.extraerBase64(file)
       .then((imagen: any) => {
         this.formEdit.value.copiaLicencia=file;
         this.filePDF2 = file;
+        // this.imgPerfil = imagen.base;
+      })
+      .catch(err => console.log(err));
+    }
+  };
+
+  loadPdf3FromDevice(event:any) {
+    const file: File = event.target.files[0];
+    if(file){
+      this.extraerBase64(file)
+      .then((imagen: any) => {
+        this.formEdit.value.copiaLicencia=file;
+        this.filePDF3 = file;
         // this.imgPerfil = imagen.base;
       })
       .catch(err => console.log(err));
@@ -356,7 +357,7 @@ export class PendientesComponent{
           if(this.pendiente_seleccionada.nombres != null && this.pendiente_seleccionada.nombres != ""){
             dataRegisto.append('nombres', this.pendiente_seleccionada.nombres);
           }else{
-            console.log("WWWWWWWWWWWWWWWWWW")
+            console.log("Problema editando Nombres")
             validator=1;
           }
           if(this.pendiente_seleccionada.apellidos != null && this.pendiente_seleccionada.apellidos != ""){
@@ -743,6 +744,14 @@ export class PendientesComponent{
   numberOnly(event:any): boolean {
     const charCode = (event.which) ? event.which : event.keyCode;
     if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+      return false;
+    }
+    return true;
+  }
+
+  numberOnlyPluss(event:any): boolean {
+    const charCode = (event.which) ? event.which : event.keyCode;
+    if (charCode != 43 && charCode > 31 && (charCode < 48 || charCode > 57)) {
       return false;
     }
     return true;
