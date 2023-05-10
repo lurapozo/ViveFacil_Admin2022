@@ -61,8 +61,8 @@
           copiaLicenciaNombre = pendiente_seleccionada?.copiaLicencia.substring(
             pendiente_seleccionada?.copiaLicencia.lastIndexOf('/') + 1
           );
-          copiaDocumentosNombre = pendiente_seleccionada?.documentsPendientes[0].document.substring(
-            pendiente_seleccionada?.documentsPendientes[0].document.lastIndexOf('/') + 1
+          copiaDocumentosNombre = pendiente_seleccionada?.documentsPendientes[0]?.document.substring(
+            pendiente_seleccionada?.documentsPendientes[0]?.document.lastIndexOf('/') + 1
           );
           funcionMostar()
         "
@@ -776,7 +776,7 @@
                     <div class="col-7">
                       <a
                         href="http://127.0.0.1:8000{{
-                          pendiente_seleccionada?.documentsPendientes[0].document
+                          pendiente_seleccionada?.documentsPendientes[0]?.document
                         }}"
                         download="newfilename3.pdf">
                         <p>
