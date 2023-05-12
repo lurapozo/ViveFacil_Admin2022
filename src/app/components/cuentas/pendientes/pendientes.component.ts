@@ -223,8 +223,6 @@ export class PendientesComponent{
         this.currentPage = 1;
       });
     })
-
-    
   }
 
   isURL(stringImage: string): boolean {
@@ -334,8 +332,8 @@ export class PendientesComponent{
       banco: this.pendiente_seleccionada.banco,
       numero_cuenta: this.pendiente_seleccionada.numero_cuenta,
       tipo_cuenta: this.pendiente_seleccionada.tipo_cuenta,
-      planilla_servicios: this.pendiente_seleccionada.planilla_servicios,
-      foto: this.pendiente_seleccionada.foto
+      foto: this.pendiente_seleccionada.foto,
+      planilla_servicios: this.pendiente_seleccionada.filesDocuments
     }
 
     const email = this.pendiente_seleccionada.email;
@@ -351,67 +349,67 @@ export class PendientesComponent{
           if(this.pendiente_seleccionada.email != null && this.pendiente_seleccionada.email != ""){
             dataRegisto.append('email', this.pendiente_seleccionada.email);
           }else{
-            console.log("QQQQQQQQQQ")
+            console.log("Problema en Email")
             validator=1;
           }
           if(this.pendiente_seleccionada.nombres != null && this.pendiente_seleccionada.nombres != ""){
             dataRegisto.append('nombres', this.pendiente_seleccionada.nombres);
           }else{
-            console.log("Problema editando Nombres")
+            console.log("Problema en Nombres")
             validator=1;
           }
           if(this.pendiente_seleccionada.apellidos != null && this.pendiente_seleccionada.apellidos != ""){
             dataRegisto.append('apellidos', this.pendiente_seleccionada.apellidos);
           }else{
-            console.log("EEEEEEEEEEEEEEEE")
+            console.log("Problema en Apellidos")
             validator=1;
           }
           if(this.pendiente_seleccionada.telefono != null && this.pendiente_seleccionada.telefono != ""){
             dataRegisto.append('telefono', this.pendiente_seleccionada.telefono);
           }else{
-            console.log("RRRRRRRRRRRRRR")
+            console.log("Problema en telefono")
             validator=1;
           }
           if(this.pendiente_seleccionada.cedula != null && this.pendiente_seleccionada.cedula != ""){
             dataRegisto.append('cedula', this.pendiente_seleccionada.cedula);
           }else{
-            console.log("TTTTTTTTTTTTTTTT")
+            console.log("Problema en cedula")
             validator=1;
           }
           if(this.pendiente_seleccionada.genero != null && this.pendiente_seleccionada.genero != ""){
             dataRegisto.append('genero', this.pendiente_seleccionada.genero);
           }else{
-            console.log("YYYYYYYYYYYYYY")
+            console.log("Problema en genero")
             validator=1;
           }
           if(this.pendiente_seleccionada.ciudad != null && this.pendiente_seleccionada.ciudad != ""){
             dataRegisto.append('ciudad', this.pendiente_seleccionada.ciudad);
           }else{
-            console.log("UUUUUUUUUUUUU")
+            console.log("Problema en ciudad")
             validator=1;
           }
           if(this.pendiente_seleccionada.foto != null && this.pendiente_seleccionada.foto != ""){
             dataRegisto.append('foto', this.pendiente_seleccionada.foto);
           }else{
-            console.log("IIIIIIIIIIIIIIII")
+            console.log("Problema en foto")
             validator=1;
           }
           if(this.pendiente_seleccionada.banco != null && this.pendiente_seleccionada.banco != ""){
             dataRegisto.append('banco', this.pendiente_seleccionada.banco);
           }else{
-            console.log("OOOOOOOOOOOOO")
+            console.log("ERROR EN banco")
             validator=1;
           }
           if(this.pendiente_seleccionada.numero_cuenta != null && this.pendiente_seleccionada.numero_cuenta != ""){
             dataRegisto.append('numero_cuenta', this.pendiente_seleccionada.numero_cuenta);
           }else{
-            console.log("PPPPPPPPPPPPPPP")
+            console.log("ERROR EN numero_cuenta")
             validator=1;
           }
           if(this.pendiente_seleccionada.tipo_cuenta != null && this.pendiente_seleccionada.tipo_cuenta != ""){
             dataRegisto.append('tipo_cuenta', this.pendiente_seleccionada.tipo_cuenta);
           }else{
-            console.log("AAAAAAAAAAAAAAA")
+            console.log("ERROR EN tipo_cuenta")
             validator=1;
           }
           if(this.pendiente_seleccionada.ano_experiencia != null && this.pendiente_seleccionada.ano_experiencia >= 0){
@@ -450,7 +448,25 @@ export class PendientesComponent{
             console.log("ERROR EN copiaLicencia")
             validator=1;
           }
-
+          if(this.pendiente_seleccionada.descripcion != null && this.pendiente_seleccionada.descripcion != ""){
+            dataRegisto.append('descripcion', this.pendiente_seleccionada.descripcion);
+          }else{
+            console.log("ERROR EN descripcion")
+            validator=1;
+          }
+          if(this.pendiente_seleccionada.ano_experiencia != null && this.pendiente_seleccionada.ano_experiencia != ""){
+            dataRegisto.append('ano_experiencia', this.pendiente_seleccionada.ano_experiencia);
+          }else{
+            console.log("ERROR EN ano_experiencia")
+            validator=1;
+          }
+          if(this.pendiente_seleccionada.documentsPendientes != null && this.pendiente_seleccionada.documentsPendientes != ""){
+            dataRegisto.append('filesDocuments', this.pendiente_seleccionada.documentsPendientes[0].document);
+          }else{
+            console.log("ERROR EN filesDocuments")
+            validator=1;
+          }
+          
           console.log("dataRegisto")
           console.log(dataRegisto)
           console.log("validator " + validator)
@@ -476,18 +492,6 @@ export class PendientesComponent{
                         this.currentPage = 1;
                       });
                     })
-                    // this.presentAlert('Completada!', 'El registro se ha completado exitosamente.').then(() => {
-                    //   console.log('Registro completo...');
-                    //   this.userService
-                    //     .logout()
-                    //     .then(() => {
-                    //       this.router.navigate(['/login']);
-                    //       console.log('fuera de sesion');
-                    //     })
-                    //     .catch((error) => {
-                    //       console.log(error);
-                    //     });
-                    // });
                   })
                   .catch((error) => {
                     console.log('Error al registrar en firebase: ', error);
@@ -503,28 +507,9 @@ export class PendientesComponent{
           }
         } else {
           console.log('Usuario encontrado en PythonAnywhere');
-          // this.presentAlert(
-          //   'Error en el registro :(',
-          //   'El usuario ya se encuentra registrado en la aplicación.',
-          //   false
-          // );
-          // this.isRegistered = true;
         }
       });
     }
-    
-    // this.pythonAnywhereService.crear_proveedor_proveedor(pendiente).subscribe(resp => {
-    //   console.log(resp)
-    // })
-    
-    /*let email: BodyEmail = {
-      password: '1234',
-      email: this.pendiente_seleccionada.email,
-      tipo: 'Proveedor'
-    }
-    this.pythonAnywhereService.enviar_email(email).subscribe(resp => {
-      console.log(resp)
-    })*/
   }
 
   onNegar() {

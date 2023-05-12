@@ -56,8 +56,8 @@
           copiaLicenciaNombre = proveedor_seleccionado?.copiaLicencia.substring(
             proveedor_seleccionado?.copiaLicencia.lastIndexOf('/') + 1
           );
-          copiaDocumentosNombre = proveedor_seleccionado?.documentsPendientes[0].document.substring(
-            proveedor_seleccionado?.documentsPendientes[0].document.lastIndexOf('/') + 1
+          copiaDocumentosNombre = proveedor_seleccionado?.document[0].documento.substring(
+            proveedor_seleccionado?.document[0].documento.lastIndexOf('/') + 1
           );
           funcionMostar();" 
           *ngFor="let a of arr_filtered_proveedor"
@@ -134,7 +134,7 @@
             </div>
             <div class="col-7">
               <a
-                href="http://127.0.0.1:8000{{
+                href="https://tomesoft1.pythonanywhere.com{{
                   proveedor_seleccionado?.copiaCedula
                 }}"
                 download="newfilename.pdf"
@@ -233,7 +233,7 @@
             </div>
             <div class="col-7">
               <a
-                href="http://127.0.0.1:8000{{
+                href="https://tomesoft1.pythonanywhere.com{{
                   proveedor_seleccionado?.copiaLicencia
                 }}"
                 download="newfilename2.pdf"
@@ -332,7 +332,7 @@
                     </div>
                     <div class="col-7">
                       <img
-                        src="http://127.0.0.1:8000{{
+                        src="https://tomesoft1.pythonanywhere.com{{
                           proveedor_seleccionado?.user_datos?.foto
                         }}"
                         alt="no se encontró foto de perfil"
@@ -425,7 +425,7 @@
                     </div>
                     <div class="col-7">
                       <a
-                        href="http://127.0.0.1:8000{{
+                        href="https://tomesoft1.pythonanywhere.com{{
                           proveedor_seleccionado?.copiaLicencia
                         }}"
                         download="newfilename2.pdf"
@@ -458,7 +458,7 @@
                     </div>
                     <div class="col-7">
                       <a
-                        href="http://127.0.0.1:8000{{
+                        href="https://tomesoft1.pythonanywhere.com{{
                           proveedor_seleccionado?.copiaCedula
                         }}"
                         download="newfilename.pdf"
@@ -671,7 +671,7 @@
                     </div>
                     <div class="col-7">
                       <a
-                        href="http://127.0.0.1:8000{{
+                        href="https://tomesoft1.pythonanywhere.com{{
                           proveedor_seleccionado?.document[0]?.documento
                         }}"
                         download="newfilename3.pdf">

@@ -143,7 +143,7 @@ export interface BodyCrearProveedorPendiente {
   numero_cuenta: string;
   tipo_cuenta: string;
   foto: File | null;
-  planilla_servicios: File | null; //file[]
+  planilla_servicios: File[] | null; //file[]
 }
 
 export interface BodyResponseCrearProveedorPendiente {

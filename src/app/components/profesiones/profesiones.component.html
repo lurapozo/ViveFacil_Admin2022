@@ -72,7 +72,7 @@
           <img
             [src]="
               profesion.foto
-                ? 'http://127.0.0.1:8000' + profesion.foto
+                ? 'https://tomesoft1.pythonanywhere.com' + profesion.foto
                 : 'assets/imagenes/ProfesionDefault.png'
             "
             class="rounded mx-auto d-block img-fluid img_profesion"
@@ -125,7 +125,7 @@
           <img
             [src]="
               profesion_seleccionada?.foto
-                ? 'http://127.0.0.1:8000' + profesion_seleccionada?.foto
+                ? 'https://tomesoft1.pythonanywhere.com' + profesion_seleccionada?.foto
                 : 'assets/imagenes/ProfesionDefault.png'
             "
             class="rounded mx-auto d-block img-fluid w-50 image_modal"
@@ -228,7 +228,7 @@
               <img
                 *ngIf="!existImageActualizar && profesion_seleccionada?.foto"
                 class="image_modal rounded mx-auto d-block img-fluid w-50"
-                [src]="'http://127.0.0.1:8000' + profesion_seleccionada?.foto"
+                [src]="'https://tomesoft1.pythonanywhere.com' + profesion_seleccionada?.foto"
                 alt="Archivo incorrecto"
               />
               <i
