@@ -154,6 +154,15 @@
           </h2>
         </div>
 
+        <!-- Sección Medallas -->
+        <div class="accordion-item rounded-0">
+          <h2 class="accordion-header m-0" id="">
+            <button [ngClass]="selection==='medalla'? '':'collapsed'" (click)="setSelection('medalla')" class="accordion-button pt-2 pb-2 accordion-no-button rounded-0" type="button">
+              <i class="bi bi-award fs-5 ps-2 pe-3"></i> Medallas
+            </button>
+          </h2>
+        </div>
+
         <!-- Sección Publicidad -->
         <div class="accordion-item">
           <h2 class="accordion-header m-0" id="">
@@ -282,6 +291,9 @@
 
       <!-- Inyeccion Vista ROLES -->
       <app-roles *ngIf="selection === 'rol'"></app-roles>
+
+      <!-- Inyeccion Vista ROLES -->
+      <app-medalla *ngIf="selection === 'medalla'"></app-medalla>
 
       <!-- Inyeccion Vista PUBLICIDAD -->
       <app-publicidad *ngIf="selection === 'publicidad'"></app-publicidad>

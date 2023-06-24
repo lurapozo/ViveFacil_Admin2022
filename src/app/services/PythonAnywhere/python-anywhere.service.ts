@@ -1003,6 +1003,13 @@ obtener_politicas(){
       `${this.API_URL}/proveedores_pendientes/${id}`
     );
   }
+  eliminar_proveedores_pendientes2(id: any, data: any) {//FALTA
+    const razon = new FormData();
+    razon.append("razon", data);
+    console.log("la raozn es esta", razon)
+    console.log("la raozn es ewwwwsta", data)
+    return this.http.put(`${this.API_URL}/proveedores_pendientes2/${id}`, razon);
+  }
   eliminar_proveedores_rechazados(id: any) {//FALTA
     return this.http.delete(
       `${this.API_URL}/proveedores_rechazados/${id}`

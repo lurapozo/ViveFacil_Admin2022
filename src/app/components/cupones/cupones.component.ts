@@ -10,6 +10,7 @@ import { PythonAnywhereService } from 'src/app/services/PythonAnywhere/python-an
   styleUrls: ['./cupones.component.css']
 })
 export class CuponesComponent {
+  codigo=Math.random().toString(36).substr(2, 6);
   arr_cupon!: Cupon[] | undefined;
   arr_filtered_cupon!: Cupon[] | undefined;
   condicionNext = false
@@ -104,6 +105,7 @@ export class CuponesComponent {
   }
 
   limpiarForm(tipo: string) {
+    this.codigo=Math.random().toString(36).substr(2, 6);
     if (tipo === 'crear') {
       this.existImageCrear = false;
       this.cuponCrear.get('titulo')?.reset();

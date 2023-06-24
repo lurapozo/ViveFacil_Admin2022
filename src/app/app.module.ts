@@ -48,6 +48,7 @@ import { AngularFireModule } from '@angular/fire/compat';
 
 import { NgSelectModule } from '@ng-select/ng-select';
 import { FormsModule } from '@angular/forms';
+import { MedallaComponent } from './components/medalla/medalla.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -77,6 +78,7 @@ import { FormsModule } from '@angular/forms';
     SugerenciasNoLeidasComponent,
     LoginComponent,
     SpinnerComponent,
+    MedallaComponent,
   ],
   imports: [
     BrowserModule,

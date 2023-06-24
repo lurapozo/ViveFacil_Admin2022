@@ -42,7 +42,7 @@
             <h3 class="p-0 m-0">Telefono</h3>
           </div>
           <div class="col-2 align-self-center">
-            <h3 class="p-0 m-0">Fecha Registro</h3>
+            <h3 class="p-0 m-0">Fecha de actualización</h3>
           </div>
   
         </div>
@@ -193,7 +193,7 @@
   
           <div class="row p-2 align-items-center">
             <div class="col-5">
-              <h3 class="m-0 p-0 fw-bold">Fecha Registro:</h3>
+              <h3 class="m-0 p-0 fw-bold">Fecha de actualización:</h3>
             </div>
             <div class="col-7">
               {{proveedor_seleccionado?.user_datos.fecha_creacion | date : "d/M/Y" }}
@@ -248,24 +248,24 @@
         </div>
         <div class="modal-footer">
           <button
-            class="btn btn-warning"
-            data-bs-target="#modalConfirmacion"
-            data-bs-toggle="modal">Cerrar</button>
+          class="btn btn-warning"
+          (click)="
+          isAceptar = true;
+          isNegar = true;
+          mensajeAlerta = 'Está seguro que no desea hacer cambios?'
+          "
+          data-bs-dismiss="modal"
+          aria-label="Close"
+          >
+            Cerrar
+          </button>
           <button
             (click)="limpiarForm()"
             class="btn btn-info"
             data-target=".bd-example-modal-xl"
             data-bs-target="#modalInformacionEdicionProfesion"
-            data-bs-toggle="modal">Editar
+            data-bs-toggle="modal">Visualizar
           </button>
-
-          <button
-            data-bs-target="#modalConfirmacion"
-            data-bs-toggle="modal"
-            class="btn btn-danger"
-            (click)="establecerMensaje('Está seguro que desea Negar la
-            información?', 'negar')">Negar</button>
-  
         </div>
       </div>
     </div>
@@ -561,28 +561,34 @@
                         'descripcion')}} </div>
                     </div>
                   </div>
-        
+
                   <div class="row p-2 align-items-center">
                     <div class="col-5">
-                      <label for="selectorServicioCrear" class="form-label"><h3
-                          class="m-0 p-0 fw-bold">Licencia:</h3></label>
+                      <label for="inputNombre" class="form-label"
+                        ><h3 class="m-0 p-0 fw-bold">Documentación:</h3></label
+                      >
                     </div>
                     <div class="col-7">
-                      <select
-                        class="form-select"
-                        [ngClass]="isInvalidForm('licencia') ?
-                        'is-invalid' : ''"
-                        formControlName="licencia"
-                  
-                        [value]="proveedor_seleccionado?.licencia"
-                        aria-describedby="selectorServicioCrearFeedback">
-                        <option selected disabled value="">¿Posee una licencia?...</option>
-                        <option *ngFor="let c of licencia" [id]="c" [value]="c"> {{c}}
-                        </option>
-                      </select>
-                      <div id="selectorServicioCrearFeedback"
-                        class="invalid-feedback"> {{getErrorMessage(formEdit,
-                        'licencia')}} </div>
+                      <a
+                        href="https://tomesoft1.pythonanywhere.com{{
+                          proveedor_seleccionado?.document[0]?.documento
+                        }}"
+                        download="newfilename3.pdf">
+                        <p>
+                          {{ copiaDocumentosNombre }}
+                        </p>
+                      </a>
+                      <input
+                        type="file"
+                        accept="pdf"
+                        formControlName="documentos"
+                        class="form-control"
+                        [ngClass]="isInvalidForm('copiaLicencia') ? 'is-invalid' : ''"
+                        (change)="loadPdf3FromDevice($event)"
+                      />
+                      <div class="invalid-feedback">
+                        {{ getErrorMessage(formEdit, "documentos") }}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -593,7 +599,7 @@
                   <div class="row  align-items-center">
                     <div class="col-5">
                       <label for="inputNombre" class="form-label">
-                        <h3 class="m-0 p-0fw-bold">
+                        <h3 class="m-0 p-0 fw-bold">
                           Tipo Cuenta:
                         </h3>
                       </label>
@@ -663,33 +669,28 @@
   
                   <h2>Profesión</h2>
                 <div>
+                  
                   <div class="row p-2 align-items-center">
                     <div class="col-5">
-                      <label for="inputNombre" class="form-label"
-                        ><h3 class="m-0 p-0 fw-bold">Documentación:</h3></label
-                      >
+                      <label for="selectorServicioCrear" class="form-label"><h3
+                          class="m-0 p-0 fw-bold">Licencia:</h3></label>
                     </div>
                     <div class="col-7">
-                      <a
-                        href="https://tomesoft1.pythonanywhere.com{{
-                          proveedor_seleccionado?.document[0]?.documento
-                        }}"
-                        download="newfilename3.pdf">
-                        <p>
-                          {{ copiaDocumentosNombre }}
-                        </p>
-                      </a>
-                      <input
-                        type="file"
-                        accept="pdf"
-                        formControlName="documentos"
-                        class="form-control"
-                        [ngClass]="isInvalidForm('copiaLicencia') ? 'is-invalid' : ''"
-                        (change)="loadPdf3FromDevice($event)"
-                      />
-                      <div class="invalid-feedback">
-                        {{ getErrorMessage(formEdit, "documentos") }}
-                      </div>
+                      <select
+                        class="form-select"
+                        [ngClass]="isInvalidForm('licencia') ?
+                        'is-invalid' : ''"
+                        formControlName="licencia"
+                  
+                        [value]="proveedor_seleccionado?.licencia"
+                        aria-describedby="selectorServicioCrearFeedback">
+                        <option selected disabled value="">¿Posee una licencia?...</option>
+                        <option *ngFor="let c of licencia" [id]="c" [value]="c"> {{c}}
+                        </option>
+                      </select>
+                      <div id="selectorServicioCrearFeedback"
+                        class="invalid-feedback"> {{getErrorMessage(formEdit,
+                        'licencia')}} </div>
                     </div>
                   </div>
 
@@ -755,9 +756,22 @@
           </form>
         </div>
         <div class="modal-footer">
-          <button class="btn btn-danger"
-            data-bs-target="#modalInformacionProfesion" data-bs-toggle="modal">Regresar</button>
+          <button class="btn btn-warning"
+            data-bs-target="#modalInformacionProfesion" 
+            data-bs-toggle="modal"
+            >
+            Regresar
+          </button>
           <button
+            data-bs-target="#modalConfirmacion"
+            data-bs-toggle="modal"
+            class="btn btn-danger"
+            (click)="establecerMensaje('Está seguro que desea Negar la
+            información?', 'negar')"
+            >
+            Negar
+          </button>
+            <button
             data-bs-target="#modalConfirmacion"
             data-bs-toggle="modal"
             class="btn btn-success"

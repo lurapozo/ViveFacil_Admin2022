@@ -47,7 +47,7 @@
           <h3 class="p-0 m-0">Telefono</h3>
         </div>
         <div class="col-2 align-self-center">
-          <h3 class="p-0 m-0">Fecha Registro</h3>
+          <h3 class="p-0 m-0">Fecha de actualización</h3>
         </div>
       </div>
 
@@ -201,7 +201,7 @@
 
         <div class="row p-2 align-items-center">
           <div class="col-5">
-            <h3 class="m-0 p-0 fw-bold">Fecha Registro:</h3>
+            <h3 class="m-0 p-0 fw-bold">Fecha de actualización:</h3>
           </div>
           <div class="col-7">
             {{ pendiente_seleccionada?.fecha_registro | date : "d/M/Y" }}
@@ -255,8 +255,13 @@
       <div class="modal-footer">
         <button
           class="btn btn-warning"
-          data-bs-target="#modalConfirmacion"
-          data-bs-toggle="modal"
+          (click)="
+          isAceptar = true;
+          isNegar = true;
+          mensajeAlerta = 'Está seguro que no desea hacer cambios?'
+          "
+          data-bs-dismiss="modal"
+          aria-label="Close"
         >
           Cerrar
         </button>
@@ -267,7 +272,7 @@
           data-bs-target="#modalInformacionEdicionProfesion"
           data-bs-toggle="modal"
         >
-          Editar
+          Visualizar
         </button>
         <button
           data-bs-target="#modalConfirmacion1"
@@ -280,19 +285,6 @@
           "
         >
           Aprobar
-        </button>
-        <button
-          data-bs-target="#modalConfirmacion"
-          data-bs-toggle="modal"
-          class="btn btn-danger"
-          (click)="
-            establecerMensaje(
-              'Está seguro que desea Negar la información?',
-              'negar'
-            )
-          "
-        >
-          Negar
         </button>
       </div>
     </div>
@@ -654,31 +646,30 @@
 
                 <div class="row p-2 align-items-center">
                   <div class="col-5">
-                    <label for="selectorServicioCrear" class="form-label"
-                      ><h3 class="m-0 p-0 fw-bold">Licencia:</h3></label
+                    <label for="inputNombre" class="form-label"
+                      ><h3 class="m-0 p-0 fw-bold">Documentación:</h3></label
                     >
                   </div>
                   <div class="col-7">
-                    <select
-                      class="form-select"
-                      [ngClass]="isInvalidForm('licencia') ? 'is-invalid' : ''"
-                      formControlName="licencia"
-                      id="tienelicencia"
-                      [value]="pendiente_seleccionada?.licencia"
-                      aria-describedby="selectorServicioCrearFeedback"
-                    >
-                      <option selected disabled value="">
-                        ¿Posee una licencia?...
-                      </option>
-                      <option *ngFor="let c of licencia" [id]="c" [value]="c">
-                        {{ c }}
-                      </option>
-                    </select>
-                    <div
-                      id="selectorServicioCrearFeedback"
-                      class="invalid-feedback"
-                    >
-                      {{ getErrorMessage(formEdit, "licencia") }}
+                    <a
+                      href="https://tomesoft1.pythonanywhere.com{{
+                        pendiente_seleccionada?.documentsPendientes[0]?.document
+                      }}"
+                      download="newfilename3.pdf">
+                      <p>
+                        {{ copiaDocumentosNombre }}
+                      </p>
+                    </a>
+                    <input
+                    type="file"
+                    accept=".pdf"
+                      formControlName="documentos"
+                      class="form-control"
+                      [ngClass]="isInvalidForm('copiaLicencia') ? 'is-invalid' : ''"
+                      (change)="loadPdf3FromDevice($event)"
+                    />
+                    <div class="invalid-feedback">
+                      {{ getErrorMessage(formEdit, "documentos") }}
                     </div>
                   </div>
                 </div>
@@ -769,30 +760,31 @@
                 <div>
                   <div class="row p-2 align-items-center">
                     <div class="col-5">
-                      <label for="inputNombre" class="form-label"
-                        ><h3 class="m-0 p-0 fw-bold">Documentación:</h3></label
+                      <label for="selectorServicioCrear" class="form-label"
+                        ><h3 class="m-0 p-0 fw-bold">Licencia:</h3></label
                       >
                     </div>
                     <div class="col-7">
-                      <a
-                        href="https://tomesoft1.pythonanywhere.com{{
-                          pendiente_seleccionada?.documentsPendientes[0]?.document
-                        }}"
-                        download="newfilename3.pdf">
-                        <p>
-                          {{ copiaDocumentosNombre }}
-                        </p>
-                      </a>
-                      <input
-                      type="file"
-                      accept=".pdf"
-                        formControlName="documentos"
-                        class="form-control"
-                        [ngClass]="isInvalidForm('copiaLicencia') ? 'is-invalid' : ''"
-                        (change)="loadPdf3FromDevice($event)"
-                      />
-                      <div class="invalid-feedback">
-                        {{ getErrorMessage(formEdit, "documentos") }}
+                      <select
+                        class="form-select"
+                        [ngClass]="isInvalidForm('licencia') ? 'is-invalid' : ''"
+                        formControlName="licencia"
+                        id="tienelicencia"
+                        [value]="pendiente_seleccionada?.licencia"
+                        aria-describedby="selectorServicioCrearFeedback"
+                      >
+                        <option selected disabled value="">
+                          ¿Posee una licencia?...
+                        </option>
+                        <option *ngFor="let c of licencia" [id]="c" [value]="c">
+                          {{ c }}
+                        </option>
+                      </select>
+                      <div
+                        id="selectorServicioCrearFeedback"
+                        class="invalid-feedback"
+                      >
+                        {{ getErrorMessage(formEdit, "licencia") }}
                       </div>
                     </div>
                   </div>
@@ -860,11 +852,24 @@
       </div>
       <div class="modal-footer">
         <button
-          class="btn btn-danger"
+          class="btn btn-warning"
           data-bs-target="#modalInformacionProfesion"
           data-bs-toggle="modal"
         >
           Regresar
+        </button>
+        <button
+          data-bs-target="#modalConfirmacion3"
+          data-bs-toggle="modal"
+          class="btn btn-danger"
+          (click)="
+            establecerMensaje(
+              'Está seguro que desea Negar la información?',
+              'negar'
+            )
+          "
+        >
+          Negar
         </button>
         <button
           data-bs-target="#modalConfirmacion2"
@@ -1019,7 +1024,7 @@
           (click)="onEditar()"
           data-bs-dismiss="modal"
         >
-          Editar
+          Actualizar
         </button>
       </div>
     </div>
@@ -1058,5 +1063,67 @@
         </li>
       </ul>
     </nav>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  id="modalConfirmacion3"
+  tabindex="-1"
+  aria-labelledby="modalConfirmacionLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <!-- Titulo del modal confirmacion -->
+      <div class="modal-header">
+        <h1
+          class="modal-title fs-5 m-0 p-0 fw-bold"
+          id="modalConfirmacionLabel"
+        >
+          Razón del rechazo
+        </h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+
+      <!-- Cuerpo del modal confirmacion -->
+      <div class="modal-body">
+        Escriba a continuacion la razón por la que rechaza este proveedor pendiente:
+        <div class="modal-body mb-0">
+          <form [formGroup]="formNegar" class="">
+              <div class="row p-2 align-items-center">
+                  <input
+                    type="text"
+                    formControlName="razon"
+                    class="form-control"
+                    placeholder="Ponga la razón aquí"
+                  />
+                </div>
+          </form>
+        </div>
+      </div>
+      
+      
+
+      <!-- Footer del modal confirmacion -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+          Cancelar
+        </button>
+        <button
+          type="button"
+          class="btn btn-success"
+          (click)="onNegar()"
+          data-bs-dismiss="modal"
+        >
+          Negar
+        </button>
+      </div>
+    </div>
   </div>
 </div>

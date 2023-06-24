@@ -647,8 +647,10 @@
             </div>
             <div class="col-7">
               <input
+              id="codigo"
                 type="text"
-                placeholder="xyz123"
+                [placeholder]="codigo"
+                [value]="codigo"
                 formControlName="codigo"
                 class="form-control"
                 [ngClass]="

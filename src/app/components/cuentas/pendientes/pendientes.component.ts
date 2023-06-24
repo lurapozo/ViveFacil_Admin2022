@@ -75,6 +75,9 @@ export class PendientesComponent{
     filesDocuments: new FormControl([this.filePDF3]),
     // foto: new FormControl('', [Validators.required]),
   });
+  formNegar: FormGroup = new FormGroup({
+    razon: new FormControl(''),
+  });
   constructor(
     private pythonAnywhereService: PythonAnywhereService,
     private userService: UserService, 
@@ -513,28 +516,12 @@ export class PendientesComponent{
   }
 
   onNegar() {
-    let pendiente: BodyCrearProveedorPendiente = {
-      nombres: this.pendiente_seleccionada.nombres,
-      apellidos: this.pendiente_seleccionada.apellidos,
-      genero: this.pendiente_seleccionada.genero,
-      telefono: this.pendiente_seleccionada.telefono,
-      cedula: this.pendiente_seleccionada.cedula,
-      copiaCedula: this.pendiente_seleccionada.copiaCedula,
-      ciudad: this.pendiente_seleccionada.ciudad,
-      direccion: this.pendiente_seleccionada.direccion,
-      email: this.pendiente_seleccionada.email,
-      descripcion: this.pendiente_seleccionada.descripcion,
-      licencia: this.pendiente_seleccionada.licencia,
-      copiaLicencia: this.pendiente_seleccionada.copiaLicencia,
-      profesion: this.pendiente_seleccionada.profesion,
-      ano_experiencia: this.pendiente_seleccionada.ano_experiencia,
-      banco: this.pendiente_seleccionada.banco,
-      numero_cuenta: this.pendiente_seleccionada.numero_cuenta,
-      tipo_cuenta: this.pendiente_seleccionada.tipo_cuenta,
-      planilla_servicios: this.pendiente_seleccionada.planilla_servicios,
-      foto: this.pendiente_seleccionada.foto
+    let razon='';
+    if(this.formNegar.value.razon != null && this.formNegar.value.razon != ""){
+      razon = this.formNegar.value.razon
     }
-    this.pythonAnywhereService.eliminar_proveedores_pendientes(this.pendiente_seleccionada.id).subscribe(resp => {
+    console.log(razon)
+    this.pythonAnywhereService.eliminar_proveedores_pendientes2(this.pendiente_seleccionada.id, razon).subscribe(resp => {
       console.log(resp)
       this.pythonAnywhereService.obtener_proveedores_pendientes().subscribe(resp => {
         this.total = Object(resp).total_objects
