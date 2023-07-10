@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { PythonAnywhereService } from 'src/app/services/PythonAnywhere/python-anywhere.service';
-import { BodyActualizarInsignia, BodyCrearInsignia, Insignia } from '../../interfaces/insignia';
+import { BodyActualizarInsignia, BodyCrearMedalla, Insignia, Medalla, BodyActualizarMedalla } from '../../interfaces/insignia';
 import { Servicio } from 'src/app/interfaces/servicio';
 import { Categoria } from '../../interfaces/categoria';
 @Component({
@@ -13,12 +13,12 @@ import { Categoria } from '../../interfaces/categoria';
 
 export class MedallaComponent {
   total = 0
-  arr_insignia?: Insignia[];
-  arr_filtered_insignia?: Insignia[];
+  arr_insignia?: Medalla[];
+  arr_filtered_insignia?: Medalla[];
   condicionNext = false
   currentPage = 1
   pageNumber: number[] = [];
-  insignia_seleccionada?: Insignia;
+  insignia_seleccionada?: Medalla;
   existImageCrear = false; existImageActualizar = false;
   activo = ''
   activoCond = false
@@ -37,7 +37,7 @@ export class MedallaComponent {
   arr_categoria?: Categoria[] | undefined;
 
   constructor(private pythonAnywhereService: PythonAnywhereService, private sanitizer: DomSanitizer) {
-    this.pythonAnywhereService.obtener_insignias().subscribe(resp => {
+    this.pythonAnywhereService.obtener_medallas().subscribe(resp => {
       this.arr_insignia = resp;
       this.arr_filtered_insignia = this.arr_insignia;
       console.log(this.arr_filtered_insignia)
@@ -54,29 +54,33 @@ export class MedallaComponent {
     )
     const imagenCrearControl = this.crearInsignias.get('imagen') as FormControl;
     imagenCrearControl.addValidators(this.createImageValidator(this.crearInsignias.get('imagen') as AbstractControl, 'crear'));
-    const imagenActualizarControl = this.editarInsignias.get('imagen') as FormControl;
-    imagenActualizarControl.addValidators(this.createImageValidator(this.editarInsignias.get('imagen') as AbstractControl, 'actualizar'));
+    const imagenActualizarControl = this.editarMedallas.get('imagen') as FormControl;
+    imagenActualizarControl.addValidators(this.createImageValidator(this.editarMedallas.get('imagen') as AbstractControl, 'actualizar'));
   }
   crearInsignias = new FormGroup({
-    imagen: new FormControl(this.fileImagenActualizar),
     nombre: new FormControl('', [Validators.required]),
-    pedidos: new FormControl('', [Validators.required, Validators.minLength(1),
-    Validators.maxLength(2), Validators.pattern(/^[0-9]+$/)]),
-    servicio: new FormControl('', [Validators.required]),
-    // cat: new FormControl('', [Validators.required]),
-    usuario: new FormControl('', [Validators.required]),
     descripcion: new FormControl('', [Validators.required]),
+    imagen: new FormControl(this.fileImagenActualizar),
+    // pedidos: new FormControl('', [Validators.required, Validators.minLength(1),
+    // Validators.maxLength(2), Validators.pattern(/^[0-9]+$/)]),
+    tiempo: new FormControl('', [Validators.required]),
+    valor: new FormControl('', [Validators.required]),
+    cantidad: new FormControl('', [Validators.required]),
+    
   }, []);
 
-  editarInsignias = new FormGroup({
+  editarMedallas = new FormGroup({
     imagen: new FormControl(this.fileImagenActualizar),
     nombre: new FormControl('', [Validators.required]),
-    pedidos: new FormControl('', [Validators.required, Validators.minLength(1),
-    Validators.maxLength(2), Validators.pattern(/^[0-9]+$/)]),
-    servicio: new FormControl('', [Validators.required]),
-    // cat: new FormControl('', [Validators.required]),
-    usuario: new FormControl('', [Validators.required]),
     descripcion: new FormControl('', [Validators.required]),
+    valor: new FormControl('', [Validators.required, Validators.minLength(1),
+    Validators.maxLength(2), Validators.pattern(/^[0-9]+$/)]),
+    cantidad: new FormControl('', [Validators.required, Validators.minLength(1),
+    Validators.maxLength(2), Validators.pattern(/^[0-9]+$/)]),
+    tiempo: new FormControl('', [Validators.required, Validators.minLength(1),
+    Validators.maxLength(2), Validators.pattern(/^[0-9]+$/)]),
+
+    
   }, []);
   search(evento: any) {
     const texto = evento.target.value;
@@ -89,6 +93,9 @@ export class MedallaComponent {
     }
   }
   establecerMensaje(mensaje: string, tipo: string) {
+    console.log("LLLLLLLLLLLLLLLLL")
+    console.log(mensaje)
+    console.log(tipo)
     if (tipo === 'actualizar') {
       this.isActualizar = true;
       this.isEliminar = false;
@@ -142,7 +149,7 @@ export class MedallaComponent {
               this.existImageCrear = false;
             }
             else if (tipo === 'actualizar') {
-              this.editarInsignias.get('imagen')?.setValue(null);
+              this.editarMedallas.get('imagen')?.setValue(null);
               this.existImageActualizar = false;
             }
             return { image_error: 'Solo imágenes con formato jpg, jpeg, png o jfif.' };
@@ -175,7 +182,7 @@ export class MedallaComponent {
 
           }
           else if (tipo === 'actualizar') {
-            this.editarInsignias.get('imagen')?.setValue(file);
+            this.editarMedallas.get('imagen')?.setValue(file);
             this.fileImagenActualizar = file;
             this.imagenActualizar = imagen.base;
           }
@@ -213,7 +220,7 @@ export class MedallaComponent {
     if (tipo === 'crear') {
       return this.crearInsignias.get(subForm)?.invalid && this.crearInsignias.get(subForm)?.touched || this.crearInsignias.get(subForm)?.dirty && this.getErrorMessage(this.crearInsignias, subForm).length !== 0;
     } else {
-      return this.editarInsignias.get(subForm)?.invalid && this.editarInsignias.get(subForm)?.touched || this.editarInsignias.get(subForm)?.dirty && this.getErrorMessage(this.editarInsignias, subForm).length !== 0;
+      return this.editarMedallas.get(subForm)?.invalid && this.editarMedallas.get(subForm)?.touched || this.editarMedallas.get(subForm)?.dirty && this.getErrorMessage(this.editarMedallas, subForm).length !== 0;
     }
   }
 
@@ -275,100 +282,94 @@ export class MedallaComponent {
       this.crearInsignias.get('imagen')?.reset();
       this.crearInsignias.get('nombre')?.reset();
       this.crearInsignias.get('descripcion')?.reset();
-      this.crearInsignias.get('servicio')?.setValue('');
-      // this.crearInsignias.get('cat')?.setValue('');
-      this.crearInsignias.get('pedidos')?.setValue('');
-      this.crearInsignias.get('servicio')?.setValue('');
-      this.crearInsignias.get('usuario')?.setValue('');
+      this.crearInsignias.get('tiempo')?.setValue('');
+      this.crearInsignias.get('valor')?.setValue('');
+      this.crearInsignias.get('cantidad')?.setValue('');
     } else if (tipo === 'actualizar') {
 
-      const servicio = this.insignia_seleccionada?.servicio;
       const nombre = this.insignia_seleccionada?.nombre;
       const descripcion = this.insignia_seleccionada?.descripcion;
       const estado = this.insignia_seleccionada?.estado;
-      const tipo = this.insignia_seleccionada?.tipo;
-      const pedido = this.insignia_seleccionada?.pedidos;
-      const usuario = this.insignia_seleccionada?.tipo_usuario;
+      const tiempo = this.insignia_seleccionada?.tiempo;
+      const valor = this.insignia_seleccionada?.valor;
+      const cantidad = this.insignia_seleccionada?.cantidad;
       this.existImageActualizar = false;
-      this.editarInsignias.get('imagen')?.reset();
-      nombre ? this.editarInsignias.get('nombre')?.setValue(nombre) : this.editarInsignias.get('nombre')?.reset();
-      descripcion ? this.editarInsignias.get('descripcion')?.setValue(descripcion) : this.editarInsignias.get('descripcion')?.reset();
-      servicio ? this.editarInsignias.get('servicio')?.setValue(servicio) : this.editarInsignias.get('servicio')?.reset();
-      // tipo ? this.editarInsignias.get('cat')?.setValue(tipo) : this.editarInsignias.get('cat')?.reset();
-      pedido ? this.editarInsignias.get('pedidos')?.setValue(pedido) : this.editarInsignias.get('pedidos')?.reset();
+      
+      this.editarMedallas.get('imagen')?.reset();
+      nombre ? this.editarMedallas.get('nombre')?.setValue(nombre) : this.editarMedallas.get('nombre')?.reset();
+      descripcion ? this.editarMedallas.get('descripcion')?.setValue(descripcion) : this.editarMedallas.get('descripcion')?.reset();
+      tiempo ? this.editarMedallas.get('tiempo')?.setValue(tiempo) : this.editarMedallas.get('tiempo')?.reset();
+      // tipo ? this.editarMedallas.get('cat')?.setValue(tipo) : this.editarMedallas.get('cat')?.reset();
+      valor ? this.editarMedallas.get('valor')?.setValue(valor) : this.editarMedallas.get('valor')?.reset();
+      cantidad ? this.editarMedallas.get('cantidad')?.setValue(cantidad) : this.editarMedallas.get('cantidad')?.reset();
 
     }
   }
   onCrear() {
 
-    const Insignia: BodyCrearInsignia = {
+    const Medalla: BodyCrearMedalla = {
       nombre: '',
-      servicio: '',
-      tipoUsuario: '',
-      pedidos: '',
       descripcion: '',
-      tipo: ''
+      tiempo: '',
+      valor: '',
+      cantidad: ''
 
     }
-    const pedidos = this.crearInsignias.get('pedidos')?.value;
-    const servicio = this.crearInsignias.get('servicio')?.value;
     const nombre = this.crearInsignias.get('nombre')?.value;
     const descripcion = this.crearInsignias.get('descripcion')?.value;
-    const tipo = this.crearInsignias.get('cat')?.value;
-    const usuario = this.crearInsignias.get('usuario')?.value;
     const foto = this.crearInsignias.get('imagen')?.value;
-    if (nombre && servicio && descripcion && tipo && pedidos && usuario) {
-      Insignia.servicio = servicio;
-      Insignia.nombre = nombre;
-      Insignia.descripcion = descripcion;
-      Insignia.tipo = tipo
-      Insignia.tipoUsuario = usuario
-      Insignia.pedidos = pedidos
+    const tiempo = this.crearInsignias.get('tiempo')?.value;
+    const valor = this.crearInsignias.get('valor')?.value;
+    const cantidad = this.crearInsignias.get('cantidad')?.value;
+    
+    if (nombre && tiempo && descripcion && valor && cantidad) {
+      Medalla.nombre = nombre;
+      Medalla.tiempo = tiempo;
+      Medalla.descripcion = descripcion;
+      Medalla.valor = valor
+      Medalla.cantidad = cantidad
       if (foto && this.existImageCrear) {
-        Insignia.imagen = foto; // Si hay foto se le agrega al body.
+        Medalla.imagen = foto; // Si hay foto se le agrega al body.
       }
-      console.log(Insignia)
-      this.pythonAnywhereService.crear_insignia(Insignia).subscribe(resp => {
+      console.log(Medalla)
+      this.pythonAnywhereService.crear_medalla(Medalla).subscribe(resp => {
         this.limpiarForm('crear');
-        this.mostrarToastInfo('Estado de la Insignia ', 'Insignia Creada correctamente', false);
+        this.mostrarToastInfo('Estado de la Medalla ', 'Medalla Creada correctamente', false);
       })
     }
   }
 
   onActualizar() {
-    const insignia: BodyActualizarInsignia = {
+    const medalla: BodyActualizarMedalla = {
       nombre: '',
-      estado: false,
       descripcion: '',
-      tipo: '',
-      pedidos: '',
-      tipo_usuario: '',
-      servicio: ''
+      tiempo: '',
+      valor: '',
+      estado: false,
+      cantidad: '',
     }
 
     const id = this.insignia_seleccionada?.id;
-    const servicio = this.editarInsignias.get('servicio')?.value;
-    const nombre = this.editarInsignias.get('nombre')?.value;
-    const descripcion = this.editarInsignias.get('descripcion')?.value;
-    const usuario = this.editarInsignias.get('usuario')?.value;
-    const pedidos = this.editarInsignias.get('pedidos')?.value;
-    const foto = this.editarInsignias.get('imagen')?.value;
-    console.log(nombre, servicio, descripcion, usuario && pedidos)
-    if (nombre && servicio && descripcion && usuario && pedidos) {
-      insignia.tipo_usuario = usuario
-      insignia.servicio = servicio;
-      insignia.nombre = nombre;
-      insignia.descripcion = descripcion;
-      insignia.pedidos = pedidos
-
-
-
+    
+    const nombre = this.editarMedallas.get('nombre')?.value;
+    const descripcion = this.editarMedallas.get('descripcion')?.value;
+    const tiempo = this.editarMedallas.get('tiempo')?.value;
+    const valor = this.editarMedallas.get('valor')?.value;
+    const cantidad = this.editarMedallas.get('cantidad')?.value;
+    const foto = this.editarMedallas.get('imagen')?.value;
+    console.log(nombre, tiempo, descripcion, cantidad && valor)
+    if (nombre && tiempo && descripcion && valor && cantidad) {
+      medalla.tiempo = tiempo;
+      medalla.valor = valor;
+      medalla.nombre = nombre;
+      medalla.descripcion = descripcion;
+      medalla.cantidad = cantidad
     }
     if (this.existImageActualizar && foto) {
-      insignia.imagen = foto;
+      medalla.imagen = foto;
     }
 
-    this.pythonAnywhereService.actualizar_insignia(insignia, id).subscribe(resp => {
+    this.pythonAnywhereService.actualizar_medalla(medalla, id).subscribe(resp => {
       console.log(resp)
       this.limpiarForm('actualizar');
       this.mostrarToastInfo('Estado de la Insignia ', 'Insignia editada correctamente', false);
@@ -377,9 +378,8 @@ export class MedallaComponent {
 
   onEliminar() {
     if (this.insignia_seleccionada) {
-      this.pythonAnywhereService.eliminar_insignia(this.insignia_seleccionada.id).subscribe(resp => {
-        
-        this.mostrarToastInfo('Estado de  Insignia', 'Insignia Eliminada correctamente', false);
+      this.pythonAnywhereService.cambio_medalla_estado(this.insignia_seleccionada.id).subscribe(resp => {
+        this.mostrarToastInfo('Estado de  Insignia', 'Insignia Anulada correctamente', false);
       })
     }
 

@@ -11,7 +11,7 @@ import { BodyCuponActualizar, BodyResponseCuponActualizar, Cupon, CuponCrear } f
 import { Documento, DocumentoPendiente } from 'src/app/interfaces/documento';
 import { BodyEmail, BodyResponseEmail } from 'src/app/interfaces/email';
 import { BodyActualizarGroup, BodyCrearGroup, Group, Permission } from 'src/app/interfaces/group';
-import { BodyActualizarInsignia, BodyCrearInsignia, BodyResponseCrearInsignia, Insignia } from 'src/app/interfaces/insignia';
+import { BodyActualizarInsignia, BodyCrearInsignia, BodyCrearMedalla, BodyActualizarMedalla, BodyResponseCrearInsignia, Insignia, Medalla } from 'src/app/interfaces/insignia';
 import { BodyLogin, BodyLoginResponse } from 'src/app/interfaces/login';
 import { BodyCrearNotificacionAnuncio, NotificacionAnuncio } from 'src/app/interfaces/notificacion';
 import { PaymentEfectivo, PaymentPaginacion, PaymentTarjeta } from 'src/app/interfaces/payment';
@@ -134,6 +134,10 @@ obtener_politicas(){
     return this.http.get(this.API_URL + '/insignias/') as Observable<Insignia[]>;
   }
 
+  obtener_medallas(): Observable<Medalla[]> {
+    return this.http.get(this.API_URL + '/medallas/') as Observable<Medalla[]>;
+  }
+
   /**
    * Función que obtiene la insignia seleccionada por parametro.
    *
@@ -160,6 +164,10 @@ obtener_politicas(){
       estado: estado,
     }) as Observable<any>;
   }
+  cambio_medalla_estado(id: string): Observable<any> {
+    return this.http.put(`${this.API_URL}/medalla_estado/?id=${id}`, {
+    }) as Observable<any>;
+  }
 
   /**
    * Función que actualiza el contenido de una Insignia registrada en la base de datos, segun los parametros pasados o por estado de insignia.
@@ -181,6 +189,19 @@ obtener_politicas(){
     bodyActualizar.tipo ? dataUpdate.append('tipo', bodyActualizar.tipo) : null;
 
     return this.http.put(`${this.API_URL}/insignia_update/${id}`, dataUpdate) as Observable<Insignia>;
+  }
+
+  actualizar_medalla(bodyActualizar: BodyActualizarMedalla, id: any): Observable<Insignia> {
+    const dataUpdate = new FormData();
+    bodyActualizar.nombre ? dataUpdate.append('nombre', bodyActualizar.nombre) : null;
+    bodyActualizar.imagen ? dataUpdate.append('imagen', bodyActualizar.imagen) : null;
+    bodyActualizar.cantidad ? dataUpdate.append('cantidad', bodyActualizar.cantidad.toString()) : null;
+    bodyActualizar.valor ? dataUpdate.append('valor', bodyActualizar.valor.toString()) : null;
+    bodyActualizar.estado ? dataUpdate.append('estado', bodyActualizar.estado.toString()) : null;
+    bodyActualizar.tiempo ? dataUpdate.append('tiempo', bodyActualizar.tiempo.toString()) : null;
+    bodyActualizar.descripcion ? dataUpdate.append('descripcion', bodyActualizar.descripcion) : null;
+
+    return this.http.put(`${this.API_URL}/medalla_update/${id}`, dataUpdate) as Observable<Insignia>;
   }
 
   /**
@@ -951,6 +972,18 @@ obtener_politicas(){
     dataCrear.append("pedidos", bodyCrear.pedidos);
     dataCrear.append("descripcion", bodyCrear.descripcion);
     return this.http.post(`${this.API_URL}/insignias/`, dataCrear) as Observable<BodyResponseCrearInsignia>;
+  }
+
+  crear_medalla(bodyCrear: BodyCrearMedalla): Observable<BodyResponseCrearInsignia> {
+    const dataCrear = new FormData();
+    dataCrear.append("nombre", bodyCrear.nombre);
+    dataCrear.append("descripcion", bodyCrear.descripcion);
+    bodyCrear.imagen ? dataCrear.append("imagen", bodyCrear.imagen) : null;
+    dataCrear.append("tiempo", bodyCrear.tiempo);
+    dataCrear.append("valor", bodyCrear.valor);
+    dataCrear.append("cantidad", bodyCrear.cantidad);
+    
+    return this.http.post(`${this.API_URL}/medallas/`, dataCrear) as Observable<BodyResponseCrearInsignia>;
   }
 
   /**

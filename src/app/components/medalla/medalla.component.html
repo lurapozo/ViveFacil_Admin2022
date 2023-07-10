@@ -2,7 +2,7 @@
     <!-- Titulo principal -->
     <div class="row p-2 justify-content-center align-items-center">
       <div class="col text-center">
-        <h2 class="p-0 m-0">Insignias Pendientes</h2>
+        <h2 class="p-0 m-0">Lista de Medallas</h2>
       </div>
     </div>
   
@@ -32,7 +32,7 @@
           href="#modalCrearProfesion"
           (click)="limpiarForm('crear')"
         >
-          Agregar Insignia
+          Agregar Medalla
         </button>
       </div>
     </div>
@@ -42,29 +42,29 @@
       <div class="col-10 text-center">
         <!-- Titulo -->
         <div class="row p-2 bg-primary text-white">
-          <div class="col-2 align-self-center">
+          <div class="col-3 align-self-center">
             <h3 class="p-0 m-0">Imagen</h3>
           </div>
   
-          <div class="col-2 align-self-center">
+          <div class="col-3 align-self-center">
             <h3 class="p-0 m-0">Nombre</h3>
           </div>
   
           <div class="col-2 align-self-center">
-            <h3 class="p-0 m-0">Usuario</h3>
-          </div>
-  
-          <div class="col-2 align-self-center">
-            <h3 class="p-0 m-0">Tipo</h3>
+            <h3 class="p-0 m-0">Valor mínimo</h3>
           </div>
   
           <div class="col-2 align-self-center">
             <h3 class="p-0 m-0">Cantidad</h3>
           </div>
-  
+
           <div class="col-2 align-self-center">
-            <h3 class="p-0 m-0">Estado</h3>
+            <h3 class="p-0 m-0">Tiempo desde creación</h3>
           </div>
+  
+          <!-- <div class="col-2 align-self-center">
+            <h3 class="p-0 m-0">Estado</h3>
+          </div> -->
         </div>
   
         <!-- Profesion -->
@@ -76,7 +76,7 @@
           href="#modalInformacionProfesion"
           role="button"
         >
-          <div class="col-2 align-self-center">
+          <div class="col-3 align-self-center">
             <img
               [src]="
                 a.imagen
@@ -88,26 +88,25 @@
             />
           </div>
   
+          <div class="col-3 align-self-center">
+            <h4 class="p-0 m-0">{{ a?.nombre }}</h4>
+          </div>
           <div class="col-2 align-self-center">
-            <h4 class="p-0 m-0">{{ a.nombre }}</h4>
+            <h4 class="p-0 m-0">{{ a?.valor }}</h4>
           </div>
   
           <div class="col-2 align-self-center">
-            <h4 class="p-0 m-0">{{ a.tipo_usuario }}</h4>
+            <h4 class="p-0 m-0">{{ a?.cantidad }}</h4>
           </div>
   
           <div class="col-2 align-self-center">
-            <h4 class="p-0 m-0">{{ a.servicio }}</h4>
+            <h4 class="p-0 m-0">{{ a?.tiempo }}</h4>
           </div>
   
-          <div class="col-2 align-self-center">
-            <h4 class="p-0 m-0">{{ a.pedidos }}</h4>
-          </div>
-  
-          <div class="col-2 align-self-center">
+          <!-- <div class="col-2 align-self-center">
             <span *ngIf="!a.estado" class="badge text-bg-danger">Inactivo</span>
             <span *ngIf="a.estado" class="badge text-bg-success">Activo</span>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
@@ -127,7 +126,7 @@
             class="modal-title fs-5 m-0 p-0 fw-bold"
             id="modalInformacionProfesionLabel"
           >
-            Información de Insignias
+            Información de Medallas
           </h1>
           <button
             type="button"
@@ -169,10 +168,10 @@
   
           <div class="row p-2 align-items-center">
             <div class="col-5">
-              <h3 class="m-0 p-0 fw-bold">Servicio asignado:</h3>
+              <h3 class="m-0 p-0 fw-bold">Valor minimo:</h3>
             </div>
             <div class="col-7">
-              {{ insignia_seleccionada?.servicio }}
+              {{ insignia_seleccionada?.valor }}
             </div>
           </div>
   
@@ -181,29 +180,20 @@
               <h3 class="m-0 p-0 fw-bold">Cantidad de pedidos</h3>
             </div>
             <div class="col-7">
-              {{ insignia_seleccionada?.pedidos }}
+              {{ insignia_seleccionada?.cantidad }}
             </div>
           </div>
   
           <div class="row p-2 align-items-center">
             <div class="col-5">
-              <h3 class="m-0 p-0 fw-bold">Tipo:</h3>
+              <h3 class="m-0 p-0 fw-bold">Tiemppo desde creación:</h3>
             </div>
             <div class="col-7">
-              {{ insignia_seleccionada?.tipo }}
+              {{ insignia_seleccionada?.tiempo }}
             </div>
           </div>
   
-          <div class="row p-2 align-items-center">
-            <div class="col-5">
-              <h3 class="m-0 p-0 fw-bold">Tipo de usuario</h3>
-            </div>
-            <div class="col-7">
-              {{ insignia_seleccionada?.tipo_usuario }}
-            </div>
-          </div>
-  
-          <div class="row p-2 align-items-center">
+          <!-- <div class="row p-2 align-items-center">
             <div class="col-5">
               <label for="switchEstado" class="form-check-label"
                 ><h3 class="m-0 p-0 fw-bold">Habilitar/Deshabilitar:</h3></label
@@ -223,7 +213,7 @@
                 aria-describedby="switchEstadoFeedback"
               />
             </div>
-          </div>
+          </div> -->
         </div>
         <div class="modal-footer">
           <button
@@ -267,7 +257,7 @@
             class="modal-title fs-5 m-0 p-0 fw-bold"
             id="modalInformacionEdicionProfesionLabel"
           >
-            Edición de Insignias
+            Edición de Medallas
           </h1>
           <!-- (click)="limpiarForm('actualizar')" -->
           <button
@@ -278,12 +268,12 @@
           ></button>
         </div>
         <div class="modal-body mb-0">
-          <form [formGroup]="editarInsignias" class="">
+          <form [formGroup]="editarMedallas" class="">
             <div class="row">
               <div class="col d-flex justify-content-center">
                 <img
                   *ngIf="existImageActualizar"
-                  class="image_modal rounded mx-auto d-block img-fluid w-50"
+                  class="image_modal rounded mx-auto d-block img-fluvvvvvvvvvvvvvvvvid w-50"
                   [src]="imagenActualizar"
                   alt="Archivo incorrecto"
                 />
@@ -302,7 +292,7 @@
                 <input
                   class="w-100 centrar form-control"
                   [ngClass]="
-                    editarInsignias.get('imagen')?.hasError('image_error')
+                    editarMedallas.get('imagen')?.hasError('image_error')
                       ? 'is-invalid'
                       : '' || existImageActualizar
                       ? 'is-valid'
@@ -313,12 +303,8 @@
                   accept="image/png, image/jpeg"
                   (change)="loadImageFromDevice($event, 'actualizar')"
                 />
-                <div class="invalid-feedback">
-                  {{ getErrorMessage(editarInsignias, "imagen") }}
-                </div>
               </div>
             </div>
-  
             <div class="row p-2 align-items-center">
               <div class="col-5">
                 <label for="inputNombre" class="form-label"
@@ -337,9 +323,6 @@
                   [placeholder]="insignia_seleccionada?.nombre"
                   [value]="insignia_seleccionada?.nombre"
                 />
-                <div class="invalid-feedback">
-                  {{ getErrorMessage(editarInsignias, "nombre") }}
-                </div>
               </div>
             </div>
   
@@ -360,116 +343,82 @@
                   [placeholder]="insignia_seleccionada?.descripcion"
                   [value]="insignia_seleccionada?.descripcion"
                 ></textarea>
-                <div class="invalid-feedback">
-                  {{ getErrorMessage(editarInsignias, "descripcion") }}
-                </div>
               </div>
             </div>
   
             <div class="row p-2 align-items-center">
               <div class="col-5">
-                <label for="textareaDescripcion" class="form-label"
+                <label for="textareaCantidad" class="form-label"
                   ><h3 class="m-0 p-0 fw-bold">Cantidad de pedidos:</h3></label
                 >
               </div>
               <div class="col-7">
                 <input
-                  type="text"
+                  type="number"
                   class="form-control"
-                  formControlName="pedidos"
+                  formControlName="cantidad"
                   [ngClass]="
-                    isInvalidForm('pedidos', 'actualizar') ? 'is-invalid' : ''
+                    isInvalidForm('cantidad', 'crear') ? 'is-invalid' : ''
                   "
                   id="textareaDescripcion"
-                  [placeholder]="insignia_seleccionada?.descripcion"
-                  [value]="insignia_seleccionada?.descripcion"
+                  placeholder="cantidad de cantidad"
+                  [placeholder]="insignia_seleccionada?.cantidad"
+                  [value]="insignia_seleccionada?.cantidad"
                 />
-                <div class="invalid-feedback">
-                  {{ getErrorMessage(editarInsignias, "pedidos") }}
-                </div>
+                <!-- <div class="invalid-feedback">
+                  {{ getErrorMessage(crearInsignias, "cantidad") }}
+                </div> -->
               </div>
-            </div>
-  
-            <div class="row p-2 align-items-center">
+
               <div class="col-5">
-                <label for="selectorServicioCrear" class="form-label"
-                  ><h3 class="m-0 p-0 fw-bold">Servicios:</h3></label
+                <label for="textareaCantidad" class="form-label"
+                  ><h3 class="m-0 p-0 fw-bold">Valor pagado:</h3></label
                 >
               </div>
               <div class="col-7">
-                <select
-                  class="form-select"
+                <input
+                  type="number"
+                  class="form-control"
+                  formControlName="valor"
                   [ngClass]="
-                    isInvalidForm('servicio', 'actualizar') ? 'is-invalid' : ''
+                    isInvalidForm('valor', 'crear') ? 'is-invalid' : ''
                   "
-                  formControlName="servicio"
-                  [value]="insignia_seleccionada?.servicio"
-                  aria-describedby="selectorServicioCrearFeedback"
-                >
-                  <option selected disabled value="">Elija un servicio...</option>
-                  <option *ngFor="let c of arr_servicios" [value]="c.nombre">
-                    {{ c.nombre }}
-                  </option>
-                </select>
-                <div id="selectorServicioCrearFeedback" class="invalid-feedback">
-                  {{ getErrorMessage(editarInsignias, "servicio") }}
-                </div>
+                  id="textareaDescripcion"
+                  placeholder="valor minimo a pagar"
+                  [placeholder]="insignia_seleccionada?.valor"
+                  [value]="insignia_seleccionada?.valor"
+                />
+                <!-- <div class="invalid-feedback">
+                  {{ getErrorMessage(crearInsignias, "valor") }}
+                </div> -->
               </div>
-            </div>
-            <div class="row p-2 align-items-center">
+
               <div class="col-5">
-                <label for="selectorServicioCrear" class="form-label"
-                  ><h3 class="m-0 p-0 fw-bold">Usuario:</h3></label
+                <label for="textareaCantidad" class="form-label"
+                  ><h3 class="m-0 p-0 fw-bold">Tiempo en app:</h3></label
                 >
               </div>
               <div class="col-7">
-                <select
-                  class="form-select"
+                <input
+                  type="number"
+                  class="form-control"
+                  formControlName="tiempo"
                   [ngClass]="
-                    isInvalidForm('servicio', 'actualizar') ? 'is-invalid' : ''
+                    isInvalidForm('tiempo', 'crear') ? 'is-invalid' : ''
                   "
-                  formControlName="usuario"
-                  [value]="insignia_seleccionada?.tipo_usuario"
-                  aria-describedby="selectorServicioCrearFeedback"
-                >
-                  <option selected disabled>Elija un tipo de usuario...</option>
-                  <option *ngFor="let ti of arr_tipo" value="{{ ti }}">
-                    {{ ti }}
-                  </option>
-                </select>
-                <div id="selectorServicioCrearFeedback" class="invalid-feedback">
-                  {{ getErrorMessage(editarInsignias, "servicio") }}
-                </div>
+                  id="textareaDescripcion"
+                  placeholder="tiempo minimo en app"
+                  [placeholder]="insignia_seleccionada?.tiempo"
+                  [value]="insignia_seleccionada?.tiempo"
+                />
+                <!-- <div class="invalid-feedback">
+                  {{ getErrorMessage(crearInsignias, "tiempo") }}
+                </div> -->
               </div>
+
             </div>
-  
-            <div class="row p-2 align-items-center">
-              <div class="col-5">
-                <label for="selectorServicioCrear" class="form-label"
-                  ><h3 class="m-0 p-0 fw-bold">Tipo:</h3></label
-                >
-              </div>
-              <div class="col-7">
-                <select
-                  class="form-select"
-                  [ngClass]="
-                    isInvalidForm('cat', 'actualizar') ? 'is-invalid' : ''
-                  "
-                  formControlName="cat"
-                  id="ped"
-                  [value]="insignia_seleccionada?.tipo"
-                  aria-describedby="selectorServicioCrearFeedback"
-                >
-                  <option selected disabled>Elija un tipo de usuario...</option>
-                  <option *ngFor="let c of arr_categoria" value="{{ c.nombre }}">
-                    {{ c.nombre }}
-                  </option>
-                </select>
-                <div id="selectorServicioCrearFeedback" class="invalid-feedback">
-                  {{ getErrorMessage(editarInsignias, "cat") }}
-                </div>
-              </div>
-            </div>
+
+
           </form>
         </div>
         <div class="modal-footer">
@@ -502,7 +451,7 @@
     </div>
   </div>
   
-  <!-- Modal crear profesion -->
+  <!-- Modal crear medalla -->
   <div
     class="modal fade"
     id="modalCrearProfesion"
@@ -517,7 +466,7 @@
             class="modal-title fs-5 m-0 p-0 fw-bold"
             id="modalCrearProfesionLabel"
           >
-            Crear Insinia
+            Crear Medalla
           </h1>
           <!-- (click)="limpiarForm('crear')" -->
           <button
@@ -626,17 +575,64 @@
               </div>
               <div class="col-7">
                 <input
-                  type="text"
+                  type="number"
+                  pattern="[0-9]*"
                   class="form-control"
-                  formControlName="pedidos"
+                  formControlName="cantidad"
                   [ngClass]="
-                    isInvalidForm('pedidos', 'crear') ? 'is-invalid' : ''
+                    isInvalidForm('cantidad', 'crear') ? 'is-invalid' : ''
                   "
                   id="textareaDescripcion"
-                  placeholder="cantidad de pedidos"
+                  placeholder="cantidad de cantidad"
                 />
                 <div class="invalid-feedback">
-                  {{ getErrorMessage(crearInsignias, "pedidos") }}
+                  {{ getErrorMessage(crearInsignias, "cantidad") }}
+                </div>
+              </div>
+            </div>
+
+            <div class="row p-2 align-items-center">
+              <div class="col-5">
+                <label for="textareaDescripcion" class="form-label"
+                  ><h3 class="m-0 p-0 fw-bold">Valor pagado:</h3></label
+                >
+              </div>
+              <div class="col-7">
+                <input
+                  type="number"
+                  class="form-control"
+                  formControlName="valor"
+                  [ngClass]="
+                    isInvalidForm('valor', 'crear') ? 'is-invalid' : ''
+                  "
+                  id="textareaDescripcion"
+                  placeholder="valor minimo a pagar"
+                />
+                <div class="invalid-feedback">
+                  {{ getErrorMessage(crearInsignias, "valor") }}
+                </div>
+              </div>
+            </div>
+
+            <div class="row p-2 align-items-center">
+              <div class="col-5">
+                <label for="textareaDescripcion" class="form-label"
+                  ><h3 class="m-0 p-0 fw-bold">Tiempo en app:</h3></label
+                >
+              </div>
+              <div class="col-7">
+                <input
+                  type="number"
+                  class="form-control"
+                  formControlName="tiempo"
+                  [ngClass]="
+                    isInvalidForm('tiempo', 'crear') ? 'is-invalid' : ''
+                  "
+                  id="textareaDescripcion"
+                  placeholder="tiempo minimo en app"
+                />
+                <div class="invalid-feedback">
+                  {{ getErrorMessage(crearInsignias, "tiempo") }}
                 </div>
               </div>
             </div>
@@ -669,62 +665,6 @@
                 </div>
               </div>
             </div> -->
-  
-            <div class="row p-2 align-items-center">
-              <div class="col-5">
-                <label for="selectorServicioCrear" class="form-label"
-                  ><h3 class="m-0 p-0 fw-bold">Usuario:</h3></label
-                >
-              </div>
-              <div class="col-7">
-                <select
-                  class="form-select"
-                  [ngClass]="
-                    isInvalidForm('usuario', 'crear') ? 'is-invalid' : ''
-                  "
-                  formControlName="usuario"
-                  aria-describedby="selectorServicioCrearFeedback"
-                >
-                  <option selected disabled value="">Elija un Usuario...</option>
-                  <option *ngFor="let ti of arr_tipo" value="{{ ti }}">
-                    {{ ti }}
-                  </option>
-                </select>
-                <div id="selectorServicioCrearFeedback" class="invalid-feedback">
-                  {{ getErrorMessage(crearInsignias, "usuario") }}
-                </div>
-              </div>
-            </div>
-  
-            <div class="row p-2 align-items-center">
-              <div class="col-5">
-                <label for="selectorServicioCrear" class="form-label"
-                  ><h3 class="m-0 p-0 fw-bold">Servicio asignado:</h3></label
-                >
-              </div>
-              <div class="col-7">
-                <select
-                  class="form-select"
-                  [ngClass]="
-                    isInvalidForm('servicio', 'crear') ? 'is-invalid' : ''
-                  "
-                  formControlName="servicio"
-                  aria-describedby="selectorServicioCrearFeedback"
-                >
-                  <option selected disabled value="">Elija un servicio...</option>
-                  <option
-                    *ngFor="let servicio of arr_servicios"
-                    [id]="servicio.id"
-                    [value]="servicio.nombre"
-                  >
-                    {{ servicio.nombre }}
-                  </option>
-                </select>
-                <div id="selectorServicioCrearFeedback" class="invalid-feedback">
-                  {{ getErrorMessage(crearInsignias, "servicio") }}
-                </div>
-              </div>
-            </div>
           </form>
         </div>
         <div class="modal-footer">
@@ -735,7 +675,7 @@
             class="btn btn-success"
             (click)="
               establecerMensaje(
-                'Está seguro que desea crear la profesión?',
+                'Está seguro que desea crear la medalla?',
                 'crear'
               )
             "
