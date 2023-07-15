@@ -11,7 +11,7 @@ import { BodyCuponActualizar, BodyResponseCuponActualizar, Cupon, CuponCrear } f
 import { Documento, DocumentoPendiente } from 'src/app/interfaces/documento';
 import { BodyEmail, BodyResponseEmail } from 'src/app/interfaces/email';
 import { BodyActualizarGroup, BodyCrearGroup, Group, Permission } from 'src/app/interfaces/group';
-import { BodyActualizarInsignia, BodyCrearInsignia, BodyCrearMedalla, BodyActualizarMedalla, BodyResponseCrearInsignia, Insignia, Medalla } from 'src/app/interfaces/insignia';
+import { BodyActualizarInsignia, BodyActualizarMedalla, BodyCrearInsignia, BodyCrearMedalla, BodyResponseCrearInsignia, Insignia, Medalla } from 'src/app/interfaces/insignia';
 import { BodyLogin, BodyLoginResponse } from 'src/app/interfaces/login';
 import { BodyCrearNotificacionAnuncio, NotificacionAnuncio } from 'src/app/interfaces/notificacion';
 import { PaymentEfectivo, PaymentPaginacion, PaymentTarjeta } from 'src/app/interfaces/payment';
@@ -22,8 +22,8 @@ import { BodyActualizarProveedor, BodyActualizarProveedorPendiente, BodyCrearPro
 import { BodyActualizarPublicidad, BodyCrearPublicidad, BodyResponseCrearPublicidad, Publicidad } from 'src/app/interfaces/publicidad';
 import { BodyActualizarServicio, Servicio } from 'src/app/interfaces/servicio';
 import {
-    Solicitante,
-    SolicitantePaginacion,
+  Solicitante,
+  SolicitantePaginacion,
 } from 'src/app/interfaces/solicitante';
 import { SolicitudProfesion, SolicitudProfesionPaginacion } from 'src/app/interfaces/solicitud';
 import { BodyCrearSubCategoria, BodyResponseCrearSubCategoria } from 'src/app/interfaces/sub-categoria';

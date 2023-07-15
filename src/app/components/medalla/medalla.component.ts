@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
-import { PythonAnywhereService } from 'src/app/services/PythonAnywhere/python-anywhere.service';
-import { BodyActualizarInsignia, BodyCrearMedalla, Insignia, Medalla, BodyActualizarMedalla } from '../../interfaces/insignia';
 import { Servicio } from 'src/app/interfaces/servicio';
+import { PythonAnywhereService } from 'src/app/services/PythonAnywhere/python-anywhere.service';
 import { Categoria } from '../../interfaces/categoria';
+import { BodyActualizarInsignia, BodyActualizarMedalla, BodyCrearMedalla, Insignia, Medalla } from '../../interfaces/insignia';
 @Component({
   selector: 'app-medalla',
   templateUrl: './medalla.component.html',
@@ -322,7 +322,7 @@ export class MedallaComponent {
     const valor = this.crearInsignias.get('valor')?.value;
     const cantidad = this.crearInsignias.get('cantidad')?.value;
     
-    if (nombre && tiempo && descripcion && valor && cantidad) {
+    if (nombre && descripcion && (valor != null) && (cantidad != null)  && (tiempo != null)) {
       Medalla.nombre = nombre;
       Medalla.tiempo = tiempo;
       Medalla.descripcion = descripcion;
@@ -334,6 +334,11 @@ export class MedallaComponent {
       console.log(Medalla)
       this.pythonAnywhereService.crear_medalla(Medalla).subscribe(resp => {
         this.limpiarForm('crear');
+        this.pythonAnywhereService.obtener_medallas().subscribe(resp => {
+          this.arr_insignia = resp;
+          this.arr_filtered_insignia = this.arr_insignia;
+          console.log(this.arr_filtered_insignia)
+        });
         this.mostrarToastInfo('Estado de la Medalla ', 'Medalla Creada correctamente', false);
       })
     }
@@ -358,7 +363,7 @@ export class MedallaComponent {
     const cantidad = this.editarMedallas.get('cantidad')?.value;
     const foto = this.editarMedallas.get('imagen')?.value;
     console.log(nombre, tiempo, descripcion, cantidad && valor)
-    if (nombre && tiempo && descripcion && valor && cantidad) {
+    if (nombre && descripcion && (valor != null) && (cantidad != null)  && (tiempo != null)) {
       medalla.tiempo = tiempo;
       medalla.valor = valor;
       medalla.nombre = nombre;
@@ -372,6 +377,11 @@ export class MedallaComponent {
     this.pythonAnywhereService.actualizar_medalla(medalla, id).subscribe(resp => {
       console.log(resp)
       this.limpiarForm('actualizar');
+      this.pythonAnywhereService.obtener_medallas().subscribe(resp => {
+        this.arr_insignia = resp;
+        this.arr_filtered_insignia = this.arr_insignia;
+        console.log(this.arr_filtered_insignia)
+      });
       this.mostrarToastInfo('Estado de la Insignia ', 'Insignia editada correctamente', false);
     })
   }
@@ -379,6 +389,11 @@ export class MedallaComponent {
   onEliminar() {
     if (this.insignia_seleccionada) {
       this.pythonAnywhereService.cambio_medalla_estado(this.insignia_seleccionada.id).subscribe(resp => {
+        this.pythonAnywhereService.obtener_medallas().subscribe(resp => {
+          this.arr_insignia = resp;
+          this.arr_filtered_insignia = this.arr_insignia;
+          console.log(this.arr_filtered_insignia)
+        });
         this.mostrarToastInfo('Estado de  Insignia', 'Insignia Anulada correctamente', false);
       })
     }
