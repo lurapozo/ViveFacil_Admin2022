@@ -22,7 +22,7 @@ export class NotificacionesPushComponent {
     titulo: new FormControl('', [Validators.required]),
     mensaje: new FormControl('', [Validators.required]),
     descripcion: new FormControl('', [Validators.required]),
-    ruta: new FormControl('', [Validators.required]),
+    ruta: new FormControl(' ', [Validators.required]),
     imagen: new FormControl(this.fileImagenNotificacion)
   }, []);
 
