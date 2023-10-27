@@ -421,8 +421,9 @@ export class SubCategoriasComponent {
 
   }
   onEliminar() {
+    console.timeLog("onELiminar")
     if (this.categoria_seleccionada?.id) {
-      this.pythonAnywhereService.eliminar_categoria(this.categoria_seleccionada?.id).subscribe(resp => {
+      this.pythonAnywhereService.eliminar_subcategoria(this.categoria_seleccionada?.id).subscribe(resp => {
         this.mostrarToastInfo('Estado de la Categoria ', 'Categoria Eliminada correctamente', false)
         this.pythonAnywhereService.obtener_servicios().subscribe((resp: any[]) => {
           this.categoria = resp

@@ -859,6 +859,9 @@ obtener_politicas(){
   eliminar_categoria(id: number): Observable<any> {
     return this.http.delete(`${this.API_URL}/categoria_delete/${id}`) as Observable<any>;
   }
+  eliminar_subcategoria(id: number): Observable<any> {
+    return this.http.delete(`${this.API_URL}/servicios_delete/${id}`) as Observable<any>;
+  }
 
   /**
    * Función que agrega en la base de datos una Categoria segun los datos pasados por parametros.
