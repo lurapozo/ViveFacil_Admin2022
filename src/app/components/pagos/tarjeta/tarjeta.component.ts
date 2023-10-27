@@ -78,7 +78,7 @@ if (texto && texto.trim() !== '') {
 next(event: any) {
 
   this.currentPage = this.currentPage + 1
-  this.pythonAnywhereService.obtener_pagos_efectivoP(this.currentPage).subscribe(resp => {
+  this.pythonAnywhereService.obtener_pagos_tarjetaP(this.currentPage).subscribe(resp => {
     this.arr_tarjeta = resp.results
   this.arr_filtered_tarjeta =  this.arr_tarjeta
   })
@@ -87,14 +87,14 @@ next(event: any) {
 previous(event: any) {
 
   this.currentPage = this.currentPage - 1
-  this.pythonAnywhereService.obtener_pagos_efectivoP(this.currentPage).subscribe(resp => {
+  this.pythonAnywhereService.obtener_pagos_tarjetaP(this.currentPage).subscribe(resp => {
     this.arr_tarjeta = resp.results;
     this.arr_filtered_tarjeta = this.arr_tarjeta;
   })
 }
 
 iteracion(event: any) {
-  this.pythonAnywhereService.obtener_pagos_efectivoP(event.target.value).subscribe(resp => {
+  this.pythonAnywhereService.obtener_pagos_tarjetaP(event.target.value).subscribe(resp => {
     this.arr_tarjeta = resp.results;
     this.arr_filtered_tarjeta = this.arr_tarjeta;
     this.currentPage = resp.current_page_number
@@ -116,9 +116,9 @@ cambiarEstado(event:any){
         this.arr_filtered_tarjeta =  this.arr_tarjeta
         console.log(this.arr_filtered_tarjeta)
         this.currentPage = 1;
-      })  
+      })
       this.mostrarToastInfo('Estado del Pago', 'se pago con exito', false);
-      
+
     })
   }
 

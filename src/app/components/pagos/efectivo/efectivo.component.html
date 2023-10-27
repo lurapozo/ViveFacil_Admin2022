@@ -2,7 +2,7 @@
     <!-- Titulo principal -->
     <div class="row p-2 justify-content-center align-items-center">
       <div class="col text-center">
-     
+
         <h2 class="p-0 m-0"> Efectivo</h2>
         <div class="row">
             <div class="col">
@@ -11,9 +11,9 @@
             <div class="col">
                 <h2 class="p-0 m-0">Total: $ {{total}}</h2>
             </div>
-           
+
         </div>
-       
+
       </div>
     </div>
 
@@ -59,7 +59,7 @@
 
         <!-- Profesion -->
         <div (click)="efectivo_seleccionada=a" *ngFor="let a of arr_filtered_efectivo" class="row p-2 bg-light fila_info_profesion" data-bs-toggle="modal" href="#modalInformacionProfesion" role="button">
-         
+
             <div class="col-3 align-self-center">
             <h4 class="p-0 m-0"> {{a.usuario}}</h4>
           </div>
@@ -74,32 +74,57 @@
           <div class="col-3  align-self-center">
             <h4 class="p-0 m-0">{{a.fecha_creacion  | date: ' MMM d, y, h:mm:ss a'}}</h4>
           </div>
-         
+
           <div class="col-1 align-self-center">
             <h4 class="p-0 m-0">${{a.valor}}</h4>
           </div>
 
-        
 
-        
+
+
         </div>
       </div>
     </div>
 
     <!-- Seccion paginacion -->
+  <div class="container-fluid">
     <div class="row p-2 justify-content-center align-items-center">
       <nav aria-label="Page navigation example">
         <ul class="pagination">
-          <li class="page-item"><a class="page-link" (click)="previous($event)">Previous</a></li>
-          <div *ngFor="let n of pageNumber; let i=index;">
-            <li class="page-item"><button class="page-link" value="{{n}}"
-                (click)="iteracion($event)">{{n}}</button></li>
+          <li class="page-item">
+            <a class="page-link" (click)="previous($event)">Previous</a>
+          </li>
+          <div *ngFor="let n of pageNumber; let i = index">
+            <li class="page-item">
+              <button
+                class="page-link azul"
+                value="{{ n }}"
+                (click)="iteracion($event)"
+                *ngIf="n == currentPage"
+              >
+                {{ n }}
+              </button>
+              <button
+                class="page-link"
+                value="{{ n }}"
+                (click)="iteracion($event)"
+                *ngIf="n != currentPage"
+              >
+                {{ n }}
+              </button>
+            </li>
           </div>
 
-          <li class="page-item"><a class="page-link" (click)="next($event)">Next</a></li>
+          <li class="page-item">
+            <a class="page-link" (click)="next($event)">Next</a>
+          </li>
         </ul>
       </nav>
     </div>
+  </div>
+
+
+
 </div>
 <div class="modal fade" id="modalInformacionProfesion" aria-hidden="true"
 aria-labelledby="modalInformacionProfesionLabel" tabindex="-1">
@@ -149,7 +174,7 @@ aria-labelledby="modalInformacionProfesionLabel" tabindex="-1">
           {{efectivo_seleccionada?.proveedor}}
         </div>
       </div>
-      
+
       <div class="row p-2 align-items-center">
         <div class="col-5">
           <h3 class="m-0 p-0 fw-bold">Telefono:</h3>
@@ -167,9 +192,9 @@ aria-labelledby="modalInformacionProfesionLabel" tabindex="-1">
           {{efectivo_seleccionada?.prov_correo}}
         </div>
       </div>
-  
+
     </div>
-   
+
   </div>
 </div>
 </div>
