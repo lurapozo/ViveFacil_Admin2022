@@ -236,7 +236,7 @@ obtener_politicas(){
    */
   obtener_cargo(id: string): Observable<Cargo> {
     return this.http.get(`${this.API_URL}/cargos/${id}`) as Observable<Cargo>
-    
+
   }
 
   /**
@@ -357,7 +357,7 @@ obtener_politicas(){
    * @param id Recibe un string perteneciente al ID del cupon la cual sera modificada.
    * @returns Devuelve un Observable con un objeto BodyResponseCuponActualizar.
    */
-  
+
   actualizar_cupon(bodyActualizar: BodyCuponActualizar, id: any): Observable<BodyResponseCuponActualizar> {
     const dataUpdate = new FormData();
     dataUpdate.append("codigo", bodyActualizar.codigo);
@@ -842,7 +842,7 @@ obtener_politicas(){
 
   actualizar_categoria_estado(bodyActualizar: BodyActualizarCategoria, id: number): Observable<Categoria> {
     const dataUpdate = new FormData();
-  
+
     dataUpdate.append('estado', bodyActualizar.estado.toString())
 
 
@@ -982,7 +982,7 @@ obtener_politicas(){
     dataCrear.append("tiempo", bodyCrear.tiempo);
     dataCrear.append("valor", bodyCrear.valor);
     dataCrear.append("cantidad", bodyCrear.cantidad);
-    
+
     return this.http.post(`${this.API_URL}/medallas/`, dataCrear) as Observable<BodyResponseCrearInsignia>;
   }
 
@@ -1071,7 +1071,7 @@ obtener_politicas(){
  * @returns Devuelve un Observable con un objeto Cupones
    */
   obtener_cupones() {
-    return this.http.get(this.API_URL + '/cupones/');
+    return this.http.get(this.API_URL + '/all_cupcategorias/');
   }
 
   /**
@@ -1140,7 +1140,7 @@ obtener_politicas(){
 }
   */
   crear_cupon(bodyCrear: CuponCrear) {
-  
+
     const dataCrear = new FormData();
     dataCrear.append("codigo", bodyCrear.codigo);
     bodyCrear.foto ? dataCrear.append("foto", bodyCrear.foto) : null;
@@ -1189,7 +1189,7 @@ obtener_politicas(){
  */
   obtener_pagos_tarjetaP(page=1) :  Observable<any>{
     return this.http.get(`${this.API_URL}/pago_tarjetasP/?page=${page}`) as  Observable<any>;
-    
+
   }
 
   /**
@@ -1390,7 +1390,7 @@ obtener_politicas(){
     bodyActualizar.duracion ? dataUpdate.append('duracion', bodyActualizar.duracion) : null;
     bodyActualizar.precio ? dataUpdate.append('precio', bodyActualizar.precio) : null;
     bodyActualizar.estado ? dataUpdate.append('estado', bodyActualizar.estado.toString()) : null;
-    
+
     return this.http.put(this.API_URL + '/planes/', dataUpdate) as Observable<Plan>;
   }
   actualizar_plan_estado(bodyActualizar: BodyActualizarPlan) : Observable<Plan> {
@@ -1398,7 +1398,7 @@ obtener_politicas(){
     const dataUpdate = new FormData();
     bodyActualizar.id ? dataUpdate.append('id', bodyActualizar.id):null
     bodyActualizar.estado ? dataUpdate.append('estado', bodyActualizar.estado.toString()) : null;
-    
+
     return this.http.put(this.API_URL + '/planes/', dataUpdate) as Observable<Plan>;
   }
 
@@ -1422,7 +1422,7 @@ obtener_politicas(){
    * @returns Retorna un objeto ProveedorPaginacion
    */
   obtener_publicidades(page=1) : any {
-    return this.http.get(`${this.API_URL}/publicidades/?page=${page}`) 
+    return this.http.get(`${this.API_URL}/publicidades/?page=${page}`)
   }
 
   /**
@@ -1474,7 +1474,7 @@ obtener_politicas(){
 
 /**
  *
- * @param bodyActualizar                                                                          
+ * @param bodyActualizar
  * @returns
  */
   actualizar_publicidad(bodyActualizar: BodyActualizarPublicidad): Observable<Publicidad> {
@@ -1490,7 +1490,7 @@ obtener_politicas(){
 
     return this.http.put(this.API_URL + '/publicidades/', dataUpdate) as any;
   }
- 
+
   /**
    * Funcion que elimna la publicidad por ID especificado
    *

@@ -83,7 +83,7 @@
         <div class="col-2 align-self-center">
           <img
             [src]="
-              a.foto
+              a.cupon.foto
                 ? 'https://tomesoft1.pythonanywhere.com' + a.foto
                 : 'assets/imagenes/ProfesionDefault.png'
             "
@@ -93,32 +93,32 @@
         </div>
 
         <div class="col-1 align-self-center">
-          <h4 class="p-0 m-0">{{ a.codigo }}</h4>
+          <h4 class="p-0 m-0">{{ a.cupon.codigo }}</h4>
         </div>
 
         <div class="col-2 align-self-center">
-          <h4 class="p-0 m-0">{{ a.titulo }}</h4>
+          <h4 class="p-0 m-0">{{ a.cupon.titulo }}</h4>
         </div>
 
         <div class="col-1 align-self-center">
-          <h4 class="p-0 m-0">{{ a.cantidad }}</h4>
+          <h4 class="p-0 m-0">{{ a.cupon.cantidad }}</h4>
         </div>
 
         <div class="col-2 align-self-center">
           <h4 class="p-0 m-0">
-            {{ a.fecha_iniciacion | date : " MMM d, y, h:mm:ss a" }}
+            {{ a.cupon.fecha_iniciacion | date : " MMM d, y, h:mm:ss a" }}
           </h4>
         </div>
 
         <div class="col-2 align-self-center">
           <h4 class="p-0 m-0">
-            {{ a.fecha_expiracion | date : " MMM d, y, h:mm:ss a" }}
+            {{ a.cupon.fecha_expiracion | date : " MMM d, y, h:mm:ss a" }}
           </h4>
         </div>
 
         <div class="col-1 align-self-center">
-          <span *ngIf="!a.estado" class="badge text-bg-danger">Inactivo</span>
-          <span *ngIf="a.estado" class="badge text-bg-success">Activo</span>
+          <span *ngIf="!a.cupon.estado" class="badge text-bg-danger">Inactivo</span>
+          <span *ngIf="a.cupon.estado" class="badge text-bg-success">Activo</span>
         </div>
       </div>
     </div>
@@ -153,7 +153,7 @@
           <div class="row p-2">
             <img
               [src]="
-                cupon_seleccionada?.foto
+                cupon_seleccionada?.cupon.foto
                   ? 'https://tomesoft1.pythonanywhere.com' + cupon_seleccionada?.foto
                   : 'assets/imagenes/ProfesionDefault.png'
               "
@@ -168,7 +168,7 @@
             <h3 class="m-0 p-0 fw-bold">Titulo:</h3>
           </div>
           <div class="col-7">
-            {{ cupon_seleccionada?.titulo }}
+            {{ cupon_seleccionada?.cupon.titulo }}
           </div>
         </div>
 
@@ -177,7 +177,7 @@
             <h3 class="m-0 p-0 fw-bold">Codigo:</h3>
           </div>
           <div class="col-7">
-            {{ cupon_seleccionada?.codigo }}
+            {{ cupon_seleccionada?.cupon.codigo }}
           </div>
         </div>
 
@@ -195,7 +195,7 @@
             <h3 class="m-0 p-0 fw-bold">Descuento:</h3>
           </div>
           <div class="col-7">
-            {{ cupon_seleccionada?.porcentaje }}
+            {{ cupon_seleccionada?.cupon.porcentaje }}
           </div>
         </div>
 
@@ -204,7 +204,7 @@
             <h3 class="m-0 p-0 fw-bold">Cantidad</h3>
           </div>
           <div class="col-7">
-            {{ cupon_seleccionada?.cantidad }}
+            {{ cupon_seleccionada?.cupon.cantidad }}
           </div>
         </div>
 
@@ -214,7 +214,7 @@
           </div>
           <div class="col-7">
             {{
-              cupon_seleccionada?.fecha_iniciacion
+              cupon_seleccionada?.cupon.fecha_iniciacion
                 | date : " MMM d, y, h:mm:ss a"
             }}
           </div>
@@ -226,7 +226,7 @@
           </div>
           <div class="col-7">
             {{
-              cupon_seleccionada?.fecha_iniciacion
+              cupon_seleccionada?.cupon.fecha_iniciacion
                 | date : " MMM d, y, h:mm:ss a"
             }}
           </div>
@@ -243,7 +243,7 @@
           >
             <input
               (change)="cambiarEstado($event)"
-              [checked]="cupon_seleccionada?.estado ? true : false"
+              [checked]="cupon_seleccionada?.cupon.estado ? true : false"
               class="form-check-input"
               id="switchEstado"
               type="checkbox"
@@ -316,13 +316,13 @@
                 alt="Archivo incorrecto"
               />
               <img
-                *ngIf="!existImageActualizar && cupon_seleccionada?.foto"
+                *ngIf="!existImageActualizar && cupon_seleccionada?.cupon.foto"
                 class="image_modal rounded mx-auto d-block img-fluid w-50"
-                [src]="'https://tomesoft1.pythonanywhere.com' + cupon_seleccionada?.foto"
+                [src]="'https://tomesoft1.pythonanywhere.com' + cupon_seleccionada?.cupon.foto"
                 alt="Archivo incorrecto"
               />
               <i
-                *ngIf="!existImageActualizar && !cupon_seleccionada?.foto"
+                *ngIf="!existImageActualizar && !cupon_seleccionada?.cupon.foto"
                 class="rounded mx-auto d-block img-fluid w-50 bi bi-upload icono"
               ></i>
             </div>
@@ -362,8 +362,8 @@
                   isInvalidForm('titulo', 'actualizar') ? 'is-invalid' : ''
                 "
                 value="Mark"
-                [placeholder]="cupon_seleccionada?.titulo"
-                [value]="cupon_seleccionada?.titulo"
+                [placeholder]="cupon_seleccionada?.cupon.titulo"
+                [value]="cupon_seleccionada?.cupon.titulo"
               />
               <div class="invalid-feedback">
                 {{ getErrorMessage(formEdit, "titulo") }}
@@ -385,7 +385,7 @@
                 [ngClass]="
                   isInvalidForm('descripcion', 'actualizar') ? 'is-invalid' : ''
                 "
-                [value]="cupon_seleccionada?.descripcion"
+                [value]="cupon_seleccionada?.cupon.descripcion"
               ></textarea>
               <div class="invalid-feedback">
                 {{ getErrorMessage(formEdit, "descripcion") }}
@@ -407,7 +407,7 @@
                 [ngClass]="
                   isInvalidForm('descuento', 'actualizar') ? 'is-invalid' : ''
                 "
-                [value]="cupon_seleccionada?.porcentaje"
+                [value]="cupon_seleccionada?.cupon.porcentaje"
               />
               <div class="invalid-feedback">
                 {{ getErrorMessage(formEdit, "descuento") }}
@@ -429,7 +429,7 @@
                 [ngClass]="
                   isInvalidForm('cantidad', 'actualizar') ? 'is-invalid' : ''
                 "
-                [value]="cupon_seleccionada?.cantidad"
+                [value]="cupon_seleccionada?.cupon.cantidad"
               />
               <div class="invalid-feedback">
                 {{ getErrorMessage(formEdit, "cantidad") }}
@@ -445,12 +445,12 @@
             </div>
             <div class="col-7">
               <small>{{
-                cupon_seleccionada?.fecha_iniciacion
+                cupon_seleccionada?.cupon.fecha_iniciacion
                   | date : " MMM d, y, h:mm:ss a"
               }}</small>
               <input
                 type="date"
-                [value]="cupon_seleccionada?.fecha_iniciacion"
+                [value]="cupon_seleccionada?.cupon.fecha_iniciacion"
                 id="start"
                 [ngClass]="
                   isInvalidForm('inicio', 'actualizar') ? 'is-invalid' : ''
@@ -472,11 +472,11 @@
             </div>
             <div class="col-7">
               <small>{{
-                cupon_seleccionada?.fecha_expiracion
+                cupon_seleccionada?.cupon.fecha_expiracion
                   | date : " MMM d, y, h:mm:ss a"
               }}</small>
               <input
-                [value]="cupon_seleccionada?.fecha_expiracion"
+                [value]="cupon_seleccionada?.cupon.fecha_expiracion"
                 [ngClass]="
                   isInvalidForm('fin', 'actualizar') ? 'is-invalid' : ''
                 "
@@ -506,7 +506,7 @@
                 [ngClass]="
                   isInvalidForm('punto', 'actualizar') ? 'is-invalid' : ''
                 "
-                [value]="cupon_seleccionada?.puntos"
+                [value]="cupon_seleccionada?.cupon.puntos"
               />
               <div class="invalid-feedback">
                 {{ getErrorMessage(formEdit, "punto") }}
@@ -533,7 +533,7 @@
                 <option
                   *ngFor="let c of categoria"
                   [id]="c.nombre"
-                  value="{{ cupon_seleccionada?.tipo_categoria }}"
+                  value="{{ cupon_seleccionada?.cupon.tipo_categoria }}"
                 >
                   {{ c.nombre }}
                 </option>

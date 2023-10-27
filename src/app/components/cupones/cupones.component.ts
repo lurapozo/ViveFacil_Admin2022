@@ -12,11 +12,11 @@ import { PythonAnywhereService } from 'src/app/services/PythonAnywhere/python-an
 export class CuponesComponent {
   codigo=Math.random().toString(36).substr(2, 6);
   arr_cupon!: Cupon[] | undefined;
-  arr_filtered_cupon!: Cupon[] | undefined;
+  arr_filtered_cupon!: any | undefined;
   condicionNext = false
   currentPage = 1
   pageNumber: number[] = [];
-  cupon_seleccionada: Cupon | undefined;
+  cupon_seleccionada: any | undefined;
   isErrorToast = false;
   mensajeToast = "";
   tituloToast = "";
@@ -34,8 +34,9 @@ export class CuponesComponent {
     this.pythonAnywhereService.obtener_cupones().subscribe(resp => {
       this.arr_cupon = Object(resp)
       this.arr_filtered_cupon = this.arr_cupon
+      console.log("aaaaa")
       console.log(this.arr_filtered_cupon)
-
+      console.log(resp)
     });
     this.pythonAnywhereService.obtener_categorias().subscribe((resp: any[]) => {
       this.categoria = resp
@@ -84,8 +85,8 @@ export class CuponesComponent {
 
   cambiarEstado(event: any) {
     let estado = event.srcElement.checked
-    if (this.cupon_seleccionada) {
-      this.pythonAnywhereService.cambio_cupon_estado(this.cupon_seleccionada.id, estado).subscribe(resp => { 
+    if (this.cupon_seleccionada.cupon) {
+      this.pythonAnywhereService.cambio_cupon_estado(this.cupon_seleccionada.cupon.id, estado).subscribe(resp => {
         this.mostrarToastInfo('Estado de la Insignia ', 'Insignia editada correctamente', false);
        });
     }
@@ -124,14 +125,14 @@ export class CuponesComponent {
 
     } else if (tipo === 'actualizar') {
 
-      const titulo = this.cupon_seleccionada?.titulo;
-      const descripcion = this.cupon_seleccionada?.descripcion;
-      const descuento = this.cupon_seleccionada?.porcentaje;
-      const cantidad = this.cupon_seleccionada?.cantidad;
-      const punto = this.cupon_seleccionada?.puntos;
+      const titulo = this.cupon_seleccionada?.cupon.titulo;
+      const descripcion = this.cupon_seleccionada?.cupon.descripcion;
+      const descuento = this.cupon_seleccionada?.cupon.porcentaje;
+      const cantidad = this.cupon_seleccionada?.cupon.cantidad;
+      const punto = this.cupon_seleccionada?.cupon.puntos;
       const categoria = 'Automotriz';
-      const inicio = this.cupon_seleccionada?.fecha_iniciacion;
-      const fin = this.cupon_seleccionada?.fecha_expiracion;
+      const inicio = this.cupon_seleccionada?.cupon.fecha_iniciacion;
+      const fin = this.cupon_seleccionada?.cupon.fecha_expiracion;
 
 
       this.existImageActualizar = false;
@@ -399,7 +400,7 @@ export class CuponesComponent {
           this.arr_cupon = Object(resp)
           this.arr_filtered_cupon = this.arr_cupon
           console.log(this.arr_filtered_cupon)
-    
+
         });
       })
 
@@ -429,8 +430,8 @@ export class CuponesComponent {
     const categoria = 'Automotriz';
     const descuento = this.formEdit.get('descuento')?.value;
     const foto = this.formEdit.get('imagen')?.value as File
-    if (this.cupon_seleccionada) {
-      cupon.codigo = this.cupon_seleccionada?.codigo
+    if (this.cupon_seleccionada.cupon) {
+      cupon.codigo = this.cupon_seleccionada?.cupon.codigo
     }
 
     if (titulo && descripcion && inicio && fin && cantidad && puntos && categoria && descuento) {
@@ -452,8 +453,8 @@ export class CuponesComponent {
       console.log(cupon.foto)
     }
     console.log(this.formEdit)
-    if (this.cupon_seleccionada) {
-      const id = this.cupon_seleccionada.id
+    if (this.cupon_seleccionada.cupon) {
+      const id = this.cupon_seleccionada.cupon.id
       console.log(id)
       this.pythonAnywhereService.actualizar_cupon(cupon, id).subscribe(resp => {
 
@@ -463,7 +464,7 @@ export class CuponesComponent {
           this.arr_cupon = Object(resp)
           this.arr_filtered_cupon = this.arr_cupon
           console.log(this.arr_filtered_cupon)
-    
+
         });
       })
 
@@ -489,22 +490,22 @@ export class CuponesComponent {
     console.log('Escribe en el buscador: ', texto)
     this.arr_filtered_cupon = this.arr_cupon;
     if (texto && texto.trim() !== '') {
-      this.arr_filtered_cupon = this.arr_filtered_cupon?.filter((solicitud) => {
+      this.arr_filtered_cupon = this.arr_filtered_cupon?.filter((solicitud:any) => {
         return solicitud.titulo.toLowerCase().includes(texto.toLowerCase())
       });
     }
   }
 
   onDelete() {
-    if (this.cupon_seleccionada) {
-      this.pythonAnywhereService.eliminar_cupon(this.cupon_seleccionada.id).subscribe(resp => {
+    if (this.cupon_seleccionada.cupon) {
+      this.pythonAnywhereService.eliminar_cupon(this.cupon_seleccionada.cupon.id).subscribe(resp => {
         this.mostrarToastInfo('Estado del Cupon ', 'Cupon Eliminado correctamente', false)
         this.pythonAnywhereService.obtener_cupones().subscribe(resp => {
           this.arr_cupon = Object(resp)
           this.arr_filtered_cupon = this.arr_cupon
           console.log(this.arr_filtered_cupon)
-    
-        });      
+
+        });
       }
         )
     }
