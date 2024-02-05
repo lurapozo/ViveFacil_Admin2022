@@ -340,7 +340,7 @@ export class PendientesComponent{
     }
 
     const email = this.pendiente_seleccionada.email;
-    const password = "ababa1234";
+    const password = email.substring(0, 3) + (Math.random() + 1).toString(36).substring(7);
     if (email && password) {
       this.pythonAnywhereService.getSolicitantePythonAny(email).subscribe((arrSolicitante: Array<Solicitante2>) => {
         if (arrSolicitante.length === 0) {
