@@ -89,7 +89,7 @@ export class RechazadosComponent {
 
     });
 
-    this.pythonAnywhereService.obtener_profesiones().subscribe(resp => {
+    this.pythonAnywhereService.obtener_servicios().subscribe(resp => {
       console.log(resp)
       for (let i=0; i<resp.length; i++){
         this.profesiones.push(resp[i].nombre)

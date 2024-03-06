@@ -101,7 +101,7 @@ export class PendientesComponent{
       }
     });
 
-    this.pythonAnywhereService.obtener_profesiones().subscribe(resp => {
+    this.pythonAnywhereService.obtener_servicios().subscribe(resp => {
       console.log(resp)
       for (let i=0; i<resp.length; i++){
         this.profesiones= [...this.profesiones, resp[i].nombre];
