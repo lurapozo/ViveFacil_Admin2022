@@ -58,6 +58,18 @@ obtener_politicas(){
       `${this.API_URL}/solicitantes/?page=${page}`
     ) as Observable<SolicitantePaginacion>;
   }
+  /**
+   * Obtiene todos los solicitantes por estado, y los entrega en un formato con paginación.
+   *
+   * @param page (Opcional) Recibe un number con el número de la página a buscar info. Por defecto 1.
+   * @param filtro (Opcional) Recibe un string con el estado del solicitante a buscar info. Por defecto "todos".  
+   * @returns Devuelve un Observable con un objeto SolicitantePaginacion.
+   */
+  obtener_solicitantes_filtro(page = 1, filtro = "todos"): Observable<SolicitantePaginacion> {
+    return this.http.get(
+      `${this.API_URL}/solicitantes/?page=${page}&filtro=${filtro}`
+    ) as Observable<SolicitantePaginacion>;
+  }
 
   /**
    * Obtene el solicitante desde la base de datos.

@@ -32,14 +32,14 @@ export class SolicitantesComponent {
   isCrear = false; isActualizar = false; isEliminar = false;
   habilitar = ''
 
-
+  filtro = 'todos'
 
 
 
 
   constructor(private pythonAnywhereService: PythonAnywhereService, private sanitizer: DomSanitizer) {
 
-    this.pythonAnywhereService.obtener_solicitantes().subscribe(resp => {
+    this.pythonAnywhereService.obtener_solicitantes_filtro().subscribe(resp => {
       this.total = resp.total_objects
       this.arr_soli = resp.results;
       this.arr_filtered_soli = this.arr_soli;
@@ -68,7 +68,7 @@ export class SolicitantesComponent {
 
     this.pythonAnywhereService.cambio_solicitante_estado(estado,id).subscribe(resp=>{
       console.log(resp)
-      this.pythonAnywhereService.obtener_solicitantes().subscribe(resp => {
+      this.pythonAnywhereService.obtener_solicitantes_filtro().subscribe(resp => {
         this.total = resp.total_objects
         this.arr_soli = resp.results;
         this.arr_filtered_soli = this.arr_soli;
@@ -94,7 +94,7 @@ export class SolicitantesComponent {
   next(event: any) {
 
     this.currentPage = this.currentPage + 1
-    this.pythonAnywhereService.obtener_solicitantes(this.currentPage).subscribe(resp => {
+    this.pythonAnywhereService.obtener_solicitantes_filtro(this.currentPage, this.filtro).subscribe(resp => {
       this.arr_soli = resp.results;
       this.arr_filtered_soli = this.arr_soli;
     })
@@ -103,14 +103,14 @@ export class SolicitantesComponent {
   previous(event: any) {
 
     this.currentPage = this.currentPage - 1
-    this.pythonAnywhereService.obtener_solicitantes(this.currentPage).subscribe(resp => {
+    this.pythonAnywhereService.obtener_solicitantes_filtro(this.currentPage, this.filtro).subscribe(resp => {
       this.arr_soli = resp.results;
       this.arr_filtered_soli = this.arr_soli;
     })
   }
 
   iteracion(event: any) {
-    this.pythonAnywhereService.obtener_solicitantes(event.target.value).subscribe(resp => {
+    this.pythonAnywhereService.obtener_solicitantes_filtro(event.target.value, this.filtro).subscribe(resp => {
       this.arr_soli = resp.results;
       this.arr_filtered_soli = this.arr_soli;
       this.currentPage = resp.current_page_number
@@ -120,6 +120,23 @@ export class SolicitantesComponent {
 
     })
 
+  }
+
+  onChange(newValue: any) {
+    this.filtro = newValue.target.value
+    this.pythonAnywhereService.obtener_solicitantes_filtro(1, this.filtro).subscribe(resp => {
+      this.total = resp.total_objects
+      this.arr_soli = resp.results;
+      this.arr_filtered_soli = this.arr_soli;
+      this.currentPage = 1
+      this.pageNumber = []
+      for (let index = 1; index <= resp.total_pages; index++) {
+        this.pageNumber.push(index)
+      }
+      if (resp.next != null) {
+        this.condicionNext = true
+      }
+    });
   }
 
 }

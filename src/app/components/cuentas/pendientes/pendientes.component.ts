@@ -40,6 +40,8 @@ export class PendientesComponent{
   copiaCedulaNombre= null;
   copiaLicenciaNombre= null;
   copiaDocumentosNombre= null;
+  mensajeIncompleto: string[] = [];
+  mensajeIncompletoString = '';
   // imgPerfil: string| null = null;
   
   formEdit: FormGroup = new FormGroup({
@@ -352,120 +354,155 @@ export class PendientesComponent{
           if(this.pendiente_seleccionada.email != null && this.pendiente_seleccionada.email != ""){
             dataRegisto.append('email', this.pendiente_seleccionada.email);
           }else{
+            this.mensajeIncompleto.push("correo")
             console.log("Problema en Email")
             validator=1;
           }
           if(this.pendiente_seleccionada.nombres != null && this.pendiente_seleccionada.nombres != ""){
             dataRegisto.append('nombres', this.pendiente_seleccionada.nombres);
           }else{
+            this.mensajeIncompleto.push("nombre")
             console.log("Problema en Nombres")
             validator=1;
           }
           if(this.pendiente_seleccionada.apellidos != null && this.pendiente_seleccionada.apellidos != ""){
             dataRegisto.append('apellidos', this.pendiente_seleccionada.apellidos);
           }else{
+            this.mensajeIncompleto.push("apellido")
             console.log("Problema en Apellidos")
             validator=1;
           }
           if(this.pendiente_seleccionada.telefono != null && this.pendiente_seleccionada.telefono != ""){
             dataRegisto.append('telefono', this.pendiente_seleccionada.telefono);
           }else{
+            this.mensajeIncompleto.push("telefono")
             console.log("Problema en telefono")
             validator=1;
           }
           if(this.pendiente_seleccionada.cedula != null && this.pendiente_seleccionada.cedula != ""){
             dataRegisto.append('cedula', this.pendiente_seleccionada.cedula);
           }else{
+            this.mensajeIncompleto.push("cédula")
             console.log("Problema en cedula")
             validator=1;
           }
           if(this.pendiente_seleccionada.genero != null && this.pendiente_seleccionada.genero != ""){
             dataRegisto.append('genero', this.pendiente_seleccionada.genero);
           }else{
+            this.mensajeIncompleto.push("género")
+
             console.log("Problema en genero")
             validator=1;
           }
           if(this.pendiente_seleccionada.ciudad != null && this.pendiente_seleccionada.ciudad != ""){
             dataRegisto.append('ciudad', this.pendiente_seleccionada.ciudad);
           }else{
+            this.mensajeIncompleto.push("ciudad")
+
             console.log("Problema en ciudad")
             validator=1;
           }
           if(this.pendiente_seleccionada.foto != null && this.pendiente_seleccionada.foto != ""){
             dataRegisto.append('foto', this.pendiente_seleccionada.foto);
           }else{
+            this.mensajeIncompleto.push("foto")
+
             console.log("Problema en foto")
             validator=1;
           }
           if(this.pendiente_seleccionada.banco != null && this.pendiente_seleccionada.banco != ""){
             dataRegisto.append('banco', this.pendiente_seleccionada.banco);
           }else{
+            this.mensajeIncompleto.push("banco")
+
             console.log("ERROR EN banco")
             validator=1;
           }
           if(this.pendiente_seleccionada.numero_cuenta != null && this.pendiente_seleccionada.numero_cuenta != ""){
             dataRegisto.append('numero_cuenta', this.pendiente_seleccionada.numero_cuenta);
           }else{
+            this.mensajeIncompleto.push("número de cuenta")
+
             console.log("ERROR EN numero_cuenta")
             validator=1;
           }
           if(this.pendiente_seleccionada.tipo_cuenta != null && this.pendiente_seleccionada.tipo_cuenta != ""){
             dataRegisto.append('tipo_cuenta', this.pendiente_seleccionada.tipo_cuenta);
           }else{
+            this.mensajeIncompleto.push("tipo de cuenta")
+
             console.log("ERROR EN tipo_cuenta")
             validator=1;
           }
           if(this.pendiente_seleccionada.ano_experiencia != null && this.pendiente_seleccionada.ano_experiencia >= 0){
             dataRegisto.append('ano_experiencia', this.pendiente_seleccionada.ano_experiencia);
           }else{
+            this.mensajeIncompleto.push("años de experiencia")
+
             console.log("ERROR EN ano_experienccia")
             validator=1;
           }
           if(this.pendiente_seleccionada.profesion != null && this.pendiente_seleccionada.profesion != ""){
             dataRegisto.append('profesion', this.pendiente_seleccionada.profesion);
           }else{
+            this.mensajeIncompleto.push("profesión")
+
             console.log("ERROR EN profesion")
             validator=1;
           }
           if(this.pendiente_seleccionada.direccion != null && this.pendiente_seleccionada.direccion != ""){
             dataRegisto.append('direccion', this.pendiente_seleccionada.direccion);
           }else{
+            this.mensajeIncompleto.push("dirección")
+
             console.log("ERROR EN direccion")
             validator=1;
           }
           if(this.pendiente_seleccionada.licencia != null && this.pendiente_seleccionada.licencia != ""){
             dataRegisto.append('licencia', this.pendiente_seleccionada.licencia);
           }else{
+            this.mensajeIncompleto.push("licencia")
+
             console.log("ERROR EN licencia")
             validator=1;
           }
           if(this.pendiente_seleccionada.copiaCedula != null && this.pendiente_seleccionada.copiaCedula != ""){
             dataRegisto.append('copiaCedula', this.pendiente_seleccionada.copiaCedula);
           }else{
+            this.mensajeIncompleto.push("copia de cédula")
+
             console.log("ERROR EN copiaCedula")
             validator=1;
           }
           if(this.pendiente_seleccionada.copiaLicencia != null && this.pendiente_seleccionada.copiaLicencia != ""){
             dataRegisto.append('copiaLicencia', this.pendiente_seleccionada.copiaLicencia);
           }else{
+            this.mensajeIncompleto.push("copia de licencia")
+
             console.log("ERROR EN copiaLicencia")
             validator=1;
           }
           if(this.pendiente_seleccionada.descripcion != null && this.pendiente_seleccionada.descripcion != ""){
             dataRegisto.append('descripcion', this.pendiente_seleccionada.descripcion);
           }else{
+            this.mensajeIncompleto.push("descripción")
+
             console.log("ERROR EN descripcion")
             validator=1;
           }
           if(this.pendiente_seleccionada.ano_experiencia != null && this.pendiente_seleccionada.ano_experiencia != ""){
             dataRegisto.append('ano_experiencia', this.pendiente_seleccionada.ano_experiencia);
           }else{
+            this.mensajeIncompleto.push("años de experiencia")
+
             console.log("ERROR EN ano_experiencia")
             validator=1;
           }
           if(this.pendiente_seleccionada.documentsPendientes != null && this.pendiente_seleccionada.documentsPendientes != ""){
             dataRegisto.append('filesDocuments', this.pendiente_seleccionada.documentsPendientes[0].document);
           }else{
+            this.mensajeIncompleto.push("documentación")
+
             console.log("ERROR EN filesDocuments")
             validator=1;
           }
@@ -506,6 +543,13 @@ export class PendientesComponent{
               }
             });
           }else{
+            // TODO: Mostrar mensaje de campos incompletos
+            if (this.mensajeIncompleto.length > 0) {
+              this.mensajeIncompletoString = "Campos incompletos: " + this.mensajeIncompleto.join(', ') 
+              console.log(this.mensajeIncompletoString)
+              this.mensajeIncompleto = []
+              this.mensajeIncompletoString = ''
+            }
             console.log('ERROR: Faltan datos');
           }
         } else {
