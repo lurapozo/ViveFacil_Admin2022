@@ -1051,6 +1051,11 @@ obtener_politicas(){
       `${this.API_URL}/proveedores_pendientes/${id}`
     );
   }
+  eliminar_proveedores(id: any) {//FALTA
+    return this.http.delete(
+      `${this.API_URL}/proveedores/${id}`
+    );
+  }
   eliminar_proveedores_pendientes2(id: any, data: any) {//FALTA
     const razon = new FormData();
     razon.append("razon", data);
@@ -1876,6 +1881,9 @@ obtener_politicas(){
 
   getAdminByCorreo(correo: string){
     return this.http.get("https://tomesoft1.pythonanywhere.com/datos-admin/" + correo);
+  }
+  actualizarCaducidad(id: number, numero: any){
+    return this.http.put(`${this.API_URL}/actualizar_caducidad/${id}`,numero);
   }
 }
 

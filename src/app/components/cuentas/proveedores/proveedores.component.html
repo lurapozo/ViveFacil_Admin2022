@@ -34,7 +34,7 @@
             <h3 class="p-0 m-0">Cedula</h3>
           </div>
   
-          <div class="col-4 align-self-center">
+          <div class="col-2 align-self-center">
             <h3 class="p-0 m-0">Correo Electronico</h3>
           </div>
   
@@ -43,6 +43,9 @@
           </div>
           <div class="col-2 align-self-center">
             <h3 class="p-0 m-0">Fecha de actualización</h3>
+          </div>
+          <div class="col-2 align-self-center">
+            <h3 class="p-0 m-0">Finalización de contrato</h3>
           </div>
   
         </div>
@@ -72,7 +75,7 @@
             <h4 class="p-0 m-0"> {{a.user_datos.cedula}} </h4>
           </div>
   
-          <div class="col-4 align-self-center">
+          <div class="col-2 align-self-center">
             <h4 class="p-0 m-0">{{a.user_datos.user.email}}</h4>
           </div>
   
@@ -81,6 +84,9 @@
           </div>
           <div class="col-2 align-self-center">
             <h4 class="p-0 m-0"> {{a.user_datos.fecha_creacion  | date : "d/M/Y" }}</h4>
+          </div>
+          <div class="col-2 align-self-center">
+            <h4 class="p-0 m-0"> {{a.fecha_caducidad  | date : "d/M/Y" }}</h4>
           </div>
   
         </div>
@@ -95,7 +101,7 @@
         <div class="modal-header align-items-center">
           <h1 class="modal-title fs-5 m-0 p-0 fw-bold"
             id="modalInformacionProfesionLabel">Información de Proveedores
-            pendientes</h1>
+          </h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal"
             aria-label="Close"></button>
         </div>
@@ -260,6 +266,13 @@
             Cerrar
           </button>
           <button
+            (click)="prepararCaducidad()"
+            class="btn btn-success"
+            data-target=".bd-example-modal-xl"
+            data-bs-target="#modalContrato"
+            data-bs-toggle="modal">Contrato
+          </button>
+          <button
             (click)="limpiarForm()"
             class="btn btn-info"
             data-target=".bd-example-modal-xl"
@@ -270,6 +283,8 @@
       </div>
     </div>
   </div>
+
+
   <!-- Modal edicion de informacion de admi -->
   <div class="modal fade modal-xl" id="modalInformacionEdicionProfesion"
     aria-hidden="true" aria-labelledby="modalInformacionEdicionProfesionLabel"
@@ -852,3 +867,54 @@
       </nav>
     </div>
   </div>
+
+<div
+  class="modal fade"
+  id="modalContrato"
+  role="dialog"
+  aria-labelledby="modalConfirmacionLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <!-- Titulo del modal confirmacion -->
+      <div class="modal-header">
+        <h1
+          class="modal-title fs-5 m-0 p-0 fw-bold"
+          id="modalConfirmacionLabel"
+        >
+          Contrato actual:
+        </h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+
+      <!-- Cuerpo del modal confirmacion -->
+      <div class="modal-body">
+        El contrato actual caduca el 
+        <b>{{proveedor_seleccionado?.fecha_caducidad  | date : "d/M/Y" }}</b>
+
+        <div class="box">
+          <div class="quantity">
+            <span class="quantity-add quantity-button"></span>
+            <input id="numeroACambiar" type="number" step="1" min="1" value="1">
+            <span class="quantity-remove quantity-button"></span>
+          </div>
+        </div>
+      </div>
+      
+      
+
+      <!-- Footer del modal confirmacion -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success" data-bs-dismiss="modal" (click)="actualizarCaducidad()">
+          Aceptar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

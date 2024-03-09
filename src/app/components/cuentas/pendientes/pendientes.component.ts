@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, ElementRef } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { BodyEmail } from 'src/app/interfaces/email';
@@ -13,6 +13,7 @@ import { UserService } from 'src/app/services/user/user.service';
   styleUrls: ['./pendientes.component.css']
 })
 export class PendientesComponent{
+  @ViewChild('modalConfirmacion4') modalConfirmacion4: ElementRef | any;
   generos = ['Masculino', 'Femenino', 'Otro'];
   ciudades = ['Guayaquil', 'Quito', 'Cuenca', 'Sto. Domingo', 'Ibarra'];
   tipoCuentas = ['Ahorro', 'Corriente'];
@@ -41,7 +42,7 @@ export class PendientesComponent{
   copiaLicenciaNombre= null;
   copiaDocumentosNombre= null;
   mensajeIncompleto: string[] = [];
-  mensajeIncompletoString = '';
+  mensajeIncompletoString = 'Campos completos';
   // imgPerfil: string| null = null;
   
   formEdit: FormGroup = new FormGroup({
@@ -343,6 +344,7 @@ export class PendientesComponent{
 
     const email = this.pendiente_seleccionada.email;
     const password = email.substring(0, 3) + (Math.random() + 1).toString(36).substring(7);
+    this.mensajeIncompletoString = 'Campos completos'
     if (email && password) {
       this.pythonAnywhereService.getSolicitantePythonAny(email).subscribe((arrSolicitante: Array<Solicitante2>) => {
         if (arrSolicitante.length === 0) {
@@ -547,8 +549,9 @@ export class PendientesComponent{
             if (this.mensajeIncompleto.length > 0) {
               this.mensajeIncompletoString = "Campos incompletos: " + this.mensajeIncompleto.join(', ') 
               console.log(this.mensajeIncompletoString)
+
               this.mensajeIncompleto = []
-              this.mensajeIncompletoString = ''
+
             }
             console.log('ERROR: Faltan datos');
           }

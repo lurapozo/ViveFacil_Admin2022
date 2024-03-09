@@ -971,6 +971,8 @@
           Cancelar
         </button>
         <button
+        data-bs-target="#modalConfirmacion4"
+          data-bs-toggle="modal"
           type="button"
           class="btn btn-success"
           (click)="onAceptar()"
@@ -1122,6 +1124,50 @@
           data-bs-dismiss="modal"
         >
           Negar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  id="modalConfirmacion4"
+  #modalConfirmacion4
+  role="dialog"
+
+  aria-labelledby="modalConfirmacionLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <!-- Titulo del modal confirmacion -->
+      <div class="modal-header">
+        <h1
+          class="modal-title fs-5 m-0 p-0 fw-bold"
+          id="modalConfirmacionLabel"
+        >
+          Estado de los campos:
+        </h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+
+      <!-- Cuerpo del modal confirmacion -->
+      <div class="modal-body">
+        {{mensajeIncompletoString}}
+      </div>
+      
+      
+
+      <!-- Footer del modal confirmacion -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success" data-bs-dismiss="modal">
+          Aceptar
         </button>
       </div>
     </div>

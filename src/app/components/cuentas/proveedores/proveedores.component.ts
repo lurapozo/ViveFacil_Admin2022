@@ -148,7 +148,7 @@ export class ProveedoresComponent {
       planilla_servicios: this.proveedor_seleccionado.planilla_servicios,
       foto: this.proveedor_seleccionado.foto
     }
-    this.pythonAnywhereService.eliminar_proveedores_pendientes(this.proveedor_seleccionado.id).subscribe(resp => {
+    this.pythonAnywhereService.eliminar_proveedores(this.proveedor_seleccionado.id).subscribe(resp => {
       console.log(resp)
       this.pythonAnywhereService.obtener_proveedores_proveedores().subscribe(resp => {
         this.total = Object(resp).total_objects
@@ -289,6 +289,9 @@ export class ProveedoresComponent {
     foto ? this.formEdit.get('foto')?.setValue(foto) : this.formEdit.get('foto')?.reset();
   }
 
+  prepararCaducidad(){
+    const ddasda = this.proveedor_seleccionado?.fecha_caducidad
+  }
   onActualizar() {
     const proveedor: BodyActualizarProveedorPendiente = {
       nombres: this.formEdit.value.nombre,
@@ -471,5 +474,25 @@ export class ProveedoresComponent {
       return false;
     }
     return true;
+  }
+
+  actualizarCaducidad(){
+    var inputValue = (<HTMLInputElement>document.getElementById('numeroACambiar')).value;
+    console.log(inputValue)
+    let pendiente ={
+      id: this.proveedor_seleccionado.id,
+      input: inputValue
+    }
+    this.pythonAnywhereService.actualizarCaducidad(this.proveedor_seleccionado.id, pendiente).subscribe(resp => {
+      console.log(resp)
+      this.pythonAnywhereService.obtener_proveedores_proveedores().subscribe(resp => {
+        this.total = Object(resp).total_objects
+        this.arr_proveedor = Object(resp).results;
+        this.arr_filtered_proveedor = this.arr_proveedor;
+        console.log(resp, "resp")
+        console.log(this.arr_filtered_proveedor)
+        this.currentPage = 1;  
+      });
+    })
   }
 }
