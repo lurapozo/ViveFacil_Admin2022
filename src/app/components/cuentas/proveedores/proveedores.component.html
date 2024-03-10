@@ -44,8 +44,11 @@
           <div class="col-2 align-self-center">
             <h3 class="p-0 m-0">Fecha de actualización</h3>
           </div>
-          <div class="col-2 align-self-center">
+          <div class="col-1 align-self-center">
             <h3 class="p-0 m-0">Finalización de contrato</h3>
+          </div>
+          <div class="col-1 align-self-center">
+            <h3 class="p-0 m-0">Estado</h3>
           </div>
   
         </div>
@@ -85,8 +88,12 @@
           <div class="col-2 align-self-center">
             <h4 class="p-0 m-0"> {{a.user_datos.fecha_creacion  | date : "d/M/Y" }}</h4>
           </div>
-          <div class="col-2 align-self-center">
+          <div class="col-1 align-self-center">
             <h4 class="p-0 m-0"> {{a.fecha_caducidad  | date : "d/M/Y" }}</h4>
+          </div>
+          <div class="col-1 align-self-center">
+            <img class="p-0 m-0" *ngIf="!a.estado" width="25vw" src="assets/imagenes/Basic_red_dot.png"> 
+            <img class="p-0 m-0" *ngIf="a.estado" width="25vw" src="assets/imagenes/Basic_green_dot.png"> 
           </div>
   
         </div>
@@ -781,10 +788,19 @@
             data-bs-target="#modalConfirmacion"
             data-bs-toggle="modal"
             class="btn btn-danger"
+            *ngIf="proveedor_seleccionado?.estado"
             (click)="establecerMensaje('Está seguro que desea Negar la
             información?', 'negar')"
             >
             Negar
+          </button>
+          <button
+            class="btn btn-info"
+            data-bs-dismiss="modal"
+            *ngIf="!proveedor_seleccionado?.estado"
+            (click)="actualizarCaducidad(1)"
+            >
+            Aceptar
           </button>
             <button
             data-bs-target="#modalConfirmacion"
@@ -911,7 +927,7 @@
 
       <!-- Footer del modal confirmacion -->
       <div class="modal-footer">
-        <button type="button" class="btn btn-success" data-bs-dismiss="modal" (click)="actualizarCaducidad()">
+        <button type="button" class="btn btn-success" data-bs-dismiss="modal" (click)="actualizarCaducidad(0)">
           Aceptar
         </button>
       </div>

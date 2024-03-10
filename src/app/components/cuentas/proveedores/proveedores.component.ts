@@ -476,9 +476,14 @@ export class ProveedoresComponent {
     return true;
   }
 
-  actualizarCaducidad(){
-    var inputValue = (<HTMLInputElement>document.getElementById('numeroACambiar')).value;
+  actualizarCaducidad(number:number){
+    if(number==1){
+      var inputValue = "0"
+    }else{
+      var inputValue = (<HTMLInputElement>document.getElementById('numeroACambiar')).value;
     console.log(inputValue)
+    }
+   
     let pendiente ={
       id: this.proveedor_seleccionado.id,
       input: inputValue
