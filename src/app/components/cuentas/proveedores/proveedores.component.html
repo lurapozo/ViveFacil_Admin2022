@@ -912,25 +912,25 @@
       <!-- Cuerpo del modal confirmacion -->
       <div class="modal-body">
         El contrato actual caduca el 
-        <b>{{proveedor_seleccionado?.fecha_caducidad  | date : "d/M/Y" }}</b>
-
+        <b>{{proveedor_seleccionado?.fecha_caducidad | date : "d/M/Y" }}</b>
+      
         <div class="box">
           <div class="quantity">
             <span class="quantity-add quantity-button"></span>
-            <input id="numeroACambiar" type="number" step="1" min="1" value="1">
+            <!-- Add a template reference variable #selectedDate to your input element -->
+            <input id="numeroACambiar" type="date" #selectedDate>
             <span class="quantity-remove quantity-button"></span>
           </div>
         </div>
       </div>
       
-      
-
       <!-- Footer del modal confirmacion -->
       <div class="modal-footer">
-        <button type="button" class="btn btn-success" data-bs-dismiss="modal" (click)="actualizarCaducidad(0)">
+        <!-- Add a click event handler to the button -->
+        <button type="button" class="btn btn-success" data-bs-dismiss="modal" (click)="actualizarCaducidad(selectedDate.value)">
           Aceptar
         </button>
       </div>
-    </div>
+      
   </div>
 </div>

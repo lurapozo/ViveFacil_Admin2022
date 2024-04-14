@@ -11,6 +11,7 @@ import { PythonAnywhereService } from 'src/app/services/PythonAnywhere/python-an
   styleUrls: ['./proveedores.component.css']
 })
 export class ProveedoresComponent {
+  selectedDate: string | null = null;
   generos = ['Masculino', 'Femenino', 'Otro'];
   ciudades = ['Guayaquil', 'Quito', 'Cuenca', 'Sto. Domingo', 'Ibarra'];
   tipoCuentas = ['Ahorro', 'Corriente'];
@@ -476,14 +477,9 @@ export class ProveedoresComponent {
     return true;
   }
 
-  actualizarCaducidad(number:number){
-    if(number==1){
-      var inputValue = "0"
-    }else{
-      var inputValue = (<HTMLInputElement>document.getElementById('numeroACambiar')).value;
-    console.log(inputValue)
-    }
-   
+  actualizarCaducidad(number:any){
+    let inputValue = number
+
     let pendiente ={
       id: this.proveedor_seleccionado.id,
       input: inputValue
