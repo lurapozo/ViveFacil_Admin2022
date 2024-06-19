@@ -25,6 +25,7 @@ export interface PaymentTarjeta {
   prov_telefono: string;
   servicio: string;
   usuario: string;
+  solicitud: any;
 }
 
 export interface PaymentEfectivo {
@@ -43,6 +44,7 @@ export interface PaymentEfectivo {
   prov_correo: string;
   prov_telefono: string;
   user_telefono: string;
+  solicitud: any;
 }
 
 export interface PaymentPaginacion {

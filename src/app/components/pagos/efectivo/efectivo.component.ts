@@ -24,7 +24,7 @@ total:any
     this.pythonAnywhereService.obtener_pagos_efectivoP().subscribe((resp) => {
     this.arr_efectivo = resp.results
     this.arr_filtered_efectivo =  this.arr_efectivo
-    console.log(this.arr_filtered_efectivo)
+    console.log(this.arr_filtered_efectivo, "arr_filtered_efectivo")
     if (resp.next != null) {
       this.condicionNext = true
     }
@@ -35,24 +35,15 @@ total:any
   
     });
 this.pythonAnywhereService.valor_total_efectivo().subscribe(resp=>{
-  this.totalEfectivo=Object(resp).valor__sum
+  this.totalEfectivo=Object(resp).valor__sum.toFixed(2)
   console.log(resp)
 })
-this.pythonAnywhereService.valor_total().subscribe(resp=>{
-  this.total=resp
+this.pythonAnywhereService.valor_total().subscribe((resp: any)=>{
+  this.total=parseFloat(resp).toFixed(2)
   console.log(resp)
 })
    
 }
-search(evento: any) {
-  const texto = evento.target.value;
-  console.log('Escribe en el buscador: ', texto)
-  this.arr_filtered_efectivo = this.arr_efectivo;
-  if (texto && texto.trim() !== '') {
-    this.arr_filtered_efectivo = this.arr_filtered_efectivo?.filter((solicitud) => {
-      return solicitud.proveedor.toLowerCase().includes(texto.toLowerCase())
-    });
-  }}
 
 
   next(event: any) {
@@ -84,6 +75,30 @@ search(evento: any) {
 
     })
 
+  }
+
+
+  filterByUser(user: any) {
+    let usuario = user.target.value
+    console.log('Filtrando por usuario: ', usuario);
+    this.arr_filtered_efectivo = this.arr_efectivo?.filter(efectivo => efectivo.user?.username.toLowerCase().includes(usuario.toLowerCase()));
+  }
+
+  searchProveedor(evento: any) {
+    const texto = evento.target.value;
+    console.log('Escribe en el buscador: ', texto);
+    this.arr_filtered_efectivo = this.arr_efectivo;
+    if (texto && texto.trim() !== '') {
+      this.arr_filtered_efectivo = this.arr_filtered_efectivo?.filter((solicitud) => {
+        return solicitud.solicitud?.proveedor.user_datos.user.username.toLowerCase().includes(texto.toLowerCase());
+      });
+    }
+  }
+
+  filterByDate(event: any) {
+    const date = event.target.value;
+    console.log('Filtrando por fecha: ', date);
+    this.arr_filtered_efectivo = this.arr_efectivo?.filter(efectivo => efectivo.fecha_creacion.startsWith(date)) ?? [];
   }
 
 }
