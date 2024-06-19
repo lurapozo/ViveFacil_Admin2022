@@ -3,6 +3,8 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { AnyCatcher } from 'rxjs/internal/AnyCatcher';
 import { PaymentTarjeta } from 'src/app/interfaces/payment';
 import { PythonAnywhereService } from 'src/app/services/PythonAnywhere/python-anywhere.service';
+import { saveAs } from 'file-saver';
+import * as Papa from 'papaparse';
 
 @Component({
   selector: 'app-tarjeta',
@@ -156,9 +158,50 @@ constructor(private pythonAnywhereService: PythonAnywhereService, private saniti
     this.arr_filtered_tarjeta = this.arr_tarjeta;
     if (texto && texto.trim() !== '') {
       this.arr_filtered_tarjeta = this.arr_filtered_tarjeta?.filter((solicitud) => {
-        return solicitud.prov_correo.toLowerCase().includes(texto.toLowerCase());
+        return solicitud.solicitud?.proveedor.user_datos.user.username.toLowerCase().includes(texto.toLowerCase());
       });
     }
+  }
+
+  exportCSV() {
+    if (this.arr_filtered_tarjeta) {
+      const data = this.arr_filtered_tarjeta.map(tarjeta => ({
+        id: tarjeta.id,
+        usuario: tarjeta.usuario ?? '',
+        solicitante_correo: tarjeta.user?.username ?? '',
+        tarjeta: 'SI',
+        promocion: tarjeta.promocion?.porcentaje ?? '',
+        valor: tarjeta.valor.toFixed(2),
+        descripcion: tarjeta.descripcion,
+        impuesto: tarjeta.impuesto.toFixed(2),
+        referencia: tarjeta.referencia,
+        fecha: this.formatDate(tarjeta.fecha_creacion),
+        carrier_id: tarjeta.carrier_id ?? 'N/A',
+        carrier_code: tarjeta.carrier_code ?? 'N/A',
+        concepto: tarjeta.concepto,
+        pago_proveedor: tarjeta.pago_proveedor,
+        cargo_paymentez: tarjeta.cargo_paymentez.toFixed(2),
+        cargo_banco: tarjeta.cargo_banco.toFixed(2),
+        cargo_sistema: tarjeta.cargo_sistema.toFixed(2),
+        proveedor: tarjeta.solicitud?.proveedor.user_datos.nombres + ' ' + tarjeta.solicitud?.proveedor.user_datos.apellidos,
+        proveedor_correo: tarjeta.solicitud?.proveedor.user_datos.user.username,
+
+      }));
+
+      const csv = Papa.unparse(data);
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      saveAs(blob, 'pagos_tarjeta.csv');
+    } else {
+      console.log('No hay datos para exportar');
+    }
+  }
+
+  formatDate(dateStr: string): string {
+    const date = new Date(dateStr);
+    const year = date.getFullYear();
+    const month = ('0' + (date.getMonth() + 1)).slice(-2); // Adding leading zero if needed
+    const day = ('0' + date.getDate()).slice(-2); // Adding leading zero if needed
+    return `${year}-${month}-${day}`;
   }
 
 }

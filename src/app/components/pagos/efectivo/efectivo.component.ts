@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { PaymentEfectivo, PaymentPaginacion } from 'src/app/interfaces/payment';
 import { PythonAnywhereService } from 'src/app/services/PythonAnywhere/python-anywhere.service';
+import { saveAs } from 'file-saver';
+import * as Papa from 'papaparse';
 
 @Component({
   selector: 'app-efectivo',
@@ -99,6 +101,40 @@ this.pythonAnywhereService.valor_total().subscribe((resp: any)=>{
     const date = event.target.value;
     console.log('Filtrando por fecha: ', date);
     this.arr_filtered_efectivo = this.arr_efectivo?.filter(efectivo => efectivo.fecha_creacion.startsWith(date)) ?? [];
+  }
+
+  exportCSV() {
+    if (this.arr_filtered_efectivo) {
+      const data = this.arr_filtered_efectivo.map(tarjeta => ({
+        id: tarjeta.id,
+        usuario: tarjeta.usuario ?? '',
+        solicitante_correo: tarjeta.user?.username ?? '',
+        tarjeta: 'SI',
+        promocion: tarjeta.promocion?.porcentaje ?? '',
+        valor: tarjeta.valor.toFixed(2),
+        descripcion: tarjeta.descripcion,
+        referencia: tarjeta.referencia,
+        fecha: this.formatDate(tarjeta.fecha_creacion),
+        concepto: tarjeta.concepto,
+        proveedor: tarjeta.solicitud?.proveedor.user_datos.nombres + ' ' + tarjeta.solicitud?.proveedor.user_datos.apellidos,
+        proveedor_correo: tarjeta.solicitud?.proveedor.user_datos.user.username,
+
+      }));
+
+      const csv = Papa.unparse(data);
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      saveAs(blob, 'pagos_efectivo.csv');
+    } else {
+      console.log('No hay datos para exportar');
+    }
+  }
+
+  formatDate(dateStr: string): string {
+    const date = new Date(dateStr);
+    const year = date.getFullYear();
+    const month = ('0' + (date.getMonth() + 1)).slice(-2); // Adding leading zero if needed
+    const day = ('0' + date.getDate()).slice(-2); // Adding leading zero if needed
+    return `${year}-${month}-${day}`;
   }
 
 }
