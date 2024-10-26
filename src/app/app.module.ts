@@ -41,7 +41,7 @@ import { SpinnerComponent } from './components/spinner/spinner/spinner.component
 import { SpinnerInterceptor } from './interceptor/spinner.interceptor';
 import { UserService } from './services/user/user.service';
 import { provideAuth, getAuth} from '@angular/fire/auth';
-import {initializeApp, provideFirebaseApp} from '@angular/fire/app';
+import { provideFirebaseApp} from '@angular/fire/app';
 import { environment } from '../environments/environment';
 import { AngularFireModule } from '@angular/fire/compat';
 import { provideFirestore, getFirestore } from '@angular/fire/firestore';
@@ -58,6 +58,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { initializeApp } from 'firebase/app';
+import { firebaseConfig } from 'src/app/services/Firebase/firebase.config';
+
 
 @NgModule({
   declarations: [
@@ -119,4 +122,8 @@ import { MatInputModule } from '@angular/material/input';
   providers: [ UserService, {provide: HTTP_INTERCEPTORS,useClass:SpinnerInterceptor,multi:true}],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule {
+  constructor() {
+    initializeApp(firebaseConfig);
+  }
+}
