@@ -12,21 +12,27 @@ import * as Papa from 'papaparse';
   styleUrls: ['./tarjeta.component.css']
 })
 export class TarjetaComponent {
-  arr_tarjeta!: PaymentTarjeta[]  | undefined;
+  fechaInicio: Date | null = null; 
+  fechaFin: Date | null = null; 
+  fechasFiltradas: any[] = [];
+  showHeader = true;
+
+  arr_tarjeta!: PaymentTarjeta[] | [];
   arr_filtered_tarjeta!: PaymentTarjeta[]  | undefined;
   condicionNext = false
   currentPage = 1
   pageNumber: number[] = [];
   tarjeta_seleccionada:  PaymentTarjeta  | undefined;
   mensajeAlerta: string = '';
-total:any
-totalTarjeta:any
-totalBanco:any
-totalSistema:any
-totalPayment:any
-mensajeToast = "";
-tituloToast = "";
-isErrorToast = false;
+  total:any
+  totalTarjeta:any
+  totalBanco:any
+  totalSistema:any
+  totalPayment:any
+  mensajeToast = "";
+  tituloToast = "";
+  isErrorToast = false;
+
 constructor(private pythonAnywhereService: PythonAnywhereService, private sanitizer: DomSanitizer) {
   this.pythonAnywhereService.obtener_pagos_tarjetaP().subscribe(resp => {
   this.arr_tarjeta = resp.results
@@ -41,31 +47,54 @@ constructor(private pythonAnywhereService: PythonAnywhereService, private saniti
   }
 
   });
-  this.pythonAnywhereService.valor_total_tarjeta().subscribe(resp=>{
-  this.totalTarjeta=Object(resp).valor__sum.toFixed(2)
-  console.log(resp)
+  this.pythonAnywhereService.valor_total_tarjeta().subscribe(resp => {
+    const valor = Number(resp);
+    if (resp === null || isNaN(valor)) {
+      this.totalTarjeta  = '00.00';
+      console.log("Es null o 0")
+    } else {
+      this.totalTarjeta = Object(resp).valor__sum.toFixed(2)
+      console.log(resp)
+    }
   })
-  this.pythonAnywhereService.valor_total().subscribe((resp: any)=>{
-  this.total=parseFloat(resp).toFixed(2)
-  console.log(resp)
+  this.pythonAnywhereService.valor_total().subscribe((resp: any) => {
+    if (resp === null || isNaN(resp)) {
+      this.total = '00.00';
+      console.log("Es null o 0")
+    } else {
+      this.total = parseFloat(resp).toFixed(2);
+    }
+    console.log(resp);
   })
-  this.pythonAnywhereService.valor_total_pay_tarjeta().subscribe(resp=>{
-    this.totalPayment=Object(resp).cargo_paymentez__sum.toFixed(2)
+  this.pythonAnywhereService.valor_total_pay_tarjeta().subscribe(resp => {
+    const valor = Number(resp);
+    if (resp === null || isNaN(valor)) {
+      this.totalPayment = '00.00';
+      console.log("Es null o 0")
+    } else {
+      this.totalPayment = Object(resp).cargo_paymentez__sum.toFixed(2)
+      console.log(resp)
+    }
+  })
+
+  this.pythonAnywhereService.valor_total_banc_tarjeta().subscribe(resp => {
+    if (resp === null || isNaN(resp)) {
+      this.totalBanco = '00.00';
+      console.log("Es null o 0")
+    } else {
+    this.totalBanco = resp.cargo_banco__sum.toFixed(2)
+    console.log("valor")
+    }
+    console.log(resp)
+  })
+
+  this.pythonAnywhereService.valor_total_sis_tarjeta().subscribe(resp => {
+    this.totalSistema = Object(resp).argo_sistema__sum
 
     console.log(resp)
-    })
-
-    this.pythonAnywhereService.valor_total_banc_tarjeta().subscribe(resp=>{
-      this.totalBanco=resp.cargo_banco__sum.toFixed(2)
-      console.log(resp)
-      })
-
-      this.pythonAnywhereService.valor_total_sis_tarjeta().subscribe(resp=>{
-        this.totalSistema=Object(resp).argo_sistema__sum
-
-        console.log(resp)
-        })
-  }
+  })
+}
+ 
 
 
   next(event: any) {
@@ -202,6 +231,21 @@ constructor(private pythonAnywhereService: PythonAnywhereService, private saniti
     const month = ('0' + (date.getMonth() + 1)).slice(-2); // Adding leading zero if needed
     const day = ('0' + date.getDate()).slice(-2); // Adding leading zero if needed
     return `${year}-${month}-${day}`;
+  }
+
+  filtrarPorFechas() {
+    if (this.fechaInicio && this.fechaFin) {
+      const fechaInicio = new Date(this.fechaInicio);
+      const fechaFin = new Date(this.fechaFin);
+
+      this.arr_filtered_tarjeta= this.arr_tarjeta.filter(a => {
+        const fechaCreacion = new Date(a.fecha_creacion);
+        if (this.fechaInicio && this.fechaFin) {
+          return fechaCreacion >= fechaInicio && fechaCreacion <= fechaFin;
+        }
+        return true;
+      });
+    }
   }
 
 }

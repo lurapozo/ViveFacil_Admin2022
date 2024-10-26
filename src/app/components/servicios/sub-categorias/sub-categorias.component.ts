@@ -11,6 +11,9 @@ import { BodyCrearSubCategoria, BodyResponseCrearSubCategoria, SubCategoria } fr
   styleUrls: ['./sub-categorias.component.css']
 })
 export class SubCategoriasComponent {
+  showHeader: boolean = true;
+  showHeaderC: boolean = false;
+
   isCrear = false; isActualizar = false; isEliminar = false;
   existImageCrear = false; existImageActualizar = false;
   existImageCrear2 = false; existImageActualizar2 = false;
@@ -451,5 +454,10 @@ export class SubCategoriasComponent {
     } else {
       console.log('No hay toast renderizado');
     }
+  }
+
+  btncrearSubCategoria() {
+    this.showHeader = false;
+    this.showHeaderC = true;
   }
 }

@@ -34,6 +34,7 @@ import { PagosTarjetaUser } from 'src/app/interfaces/tarjeta';
 })
 export class PythonAnywhereService {
   API_URL = `https://tomesoft1.pythonanywhere.com`;
+  //API_URL = `https://127.0.0.1:8000`;
   administradores = 'https://tomesoft1.pythonanywhere.com/administradores';
   private _refresh$ = new Subject<void>();
   constructor(private http: HttpClient) { }
@@ -378,6 +379,7 @@ obtener_politicas(){
     bodyActualizar.fecha_iniciacion ? dataUpdate.append("fecha_iniciacion", bodyActualizar.fecha_iniciacion) : null;
     dataUpdate.append("fecha_expiracion", bodyActualizar.fecha_expiracion);
     dataUpdate.append("porcentaje", bodyActualizar.porcentaje.toString());
+    dataUpdate.append("participantes", bodyActualizar.porcentaje.toString());
     dataUpdate.append("cantidad", bodyActualizar.cantidad.toString());
     dataUpdate.append("puntos", bodyActualizar.puntos.toString());
     bodyActualizar.foto ? dataUpdate.append("foto", bodyActualizar.foto) : null;
@@ -1574,6 +1576,10 @@ obtener_politicas(){
    */
   get_notificacion(): Observable<NotificacionAnuncio> {
     return this.http.get(`${this.API_URL}/notificacion-anuncio/`) as Observable<NotificacionAnuncio>;
+  }
+
+  delete_notificacion(id: any){ 
+    return this.http.delete(`${this.API_URL}/notificacion-anuncio/${id}`);
   }
 
 

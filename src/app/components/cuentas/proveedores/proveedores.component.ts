@@ -11,6 +11,14 @@ import { PythonAnywhereService } from 'src/app/services/PythonAnywhere/python-an
   styleUrls: ['./proveedores.component.css']
 })
 export class ProveedoresComponent {
+  fechaInicio: Date | null = null; 
+  fechaFin: Date | null = null; 
+  fechasFiltradas: any[] = [];
+
+  showHeader: boolean = true;
+  showHeaderC: boolean = false;
+  showadmi: boolean = false;
+  nombre: any;
   selectedDate: string | null = null;
   generos = ['Masculino', 'Femenino', 'Otro'];
   ciudades = ['Guayaquil', 'Quito', 'Cuenca', 'Sto. Domingo', 'Ibarra'];
@@ -30,11 +38,14 @@ export class ProveedoresComponent {
   isAceptar = false; isNegar = false;
   habilitar = ''
   mostrar1=false
-  mostrar2=false
   filePDF: File| null = null;
+  filePDF1: File| null = null;
   filePDF2: File| null = null;
   filePDF3: File| null = null;
   fileImgPerfil: File| null = null;
+  fileImgPerfil1: File| null = null;
+  fileImgPerfil2: File| null = null;
+  fileImgPerfil3: File| null = null;
   profesiones: string[] = [];
   copiaCedulaNombre= null;
   copiaLicenciaNombre= null;
@@ -95,6 +106,19 @@ export class ProveedoresComponent {
         this.profesiones= [...this.profesiones, resp[i].nombre];
       }
     });
+  }
+
+  ngOnInit() {
+    this.loadGeneros();
+    this.loadCiudades();
+  }
+  
+  loadGeneros() {
+    this.generos = ['Masculino', 'Femenino', 'Otro']; 
+  }
+
+  loadCiudades() {
+    this.ciudades = ['Guayaquil', 'Quito', 'Cuenca', 'Sto. Domingo', 'Ibarra'];
   }
 
   search(evento: any) {
@@ -314,7 +338,7 @@ export class ProveedoresComponent {
       //planilla_servicios: this.formEdit.value.planilla_servicios
       filesDocuments: [this.filePDF3],
       copiaLicencia: this.filePDF2,
-      copiaCedula: this.filePDF,
+      copiaCedula: this.filePDF1,
     }
     const id = this.proveedor_seleccionado.id
 
@@ -495,5 +519,176 @@ export class ProveedoresComponent {
         this.currentPage = 1;  
       });
     })
+  }
+
+  
+  filtrarPorFechas() {
+    if (this.fechaInicio && this.fechaFin) {
+      const fechaInicio = new Date(this.fechaInicio);
+      const fechaFin = new Date(this.fechaFin);
+
+      this.arr_filtered_proveedor= this.arr_proveedor.filter(a => {
+        const fechaCreacion1 = new Date(a.user_datos.fecha_creacion);
+        const fechaCreacion = new Date(a.fecha_caducidad );
+        if (this.fechaInicio && this.fechaFin) {
+          return fechaCreacion1 >= fechaInicio && fechaCreacion <= fechaFin;
+        }
+        return true;
+      });
+    }
+  }
+  loadImageFromDeviceCI(event:any) {
+    const file: File = event.target.files[0];
+    if(file){
+      this.extraerBase64(file)
+      .then((imagen: any) => {
+        this.formEdit.value.copiaCedula=file;
+        this.fileImgPerfil1 = file;
+        // this.imgPerfil = imagen.base;
+      })
+      .catch(err => console.log(err));
+    }
+  };
+
+  loadImageFromDeviceLI(event:any) {
+    const file: File = event.target.files[0];
+    if(file){
+      this.extraerBase64(file)
+      .then((imagen: any) => {
+        this.formEdit.value.copiaLicencia=file;
+        this.fileImgPerfil2 = file;
+        // this.imgPerfil = imagen.base;
+      })
+      .catch(err => console.log(err));
+    }
+  };
+
+  loadImageFromDeviceDocCurri(event:any) {
+    const file: File = event.target.files[0];
+    if(file){
+      this.extraerBase64(file)
+      .then((imagen: any) => {
+        this.formEdit.value.filesDocuments=file;
+        this.fileImgPerfil3 = file;
+        // this.imgPerfil = imagen.base;
+      })
+      .catch(err => console.log(err));
+    }
+  };
+
+  loadPdfFromDeviceCI(event:any) {
+    const file: File = event.target.files[0];
+    console.log("Archivo de Copia de Cedula")
+    console.log(event.target.files)
+    if(file){
+      this.extraerBase64(file)
+      .then((imagen: any) => {
+        this.formEdit.value.copiaCedula=file;
+        this.filePDF1 = file;
+        // this.imgPerfil = imagen.base;
+      })
+      .catch(err => console.log(err));
+    }
+  };
+
+
+  loadPdfFromDeviceLI(event:any) {
+    const file: File = event.target.files[0];
+    console.log("Archivo de Copia de Licencia")
+    console.log(event.target.files)
+    if(file){
+      this.extraerBase64(file)
+      .then((imagen: any) => {
+        this.formEdit.value.copiaLicencia=file;
+        this.filePDF2 = file;
+        // this.imgPerfil = imagen.base;
+      })
+      .catch(err => console.log(err));
+    }
+  };
+
+  loadPdfFromDeviceDocCurri(event:any) {
+    const file: File = event.target.files[0];
+    console.log("Archivo de Copia de Curriculum")
+    console.log(event.target.files)
+    if(file){
+      this.extraerBase64(file)
+      .then((imagen: any) => {
+        this.formEdit.value.documentos=file;
+        this.filePDF3= file;
+        // this.imgPerfil = imagen.base;
+      })
+      .catch(err => console.log(err));
+    }
+  };
+
+  
+  loadFileFromDevice(event: any, formField: string) {
+    const file: File = event.target.files[0];  
+    if (file) {
+      const fileType = file.type;  
+      if(formField== 'copiaCedula'){
+        if (fileType.includes('image')) {
+          this.loadImageFromDeviceCI(event); 
+          console.log("Archivo Cedula image")
+        } else if (fileType === 'application/pdf') {
+          this.loadPdfFromDeviceCI(event); 
+          console.log("Archivo Cedula pdf")
+        } 
+      }else if(formField== 'copiaLicencia'){
+        if (fileType.includes('image')) {
+          this.loadImageFromDeviceLI(event); 
+          console.log("Archivo Licencia image")
+        } else if (fileType === 'application/pdf') {
+          this.loadPdfFromDeviceLI(event); 
+          console.log("Archivo Licencia pdf")
+        } 
+      }else if(formField== 'curriculum'){
+        if (fileType.includes('image')) {
+          this.loadImageFromDeviceDocCurri(event); 
+          console.log("Archivo Curriculum image")
+        } else if (fileType === 'application/pdf') {
+          this.loadPdfFromDeviceDocCurri(event); 
+          console.log("Archivo Currilculum pdf")
+        } 
+      }   
+    }
+  } 
+
+  getNombreArchivo(tipo: string, archivo: File): { nombreArchivo: string, archivo: File| null } {
+    const { nombres, apellidos } = this.proveedor_seleccionado|| {};
+    
+    const archivoUrl = this.proveedor_seleccionado?.[tipo]; 
+    
+    const extension = archivoUrl ? archivoUrl.split('.').pop() : 'pdf'; 
+  
+    if (!nombres || !apellidos) {
+      return { nombreArchivo: 'archivo_descargado', archivo: null };
+    }
+    
+    // Si el tipo está definido, formateamos el nombre del archivo
+    if (tipo != '' && archivo!=null) {
+      this.nombre = `${nombres}_${apellidos}_${tipo}.${extension}`;
+      return { nombreArchivo: this.nombre , archivo };
+    }
+    
+    // Retorna un nombre de archivo predeterminado si no se proporciona un tipo
+    return { nombreArchivo: 'No hay documento disponible', archivo : null};
+  }
+
+  edit_prov(a: any) {
+    this.showHeader = false;
+    this.showHeaderC = true;
+    this.proveedor_seleccionado = a;
+
+    this.copiaCedulaNombre = this.proveedor_seleccionado?.copiaCedula.substring(
+      this.proveedor_seleccionado?.copiaCedula.lastIndexOf('/') + 1
+    );
+    this.copiaLicenciaNombre = this.proveedor_seleccionado?.copiaLicencia.substring(
+      this.proveedor_seleccionado?.copiaLicencia.lastIndexOf('/') + 1
+    );
+    this.copiaDocumentosNombre = this.proveedor_seleccionado?.documentsPendientes[0]?.document.substring(
+      this.proveedor_seleccionado?.documentsPendientes[0]?.document.lastIndexOf('/') + 1
+    );
   }
 }

@@ -1,107 +1,370 @@
-<div class="container-fluid">
-  <!-- Titulo principal -->
-  <div class="row p-2 justify-content-center align-items-center">
-    <div class="col text-center">
-      <h2 class="p-0 m-0">Solicitantes</h2>
-      <h2 class="p-0 m-0">Total de solicitantes: {{ total }}</h2>
+<!-- Titulo principal-->
+<div class="header-admi1 ">
+  <div class="header-text">
+    <div class="containerstart">
+      <p *ngIf="showHeader">Solicitantes</p>
+      <p *ngIf="showHeaderC">Ver Solicitantes</p>
+    </div>
+    <div class="containerend">
+      <p *ngIf="showHeader" >Total de Solicitantes: {{total}}</p>
     </div>
   </div>
-
-  <!-- Buscar y agregar admi -->
-  <div class="row p-2 justify-content-center align-items-center">
-    <div class="col-xl-7 col-lg-5">
-
-      <select class="form-control" #fruits  
-                (change)="onChange($event)"> 
-            <option default>Todos</option> 
-            <option>activos</option> 
-            <option>inactivos</option> 
-        </select> 
-      
-    </div>
-    <div class="col-xl-3 col-lg-4">
-      <div class="input-group">
-        <input
-          type="text"
-          class="form-control"
-          placeholder="Buscar"
-          aria-label="Buscar"
-          aria-describedby="basic-addon1"
-          (input)="search($event)"
-        />
-        <button class="input-group-text" id="basic-addon1">
-          <i class="bi bi-search"></i>
-        </button>
-      </div>
-    </div>
-  </div>
-  <!-- Contenedor de admi -->
-  <div class="row justify-content-center align-items-center p-0">
-    <div class="col-10 text-center">
-      <!-- Titulo -->
-      <div class="row p-2 bg-primary text-white">
-        <div class="col-2 align-self-center">
-          <h3 class="p-0 m-0">Nombres</h3>
-        </div>
-
-        <div class="col-2 align-self-center">
-          <h3 class="p-0 m-0">Cedula</h3>
-        </div>
-
-        <div class="col-2 align-self-center">
-          <h3 class="p-0 m-0">Correo Electronico</h3>
-        </div>
-
-        <div class="col-2 align-self-center">
-          <h3 class="p-0 m-0">Telefono</h3>
-        </div>
-        <div class="col-2 align-self-center">
-          <h3 class="p-0 m-0">Fecha Creacion</h3>
-        </div>
-        <div class="col-2 align-self-center">
-          <h3 class="p-0 m-0">Estado</h3>
-        </div>
-      </div>
-
-      <!-- Profesion -->
-      <div
-        (click)="ver(a)"
-        *ngFor="let a of arr_filtered_soli"
-        class="row p-2 bg-light fila_info_profesion"
-        data-bs-toggle="modal"
-        href="#modalInformacionProfesion"
-        role="button"
-      >
-        <div class="col-2 align-self-center">
-          <h4 class="p-0 m-0">
-            {{ a.user_datos.nombres }} {{ a.user_datos.apellidos }}
-          </h4>
-        </div>
-
-        <div class="col-2 align-self-center">
-          <h4 class="p-0 m-0">{{ a.user_datos.cedula }}</h4>
-        </div>
-
-        <div class="col-2 align-self-center">
-          <h4 class="p-0 m-0">{{ a.user_datos.user.username }}</h4>
-        </div>
-
-        <div class="col-2 align-self-center">
-          <h4 class="p-0 m-0">{{ a.user_datos.telefono }}</h4>
-        </div>
-        <div class="col-2 align-self-center">
-          <h4 class="p-0 m-0">
-            {{ a.user_datos.fecha_creacion | date : " MMM d, y, h:mm:ss a" }}
-          </h4>
-        </div>
-        <div class="col-2 align-self-center">
-          <span *ngIf="!a.estado" class="badge text-bg-danger">Inactivo</span>
-          <span *ngIf="a.estado" class="badge text-bg-success">Activo</span>
-        </div>
-      </div>
-    </div>
-  </div>
+  <svg preserveAspectRatio="xMidYMid">
+    <path d="M0,60 L0,0 L1290,0 L1290,60" fill="#333539"  />
+    <path d="M320,60 Q448,85 550,60" fill="#333539" />
+  </svg>
 </div>
+
+ <!-- FILTROS-->
+  <div class="d-flex flex-wrap header-solicitud1 align-items-center gap-3" *ngIf="showHeader"> 
+    <div class="containerstart_1" >
+      <label class="calendar-label">Estado:</label>
+      <div class="date-container1" >
+            <select class="form-control1 custom-select" #fruits  
+                    (change)="onChange($event)"> 
+                <option default>Todos</option> 
+                <option>activos</option> 
+                <option>inactivos</option> 
+            </select> 
+      </div>
+    </div>
+
+    <div class="containerstart12" >
+      <label class="calendar-label">Desde:</label>
+      <div class="date-container1" >
+        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+        <mat-datepicker #picker1></mat-datepicker>
+        <input matInput [matDatepicker]="picker1" placeholder="SELECCIONA DIA" 
+        [(ngModel)]="fechaInicio" (dateChange)="filtrarPorFechas()"
+        >
+      </div>
+    </div>
+    
+    <div class="containerstart13" >
+      <label class="calendar-label">Hasta:</label>
+      <div class="date-container1" >
+        <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+        <mat-datepicker #picker2></mat-datepicker>
+        <input matInput [matDatepicker]="picker2" placeholder="SELECCIONA DIA"
+        [(ngModel)]="fechaFin" (dateChange)="filtrarPorFechas()">
+      </div>
+    </div>
+
+    <div class="containerstart14">
+      <button class="search-button1" id="basic-addon1">
+        <i class="bi bi-search"></i>
+      </button>
+      <div class="date-container1">
+        <div class="input-group1 search-group1">
+          <input 
+            type="text" 
+            class="form-control1 search-input1" 
+            placeholder="BUSCAR"
+            aria-label="Buscar" 
+            aria-describedby="basic-addon1" 
+            (input)="search($event)">
+        </div> 
+      </div>       
+    </div>
+  </div>
+
+  <div class="row justify-content-center align-items-center p-0" *ngIf="showHeader" >
+    <div class="col-10 text-center containeradmin">
+      <div class="table-responsive">
+      <table class="table table-striped custom-table">
+        <thead>
+          <!-- Encabezado -->
+          <tr>
+            <th scope="col">Nombres</th>
+            <th scope="col">Cedula</th>
+            <th scope="col">Correo Electronico</th>
+            <th scope="col">Telefono</th>
+            <th scope="col">Fecha de Creacion</th>
+            <th scope="col">Estado</th>
+          </tr>
+        </thead>
+        </table>
+        <div class="table-body">
+          <table class="table table-striped custom-table">
+          <tbody>
+            <tr
+              (click)="ver(a);"
+              *ngFor="let a of arr_filtered_soli"
+              role="button"
+            >
+              <td style="color: #40378b; text-transform: uppercase"> <strong> {{ a.user_datos.nombres }} {{ a.user_datos.apellidos }}</strong></td>
+              <td style="color: #40378b; text-transform: uppercase"> <strong> {{a.user_datos.cedula}} </strong> </td>
+              <td style="color: #40378b; text-transform: uppercase"> <strong> {{a.user_datos.user.username}} </strong></td>
+              <td style="color: #40378b; text-transform: uppercase"> <strong> {{a.user_datos.telefono}} </strong></td>
+              <td style="color: #40378b; text-transform: uppercase"> <strong>
+                {{ a.user_datos.fecha_creacion  | date : "d/M/Y" }}
+              
+                </strong></td>
+              <td class="d-flex align-items-center">
+                <span
+                  *ngIf="a.user_datos.estado"
+                  class="estado-indicador bg-success me-2"
+                  ></span>
+                  <span *ngIf="a.user_datos.estado" class="text-success">Activo</span>
+          
+                  <span
+                    *ngIf="!a.user_datos.estado"
+                    class="estado-indicador bg-secondary me-2" 
+                  ></span>
+                  <span *ngIf="!a.user_datos.estado" class="text-muted">Inactivo</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+      </div>
+    </div>
+
+
+      <div class="container-fluid">
+        <div class="row p-2 justify-content-end align-items-center">
+          <nav aria-label="Page navigation example">
+            <ul class="pagination">
+              <!-- Botón Anterior -->
+              <li class="page-item">
+                <a class="page-link" (click)="previous($event)">
+                  <i class="bi bi-chevron-left"></i>
+                </a>
+              </li>
+      
+              <!-- Números de Página -->
+              <div *ngFor="let n of pageNumber; let i = index" class="d-inline-block">
+                <li class="page-item">
+                  <button
+                    class="page-link azul"
+                    value="{{ n }}"
+                    (click)="iteracion($event)"
+                    [class.active]="n === currentPage"
+                  >
+                    {{ n }}
+                  </button>
+                </li>
+              </div>
+      
+              <!-- Botón Siguiente -->
+              <li class="page-item">
+                <a class="page-link" (click)="next($event)">
+                  <i class="bi bi-chevron-right"></i>
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>    
+</div>
+</div>
+    
+<!-- VER -->
+
+<div *ngIf="showHeaderC">
+      <div class="row justify-content-center align-items-center p-0">
+        <div class="col-10 text-center containerCrearadmin">
+          <div class="form-container">
+            <h2>Ver Solicitante</h2>
+
+            <div class="row">
+
+             <div class="col-md-6">
+                <div class="form-field">
+                  <div class="col-5">
+                    <label for="inputNombre" class="form-label"
+                      ><h3 class="m-0 p-0 fw-bold">Nombre:</h3></label
+                    >
+                  </div>
+                  <div class="col-5">
+                    <input
+                      type="text"
+                     
+                      class="form-control1"
+                      [placeholder]="soli_seleccionada?.user_datos.nombres"
+                      [value]="soli_seleccionada?.user_datos.nombres"
+                      [(ngModel)]="soli_seleccionada.user_datos.nombres"
+                    />
+                  </div>
+                </div>
+    
+                <div class="form-field">
+                  <div class="col-5">
+                    <label for="inputNombre" class="form-label"
+                      ><h3 class="m-0 p-0 fw-bold">Apellidos:</h3></label
+                    >
+                  </div>
+                  <div class="col-5">
+                    <input
+                      type="text"
+                      class="form-control1"
+                     
+                      id="textareaDescripcion"
+                      [placeholder]="soli_seleccionada?.user_datos.apellidos"
+                      [value]="soli_seleccionada?.user_datos.apellidos"
+                      [(ngModel)]="soli_seleccionada.user_datos.apellidos"
+                      />
+                    
+                  </div>
+                </div>
+    
+                <div class="form-field">
+                  <div class="col-5">
+                    <label for="textareaDescripcion" class="form-label"
+                      ><h3 class="m-0 p-0 fw-bold">Telefono:</h3></label
+                    >
+                  </div>
+                  <div class="form-field">
+                    <input
+                      class="form-control1"
+                      
+                      type="number"
+                      [placeholder]="soli_seleccionada?.user_datos.telefono"
+                      [value]="soli_seleccionada?.user_datos.telefono"
+                      [(ngModel)]="soli_seleccionada.user_datos.telefono"
+                    />
+                  </div>
+                </div>
+   
+                <div class="form-field">
+                  <div class="col-5">
+                    <label for="textareaDescripcion" class="form-label"
+                      ><h3 class="m-0 p-0 fw-bold">Cedula:</h3></label
+                    >
+                  </div>
+                  <div class="col-5">
+                    <input
+                      type="text"
+                      class="form-control1"
+                      
+                      [placeholder]="soli_seleccionada?.user_datos.cedula"
+                      [value]="soli_seleccionada?.user_datos.cedula"
+                      [(ngModel)]="soli_seleccionada.user_datos.cedula"
+                    />
+                  </div>
+                </div>
+    
+                <div class="form-field">
+                  <div class="col-5">
+                    <label for="textareaDescripcion" class="form-label"
+                      ><h3 class="m-0 p-0 fw-bold">Correo:</h3></label
+                    >
+                  </div>
+                  <div class="col-5">
+                    <input
+                      type="email"
+                      class="form-control1"
+                    
+                      [placeholder]="soli_seleccionada?.user_datos.user.email"
+                      [value]="soli_seleccionada?.user_datos.user.email"
+                      
+                    />
+                  </div>
+                </div>
+              </div>
+
+              
+              <div class="col-md-6">
+                <div class="form-field">
+                  <div class="col-5">
+                    <label for="selectorServicioCrear" class="form-label"
+                      ><h3 class="m-0 p-0 fw-bold">Ciudad:</h3></label
+                    >
+                  </div>
+                  <div class="col-5">
+                    <input
+                      class="form-control1"
+                      
+                      [value]="soli_seleccionada?.user_datos.ciudad"
+                      aria-describedby="selectorServicioCrearFeedback"
+                      [(ngModel)]="soli_seleccionada.user_datos.ciudad"
+                    />
+                  </div>
+                </div>
+      
+                <div class="form-field">
+                  <div class="col-5">
+                    <label for="selectorServicioCrear" class="form-label"
+                      ><h3 class="m-0 p-0 fw-bold">Genero:</h3></label
+                    >
+                  </div>
+                  <div class="form-field">
+                    <input
+                      class="form-control1"
+                      id="ge"
+                      [value]="soli_seleccionada?.user_datos.genero"
+                      aria-describedby="selectorServicioCrearFeedback"
+                      [(ngModel)]="soli_seleccionada.user_datos.genero"
+                    />
+                    
+                  </div>
+                </div>
+      
+                <div class="form-field">
+                  <div class="col-5">
+                    <label for="selectorServicioCrear" class="form-label"
+                      ><h3 class="m-0 p-0 fw-bold">Rol:</h3></label
+                    >
+                  </div>
+                  <div class="form-field">
+                    <input
+                      class="form-control1"
+                      
+                      [value]="soli_seleccionada?.user_datos.user.groups[0].name"
+                      aria-describedby="selectorServicioCrearFeedback"
+                      [(ngModel)]="soli_seleccionada.user_datos.telefono"
+                    />
+                    
+                  </div>
+                </div>
+      
+                <div class="form-field">
+      
+                  <div class="row p-2 align-items-center">
+                    <div class="col-7">
+                      <label for="switchEstado" class="form-check-label"
+                        ><h3 class="m-0 p-0 fw-bold">Habilitar/Deshabilitar:</h3></label
+                      >
+                    </div>
+                    <div
+                      class="col-7 form-check form-switch d-flex justify-content-end fs-6"
+                    >
+                      <input
+                        (change)="cambiarEstado($event)"
+                        [checked]="soli_seleccionada?.user_datos.estado ? true : false"
+                        class="form-check-input"
+                        id="switchEstado"
+                        type="checkbox"
+                        role="switch"
+                        checked
+                        aria-describedby="switchEstadoFeedback"
+                      />
+                    </div>
+                  </div>
+                </div>    
+              </div>
+            </div>
+
+
+    
+            <button
+              class="custom-button1 float-right"
+              data-bs-target="#modalConfirmacion"
+              data-bs-toggle="modal"
+              (click)="showHeader = true; showHeaderC= false ; showadmi = false;">
+            Cerrar
+            </button>  
+            
+          </div>
+          
+          
+        </div>
+      </div>
+</div>
+<!-- FIN EDITAR  -->
+
+
+
+
 
 <!-- Modal informacion de soli -->
 <div
@@ -239,38 +502,3 @@
   </div>
 </div>
 
-<div class="container-fluid">
-  <div class="row p-2 justify-content-center align-items-center">
-    <nav aria-label="Page navigation example">
-      <ul class="pagination">
-        <li class="page-item">
-          <a class="page-link" (click)="previous($event)">Previous</a>
-        </li>
-        <div *ngFor="let n of pageNumber; let i = index">
-          <li class="page-item">
-            <button
-              class="page-link azul"
-              value="{{ n }}"
-              (click)="iteracion($event)"
-              *ngIf="n == currentPage"
-            >
-              {{ n }}
-            </button>
-            <button
-              class="page-link"
-              value="{{ n }}"
-              (click)="iteracion($event)"
-              *ngIf="n != currentPage"
-            >
-              {{ n }}
-            </button>
-          </li>
-        </div>
-
-        <li class="page-item">
-          <a class="page-link" (click)="next($event)">Next</a>
-        </li>
-      </ul>
-    </nav>
-  </div>
-</div>

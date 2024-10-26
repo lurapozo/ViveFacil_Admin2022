@@ -13,18 +13,36 @@ import { UserService } from 'src/app/services/user/user.service';
   styleUrls: ['./rechazados.component.css']
 })
 export class RechazadosComponent {
+  fechaInicio: Date | null = null; 
+  fechaFin: Date | null = null; 
+  fechasFiltradas: any[] = [];
+
+  showHeader: boolean = true;
+  showHeaderC: boolean = false;
+  showadmi: boolean = false;
+  nombre: any;
+
+  filePDF: File| null = null;
+  filePDF1: File| null = null;
+  filePDF2: File| null = null;
+  filePDF3: File| null = null;
+  fileImgPerfil: File| null = null;
+  fileImgPerfil1: File| null = null;
+  fileImgPerfil2: File| null = null;
+  fileImgPerfil3: File| null = null;
 
   generos = ['Masculino', 'Femenino', 'Otro'];
   ciudades = ['Guayaquil', 'Quito', 'Cuenca', 'Sto. Domingo', 'Ibarra'];
   licencia = ['Si', 'No'];
+  tipoCuentas = ['Ahorro', 'Corriente'];
   profesiones: string[] = [];
   total = 0
-  arr_pendiente!: any[];
-  arr_filtered_pendiente!: any[];
+  arr_rechazados!: any[];
+  arr_filtered_rechazados!: any[];
   condicionNext = false
   currentPage = 1
   pageNumber: number[] = [];
-  pendiente_seleccionada: any
+  rechazados_seleccionada: any
   existImageCrear = false; existImageActualizar = false;
   activo = ''
   activoCond = false
@@ -55,7 +73,7 @@ export class RechazadosComponent {
     profesion: new FormControl('', [Validators.required]),
     licencia: new FormControl('', [Validators.required]),
     copiaCedula: new FormControl('', [Validators.required]),
-    TipoCuenta: new FormControl('', [Validators.required]),
+    tipo_cuenta: new FormControl('', [Validators.required]),
     numeroCuenta: new FormControl('', [Validators.required]),
     banco: new FormControl('', [Validators.required]),
     experiencia: new FormControl('', [Validators.required]),
@@ -74,10 +92,10 @@ export class RechazadosComponent {
 
     this.pythonAnywhereService.obtener_proveedores_rechazados().subscribe(resp => {
       this.total = Object(resp).total_objects
-      this.arr_pendiente = Object(resp).results;
+      this.arr_rechazados = Object(resp).results;
 
-      this.arr_filtered_pendiente = this.arr_pendiente;
-      console.log(this.arr_filtered_pendiente)
+      this.arr_filtered_rechazados = this.arr_rechazados;
+      console.log(this.arr_filtered_rechazados)
       if (Object(resp).next != null) {
         this.condicionNext = true
       }
@@ -97,12 +115,25 @@ export class RechazadosComponent {
     });
   }
 
+  ngOnInit() {
+    this.loadGeneros();
+    this.loadCiudades();
+  }
+  
+  loadGeneros() {
+    this.generos = ['Masculino', 'Femenino', 'Otro']; 
+  }
+
+  loadCiudades() {
+    this.ciudades = ['Guayaquil', 'Quito', 'Cuenca', 'Sto. Domingo', 'Ibarra'];
+  }
+  
   search(evento: any) {
     const texto = evento.target.value;
     console.log('Escribe en el buscador: ', texto)
-    this.arr_filtered_pendiente = this.arr_pendiente;
+    this.arr_filtered_rechazados = this.arr_rechazados;
     if (texto && texto.trim() !== '') {
-      this.arr_filtered_pendiente = this.arr_filtered_pendiente?.filter((solicitud) => {
+      this.arr_filtered_rechazados = this.arr_filtered_rechazados?.filter((solicitud) => {
         return solicitud.nombres.toLowerCase().includes(texto.toLowerCase())
       });
     }
@@ -127,38 +158,54 @@ export class RechazadosComponent {
 
   onNegar() {
     let pendiente: BodyCrearProveedorPendiente = {
-      nombres: this.pendiente_seleccionada.nombres,
-      apellidos: this.pendiente_seleccionada.apellidos,
-      genero: this.pendiente_seleccionada.genero,
-      telefono: this.pendiente_seleccionada.telefono,
-      cedula: this.pendiente_seleccionada.cedula,
-      copiaCedula: this.pendiente_seleccionada.copiaCedula,
-      ciudad: this.pendiente_seleccionada.ciudad,
-      direccion: this.pendiente_seleccionada.direccion,
-      email: this.pendiente_seleccionada.email,
-      descripcion: this.pendiente_seleccionada.descripcion,
-      licencia: this.pendiente_seleccionada.licencia,
-      copiaLicencia: this.pendiente_seleccionada.copiaLicencia,
-      profesion: this.pendiente_seleccionada.profesion,
-      ano_experiencia: this.pendiente_seleccionada.ano_experiencia,
-      banco: this.pendiente_seleccionada.banco,
-      numero_cuenta: this.pendiente_seleccionada.numero_cuenta,
-      tipo_cuenta: this.pendiente_seleccionada.tipo_cuenta,
-      planilla_servicios: this.pendiente_seleccionada.planilla_servicios,
-      foto: this.pendiente_seleccionada.foto
+      nombres: this.rechazados_seleccionada.nombres,
+      apellidos: this.rechazados_seleccionada.apellidos,
+      genero: this.rechazados_seleccionada.genero,
+      telefono: this.rechazados_seleccionada.telefono,
+      cedula: this.rechazados_seleccionada.cedula,
+      copiaCedula: this.rechazados_seleccionada.copiaCedula,
+      ciudad: this.rechazados_seleccionada.ciudad,
+      direccion: this.rechazados_seleccionada.direccion,
+      email: this.rechazados_seleccionada.email,
+      descripcion: this.rechazados_seleccionada.descripcion,
+      licencia: this.rechazados_seleccionada.licencia,
+      copiaLicencia: this.rechazados_seleccionada.copiaLicencia,
+      profesion: this.rechazados_seleccionada.profesion,
+      ano_experiencia: this.rechazados_seleccionada.ano_experiencia,
+      banco: this.rechazados_seleccionada.banco,
+      numero_cuenta: this.rechazados_seleccionada.numero_cuenta,
+      tipo_cuenta: this.rechazados_seleccionada.tipo_cuenta,
+      planilla_servicios: this.rechazados_seleccionada.planilla_servicios,
+      foto: this.rechazados_seleccionada.foto
     }
-    this.pythonAnywhereService.eliminar_proveedores_rechazados(this.pendiente_seleccionada.id).subscribe(resp => {
+    this.pythonAnywhereService.eliminar_proveedores_rechazados(this.rechazados_seleccionada.id).subscribe(resp => {
       console.log(resp)
       this.pythonAnywhereService.obtener_proveedores_rechazados().subscribe(resp => {
         this.total = Object(resp).total_objects
-        this.arr_pendiente = Object(resp).results;
-        this.arr_filtered_pendiente = this.arr_pendiente;
+        this.arr_rechazados = Object(resp).results;
+        this.arr_filtered_rechazados = this.arr_rechazados;
         console.log(resp, "resp");
-        console.log(this.arr_filtered_pendiente)
+        console.log(this.arr_filtered_rechazados)
         this.currentPage = 1;
   
       });
     })
+  }
+
+  numberOnly(event: any): boolean {
+    const charCode = (event.which) ? event.which : event.keyCode;
+    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+      return false;
+    }
+    return true;
+  }
+
+  numberOnlyPluss(event: any): boolean {
+    const charCode = (event.which) ? event.which : event.keyCode;
+    if (charCode != 43 && charCode > 31 && (charCode < 48 || charCode > 57)) {
+      return false;
+    }
+    return true;
   }
 
   getErrorMessage(formGroup: FormGroup, item: string): string {
@@ -255,24 +302,24 @@ export class RechazadosComponent {
   limpiarForm() {
 
 
-    const nombre = this.pendiente_seleccionada?.nombres;
-    const apellidos = this.pendiente_seleccionada?.apellidos;
-    const telefono = this.pendiente_seleccionada?.telefono;
-    const cedula = this.pendiente_seleccionada?.cedula;
-    const correo = this.pendiente_seleccionada?.email;
-    const genero = this.pendiente_seleccionada?.genero;
-    const ciudad = this.pendiente_seleccionada?.ciudad;
-    const direccion = this.pendiente_seleccionada?.direccion;
-    const licencia = this.pendiente_seleccionada?.licencia;
-    const copiaCedula = this.pendiente_seleccionada?.copiaCedula;
-    const profesion = this.pendiente_seleccionada?.profesion;
-    const experiencia = this.pendiente_seleccionada?.ano_experiencia;
-    const banco = this.pendiente_seleccionada?.banco;
-    const numeroCuenta = this.pendiente_seleccionada?.numero_cuenta;
-    const copiaLicencia = this.pendiente_seleccionada?.copiaLicencia;
-    const tipoCuenta = this.pendiente_seleccionada?.copiaLicencia;
-    const documentos: any[] = this.pendiente_seleccionada?.documentsPendientes;
-    const descripcion = this.pendiente_seleccionada?.descripcion;
+    const nombre = this.rechazados_seleccionada?.nombres;
+    const apellidos = this.rechazados_seleccionada?.apellidos;
+    const telefono = this.rechazados_seleccionada?.telefono;
+    const cedula = this.rechazados_seleccionada?.cedula;
+    const correo = this.rechazados_seleccionada?.email;
+    const genero = this.rechazados_seleccionada?.genero;
+    const ciudad = this.rechazados_seleccionada?.ciudad;
+    const direccion = this.rechazados_seleccionada?.direccion;
+    const licencia = this.rechazados_seleccionada?.licencia;
+    const copiaCedula = this.rechazados_seleccionada?.copiaCedula;
+    const profesion = this.rechazados_seleccionada?.profesion;
+    const experiencia = this.rechazados_seleccionada?.ano_experiencia;
+    const banco = this.rechazados_seleccionada?.banco;
+    const numeroCuenta = this.rechazados_seleccionada?.numero_cuenta;
+    const copiaLicencia = this.rechazados_seleccionada?.copiaLicencia;
+    const tipo_cuenta = this.rechazados_seleccionada?.tipo_cuenta;
+    const documentos: any[] = this.rechazados_seleccionada?.documentsPendientes;
+    const descripcion = this.rechazados_seleccionada?.descripcion;
 
     nombre ? this.formEdit.get('nombre')?.setValue(nombre) : this.formEdit.get('nombre')?.reset();
     apellidos ? this.formEdit.get('apellidos')?.setValue(apellidos) : this.formEdit.get('apellidos')?.reset();
@@ -289,7 +336,7 @@ export class RechazadosComponent {
     banco ? this.formEdit.get('banco')?.setValue(ciudad) : this.formEdit.get('banco')?.reset();
     numeroCuenta ? this.formEdit.get('numeroCuenta')?.setValue(ciudad) : this.formEdit.get('numeroCuenta')?.reset();
     copiaLicencia ? this.formEdit.get('copiaLicencia')?.setValue(ciudad) : this.formEdit.get('copiaLicencia')?.reset();
-    tipoCuenta ? this.formEdit.get('tipoCuenta')?.setValue(ciudad) : this.formEdit.get('tipoCuenta')?.reset();
+    tipo_cuenta ? this.formEdit.get('tipo_cuenta')?.setValue(ciudad) : this.formEdit.get('tipo_cuenta')?.reset();
     documentos ? this.formEdit.get('documentos')?.setValue(ciudad) : this.formEdit.get('documentos')?.reset();
     descripcion ? this.formEdit.get('descripcion')?.setValue(ciudad) : this.formEdit.get('descripcion')?.reset();
 
@@ -312,12 +359,12 @@ export class RechazadosComponent {
       email: this.formEdit.get('correo')?.value,
       banco: this.formEdit.get('banco')?.value,
       numero_cuenta: this.formEdit.get('numeroCuenta')?.value,
-      tipo_cuenta: this.formEdit.get('tipoCuenta')?.value,
+      tipo_cuenta: this.formEdit.get('tipo_cuenta')?.value,
       ano_experiencia: this.formEdit.get('experiencia')?.value,
       profesion: this.formEdit.get('profesion')?.value,
       foto: this.formEdit.get('foto')?.value
     }
-    const id = this.pendiente_seleccionada.id
+    const id = this.rechazados_seleccionada.id
 
     console.log(this.formEdit)
     if (this.formEdit.status == "INVALID") {
@@ -328,10 +375,10 @@ export class RechazadosComponent {
         console.log(resp)
         this.pythonAnywhereService.obtener_proveedores_rechazados().subscribe(resp => {
           this.total = Object(resp).total_objects
-          this.arr_pendiente = Object(resp).results;
-          this.arr_filtered_pendiente = this.arr_pendiente;
+          this.arr_rechazados = Object(resp).results;
+          this.arr_filtered_rechazados = this.arr_rechazados;
           console.log(resp, "resp");
-          console.log(this.arr_filtered_pendiente)
+          console.log(this.arr_filtered_rechazados)
           this.currentPage = 1;
     
         });
@@ -344,5 +391,253 @@ export class RechazadosComponent {
 
     return this.formEdit.get(subForm)?.invalid && this.formEdit.get(subForm)?.touched || this.formEdit.get(subForm)?.dirty && this.getErrorMessage(this.formEdit, subForm).length !== 0;
 
+  }
+
+  
+  next(event: any) {
+
+    this.currentPage = this.currentPage + 1
+    this.pythonAnywhereService.obtener_proveedores_proveedores(this.currentPage).subscribe(resp => {
+      this.arr_rechazados = resp.results;
+      this.arr_filtered_rechazados = this.arr_rechazados;
+    })
+  }
+
+  previous(event: any) {
+
+    this.currentPage = this.currentPage - 1
+    this.pythonAnywhereService.obtener_proveedores_proveedores(this.currentPage).subscribe(resp => {
+      this.arr_rechazados = resp.results;
+      this.arr_filtered_rechazados = this.arr_rechazados;
+    })
+  }
+
+  iteracion(event: any) {
+    this.pythonAnywhereService.obtener_proveedores_proveedores(event.target.value).subscribe(resp => {
+      this.arr_rechazados = resp.results;
+      this.arr_filtered_rechazados = this.arr_rechazados;
+      this.currentPage = resp.current_page_number
+      if (resp.next != null) {
+        this.condicionNext = true
+      }
+
+    })
+
+  }
+
+  filtrarPorFechas() {
+    if (this.fechaInicio && this.fechaFin) {
+      const fechaInicio = new Date(this.fechaInicio);
+      const fechaFin = new Date(this.fechaFin);
+
+      this.arr_filtered_rechazados= this.arr_rechazados.filter(a => {
+        const fechaCreacion = new Date(a.fecha_registro );
+        if (this.fechaInicio && this.fechaFin) {
+          return fechaCreacion >= fechaInicio && fechaCreacion <= fechaFin;
+        }
+        return true;
+      });
+    }
+  }
+
+  loadImageFromDevice(event:any) {
+    const file: File = event.target.files[0];
+    if(file){
+      this.extraerBase64(file)
+      .then((imagen: any) => {
+        this.formEdit.value.foto=file;
+        this.fileImgPerfil = file;
+        // this.imgPerfil = imagen.base;
+      })
+      .catch(err => console.log(err));
+    }
+  };
+
+  extraerBase64 = async ($event: any) => new Promise((resolve, reject) => {
+    try {
+      const unsafeImg = window.URL.createObjectURL($event);
+      const image = this.sanitizer.bypassSecurityTrustUrl(unsafeImg);
+      const reader = new FileReader();
+      reader.readAsDataURL($event);
+      reader.onload = () => {
+        resolve({
+          blob: $event,
+          image,
+          base: reader.result
+        });
+      };
+      reader.onerror = error => {
+        resolve({
+          blob: $event,
+          image,
+          base: null
+        });
+      };
+      return null;
+
+    } catch (e) {
+      return null;
+    }
+  });
+
+  
+  loadPdfFromDevice(event:any) {
+    const file: File = event.target.files[0];
+    console.log("Archivo de Copia de Cedula")
+    console.log(event.target.files)
+    if(file){
+      this.extraerBase64(file)
+      .then((imagen: any) => {
+        this.formEdit.value.copiaCedula=file;
+        this.filePDF = file;
+        // this.imgPerfil = imagen.base;
+      })
+      .catch(err => console.log(err));
+    }
+  };
+
+  loadImageFromDeviceCI(event:any) {
+    const file: File = event.target.files[0];
+    if(file){
+      this.extraerBase64(file)
+      .then((imagen: any) => {
+        this.formEdit.value.copiaCedula=file;
+        this.fileImgPerfil1 = file;
+        // this.imgPerfil = imagen.base;
+      })
+      .catch(err => console.log(err));
+    }
+  };
+
+  loadImageFromDeviceLI(event:any) {
+    const file: File = event.target.files[0];
+    if(file){
+      this.extraerBase64(file)
+      .then((imagen: any) => {
+        this.formEdit.value.copiaLicencia=file;
+        this.fileImgPerfil2 = file;
+        // this.imgPerfil = imagen.base;
+      })
+      .catch(err => console.log(err));
+    }
+  };
+
+  loadImageFromDeviceDocCurri(event:any) {
+    const file: File = event.target.files[0];
+    if(file){
+      this.extraerBase64(file)
+      .then((imagen: any) => {
+        this.formEdit.value.filesDocuments=file;
+        this.fileImgPerfil3 = file;
+        // this.imgPerfil = imagen.base;
+      })
+      .catch(err => console.log(err));
+    }
+  };
+
+  loadPdfFromDeviceCI(event:any) {
+    const file: File = event.target.files[0];
+    console.log("Archivo de Copia de Cedula")
+    console.log(event.target.files)
+    if(file){
+      this.extraerBase64(file)
+      .then((imagen: any) => {
+        this.formEdit.value.copiaCedula=file;
+        this.filePDF1 = file;
+        // this.imgPerfil = imagen.base;
+      })
+      .catch(err => console.log(err));
+    }
+  };
+
+
+  loadPdfFromDeviceLI(event:any) {
+    const file: File = event.target.files[0];
+    console.log("Archivo de Copia de Licencia")
+    console.log(event.target.files)
+    if(file){
+      this.extraerBase64(file)
+      .then((imagen: any) => {
+        this.formEdit.value.copiaLicencia=file;
+        this.filePDF2 = file;
+        // this.imgPerfil = imagen.base;
+      })
+      .catch(err => console.log(err));
+    }
+  };
+
+  loadPdfFromDeviceDocCurri(event:any) {
+    const file: File = event.target.files[0];
+    console.log("Archivo de Copia de Curriculum")
+    console.log(event.target.files)
+    if(file){
+      this.extraerBase64(file)
+      .then((imagen: any) => {
+        this.formEdit.value.documentos=file;
+        this.filePDF3= file;
+        // this.imgPerfil = imagen.base;
+      })
+      .catch(err => console.log(err));
+    }
+  };
+
+  
+  loadFileFromDevice(event: any, formField: string) {
+    const file: File = event.target.files[0];  
+    if (file) {
+      const fileType = file.type;  
+      if(formField== 'copiaCedula'){
+        if (fileType.includes('image')) {
+          this.loadImageFromDeviceCI(event); 
+          console.log("Archivo Cedula image")
+        } else if (fileType === 'application/pdf') {
+          this.loadPdfFromDeviceCI(event); 
+          console.log("Archivo Cedula pdf")
+        } 
+      }else if(formField== 'copiaLicencia'){
+        if (fileType.includes('image')) {
+          this.loadImageFromDeviceLI(event); 
+          console.log("Archivo Licencia image")
+        } else if (fileType === 'application/pdf') {
+          this.loadPdfFromDeviceLI(event); 
+          console.log("Archivo Licencia pdf")
+        } 
+      }else if(formField== 'curriculum'){
+        if (fileType.includes('image')) {
+          this.loadImageFromDeviceDocCurri(event); 
+          console.log("Archivo Curriculum image")
+        } else if (fileType === 'application/pdf') {
+          this.loadPdfFromDeviceDocCurri(event); 
+          console.log("Archivo Currilculum pdf")
+        } 
+      }   
+    }
+  } 
+
+  getNombreArchivo(tipo: string, archivo: File): { nombreArchivo: string, archivo: File| null } {
+    const { nombres, apellidos } = this.rechazados_seleccionada || {};
+    
+    const archivoUrl = this.rechazados_seleccionada?.[tipo]; 
+    
+    const extension = archivoUrl ? archivoUrl.split('.').pop() : 'pdf'; 
+  
+    if (!nombres || !apellidos) {
+      return { nombreArchivo: 'archivo_descargado', archivo: null };
+    }
+    
+    // Si el tipo está definido, formateamos el nombre del archivo
+    if (tipo != '' && archivo!=null) {
+      this.nombre = `${nombres}_${apellidos}_${tipo}.${extension}`;
+      return { nombreArchivo: this.nombre , archivo };
+    }
+    
+    // Retorna un nombre de archivo predeterminado si no se proporciona un tipo
+    return { nombreArchivo: 'No hay documento disponible', archivo : null};
+  }
+
+  edit_rec(a: any) {
+    this.showHeader = false;
+    this.showHeaderC = true;
+    this.rechazados_seleccionada = a;
   }
 }

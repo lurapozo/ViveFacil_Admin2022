@@ -1,296 +1,887 @@
-<div class="container-fluid">
-  <!-- Titulo principal -->
-  <div class="row p-2 justify-content-center align-items-center">
-    <div class="col text-center">
-      <h2 class="p-0 m-0">Pendientes</h2>
-      <h2 class="p-0 m-0">Total de Pendientes: {{ total }}</h2>
+ <!-- Titulo principal-->
+ <div class="header-admi1 ">
+  <div class="header-text">
+    <div class="containerstart">
+      <p *ngIf="showHeader"> PENDIENTES</p>
+      <p *ngIf="showHeaderC">EDITAR PENDIENTE</p>
+    </div>
+    <div class="containerend">
+      <p *ngIf="showHeader"> Total de solicitudes pendientes: {{total}}</p>
+    </div>
+  </div>
+  <svg preserveAspectRatio="xMidYMid">
+    <path d="M0,60 L0,0 L1290,0 L1290,60" fill="#333539"  />
+    <path d="M320,60 Q448,85 550,60" fill="#333539" />
+  </svg>
+</div>
+ <!-- FILTROS-->
+  <div class="d-flex flex-wrap header-solicitud align-items-center gap-3" *ngIf="showHeader">   
+    <div class="containerstart1" >
+      <label class="calendar-label">Desde:</label>
+      <div class="date-container" >
+        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+        <mat-datepicker #picker1></mat-datepicker>
+        <input matInput [matDatepicker]="picker1" placeholder="SELECCIONA DIA" 
+        [(ngModel)]="fechaInicio" (dateChange)="filtrarPorFechas()"
+        >
+      </div>
+    </div>
+    
+    <div class="containerstart2" >
+      <label class="calendar-label">Hasta:</label>
+      <div class="date-container" >
+        <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+        <mat-datepicker #picker2></mat-datepicker>
+        <input matInput [matDatepicker]="picker2" placeholder="SELECCIONA DIA"
+        [(ngModel)]="fechaFin" (dateChange)="filtrarPorFechas()"
+        >
+      </div>
+    </div>
+
+    <div class="containerstart3">
+      <button class="search-button" id="basic-addon1">
+        <i class="bi bi-search"></i>
+      </button>
+      <div class="date-container">
+        <div class="input-group search-group">
+          <input 
+            type="text" 
+            class="form-control search-input" 
+            placeholder="BUSCAR"
+            aria-label="Buscar" 
+            aria-describedby="basic-addon1" 
+            (input)="search($event)">
+        </div> 
+      </div>       
     </div>
   </div>
 
-  <!-- Buscar y agregar admi -->
-  <div class="row p-2 justify-content-center align-items-center">
-    <div class="col-xl-7 col-lg-5"></div>
-    <div class="col-xl-3 col-lg-4">
-      <div class="input-group">
-        <input
-          type="text"
-          class="form-control"
-          placeholder="Buscar"
-          aria-label="Buscar"
-          aria-describedby="basic-addon1"
-          (input)="search($event)"
-        />
-        <button class="input-group-text" id="basic-addon1">
-          <i class="bi bi-search"></i>
-        </button>
+ <!-- CONTENIDO--> 
+  <div class="row justify-content-center align-items-center p-0" *ngIf="showHeader">
+    <div class="col-10 text-center containeradmin">
+      <div class="table-responsive">
+      <table class="table table-striped custom-table">
+        <thead>
+          <!-- Encabezado -->
+          <tr>
+            <th scope="col" class="text-center">Nombres</th>
+            <th scope="col" class="text-center">Cedula</th>
+            <th scope="col" class="text-center">Correo Electronico</th>
+            <th scope="col" class="text-center">Telefono</th>
+            <th scope="col" class="text-center">Fecha de actualizacion</th>
+          </tr>
+        </thead>
+      </table>
+      <div class="table-body">
+        <table class="table table-striped custom-table">
+          <tbody>
+            <tr
+              (click)="
+                edit_pend(a);"
+              *ngFor="let a of arr_filtered_pendiente"
+              role="button"
+            >
+              <td style="color: #40378b; text-transform: uppercase"> <strong> {{ a.nombres }} {{ a.apellidos }} </strong></td>
+              <td style="color: #40378b; text-transform: uppercase"> <strong>{{ a.cedula}} </strong> </td>
+              <td style="color: #40378b; text-transform: uppercase"> <strong>{{ a.email}} </strong></td>
+              <td style="color: #40378b; text-transform: uppercase"> <strong> {{ a.telefono }} </strong></td>
+              <td style="color: #40378b; text-transform: uppercase"> <strong> {{ a.fecha_registro | date : "d/M/Y" }} </strong></td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
-  </div>
-  <!-- Contenedor de admi -->
-  <div class="row justify-content-center align-items-center p-0">
-    <div class="col-10 text-center">
-      <!-- Titulo -->
-      <div class="row p-2 bg-primary text-white">
-        <div class="col-2 align-self-center">
-          <h3 class="p-0 m-0">Nombres</h3>
-        </div>
-
-        <div class="col-2 align-self-center">
-          <h3 class="p-0 m-0">Cedula</h3>
-        </div>
-
-        <div class="col-4 align-self-center">
-          <h3 class="p-0 m-0">Correo Electronico</h3>
-        </div>
-
-        <div class="col-2 align-self-center">
-          <h3 class="p-0 m-0">Telefono</h3>
-        </div>
-        <div class="col-2 align-self-center">
-          <h3 class="p-0 m-0">Fecha de actualización</h3>
-        </div>
+    <div class="container-fluid">
+      <div class="row p-2 justify-content-end align-items-center">
+        <nav aria-label="Page navigation example">
+          <ul class="pagination">
+            <!-- Botón Anterior -->
+            <li class="page-item">
+              <a class="page-link" (click)="previous($event)">
+                <i class="bi bi-chevron-left"></i>
+              </a>
+            </li>
+    
+            <!-- Números de Página -->
+            <div *ngFor="let n of pageNumber; let i = index" class="d-inline-block">
+              <li class="page-item">
+                <button
+                  class="page-link azul"
+                  value="{{ n }}"
+                  (click)="iteracion($event)"
+                  [class.active]="n === currentPage"
+                >
+                  {{ n }}
+                </button>
+              </li>
+            </div>
+    
+            <!-- Botón Siguiente -->
+            <li class="page-item">
+              <a class="page-link" (click)="next($event)">
+                <i class="bi bi-chevron-right"></i>
+              </a>
+            </li>
+          </ul>
+        </nav>
       </div>
+    </div> 
+    </div>
+        
+  </div>
 
-      <!-- Profesion -->
-      <div
-        (click)="
-          pendiente_seleccionada = a;
-          copiaCedulaNombre = pendiente_seleccionada?.copiaCedula.substring(
-            pendiente_seleccionada?.copiaCedula.lastIndexOf('/') + 1
-          );
-          copiaLicenciaNombre = pendiente_seleccionada?.copiaLicencia.substring(
-            pendiente_seleccionada?.copiaLicencia.lastIndexOf('/') + 1
-          );
-          copiaDocumentosNombre = pendiente_seleccionada?.documentsPendientes[0]?.document.substring(
-            pendiente_seleccionada?.documentsPendientes[0]?.document.lastIndexOf('/') + 1
-          );
-          funcionMostar()
-        "
-        *ngFor="let a of arr_filtered_pendiente"
-        class="row p-2 bg-light fila_info_profesion"
+<!-- EDITAR PENDIENTE --> 
+<div *ngIf="showHeaderC">
+<div class="row justify-content-center align-items-center p-0">
+  <div class="col-10 text-center containerCrearadmin">
+    <div class="form-container">
+      <h2>Editar Pendiente</h2>
+      <form [formGroup]="formEdit"> 
+        
+        <div class="col-md-6">
+          <div class="form-field">
+            <div class="col-5">
+              <label for="inputNombre" class="form-label"
+                ><h3 class="m-0 p-0 fw-bold">Nombre:</h3></label
+              >
+            </div>
+            <div class="col-5">
+              <input
+                type="text"
+                formControlName="nombre"
+                class="form-control"
+                [ngClass]="isInvalidForm('nombre') ? 'is-invalid' : ''"
+                [placeholder]="pendiente_seleccionada?.nombres"
+                [(ngModel)]="pendiente_seleccionada.nombres">
+              
+              <div class="invalid-feedback">
+                {{ getErrorMessage(formEdit, "nombre") }}
+              </div>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <div class="col-5">
+              <label for="inputNombre" class="form-label"
+                ><h3 class="m-0 p-0 fw-bold">Apellidos:</h3></label
+              >
+            </div>
+            <div class="col-5">
+              <input
+              
+              type="text"
+              formControlName="apellidos"
+              class="form-control"
+              [ngClass]="isInvalidForm('apellidos') ? 'is-invalid' : ''"
+              [placeholder]="pendiente_seleccionada?.apellidos"
+              [value]="pendiente_seleccionada?.apellidos"
+              [(ngModel)]="pendiente_seleccionada.apellidos">
+      
+              
+              <div class="invalid-feedback">
+                {{ getErrorMessage(formEdit, "apellidos") }}
+              </div>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <div class="col-5">
+              <label for="textareaDescripcion" class="form-label"
+                ><h3 class="m-0 p-0 fw-bold">Correo:</h3></label
+              >
+            </div>
+            <div class="col-5">
+              <input
+                      type="text"
+                      formControlName="correo"
+                      class="form-control"
+                      [ngClass]="isInvalidForm('email') ? 'is-invalid' : ''"
+                      [placeholder]="pendiente_seleccionada?.email"
+                      [(ngModel)]="pendiente_seleccionada.email">
+                   
+              <div class="invalid-feedback">
+                {{ getErrorMessage(formEdit, "correo") }}
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-field">
+            <div class="col-5">
+              <label for="selectorServicioCrear" class="form-label"
+                ><h3 class="m-0 p-0 fw-bold">Genero:</h3></label
+              >
+            </div>
+            <div class="form-field">
+              <select
+                class="form-select"
+                [ngClass]="isInvalidForm('genero') ? 'is-invalid' : ''"
+                formControlName="genero"
+                id="ge"
+                aria-describedby="selectorServicioCrearFeedback"
+                [(ngModel)]="pendiente_seleccionada.genero">
+              
+                <option selected disabled value="">Elija una genero...</option>
+                <option *ngFor="let c of generos" [id]="c" [value]="c">
+                  {{ c }}
+                </option>
+              </select>
+              <div id="selectorServicioCrearFeedback" class="invalid-feedback">
+                {{ getErrorMessage(formEdit, "genero") }}
+              </div>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <div class="col-5">
+              <label for="inputNombre" class="form-label"
+                ><h3 class="m-0 p-0 fw-bold">Cedula:</h3></label
+              >
+            </div>
+            <div class="col-5">
+              <input
+                      type="text"
+                      formControlName="cedula"
+                      class="form-control"
+                      (keypress)="numberOnly($event)"
+                      [ngClass]="isInvalidForm('cedula') ? 'is-invalid' : ''"
+                      [placeholder]="pendiente_seleccionada?.cedula"
+                      [value]="pendiente_seleccionada?.cedula"
+                      [(ngModel)]="pendiente_seleccionada.cedula">
+                    
+              <div class="invalid-feedback">
+                {{ getErrorMessage(formEdit, "cedula") }}
+              </div>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <div class="col-5">
+              <label for="inputNombre" class="form-label"
+                ><h3 class="m-0 p-0 fw-bold">Copia Cedula:</h3></label
+              >
+            </div>
+            <a
+            href="https://tomesoft1.pythonanywhere.com{{
+              pendiente_seleccionada?.copiaCedula
+            }}"
+            [download]="getNombreArchivo('copiaCedula', pendiente_seleccionada?.copiaCedula ).nombreArchivo"
+            >
+              <p style="color: black; font-size:12px">
+                {{ getNombreArchivo('copiaCedula', pendiente_seleccionada?.copiaCedula ).nombreArchivo}}
+              </p>
+            </a>
+            <input
+              type="file"
+              accept="image/*,.pdf"
+              formControlName="copiaCedula"
+              class="form-control"
+              [ngClass]="
+                isInvalidForm('copiaCedula') ? 'is-invalid' : ''
+              "
+              (change)="loadPdfFromDevice($event)"
+            />
+            <div class="invalid-feedback">
+              {{ getErrorMessage(formEdit, "copiaCedula") }}
+            </div>
+            
+          </div>
+
+          <div class="form-field">
+            <div class="col-5">
+              <label for="textareaDescripcion" class="form-label"
+                ><h3 class="m-0 p-0 fw-bold">Telefono:</h3></label
+              >
+            </div>
+            <div class="form-field">
+              <input
+                class="form-control"
+                formControlName="telefono"
+                [ngClass]="isInvalidForm('telefono') ? 'is-invalid' : ''"
+                type="number"
+                [placeholder]="pendiente_seleccionada?.telefono"
+                [value]="pendiente_seleccionada?.telefono"
+                [(ngModel)]="pendiente_seleccionada.telefono">
+              
+              <div class="invalid-feedback">
+                {{ getErrorMessage(formEdit, "telefono") }}
+              </div>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <div class="col-5">
+              <label for="selectorServicioCrear" class="form-label"
+                ><h3 class="m-0 p-0 fw-bold">Ciudad:</h3></label
+              >
+            </div>
+            <div class="col-5">
+              <select
+                class="form-select"
+                [ngClass]="isInvalidForm('ciudad') ? 'is-invalid' : ''"
+                formControlName="ciudad"
+                [value]="pendiente_seleccionada?.ciudad"
+                aria-describedby="selectorServicioCrearFeedback"
+                [(ngModel)]="pendiente_seleccionada.ciudad">
+              
+                <option selected disabled value="">Elija una ciudad...</option>
+                <option *ngFor="let c of ciudades" [id]="c" [value]="c">
+                  {{ c }}
+                </option>
+              </select>
+              <div id="selectorServicioCrearFeedback" class="invalid-feedback">
+                {{ getErrorMessage(formEdit, "ciudad") }}
+              </div>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <div class="col-5">
+              <label for="inputNombre" class="form-label">
+                <h3 class="m-0 p-0 fw-bold">Dirección:</h3>
+              </label>
+            </div>
+            <div class="col-7">
+              <input
+                type="text"
+                formControlName="direccion"
+                class="form-control"
+                [ngClass]="isInvalidForm('direccion') ? 'is-invalid' : ''"
+                [value]="pendiente_seleccionada?.direccion"
+                [placeholder]="pendiente_seleccionada?.direccion"
+                [(ngModel)]="pendiente_seleccionada.direccion">
+              
+              <div class="invalid-feedback">
+                {{ getErrorMessage(formEdit, "direccion") }}
+              </div>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <div class="col-5">
+              <label for="inputNombre" class="form-label"
+                ><h3 class="m-0 p-0 fw-bold">Descripcion:</h3></label
+              >
+            </div>
+            <div class="col-5">
+              <input
+                type="text"
+                formControlName="descripcion"
+                class="form-control"
+                [ngClass]="
+                  isInvalidForm('descripcion') ? 'is-invalid' : ''
+                "
+                [placeholder]="pendiente_seleccionada?.descripcion"
+                [value]="pendiente_seleccionada?.descripcion"
+                [(ngModel)]="pendiente_seleccionada.descripcion">
+              
+              <div class="invalid-feedback">
+                {{ getErrorMessage(formEdit, "descripcion") }}
+              </div>
+            </div>
+          </div>
+
+          <div  class="form-field">
+            <div class="col-5">
+              <label for="inputNombre" class="form-label"
+                ><h3 class="m-0 p-0 fw-bold">Documentación:</h3></label
+              >
+            </div>
+            <div class="col-7">
+              <a
+                href="https://tomesoft1.pythonanywhere.com{{
+                  getNombreArchivo('copiaCedula', pendiente_seleccionada?.documentsPendientes[0]?.document).nombreArchivo
+                }}"
+                [download]="getNombreArchivo('copiaCedula', pendiente_seleccionada?.documentsPendientes[0]?.document).nombreArchivo">
+                <p style="color: black; font-size:12px">
+                    {{ getNombreArchivo('copiaCedula', pendiente_seleccionada?.documentsPendientes[0]?.document).nombreArchivo}}
+                  
+                </p>
+              </a>
+              <input
+              type="file"
+              accept="image/*,.pdf"
+                formControlName="documentos"
+                class="form-control"
+                [ngClass]="isInvalidForm('copiaLicencia') ? 'is-invalid' : ''"
+                (change)="loadFileFromDevice($event,'copiaLicencia')"
+              />
+              <div class="invalid-feedback">
+                {{ getErrorMessage(formEdit, "documentos") }}
+              </div>
+            </div>
+          </div>
+
+
+
+        </div>
+
+
+        <div class="col-md-6">
+          <div class="form-field">
+            <div class="form-field  d-flex flex-column justify-content-center align-items-center text-center">
+        
+              <!-- Imagen previsualización -->
+              <img
+                src="https://tomesoft1.pythonanywhere.com{{
+                  pendiente_seleccionada?.foto
+                }}"
+                alt="no se encontró foto de perfil"
+                width="100"
+                height="100"
+              />
+                       
+              <!-- Input file oculto -->
+              <input
+                type="file"
+                #fileInput
+                formControlName="foto"
+                accept="image/*"
+                class="form-control"
+                [ngClass]="isInvalidForm('foto') ? 'is-invalid' : ''"
+                (change)="loadImageFromDevice($event)"
+                style="display: none;" 
+              />
+            
+              <!-- Mensaje de error -->
+              <div class="invalid-feedback">
+                {{ getErrorMessage(formEdit, 'imagen') }}
+              </div>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <div class="col-5">
+              <label for="inputNombre" class="form-label"
+                ><h3 class="m-0 p-0 fw-bold">Cuenta Bancaria</h3></label
+              >
+            </div>
+            <div class="col-5">
+              <label for="textareaDescripcion" class="form-label"
+                ><h3 class="m-0 p-0 fw-bold">Tipo Cuenta:</h3></label
+              >
+            </div>
+            <div class="col-5">
+              <div class="col-7">
+                <select
+                  formControlName="tipo_cuenta"
+                  class="form-select"
+                  [ngClass]="isInvalidForm('tipo_cuenta') ? 'is-invalid' : ''"
+                  [value]="pendiente_seleccionada?.tipo_cuenta"
+                  aria-describedby="selectorServicioCrearFeedback"
+                  [(ngModel)]="pendiente_seleccionada.tipo_cuenta">
+                
+                  <option selected disabled value="">
+                    Elija un tipo de cuenta...
+                  </option>
+                  <option
+                    *ngFor="let c of tipoCuentas"
+                    [id]="c"
+                    [value]="c"
+                  >
+                    {{ c }}
+                  </option>
+                </select>
+                <div
+                  id="selectorServicioCrearFeedback"
+                  class="invalid-feedback"
+                >
+                  {{ getErrorMessage(formEdit, "profesion") }}
+                </div>
+              </div>
+            </div>
+          </div>        
+
+          <div class="form-field">
+            <div class="col-5">
+              <label for="inputNombre" class="form-label"
+                ><h3 class="m-0 p-0 fw-bold">Número cuenta:</h3></label
+              >
+            </div>
+            <div class="col-5">
+              <input
+              type="text"
+              formControlName="numero_cuenta"
+              class="form-control"
+              (keypress)="numberOnly($event)"
+              [ngClass]="
+                isInvalidForm('numero_cuenta') ? 'is-invalid' : ''
+              "
+              [placeholder]="pendiente_seleccionada?.numero_cuenta"
+              [value]="pendiente_seleccionada?.numero_cuenta"
+              [(ngModel)]="pendiente_seleccionada.numero_cuenta">
+            
+            <div class="invalid-feedback">
+              {{ getErrorMessage(formEdit, "numero_cuenta") }}
+            </div>
+            </div>
+          </div>
+
+
+          <div class="form-field">
+            <div class="col-5">
+              <label for="textareaDescripcion" class="form-label"
+                ><h3 class="m-0 p-0 fw-bold">Banco:</h3></label
+              >
+            </div>
+            <div class="form-field">
+              <input
+                      type="text"
+                      formControlName="banco"
+                      class="form-control"
+                      [ngClass]="isInvalidForm('banco') ? 'is-invalid' : ''"
+                      [placeholder]="pendiente_seleccionada?.banco"
+                      [value]="pendiente_seleccionada?.banco"
+                      [(ngModel)]="pendiente_seleccionada.banco">
+                    
+                    <div class="invalid-feedback">
+                      {{ getErrorMessage(formEdit, "banco") }}
+                    </div>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <div class="col-5">
+              <label for="inputNombre" class="form-label"
+                ><h3 class="m-0 p-0 fw-bold">Profesión</h3></label
+              >
+              <div class="col-5">
+                <label for="selectorServicioCrear" class="form-label"
+                  ><h3 class="m-0 p-0 fw-bold">Licencia:</h3></label
+                >
+              </div>
+              <div class="col-7">
+                <select
+                  class="form-select"
+                  [ngClass]="isInvalidForm('licencia') ? 'is-invalid' : ''"
+                  formControlName="licencia"
+                  id="tienelicencia"
+                  [value]="pendiente_seleccionada?.licencia"
+                  aria-describedby="selectorServicioCrearFeedback"
+                  [(ngModel)]="pendiente_seleccionada.licencia">
+                >
+                  <option selected disabled value="">
+                    ¿Posee una licencia?...
+                  </option>
+                  <option *ngFor="let c of licencia" [id]="c" [value]="c">
+                    {{ c }}
+                  </option>
+                </select>
+                <div
+                  id="selectorServicioCrearFeedback"
+                  class="invalid-feedback"
+                >
+                  {{ getErrorMessage(formEdit, "licencia") }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <div class="col-5">
+              <label for="inputNombre" class="form-label"
+                ><h3 class="m-0 p-0 fw-bold">
+                  Años de Experiencia:
+                </h3></label
+              >
+            </div>
+            <div class="col-7">
+              <input
+                type="number"
+                formControlName="ano_experiencia"
+                class="form-control"
+                [ngClass]="
+                  isInvalidForm('ano_experiencia') ? 'is-invalid' : ''
+                "
+                [placeholder]="pendiente_seleccionada?.ano_experiencia"
+                [value]="pendiente_seleccionada?.ano_experiencia"
+                [(ngModel)]="pendiente_seleccionada.ano_experiencia">
+              
+              <div class="invalid-feedback">
+                {{ getErrorMessage(formEdit, "ano_experiencia") }}
+              </div>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <div class="col-5">
+              <label for="selectorServicioCrear" class="form-label"
+                ><h3 class="m-0 p-0 fw-bold">Profesión:</h3></label
+              >
+            </div>
+            <div class="col-5">
+              <p style="color: black; font-size:12px">
+                <span class="m-0 p-0 fw-bold">profesiones actuales:</span>  {{pendiente_seleccionada?.profesion}}
+              </p>
+              <ng-select
+                [items]="profesiones"
+                class="form-select"
+                [ngClass]="
+                  isInvalidForm('profesion') ? 'is-invalid' : ''
+                "
+                formControlName="profesion"
+                id="ge"
+                
+                aria-describedby="selectorServicioCrearFeedback"
+                [multiple]="true">
+              </ng-select>
+              <div
+                id="selectorServicioCrearFeedback"
+                class="invalid-feedback"
+              >
+                {{ getErrorMessage(formEdit, "profesion") }}
+              </div>
+            </div>
+          </div>
+
+        </div>
+       
+      </form> 
+
+      
+
+           
+
+      <button
+
+        data-bs-target="#modalConfirmacion1"
         data-bs-toggle="modal"
-        href="#modalInformacionProfesion"
-        role="button"
-      >
-        <div class="col-2 align-self-center">
-          <h4 class="p-0 m-0">{{ a.nombres }} {{ a.apellidos }}</h4>
-        </div>
-
-        <div class="col-2 align-self-center">
-          <h4 class="p-0 m-0">{{ a.cedula }}</h4>
-        </div>
-
-        <div class="col-4 align-self-center">
-          <h4 class="p-0 m-0">{{ a.email }}</h4>
-        </div>
-
-        <div class="col-2 align-self-center">
-          <h4 class="p-0 m-0">{{ a.telefono }}</h4>
-        </div>
-        <div class="col-2 align-self-center">
-          <h4 class="p-0 m-0">{{ a.fecha_registro | date : "d/M/Y" }}</h4>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-<div
-  class="modal fade"
-  id="modalInformacionProfesion"
-  aria-hidden="true"
-  aria-labelledby="modalInformacionProfesionLabel"
-  tabindex="-1"
->
-  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-    <div class="modal-content">
-      <div class="modal-header align-items-center">
-        <h1
-          class="modal-title fs-5 m-0 p-0 fw-bold"
-          id="modalInformacionProfesionLabel"
-        >
-          Información de Proveedores pendientes
-        </h1>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
-      </div>
-      <div class="modal-body mb-0">
-        <div class="row p-2 align-items-center">
-          <div class="col-5">
-            <h3 class="m-0 p-0 fw-bold">Nombres:</h3>
-          </div>
-          <div class="col-7">
-            {{ pendiente_seleccionada?.nombres }}
-          </div>
-        </div>
-
-        <div class="row p-2 align-items-center">
-          <div class="col-5">
-            <h3 class="m-0 p-0 fw-bold">Apellidos:</h3>
-          </div>
-          <div class="col-7">
-            {{ pendiente_seleccionada?.apellidos }}
-          </div>
-        </div>
-
-        <div class="row p-2 align-items-center">
-          <div class="col-5">
-            <h3 class="m-0 p-0 fw-bold">Cedula:</h3>
-          </div>
-          <div class="col-7">
-            {{ pendiente_seleccionada?.cedula }}
-          </div>
-        </div>
-
-        <div class="row p-2 align-items-center">
-          <div class="col-5">
-            <h3 class="m-0 p-0 fw-bold">Documento cedula:</h3>
-          </div>
-          <div class="col-7">
-            <a
-              href="https://tomesoft1.pythonanywhere.com{{
-                pendiente_seleccionada?.copiaCedula
-              }}"
-              download="newfilename.pdf"
-            >
-              <p>
-                {{ copiaCedulaNombre }}
-              </p>
-            </a>
-          </div>
-        </div>
-
-        <div class="row p-2 align-items-center">
-          <div class="col-5">
-            <h3 class="m-0 p-0 fw-bold">Ciudad:</h3>
-          </div>
-          <div class="col-7">
-            {{ pendiente_seleccionada?.ciudad }}
-          </div>
-        </div>
-
-        <div class="row p-2 align-items-center">
-          <div class="col-5">
-            <h3 class="m-0 p-0 fw-bold">Direccion:</h3>
-          </div>
-          <div class="col-7">
-            {{ pendiente_seleccionada?.direccion }}
-          </div>
-        </div>
-
-        <div class="row p-2 align-items-center">
-          <div class="col-5">
-            <h3 class="m-0 p-0 fw-bold">Telefono:</h3>
-          </div>
-          <div class="col-7">
-            {{ pendiente_seleccionada?.telefono }}
-          </div>
-        </div>
-
-        <div class="row p-2 align-items-center">
-          <div class="col-5">
-            <h3 class="m-0 p-0 fw-bold">Genero:</h3>
-          </div>
-          <div class="col-7">
-            {{ pendiente_seleccionada?.genero }}
-          </div>
-        </div>
-
-        <div class="row p-2 align-items-center">
-          <div class="col-5">
-            <h3 class="m-0 p-0 fw-bold">Fecha de actualización:</h3>
-          </div>
-          <div class="col-7">
-            {{ pendiente_seleccionada?.fecha_registro | date : "d/M/Y" }}
-          </div>
-        </div>
-
-        <div class="row p-2 align-items-center">
-          <div class="col-5">
-            <h3 class="m-0 p-0 fw-bold">Correo:</h3>
-          </div>
-          <div class="col-7">
-            {{ pendiente_seleccionada?.email }}
-          </div>
-        </div>
-
-        <div class="row p-2 align-items-center">
-          <div class="col-5">
-            <h3 class="m-0 p-0 fw-bold">Descripcion:</h3>
-          </div>
-          <div class="col-7">
-            {{ pendiente_seleccionada?.descripcion }}
-          </div>
-        </div>
-
-        <div class="row p-2 align-items-center">
-          <div class="col-5">
-            <h3 class="m-0 p-0 fw-bold">Licencia:</h3>
-          </div>
-          <div class="col-7">
-            {{ pendiente_seleccionada?.licencia }}
-          </div>
-        </div>
-        <div class="row p-2 align-items-center">
-          <div class="col-5">
-            <h3 class="m-0 p-0 fw-bold">Documentacion Licenciada:</h3>
-          </div>
-          <div class="col-7">
-            <a
-              href="https://tomesoft1.pythonanywhere.com{{
-                pendiente_seleccionada?.copiaLicencia
-              }}"
-              download="newfilename2.pdf"
-            >
-              <p>
-                {{ copiaLicenciaNombre }}
-              </p>
-            </a>
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button
-          class="btn btn-warning"
-          (click)="
+        class="custom-button float-right"
+        (click)="
           isAceptar = true;
-          isNegar = true;
-          mensajeAlerta = 'Está seguro que no desea hacer cambios?'
-          "
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        >
-          Cerrar
-        </button>
-        <button
-          (click)="limpiarForm()"
-          class="btn btn-info"
-          data-target=".bd-example-modal-xl"
-          data-bs-target="#modalInformacionEdicionProfesion"
-          data-bs-toggle="modal"
-        >
-          Visualizar
-        </button>
-        <button
-          data-bs-target="#modalConfirmacion1"
-          data-bs-toggle="modal"
-          class="btn btn-success"
-          (click)="
-            isAceptar = true;
-            isNegar = false;
-            mensajeAlerta = 'Está seguro que desea aprobar la solicitud?'
-          "
-        >
-          Aprobar
-        </button>
+          isNegar = false;
+          mensajeAlerta = 'Está seguro que desea aprobar la solicitud?'
+        "
+      >
+        Aprobar
+      </button>
+
+      <button
+      data-bs-target="#modalConfirmacion3"
+      data-bs-toggle="modal"
+      class=" custom-button2 float-right btn-danger"
+      (click)="
+        establecerMensaje(
+          'Está seguro que desea Negar la información?',
+          'negar'
+        )
+      "
+    >
+      Negar
+    </button>
+
+      <button
+        class="custom-button1 float-right"
+        (click)="showHeader = true; showHeaderC= false ; showadmi = false;">
+      Cancelar
+      </button>
+      
+    </div>
+    
+    
+  </div>
+</div>
+</div>
+<!-- FIN DE EDITAR PENDIENTE--> 
+
+<!--  
+<div
+class="modal fade"
+id="modalInformacionProfesion"
+aria-hidden="true"
+aria-labelledby="modalInformacionProfesionLabel"
+tabindex="-1"
+>
+<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+  <div class="modal-content">
+    <div class="modal-header align-items-center">
+      <h1
+        class="modal-title fs-5 m-0 p-0 fw-bold"
+        id="modalInformacionProfesionLabel"
+      >
+        Información de Proveedores pendientes
+      </h1>
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="modal"
+        aria-label="Close"
+      ></button>
+    </div>
+    <div class="modal-body mb-0">
+      <div class="row p-2 align-items-center">
+        <div class="col-5">
+          <h3 class="m-0 p-0 fw-bold">Nombres:</h3>
+        </div>
+        <div class="col-7">
+          {{ pendiente_seleccionada?.nombres }}
+        </div>
       </div>
+
+      <div class="row p-2 align-items-center">
+        <div class="col-5">
+          <h3 class="m-0 p-0 fw-bold">Apellidos:</h3>
+        </div>
+        <div class="col-7">
+          {{ pendiente_seleccionada?.apellidos }}
+        </div>
+      </div>
+
+      <div class="row p-2 align-items-center">
+        <div class="col-5">
+          <h3 class="m-0 p-0 fw-bold">Cedula:</h3>
+        </div>
+        <div class="col-7">
+          {{ pendiente_seleccionada?.cedula }}
+        </div>
+      </div>
+
+      <div class="row p-2 align-items-center">
+        <div class="col-5">
+          <h3 class="m-0 p-0 fw-bold">Documento cedula:</h3>
+        </div>
+        <div class="col-7">
+          <a
+            href="https://tomesoft1.pythonanywhere.com{{
+              pendiente_seleccionada?.copiaCedula
+            }}"
+            download="{{ pendiente_seleccionada?.nombres }}_{{ pendiente_seleccionada?.apellidos }}_copiaCedula.pdf"
+          >
+            <p>
+              {{ copiaCedulaNombre }}
+            </p>
+          </a>
+        </div>
+      </div>
+
+      <div class="row p-2 align-items-center">
+        <div class="col-5">
+          <h3 class="m-0 p-0 fw-bold">Ciudad:</h3>
+        </div>
+        <div class="col-7">
+          {{ pendiente_seleccionada?.ciudad }}
+        </div>
+      </div>
+
+      <div class="row p-2 align-items-center">
+        <div class="col-5">
+          <h3 class="m-0 p-0 fw-bold">Direccion:</h3>
+        </div>
+        <div class="col-7">
+          {{ pendiente_seleccionada?.direccion }}
+        </div>
+      </div>
+
+      <div class="row p-2 align-items-center">
+        <div class="col-5">
+          <h3 class="m-0 p-0 fw-bold">Telefono:</h3>
+        </div>
+        <div class="col-7">
+          {{ pendiente_seleccionada?.telefono }}
+        </div>
+      </div>
+
+      <div class="row p-2 align-items-center">
+        <div class="col-5">
+          <h3 class="m-0 p-0 fw-bold">Genero:</h3>
+        </div>
+        <div class="col-7">
+          {{ pendiente_seleccionada?.genero }}
+        </div>
+      </div>
+
+      <div class="row p-2 align-items-center">
+        <div class="col-5">
+          <h3 class="m-0 p-0 fw-bold">Fecha de actualización:</h3>
+        </div>
+        <div class="col-7">
+          {{ pendiente_seleccionada?.fecha_registro | date : "d/M/Y" }}
+        </div>
+      </div>
+
+      <div class="row p-2 align-items-center">
+        <div class="col-5">
+          <h3 class="m-0 p-0 fw-bold">Correo:</h3>
+        </div>
+        <div class="col-7">
+          {{ pendiente_seleccionada?.email }}
+        </div>
+      </div>
+
+      <div class="row p-2 align-items-center">
+        <div class="col-5">
+          <h3 class="m-0 p-0 fw-bold">Descripcion:</h3>
+        </div>
+        <div class="col-7">
+          {{ pendiente_seleccionada?.descripcion }}
+        </div>
+      </div>
+
+      <div class="row p-2 align-items-center">
+        <div class="col-5">
+          <h3 class="m-0 p-0 fw-bold">Licencia:</h3>
+        </div>
+        <div class="col-7">
+          {{ pendiente_seleccionada?.licencia }}
+        </div>
+      </div>
+      <div class="row p-2 align-items-center">
+        <div class="col-5">
+          <h3 class="m-0 p-0 fw-bold">Documentacion Licenciada:</h3>
+        </div>
+        <div class="col-7">
+          <a
+            href="https://tomesoft1.pythonanywhere.com{{
+              pendiente_seleccionada?.copiaLicencia
+            }}"
+            download="newfilename2.pdf"
+          >
+            <p>
+              {{ copiaLicenciaNombre }}
+            </p>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button
+        class="btn btn-warning"
+        (click)="
+        isAceptar = true;
+        isNegar = true;
+        mensajeAlerta = 'Está seguro que no desea hacer cambios?'
+        "
+        data-bs-dismiss="modal"
+        aria-label="Close"
+      >
+        Cerrar
+      </button>
+      <button
+        (click)="limpiarForm()"
+        class="btn btn-info"
+        data-target=".bd-example-modal-xl"
+        data-bs-target="#modalInformacionEdicionProfesion"
+        data-bs-toggle="modal"
+      >
+        Visualizar
+      </button>
+      <button
+        data-bs-target="#modalConfirmacion1"
+        data-bs-toggle="modal"
+        class="btn btn-success"
+        (click)="
+          isAceptar = true;
+          isNegar = false;
+          mensajeAlerta = 'Está seguro que desea aprobar la solicitud?'
+        "
+      >
+        Aprobar
+      </button>
     </div>
   </div>
 </div>
-<!-- Modal edicion de informacion de admi -->
+</div>-->
+
+<!-- Modal edicion de informacion de admi
 <div
   class="modal fade modal-xl"
   id="modalInformacionEdicionProfesion"
@@ -383,7 +974,7 @@
                       accept="image/*"
                       class="form-control"
                       [ngClass]="isInvalidForm('foto') ? 'is-invalid' : ''"
-                      (change)="loadImageFromDevice($event)"
+                      (change)="loadFileFromDevice($event,'copiaCedula')"
                     />
                     <div class="invalid-feedback">
                       {{ getErrorMessage(formEdit, "copiaCedula") }}
@@ -464,7 +1055,7 @@
                   </div>
                 </div>
 
-                <!-- <div class="row p-2 align-items-center">
+                <div class="row p-2 align-items-center">
                   <div class="col-5">
                     <label for="inputNombre" class="form-label">
                       <h3 class="m-0 p-0 fw-bold">Cedula:</h3>
@@ -483,7 +1074,7 @@
                       {{ getErrorMessage(formEdit, "cedula") }}
                     </div>
                   </div>
-                </div> -->
+                </div> 
 
                 <div class="row p-2 align-items-center">
                   <div class="col-5">
@@ -504,11 +1095,11 @@
                     </a>
                     <input
                       type="file"
-                      accept=".pdf"
+                      accept="image/*,.pdf"
                       formControlName="copiaLicencia"
                       class="form-control"
                       [ngClass]="isInvalidForm('copiaLicencia') ? 'is-invalid' : ''"
-                      (change)="loadPdf2FromDevice($event)"
+                      (change)="loadFileFromDevice($event,'copiaLicencia')"
                     />
                     <div class="invalid-feedback">
                       {{ getErrorMessage(formEdit, "copiaLicencia") }}
@@ -527,21 +1118,20 @@
                       href="https://tomesoft1.pythonanywhere.com{{
                         pendiente_seleccionada?.copiaCedula
                       }}"
-                      download="newfilename.pdf"
-                    >
+                      [download]="getNombreArchivo('curriculum', pendiente_seleccionada?.copiaCedula).nombreArchivo">
                       <p>
-                        {{ copiaCedulaNombre }}
+                        {{ getNombreArchivo('copiaCedula', pendiente_seleccionada?.copiaCedula).nombreArchivo }}
                       </p>
                     </a>
                     <input
                       type="file"
-                      accept=".pdf"
+                      accept="image/*,.pdf"
                       formControlName="copiaCedula"
                       class="form-control"
                       [ngClass]="
                         isInvalidForm('copiaCedula') ? 'is-invalid' : ''
                       "
-                      (change)="loadPdfFromDevice($event)"
+                      (change)="loadFileFromDevice($event,'copiaCedula')"
                     />
                     <div class="invalid-feedback">
                       {{ getErrorMessage(formEdit, "copiaCedula") }}
@@ -662,11 +1252,11 @@
                     </a>
                     <input
                     type="file"
-                    accept=".pdf"
+                    accept="image/*,.pdf"
                       formControlName="documentos"
                       class="form-control"
                       [ngClass]="isInvalidForm('copiaLicencia') ? 'is-invalid' : ''"
-                      (change)="loadPdf3FromDevice($event)"
+                      (change)="loadFileFromDevice($event,'copiaLicencia')"
                     />
                     <div class="invalid-feedback">
                       {{ getErrorMessage(formEdit, "documentos") }}
@@ -885,291 +1475,254 @@
           Actualizar
         </button>
       </div>
+    </div>
+  </div>
+</div>-->
 
-      <!-- <pre>
-        {{actualizarProfesionesForm.value | json}}
-      </pre> -->
+<div
+class="modal fade"
+id="modalConfirmacion"
+tabindex="-1"
+aria-labelledby="modalConfirmacionLabel"
+aria-hidden="true"
+>
+<div class="modal-dialog">
+  <div class="modal-content">
+    <!-- Titulo del modal confirmacion -->
+    <div class="modal-header">
+      <h1
+        class="modal-title fs-5 m-0 p-0 fw-bold"
+        id="modalConfirmacionLabel"
+      >
+        Confirmar selección
+      </h1>
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="modal"
+        aria-label="Close"
+      ></button>
+    </div>
+
+    <!-- Cuerpo del modal confirmacion -->
+    <div class="modal-body">Está seguro que desea Negar la información?</div>
+    <!-- Footer del modal confirmacion -->
+    <div class="modal-footer">
+      <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+        Cancelar
+      </button>
+      <button
+        type="button"
+        class="btn btn-success"
+        (click)="onNegar()"
+        data-bs-dismiss="modal"
+      >
+        Negar
+      </button>
     </div>
   </div>
 </div>
-<div
-  class="modal fade"
-  id="modalConfirmacion"
-  tabindex="-1"
-  aria-labelledby="modalConfirmacionLabel"
-  aria-hidden="true"
->
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <!-- Titulo del modal confirmacion -->
-      <div class="modal-header">
-        <h1
-          class="modal-title fs-5 m-0 p-0 fw-bold"
-          id="modalConfirmacionLabel"
-        >
-          Confirmar selección
-        </h1>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
-      </div>
-
-      <!-- Cuerpo del modal confirmacion -->
-      <div class="modal-body">Está seguro que desea Negar la información?</div>
-      <!-- Footer del modal confirmacion -->
-      <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
-          Cancelar
-        </button>
-        <button
-          type="button"
-          class="btn btn-success"
-          (click)="onNegar()"
-          data-bs-dismiss="modal"
-        >
-          Negar
-        </button>
-      </div>
-    </div>
-  </div>
 </div>
 
 <div
-  class="modal fade"
-  id="modalConfirmacion1"
-  tabindex="-1"
-  aria-labelledby="modalConfirmacionLabel"
-  aria-hidden="true"
+class="modal fade"
+id="modalConfirmacion1"
+tabindex="-1"
+aria-labelledby="modalConfirmacionLabel"
+aria-hidden="true"
 >
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <!-- Titulo del modal confirmacion -->
-      <div class="modal-header">
-        <h1
-          class="modal-title fs-5 m-0 p-0 fw-bold"
-          id="modalConfirmacionLabel"
-        >
-          Confirmar selección
-        </h1>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
-      </div>
+<div class="modal-dialog">
+  <div class="modal-content">
+    <!-- Titulo del modal confirmacion -->
+    <div class="modal-header">
+      <h1
+        class="modal-title fs-5 m-0 p-0 fw-bold"
+        id="modalConfirmacionLabel"
+      >
+        Confirmar selección
+      </h1>
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="modal"
+        aria-label="Close"
+      ></button>
+    </div>
 
-      <!-- Cuerpo del modal confirmacion -->
-      <div class="modal-body">Está seguro que desea aprobar la solicitud?</div>
+    <!-- Cuerpo del modal confirmacion -->
+    <div class="modal-body">Está seguro que desea aprobar la solicitud?</div>
 
-      <!-- Footer del modal confirmacion -->
-      <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
-          Cancelar
-        </button>
-        <button
-        data-bs-target="#modalConfirmacion4"
-          data-bs-toggle="modal"
-          type="button"
-          class="btn btn-success"
-          (click)="onAceptar()"
-          data-bs-dismiss="modal"
-        >
-          Aceptar
-        </button>
-      </div>
+    <!-- Footer del modal confirmacion -->
+    <div class="modal-footer">
+      <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+        Cancelar
+      </button>
+      <button
+      data-bs-target="#modalConfirmacion4"
+        data-bs-toggle="modal"
+        type="button"
+        class="btn btn-success"
+        (click)="onAceptar()"
+        data-bs-dismiss="modal"
+      >
+        Aceptar
+      </button>
     </div>
   </div>
+</div>
 </div>
 
 <div
-  class="modal fade"
-  id="modalConfirmacion2"
-  tabindex="-1"
-  aria-labelledby="modalConfirmacionLabel"
-  aria-hidden="true"
+class="modal fade"
+id="modalConfirmacion2"
+tabindex="-1"
+aria-labelledby="modalConfirmacionLabel"
+aria-hidden="true"
 >
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <!-- Titulo del modal confirmacion -->
-      <div class="modal-header">
-        <h1
-          class="modal-title fs-5 m-0 p-0 fw-bold"
-          id="modalConfirmacionLabel"
-        >
-          Confirmar selección
-        </h1>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
-      </div>
+<div class="modal-dialog">
+  <div class="modal-content">
+    <!-- Titulo del modal confirmacion -->
+    <div class="modal-header">
+      <h1
+        class="modal-title fs-5 m-0 p-0 fw-bold"
+        id="modalConfirmacionLabel"
+      >
+        Confirmar selección
+      </h1>
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="modal"
+        aria-label="Close"
+      ></button>
+    </div>
 
-      <!-- Cuerpo del modal confirmacion -->
-      <div class="modal-body">
-        Está seguro que desea actualizar la información?
-      </div>
+    <!-- Cuerpo del modal confirmacion -->
+    <div class="modal-body">
+      Está seguro que desea actualizar la información?
+    </div>
 
-      <!-- Footer del modal confirmacion -->
-      <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
-          Cancelar
-        </button>
-        <button
-          type="button"
-          class="btn btn-success"
-          (click)="onEditar()"
-          data-bs-dismiss="modal"
-        >
-          Actualizar
-        </button>
-      </div>
+    <!-- Footer del modal confirmacion -->
+    <div class="modal-footer">
+      <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+        Cancelar
+      </button>
+      <button
+        type="button"
+        class="btn btn-success"
+        (click)="onEditar()"
+        data-bs-dismiss="modal"
+      >
+        Actualizar
+      </button>
     </div>
   </div>
 </div>
-<div class="container-fluid">
-  <div class="row p-2 justify-content-center align-items-center">
-    <nav aria-label="Page navigation example">
-      <ul class="pagination">
-        <li class="page-item">
-          <a class="page-link" (click)="previous($event)">Previous</a>
-        </li>
-        <div *ngFor="let n of pageNumber; let i = index">
-          <li class="page-item">
-            <button
-              class="page-link azul"
-              value="{{ n }}"
-              (click)="iteracion($event)"
-              *ngIf="n == currentPage"
-            >
-              {{ n }}
-            </button>
-            <button
-              class="page-link"
-              value="{{ n }}"
-              (click)="iteracion($event)"
-              *ngIf="n != currentPage"
-            >
-              {{ n }}
-            </button>
-          </li>
-        </div>
+</div>
 
-        <li class="page-item">
-          <a class="page-link" (click)="next($event)">Next</a>
-        </li>
-      </ul>
-    </nav>
+
+<div
+class="modal fade"
+id="modalConfirmacion3"
+tabindex="-1"
+aria-labelledby="modalConfirmacionLabel"
+aria-hidden="true"
+>
+<div class="modal-dialog">
+  <div class="modal-content">
+    <!-- Titulo del modal confirmacion -->
+    <div class="modal-header">
+      <h1
+        class="modal-title fs-5 m-0 p-0 fw-bold"
+        id="modalConfirmacionLabel"
+      >
+        Razón del rechazo
+      </h1>
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="modal"
+        aria-label="Close"
+      ></button>
+    </div>
+
+    <!-- Cuerpo del modal confirmacion -->
+    <div class="modal-body">
+      Escriba a continuacion la razón por la que rechaza este proveedor pendiente:
+      <div class="modal-body mb-0">
+        <form [formGroup]="formNegar" class="">
+            <div class="row p-2 align-items-center">
+                <input
+                  type="text"
+                  formControlName="razon"
+                  class="form-control"
+                  placeholder="Ponga la razón aquí"
+                />
+              </div>
+        </form>
+      </div>
+    </div>
+    
+    
+
+    <!-- Footer del modal confirmacion -->
+    <div class="modal-footer">
+      <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+        Cancelar
+      </button>
+      <button
+        type="button"
+        class="btn btn-success"
+        (click)="onNegar()"
+        data-bs-dismiss="modal"
+      >
+        Negar
+      </button>
+    </div>
   </div>
+</div>
 </div>
 
 <div
-  class="modal fade"
-  id="modalConfirmacion3"
-  tabindex="-1"
-  aria-labelledby="modalConfirmacionLabel"
-  aria-hidden="true"
+class="modal fade"
+id="modalConfirmacion4"
+#modalConfirmacion4
+role="dialog"
+
+aria-labelledby="modalConfirmacionLabel"
+aria-hidden="true"
 >
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <!-- Titulo del modal confirmacion -->
-      <div class="modal-header">
-        <h1
-          class="modal-title fs-5 m-0 p-0 fw-bold"
-          id="modalConfirmacionLabel"
-        >
-          Razón del rechazo
-        </h1>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
-      </div>
+<div class="modal-dialog">
+  <div class="modal-content">
+    <!-- Titulo del modal confirmacion -->
+    <div class="modal-header">
+      <h1
+        class="modal-title fs-5 m-0 p-0 fw-bold"
+        id="modalConfirmacionLabel"
+      >
+        Estado de los campos:
+      </h1>
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="modal"
+        aria-label="Close"
+      ></button>
+    </div>
 
-      <!-- Cuerpo del modal confirmacion -->
-      <div class="modal-body">
-        Escriba a continuacion la razón por la que rechaza este proveedor pendiente:
-        <div class="modal-body mb-0">
-          <form [formGroup]="formNegar" class="">
-              <div class="row p-2 align-items-center">
-                  <input
-                    type="text"
-                    formControlName="razon"
-                    class="form-control"
-                    placeholder="Ponga la razón aquí"
-                  />
-                </div>
-          </form>
-        </div>
-      </div>
-      
-      
+    <!-- Cuerpo del modal confirmacion -->
+    <div class="modal-body">
+      {{mensajeIncompletoString}}
+    </div>
+    
+    
 
-      <!-- Footer del modal confirmacion -->
-      <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
-          Cancelar
-        </button>
-        <button
-          type="button"
-          class="btn btn-success"
-          (click)="onNegar()"
-          data-bs-dismiss="modal"
-        >
-          Negar
-        </button>
-      </div>
+    <!-- Footer del modal confirmacion -->
+    <div class="modal-footer">
+      <button type="button" class="btn btn-success" data-bs-dismiss="modal">
+        Aceptar
+      </button>
     </div>
   </div>
 </div>
-
-<div
-  class="modal fade"
-  id="modalConfirmacion4"
-  #modalConfirmacion4
-  role="dialog"
-
-  aria-labelledby="modalConfirmacionLabel"
-  aria-hidden="true"
->
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <!-- Titulo del modal confirmacion -->
-      <div class="modal-header">
-        <h1
-          class="modal-title fs-5 m-0 p-0 fw-bold"
-          id="modalConfirmacionLabel"
-        >
-          Estado de los campos:
-        </h1>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
-      </div>
-
-      <!-- Cuerpo del modal confirmacion -->
-      <div class="modal-body">
-        {{mensajeIncompletoString}}
-      </div>
-      
-      
-
-      <!-- Footer del modal confirmacion -->
-      <div class="modal-footer">
-        <button type="button" class="btn btn-success" data-bs-dismiss="modal">
-          Aceptar
-        </button>
-      </div>
-    </div>
-  </div>
 </div>

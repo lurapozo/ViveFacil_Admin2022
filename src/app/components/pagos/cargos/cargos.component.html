@@ -1,209 +1,474 @@
-<div class="container-fluid">
-    <!-- Titulo principal -->
-    <div class="row p-2 justify-content-center align-items-center">
-      <div class="col text-center">
-        <h2 class="p-0 m-0">Cargos </h2>
-      </div>
+ <!-- Titulo principal-->
+ <div class="header-admi1">
+  <div class="header-text">
+    <div class="containerstart" >
+      <p *ngIf="showHeader"> CARGO</p>
+      <p *ngIf="showHeaderC"> CREAR CARGO</p>
     </div>
-  
-    <!-- Buscar y agregar profesion -->
-    <div class="row p-2 justify-content-center align-items-center">
-      <div class="col-xl-7 col-lg-5"></div>
-      <div class="col-xl-3 col-lg-4">
-        <div class="input-group">
-          <input type="text" (input)="search($event)" class="form-control"
-            placeholder="Buscar" aria-label="Buscar"
-            aria-describedby="basic-addon1">
-          <button class="input-group-text" id="basic-addon1"> <i class="bi
-              bi-search"></i> </button>
-        </div>
-      </div>
-      <div class="col-xl-2 col-lg-3">
-        <button
-          type="button"
-          class="btn btn-primary"
-          data-bs-toggle="modal"
-          href="#modalCrearProfesion"
-          (click)="limpiarForm('crear')">Agregar Cargo</button>
-      </div>
-    </div>
-  
-    <!-- Contenedor de profesiones -->
-    <div class="row justify-content-center align-items-center p-0">
-      <div class="col-10 text-center">
-        <!-- Titulo -->
-        <div class="row p-2 bg-primary text-white">
-          <div class="col-4 align-self-center">
-            <h3 class="p-0 m-0">Id</h3>
-          </div>
-    
-          <div class="col-4 align-self-center">
-            <h3 class="p-0 m-0">Titulo</h3>
-          </div>
-  
-  
-          <div class="col-4 align-self-center">
-            <h3 class="p-0 m-0">Porcentaje(%)</h3>
-          </div>
-  
-  
-        
-        </div>
-  
-        <!-- Profesion -->
-        <div (click)="ver(a)" *ngFor="let a of arr_filtered_cargo" class="row p-2
-          bg-light fila_info_profesion" data-bs-toggle="modal"
-          href="#modalInformacionProfesion" role="button">
-       
-  
-          <div class="col-4 align-self-center">
-            <h4 class="p-0 m-0">{{a.id}}</h4>
-          </div>
-
-          <div class="col-4 align-self-center">
-            <h4 class="p-0 m-0">{{a.titulo}}</h4>
-          </div>
-  
-       
-  
-          <div class="col-4 align-self-center">
-            <h4 class="p-0 m-0">{{a.porcentaje}}</h4>
-          </div>
-     
-        </div>
-      </div>
-    </div>
-
-        <!-- Seccion paginacion -->
-        
+  </div>
+  <svg preserveAspectRatio="xMidYMid">
+    <path d="M0,60 L0,0 L1290,0 L1290,60" fill="#333539"  />
+    <path d="M320,60 Q448,85 550,60" fill="#333539" />
+  </svg>
 </div>
 
+ <!-- FILTROS-->
+<div class="container-fluid" *ngIf="showHeader">
+  <div class="d-flex flex-wrap header-solicitud align-items-center gap-3">   
+    <div class="containerstart1" >
+      <label class="calendar-label">Desde:</label>
+      <div class="date-container" >
+        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+        <mat-datepicker #picker1></mat-datepicker>
+        <input matInput [matDatepicker]="picker1" placeholder="SELECCIONA DIA" >
+      </div>
+    </div>
+    
+    <div class="containerstart2" >
+      <label class="calendar-label">Hasta:</label>
+      <div class="date-container" >
+        <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+        <mat-datepicker #picker2></mat-datepicker>
+        <input matInput [matDatepicker]="picker2" placeholder="SELECCIONA DIA">
+      </div>
+    </div>
+
+    <div class="containerstart3">
+      <button class="search-button" id="basic-addon1">
+        <i class="bi bi-search"></i>
+      </button>
+      <div class="date-container">
+        <div class="input-group search-group">
+          <input 
+            type="text" 
+            class="form-control search-input" 
+            placeholder="BUSCAR"
+            aria-label="Buscar" 
+            aria-describedby="basic-addon1" 
+            (input)="search($event)">
+        </div> 
+      </div>       
+    </div>
+  </div>
+  <div class="d-flex flex-wrap header-admin">
+    <button class="admin-button"
+    type="button"
+        (click)="crear_cargo()"
+    >
+      <span class="material-icons">add_circle</span>
+      CREAR CAMPO
+    </button>
+  </div>
+
+  <!-- Contenedor de admi -->
+  <div class="row justify-content-center align-items-center p-0">
+    <div class="col-10 text-center containeradmin">
+      <div class="table-responsive">
+      <table class="table table-striped custom-table">
+        <thead>
+          <!-- Encabezado -->
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">TITULO</th>
+            <th scope="col">PORCENTAJE</th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+      </table>
+      <div class="table-body">
+        <table class="table table-striped custom-table">
+        <tbody>
+          <tr
+            (click)="ver(a)" *ngFor="let a of arr_filtered_cargo" 
+          >
+            <td style="color: #40378b; text-transform: uppercase"> <strong> {{ a.id }} </strong></td>
+            <td class="d-flex align-items-center">
+              <span class="estado-indicador" 
+              >  </span>
+              <span style="color: #40378b">{{ a.titulo}} </span>
+      
+            </td>
+            <td style="color: #40378b; text-transform: uppercase"> <strong> {{ a.porcentaje }} </strong> </td>
+            <td>
+              <mat-icon>settings</mat-icon>
+              <button mat-icon-button [matMenuTriggerFor]="menu">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <mat-menu #menu="matMenu">
+                <button mat-menu-item >
+                  <mat-icon>edit</mat-icon>
+                  <span>Editar</span>
+                </button>
+                <button mat-menu-item >
+                  <mat-icon>delete</mat-icon>
+                  <span>Eliminar</span>
+                </button>
+              </mat-menu>
+          </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+             
+      </div>
+    </div>
+  </div>
+     
+
+<!-- Crear Cargo -->
+<div *ngIf="showHeaderC">
+<div class="row justify-content-center align-items-center p-0">
+  <div class="col-10 text-center containerCrearCate">
+    <div class="form-container">
+      <h2>CREAR CARGO</h2>
+      <form [formGroup]="cargoCrear" id="formCrearCate">
+      
+        <div class="form-field">
+          <div class="col-5">
+            <label for="inputNombre" class="form-label"
+              ><h3 class="m-0 p-0 fw-bold">TÍTULO:</h3></label
+            >
+          </div>
+
+          <div class="col-5">
+            <input
+              type="text"
+              formControlName="nombre"
+              class="form-control"
+              [ngClass]="
+                isInvalidForm('nombre', 'crear')
+                  ? 'is-invalid'
+                  : cargoCrear.get('nombre')?.touched ||
+                    (cargoCrear.get('nombre')?.dirty &&
+                      !cargoCrear.get('nombre')?.invalid)
+                  ? 'is-valid'
+                  : ''
+              "
+              id="inputNombre"
+              placeholder="Ingresa nombre"
+            />
+            <div class="invalid-feedback">
+              {{ getErrorMessage(cargoCrear, "nombre") }}
+            </div>
+          </div>
+        </div>
+
+        <div class="form-field">
+          <div class="col-5">
+            <label for="inputtitulo" class="form-label"
+              ><h3 class="m-0 p-0 fw-bold">Título:</h3></label
+            >
+          </div>
+          <div class="col-5">
+            <textarea
+              type="text"
+              formControlName="titulo"
+              class="form-control"
+              [ngClass]="
+                isInvalidForm('titulo', 'crear')
+                  ? 'is-invalid'
+                  : cargoCrear.get('titulo')?.touched ||
+                    (cargoCrear.get('titulo')?.dirty &&
+                      !cargoCrear.get('titulo')?.invalid)
+                  ? 'is-valid'
+                  : ''
+              "
+              id="inputtitulo"
+              placeholder="Ingrese titulo"
+            ></textarea>
+            <div class="invalid-feedback">
+              {{ getErrorMessage(cargoCrear, "titulo") }}
+            </div>
+          </div>
+        </div>
+
+        <div class="form-field">
+          <div class="col-5">
+            <label for="inputNombre" class="form-label"
+              ><h3 class="m-0 p-0 fw-bold">Porcentaje:</h3></label
+            >
+          </div>
+          <div class="col-5">
+            <select
+                class="form-select"
+                [ngClass]="isInvalidForm('porcentaje','crear') ? 'is-invalid' : ''"
+                formControlName="porcentaje"
+                id="ge"
+                [value]="cargo_seleccionada?.porcentaje"
+                aria-describedby="selectorServicioCrearFeedback"
+                placeholder="Elija un porcentaje"
+              >
+                <option *ngFor="let c of  arr_filtered_cargo" [id]="c" [value]="c">
+                  {{ c.porcentaje }}
+                </option>
+              </select>
+            <div class="invalid-feedback">
+              {{ getErrorMessage(cargoCrear, "porcentaje") }}
+            </div>
+          </div>
+        </div>
+
+      </form>
+      <button
+        [disabled]="cargoCrear.invalid ? true : false"
+        data-bs-target="#modalConfirmacion"
+        data-bs-toggle="modal"
+        class="custom-button float-right"
+        (click)="
+          establecerMensaje(
+            'Está seguro que desea crear la profesión?',
+            'crear'
+          )
+        "
+      >
+        Crear
+      </button>
+     
+      <button
+        class="custom-button1 float-right"
+        (click)="showHeader = true; showHeaderC= false ;">
+      Cancelar
+      </button>  
+      
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- Fin Crear Cargo-->
+
+<!-- Seccion paginacion -->
 <div class="modal fade" id="modalInformacionProfesion" aria-hidden="true"
 aria-labelledby="modalInformacionProfesionLabel" tabindex="-1">
 <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-  <div class="modal-content">
-    <div class="modal-header align-items-center">
-      <h1 class="modal-title fs-5 m-0 p-0 fw-bold"
-        id="modalInformacionProfesionLabel">Información de Cargo</h1>
-      <button type="button" class="btn-close" data-bs-dismiss="modal"
-        aria-label="Close"></button>
+<div class="modal-content">
+  <div class="modal-header align-items-center">
+    <h1 class="modal-title fs-5 m-0 p-0 fw-bold"
+      id="modalInformacionProfesionLabel">Información de Cargo</h1>
+    <button type="button" class="btn-close" data-bs-dismiss="modal"
+      aria-label="Close"></button>
+  </div>
+  <div class="modal-body mb-0">
+
+
+    <div class="row p-2 align-items-center">
+      <div class="col-5">
+        <h3 class="m-0 p-0 fw-bold">Id:</h3>
+      </div>
+      <div class="col-7">
+        {{cargo_seleccionada?.id}}
+      </div>
     </div>
-    <div class="modal-body mb-0">
+
+
+    <div class="row p-2 align-items-center">
+      <div class="col-5">
+        <h3 class="m-0 p-0 fw-bold">Titulo:</h3>
+      </div>
+      <div class="col-7">
+        {{cargo_seleccionada?.titulo}}
+      </div>
+    </div>
+
  
 
-      <div class="row p-2 align-items-center">
-        <div class="col-5">
-          <h3 class="m-0 p-0 fw-bold">Id:</h3>
-        </div>
-        <div class="col-7">
-          {{cargo_seleccionada?.id}}
-        </div>
+    <div class="row p-2 align-items-center">
+      <div class="col-5">
+        <h3 class="m-0 p-0 fw-bold">Nombre:</h3>
       </div>
-
-
-      <div class="row p-2 align-items-center">
-        <div class="col-5">
-          <h3 class="m-0 p-0 fw-bold">Titulo:</h3>
-        </div>
-        <div class="col-7">
-          {{cargo_seleccionada?.titulo}}
-        </div>
+      <div class="col-7">
+        {{cargo_seleccionada?.porcentaje}}
       </div>
-
-   
-
-      <div class="row p-2 align-items-center">
-        <div class="col-5">
-          <h3 class="m-0 p-0 fw-bold">Nombre:</h3>
-        </div>
-        <div class="col-7">
-          {{cargo_seleccionada?.porcentaje}}
-        </div>
-      </div>
-  
     </div>
-    <div class="modal-footer">
-      <button
-        class="btn btn-danger"
-        data-bs-target="#modalConfirmacion"
-        data-bs-toggle="modal"
-        (click)="establecerMensaje('Está seguro que desea eliminar la profesión?', 'eliminar')">Eliminar</button>
-      <button
-        (click)="limpiarForm('actualizar')"
 
-        class="btn btn-success"
-        data-bs-target="#modalInformacionEdicionProfesion"
-        data-bs-toggle="modal">Editar</button>
-    </div>
   </div>
+  <div class="modal-footer">
+    <button
+      class="btn btn-danger"
+      data-bs-target="#modalConfirmacion"
+      data-bs-toggle="modal"
+      (click)="establecerMensaje('Está seguro que desea eliminar la profesión?', 'eliminar')">Eliminar</button>
+    <button
+      (click)="limpiarForm('actualizar')"
+
+      class="btn btn-success"
+      data-bs-target="#modalInformacionEdicionProfesion"
+      data-bs-toggle="modal">Editar</button>
+  </div>
+</div>
 </div>
 </div>
 
 <div class="modal fade" id="modalInformacionEdicionProfesion" aria-hidden="true"
 aria-labelledby="modalInformacionEdicionProfesionLabel" tabindex="-1">
 <div class="modal-dialog modal-dialog-centered">
-  <div class="modal-content">
-    <div class="modal-header align-items-center">
-      <h1 class="modal-title fs-5 m-0 p-0 fw-bold"
-        id="modalInformacionEdicionProfesionLabel">Edición de Cargo</h1>
-      <!-- (click)="limpiarForm('actualizar')" -->
-      <button
-        type="button"
-        class="btn-close"
-        data-bs-dismiss="modal"
-        aria-label="Close"></button>
-    </div>
-    <div class="modal-body mb-0">
-      <form [formGroup]="formEdit" class="">
-    
+<div class="modal-content">
+  <div class="modal-header align-items-center">
+    <h1 class="modal-title fs-5 m-0 p-0 fw-bold"
+      id="modalInformacionEdicionProfesionLabel">Edición de Cargo</h1>
+    <!-- (click)="limpiarForm('actualizar')" -->
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"></button>
+  </div>
+  <div class="modal-body mb-0">
+    <form [formGroup]="formEdit" class="">
+  
 
-        <div class="row p-2 align-items-center">
-          <div class="col-5">
-            <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
-                fw-bold">Titulo:</h3></label>
-          </div>
-          <div class="col-7">
-            <input
-              type="text"
-              formControlName="titulo"
-              class="form-control"
-              [ngClass]="isInvalidForm('titulo', 'actualizar') ? 'is-invalid'
-              : ''"
+      <div class="row p-2 align-items-center">
+        <div class="col-5">
+          <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
+              fw-bold">Titulo:</h3></label>
+        </div>
+        <div class="col-7">
+          <input
+            type="text"
+            formControlName="titulo"
+            class="form-control"
+            [ngClass]="isInvalidForm('titulo', 'actualizar') ? 'is-invalid'
+            : ''"
 
-              value="Mark"
-              [placeholder]="cargo_seleccionada
+            value="Mark"
+            [placeholder]="cargo_seleccionada
 ?.titulo"
-              [value]="cargo_seleccionada
+            [value]="cargo_seleccionada
 ?.titulo">
-            <div class="invalid-feedback"> {{getErrorMessage(formEdit,
-              'titulo')}} </div>
-          </div>
+          <div class="invalid-feedback"> {{getErrorMessage(formEdit,
+            'titulo')}} </div>
         </div>
+      </div>
 
-        <div class="row p-2 align-items-center">
-          <div class="col-5">
-            <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
-                fw-bold">Nombre:</h3></label>
-          </div>
-          <div class="col-7">
-            <input
-              type="number"
-              formControlName="porcentaje"
-              class="form-control"
-              [ngClass]="isInvalidForm('porcentaje', 'actualizar') ?
-              'is-invalid' : ''"
+      <div class="row p-2 align-items-center">
+        <div class="col-5">
+          <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
+              fw-bold">Nombre:</h3></label>
+        </div>
+        <div class="col-7">
+          <input
+            type="number"
+            formControlName="porcentaje"
+            class="form-control"
+            [ngClass]="isInvalidForm('porcentaje', 'actualizar') ?
+            'is-invalid' : ''"
 
-              value="Mark"
+            value="Mark"
 
-              [value]="cargo_seleccionada
+            [value]="cargo_seleccionada
 ?.nombre">
-            <div class="invalid-feedback"> {{getErrorMessage(formEdit,
-              'porcentaje')}} </div>
-          </div>
+          <div class="invalid-feedback"> {{getErrorMessage(formEdit,
+            'porcentaje')}} </div>
         </div>
+      </div>
 
 
-        <div class="row p-2 align-items-center">
+      <div class="row p-2 align-items-center">
+        <div class="col-5">
+          <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
+              fw-bold">Porcentaje:</h3></label>
+        </div>
+        <div class="col-7">
+          <input
+            type="number"
+            formControlName="porcentaje"
+            class="form-control"
+            [ngClass]="isInvalidForm('porcentaje', 'actualizar') ?
+            'is-invalid' : ''"
+
+            value="Mark"
+
+            [value]="cargo_seleccionada
+?.porcentaje">
+          <div class="invalid-feedback"> {{getErrorMessage(formEdit,
+            'porcentaje')}} </div>
+        </div>
+      </div>
+
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-danger"
+      data-bs-target="#modalInformacionProfesion" data-bs-toggle="modal">Regresar</button>
+    <button
+    [disabled]="formEdit.invalid? true : false"
+      data-bs-target="#modalConfirmacion"
+      data-bs-toggle="modal"
+      class="btn btn-success"
+      (click)="establecerMensaje('Está seguro que desea actualizar la información?', 'actualizar')">Actualizar</button>
+  </div>
+
+  <!-- <pre>
+    {{actualizarProfesionesForm.value | json}}
+  </pre> -->
+</div>
+</div>
+</div>
+<!-- Modal crear admi -->
+<div class="modal fade" id="modalCrearProfesion" aria-hidden="true"
+aria-labelledby="modalCrearProfesionLabel" tabindex="-1">
+<div class="modal-dialog modal-dialog-centered">
+<div class="modal-content">
+  <div class="modal-header align-items-center">
+    <h1 class="modal-title fs-5 m-0 p-0 fw-bold"
+      id="modalCrearProfesionLabel">Crear Cargo</h1>
+    <!-- (click)="limpiarForm('crear')" -->
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"></button>
+  </div>
+  <div class="modal-body mb-0">
+    <form [formGroup]="cargoCrear" class="">
+      <!-- Seccion de imagen -->
+ 
+
+
+      <div class="row p-2 align-items-center">
+        <div class="col-5">
+          <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
+              fw-bold">Titulo:</h3></label>
+        </div>
+        <div class="col-7">
+          <input
+            type="text"
+            formControlName="titulo"
+            class="form-control"
+            [ngClass]="isInvalidForm('titulo', 'crear') ? 'is-invalid' :
+            cargoCrear.get('titulo')?.touched ||
+            cargoCrear.get('titulo')?.dirty &&
+            !cargoCrear.get('titulo')?.invalid ? 'is-valid' : ''"
+            placeholder="Paymentest">
+          <div class="invalid-feedback"> {{getErrorMessage(cargoCrear,
+            'titulo')}} </div>
+        </div>
+      </div>
+
+
+      <div class="row p-2 align-items-center">
+        <div class="col-5">
+          <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
+              fw-bold">Nombre:</h3></label>
+        </div>
+        <div class="col-7">
+          <textarea
+            type="text"
+            formControlName="nombre"
+            class="form-control"
+            [ngClass]="isInvalidForm('nombre', 'crear') ? 'is-invalid'
+            :
+            cargoCrear.get('nombre')?.touched ||
+            cargoCrear.get('nombre')?.dirty &&
+            !cargoCrear.get('nombre')?.invalid ? 'is-valid' : ''"
+            placeholder="Banco"></textarea>
+          <div class="invalid-feedback"> {{getErrorMessage(cargoCrear,
+            'nombre')}} </div>
+        </div>
+      </div>
+
+      <div class="row p-2 align-items-center">
           <div class="col-5">
             <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
                 fw-bold">Porcentaje:</h3></label>
@@ -213,137 +478,33 @@ aria-labelledby="modalInformacionEdicionProfesionLabel" tabindex="-1">
               type="number"
               formControlName="porcentaje"
               class="form-control"
-              [ngClass]="isInvalidForm('porcentaje', 'actualizar') ?
-              'is-invalid' : ''"
-
-              value="Mark"
-
-              [value]="cargo_seleccionada
-?.porcentaje">
-            <div class="invalid-feedback"> {{getErrorMessage(formEdit,
+              [ngClass]="isInvalidForm('porcentaje', 'crear') ? 'is-invalid'
+              :
+              cargoCrear.get('porcentaje')?.touched ||
+              cargoCrear.get('porcentaje')?.dirty &&
+              !cargoCrear.get('porcentaje')?.invalid ? 'is-valid' : ''"
+              placeholder="1%">
+            <div class="invalid-feedback"> {{getErrorMessage(cargoCrear,
               'porcentaje')}} </div>
           </div>
         </div>
 
-      </form>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-danger"
-        data-bs-target="#modalInformacionProfesion" data-bs-toggle="modal">Regresar</button>
-      <button
-      [disabled]="formEdit.invalid? true : false"
-        data-bs-target="#modalConfirmacion"
-        data-bs-toggle="modal"
-        class="btn btn-success"
-        (click)="establecerMensaje('Está seguro que desea actualizar la información?', 'actualizar')">Actualizar</button>
-    </div>
+  
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button
+    [disabled]="cargoCrear.invalid? true : false"
+      data-bs-target="#modalConfirmacion"
+      data-bs-toggle="modal"
+      class="btn btn-success" 
+      (click)="establecerMensaje('Está seguro que desea crear la  profesión?', 'crear')">Crear</button>
+  </div>
 
-    <!-- <pre>
-      {{actualizarProfesionesForm.value | json}}
+  <!-- <pre>
+      {{crearProfesionesForm.value | json}}
     </pre> -->
-  </div>
 </div>
-</div>
-<!-- Modal crear admi -->
-<div class="modal fade" id="modalCrearProfesion" aria-hidden="true"
-aria-labelledby="modalCrearProfesionLabel" tabindex="-1">
-<div class="modal-dialog modal-dialog-centered">
-  <div class="modal-content">
-    <div class="modal-header align-items-center">
-      <h1 class="modal-title fs-5 m-0 p-0 fw-bold"
-        id="modalCrearProfesionLabel">Crear Cargo</h1>
-      <!-- (click)="limpiarForm('crear')" -->
-      <button
-        type="button"
-        class="btn-close"
-        data-bs-dismiss="modal"
-        aria-label="Close"></button>
-    </div>
-    <div class="modal-body mb-0">
-      <form [formGroup]="cargoCrear" class="">
-        <!-- Seccion de imagen -->
-   
-
-
-        <div class="row p-2 align-items-center">
-          <div class="col-5">
-            <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
-                fw-bold">Titulo:</h3></label>
-          </div>
-          <div class="col-7">
-            <input
-              type="text"
-              formControlName="titulo"
-              class="form-control"
-              [ngClass]="isInvalidForm('titulo', 'crear') ? 'is-invalid' :
-              cargoCrear.get('titulo')?.touched ||
-              cargoCrear.get('titulo')?.dirty &&
-              !cargoCrear.get('titulo')?.invalid ? 'is-valid' : ''"
-              placeholder="Paymentest">
-            <div class="invalid-feedback"> {{getErrorMessage(cargoCrear,
-              'titulo')}} </div>
-          </div>
-        </div>
-
-
-        <div class="row p-2 align-items-center">
-          <div class="col-5">
-            <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
-                fw-bold">Nombre:</h3></label>
-          </div>
-          <div class="col-7">
-            <textarea
-              type="text"
-              formControlName="nombre"
-              class="form-control"
-              [ngClass]="isInvalidForm('nombre', 'crear') ? 'is-invalid'
-              :
-              cargoCrear.get('nombre')?.touched ||
-              cargoCrear.get('nombre')?.dirty &&
-              !cargoCrear.get('nombre')?.invalid ? 'is-valid' : ''"
-              placeholder="Banco"></textarea>
-            <div class="invalid-feedback"> {{getErrorMessage(cargoCrear,
-              'nombre')}} </div>
-          </div>
-        </div>
-
-        <div class="row p-2 align-items-center">
-            <div class="col-5">
-              <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
-                  fw-bold">Porcentaje:</h3></label>
-            </div>
-            <div class="col-7">
-              <input
-                type="number"
-                formControlName="porcentaje"
-                class="form-control"
-                [ngClass]="isInvalidForm('porcentaje', 'crear') ? 'is-invalid'
-                :
-                cargoCrear.get('porcentaje')?.touched ||
-                cargoCrear.get('porcentaje')?.dirty &&
-                !cargoCrear.get('porcentaje')?.invalid ? 'is-valid' : ''"
-                placeholder="1%">
-              <div class="invalid-feedback"> {{getErrorMessage(cargoCrear,
-                'porcentaje')}} </div>
-            </div>
-          </div>
-
-    
-      </form>
-    </div>
-    <div class="modal-footer">
-      <button
-      [disabled]="cargoCrear.invalid? true : false"
-        data-bs-target="#modalConfirmacion"
-        data-bs-toggle="modal"
-        class="btn btn-success" 
-        (click)="establecerMensaje('Está seguro que desea crear la  profesión?', 'crear')">Crear</button>
-    </div>
-
-    <!-- <pre>
-        {{crearProfesionesForm.value | json}}
-      </pre> -->
-  </div>
 </div>
 </div>
 
@@ -351,46 +512,45 @@ aria-labelledby="modalCrearProfesionLabel" tabindex="-1">
 <div class="modal fade" id="modalConfirmacion" tabindex="-1"
 aria-labelledby="modalConfirmacionLabel" aria-hidden="true">
 <div class="modal-dialog">
-  <div class="modal-content">
-    <!-- Titulo del modal confirmacion -->
-    <div class="modal-header">
-      <h1 class="modal-title fs-5 m-0 p-0 fw-bold"
-        id="modalConfirmacionLabel">Confirmar selección</h1>
-      <button type="button" class="btn-close" data-bs-dismiss="modal"
-        aria-label="Close"></button>
-    </div>
-
-    <!-- Cuerpo del modal confirmacion -->
-    <div class="modal-body">
-      {{mensajeAlerta}}
-    </div>
-
-    <!-- Footer del modal confirmacion -->
-    <div class="modal-footer">
-      <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
-      <button *ngIf="isCrear" type="button" class="btn btn-success"
-        (click)="onCrear()" data-bs-dismiss="modal">Confirmar</button>
-      <button *ngIf="isActualizar" type="button" class="btn btn-success"
-        (click)="onActualizar()" data-bs-dismiss="modal">Confirmar</button>
-      <button *ngIf="isEliminar" type="button" class="btn btn-success"
-        (click)="onDelete()" data-bs-dismiss="modal">Confirmar</button>
-    </div>
+<div class="modal-content">
+  <!-- Titulo del modal confirmacion -->
+  <div class="modal-header">
+    <h1 class="modal-title fs-5 m-0 p-0 fw-bold"
+      id="modalConfirmacionLabel">Confirmar selección</h1>
+    <button type="button" class="btn-close" data-bs-dismiss="modal"
+      aria-label="Close"></button>
   </div>
+
+  <!-- Cuerpo del modal confirmacion -->
+  <div class="modal-body">
+    {{mensajeAlerta}}
+  </div>
+
+  <!-- Footer del modal confirmacion -->
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+    <button *ngIf="isCrear" type="button" class="btn btn-success"
+      (click)="onCrear()" data-bs-dismiss="modal">Confirmar</button>
+    <button *ngIf="isActualizar" type="button" class="btn btn-success"
+      (click)="onActualizar()" data-bs-dismiss="modal">Confirmar</button>
+    <button *ngIf="isEliminar" type="button" class="btn btn-success"
+      (click)="onDelete()" data-bs-dismiss="modal">Confirmar</button>
+  </div>
+</div>
 
 </div>
 </div>
 
 <!-- Toast de Información -->
 <div class="toast-container position-fixed bottom-0 end-0 p-3">
-  <div #liveToast id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-    <div class="toast-header" [ngClass]="isErrorToast? ' bg-danger' : ' bg-success'">
-      <img src="../../../assets/imagenes/notification_logo.png" class="rounded me-2" width="25px" alt="...">
-      <strong class="me-auto text-light">{{tituloToast}}</strong>
-      <small class="text-light">Ahora</small>
-      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-    </div>
-    <div class="toast-body bg-opacity-25" [ngClass]="isErrorToast? ' bg-danger' : ' bg-success'">
-      {{mensajeToast}}
-    </div>
+<div #liveToast id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+  <div class="toast-header" [ngClass]="isErrorToast? ' bg-danger' : ' bg-success'">
+    <strong class="me-auto text-light">{{tituloToast}}</strong>
+    <small class="text-light">Ahora</small>
+    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
   </div>
+  <div class="toast-body bg-opacity-25" [ngClass]="isErrorToast? ' bg-danger' : ' bg-success'">
+    {{mensajeToast}}
+  </div>
+</div>
 </div>

@@ -12,8 +12,8 @@ import { BodyCrearProfesionProveedor, Proveedor } from '../../interfaces/proveed
 export class SolicitudesProfesionesComponent {
 
   total = 0
-  arr_soli?: SolicitudProfesion[];
-  arr_filtered_soli?: SolicitudProfesion[];
+  arr_soli?: SolicitudProfesion[] | undefined;;
+  arr_filtered_soli?: SolicitudProfesion[] | undefined;;
   condicionNext = false
   currentPage = 1
   pageNumber: number[] = [];
@@ -26,6 +26,12 @@ export class SolicitudesProfesionesComponent {
   isErrorToast = false;
   mensajeToast = "";
   tituloToast = "";
+
+  fechaInicio: Date | null = null;
+  fechaFin: Date | null = null;
+
+
+  fechasFiltradas: any[] = [];
 
   constructor(private pythonAnywhereService: PythonAnywhereService, private sanitizer: DomSanitizer) {
 
@@ -136,4 +142,18 @@ export class SolicitudesProfesionesComponent {
     }
   }
 
+  filtrarPorFechas() {
+    if (this.fechaInicio && this.fechaFin) {
+      const fechaInicio = new Date(this.fechaInicio);
+      const fechaFin = new Date(this.fechaFin);
+      const solic = this.arr_soli? Object.values(this.arr_soli) : [];
+      this.arr_filtered_soli = solic.filter( a => {
+        const fechaCreacion = new Date(a.fecha_solicitud);
+        if (this.fechaInicio && this.fechaFin) {
+          return fechaCreacion >= fechaInicio && fechaCreacion <= fechaFin;
+        }
+        return true;
+      });
+    }
+  }
 }

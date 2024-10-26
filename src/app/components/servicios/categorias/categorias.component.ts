@@ -10,6 +10,8 @@ import { BodyActualizarCategoria, BodyCrearCategoria, Categoria } from '../../..
   styleUrls: ['./categorias.component.css']
 })
 export class CategoriasComponent {
+  showHeader: boolean = true;
+  showHeaderC: boolean = false;
   isCrear = false; isActualizar = false; isEliminar = false;
   existImageCrear = false; existImageActualizar = false;
   existImageCrear2 = false; existImageActualizar2 = false;
@@ -426,5 +428,10 @@ export class CategoriasComponent {
     } else {
       console.log('No hay toast renderizado');
     }
+  }
+
+  btncrearCategoria() {
+    this.showHeader = false;
+    this.showHeaderC = true;
   }
 }

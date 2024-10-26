@@ -4,6 +4,10 @@ import { DomSanitizer } from '@angular/platform-browser';
 import * as moment from 'moment';
 import { PythonAnywhereService } from 'src/app/services/PythonAnywhere/python-anywhere.service';
 import { BodyPromocionActualizar, Promocion, PromocionCrear } from '../../interfaces/promocion';
+import { Categoria } from 'src/app/interfaces/categoria';
+import { SubCategoria } from 'src/app/interfaces/sub-categoria';
+
+
 @Component({
   selector: 'app-promocion',
   templateUrl: './promocion.component.html',
@@ -26,11 +30,22 @@ export class PromocionComponent {
   activoCond = false
   mensajeAlerta: string = '';
   isCrear = false; isActualizar = false; isEliminar = false;
-  categoria!: any[];
   participante = ['Solicitante','Proveedor']
   isErrorToast = false;
   mensajeToast = "";
   tituloToast = "";
+
+  filtroActual: any;
+  mostrarFiltro: boolean = false;
+
+  dropdownOpen: boolean = false;
+  categoria?: SubCategoria[];
+  listCategorias?: Categoria[];
+  primeraCat?: string;
+  fechaInicio: Date | null = null; 
+  fechaFin: Date | null = null; 
+  fechasFiltradas: any[] = [];
+ 
 
 
   constructor(private pythonAnywhereService: PythonAnywhereService, private sanitizer: DomSanitizer) {
@@ -84,6 +99,25 @@ formEdit: FormGroup = new FormGroup({
 
 
 });
+
+abrirSelectorArchivo(event: Event, fileInput: HTMLInputElement): void {
+  event.stopPropagation();  
+  fileInput.click();  
+}
+
+toggleFiltro() {
+  this.mostrarFiltro = true;
+}
+
+openSelect(selectElement: HTMLSelectElement) {
+  selectElement.focus();  
+  selectElement.size = selectElement.options.length; 
+}
+
+onChange(event: Event) {
+  const selectedValue = (event.target as HTMLSelectElement).value;
+  console.log('Opción seleccionada:', selectedValue);
+}
 
 cambiarEstado(event:any){
   let estado = event.srcElement.checked
@@ -512,5 +546,31 @@ search(evento: any) {
     } else {
       console.log('No hay toast renderizado');
     }
+  }
+
+  
+  filtrarPorFechas() {
+    if (this.fechaInicio && this.fechaFin) {
+      const fechaInicio = new Date(this.fechaInicio);
+      const fechaFin = new Date(this.fechaFin);
+      const prom =  this.arr_promocion? Object.values(this.arr_promocion) : [];
+      this.arr_filtered_promocion= prom.filter(a => {
+        const fechaCreacion1 = new Date(a.fecha_creacion);
+        const fechaCreacion = new Date(a.fecha_expiracion);
+        if (this.fechaInicio && this.fechaFin) {
+          return fechaCreacion1 >= fechaInicio && fechaCreacion <= fechaFin;
+        }
+        return true;
+      });
+    }
+  }
+
+  toggleDropdown() {
+    this.dropdownOpen = !this.dropdownOpen;
+  }
+
+  seleccionarOpcion(opcion: string) {
+    console.log('Opción seleccionada:', opcion);
+    this.dropdownOpen = false; 
   }
 }

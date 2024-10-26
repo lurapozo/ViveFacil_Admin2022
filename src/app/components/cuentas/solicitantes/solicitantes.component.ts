@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component,} from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ignoreElements } from 'rxjs';
@@ -7,7 +7,7 @@ import { PythonAnywhereService } from 'src/app/services/PythonAnywhere/python-an
 @Component({
   selector: 'app-solicitantes',
   templateUrl: './solicitantes.component.html',
-  styleUrls: ['./solicitantes.component.css']
+  styleUrls: ['./solicitantes.component.css'],
 })
 export class SolicitantesComponent {
 
@@ -32,10 +32,16 @@ export class SolicitantesComponent {
   isCrear = false; isActualizar = false; isEliminar = false;
   habilitar = ''
 
-  filtro = 'todos'
+  filtro = 'todos';
+  fechaInicio: Date | null = null; 
+  fechaFin: Date | null = null; 
 
+  showHeader: boolean = true;
+  showHeaderC: boolean = false;
+  showadmi: boolean = false;
+  nombre: any;
 
-
+  fechasFiltradas: any[] = [];
 
   constructor(private pythonAnywhereService: PythonAnywhereService, private sanitizer: DomSanitizer) {
 
@@ -52,6 +58,20 @@ export class SolicitantesComponent {
       }
     });
   }
+
+  ngOnInit() {
+    this.loadGeneros();
+    this.loadCiudades();
+  }
+  
+  loadGeneros() {
+    this.generos = ['Masculino', 'Femenino', 'Otro']; 
+  }
+
+  loadCiudades() {
+    this.ciudades = ['Guayaquil', 'Quito', 'Cuenca', 'Sto. Domingo', 'Ibarra'];
+  }
+
   search(evento: any) {
     const texto = evento.target.value;
     console.log('Escribe en el buscador: ', texto)
@@ -137,6 +157,21 @@ export class SolicitantesComponent {
         this.condicionNext = true
       }
     });
+  }
+
+  filtrarPorFechas() {
+    if (this.fechaInicio && this.fechaFin) {
+      const fechaInicio = new Date(this.fechaInicio);
+      const fechaFin = new Date(this.fechaFin);
+
+      this.arr_filtered_soli = this.arr_soli.filter(a => {
+        const fechaCreacion = new Date(a.user_datos.fecha_creacion);
+        if (this.fechaInicio && this.fechaFin) {
+          return fechaCreacion >= fechaInicio && fechaCreacion <= fechaFin;
+        }
+        return true; // Si no se seleccionan fechas, mostrar todos los elementos
+      });
+  }
   }
 
 }

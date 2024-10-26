@@ -6,6 +6,7 @@ export interface Cupon {
   porcentaje: number;
   fecha_iniciacion: string;
   fecha_expiracion: string;
+  participantes: string;
   puntos: number;
   foto?: File
   tipo_categoria: string;
@@ -20,6 +21,7 @@ export interface CuponCrear {
   porcentaje: number;
   fecha_iniciacion: string;
   fecha_expiracion: string;
+  participantes: string;
   puntos: number;
   foto?:File
   tipo_categoria: string;

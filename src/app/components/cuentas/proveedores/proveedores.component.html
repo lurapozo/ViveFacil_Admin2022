@@ -1,105 +1,701 @@
-<div class="container-fluid">
-    <!-- Titulo principal -->
-    <div class="row p-2 justify-content-center align-items-center">
-      <div class="col text-center">
-        <h2 class="p-0 m-0">Proveedores</h2>
-        <h2 class="p-0 m-0">Total de Proveedores: {{total}}</h2>
-      </div>
+<!-- Titulo principal-->
+<div class="header-admi1 ">
+  <div class="header-text">
+    <div class="containerstart">
+      <p *ngIf="showHeader"> PROVEEDOR</p>
+        <p *ngIf="showHeaderC">EDITAR PROVEEDOR</p>
     </div>
-  
-    <!-- Buscar y agregar admi -->
-    <div class="row p-2 justify-content-center align-items-center">
-      <div class="col-xl-7 col-lg-5"></div>
-      <div class="col-xl-3 col-lg-4">
-        <div class="input-group">
-          <input type="text" class="form-control" placeholder="Buscar"
-            aria-label="Buscar" aria-describedby="basic-addon1"
-            (input)="search($event)">
-          <button class="input-group-text" id="basic-addon1"> <i class="bi
-              bi-search"></i> </button>
-        </div>
-      </div>
-  
-    </div>
-    <!-- Contenedor de admi -->
-    <div class="row justify-content-center align-items-center p-0">
-      <div class="col-10 text-center">
-        <!-- Titulo -->
-        <div class="row p-2 bg-primary text-white">
-          <div class="col-2 align-self-center">
-            <h3 class="p-0 m-0">Nombres</h3>
-          </div>
-  
-          <div class="col-2 align-self-center">
-            <h3 class="p-0 m-0">Cedula</h3>
-          </div>
-  
-          <div class="col-2 align-self-center">
-            <h3 class="p-0 m-0">Correo Electronico</h3>
-          </div>
-  
-          <div class="col-2 align-self-center">
-            <h3 class="p-0 m-0">Telefono</h3>
-          </div>
-          <div class="col-2 align-self-center">
-            <h3 class="p-0 m-0">Fecha de actualización</h3>
-          </div>
-          <div class="col-1 align-self-center">
-            <h3 class="p-0 m-0">Finalización de contrato</h3>
-          </div>
-          <div class="col-1 align-self-center">
-            <h3 class="p-0 m-0">Estado</h3>
-          </div>
-  
-        </div>
-  
-        <!-- Profesion -->
-        <div (click)=" 
-          proveedor_seleccionado=a;
-          copiaCedulaNombre = proveedor_seleccionado?.copiaCedula.substring(
-            proveedor_seleccionado?.copiaCedula.lastIndexOf('/') + 1
-          );
-          copiaLicenciaNombre = proveedor_seleccionado?.copiaLicencia.substring(
-            proveedor_seleccionado?.copiaLicencia.lastIndexOf('/') + 1
-          );
-          copiaDocumentosNombre = proveedor_seleccionado?.document[0].documento.substring(
-            proveedor_seleccionado?.document[0].documento.lastIndexOf('/') + 1
-          );
-          funcionMostar();" 
-          *ngFor="let a of arr_filtered_proveedor"
-          class="row p-2 bg-light fila_info_profesion" data-bs-toggle="modal"
-          href="#modalInformacionProfesion" role="button">
-          <div class="col-2 align-self-center">
-            <h4 class="p-0 m-0"> {{a.user_datos.nombres}}
-              {{a.apellidos}}</h4>
-          </div>
-  
-          <div class="col-2 align-self-center">
-            <h4 class="p-0 m-0"> {{a.user_datos.cedula}} </h4>
-          </div>
-  
-          <div class="col-2 align-self-center">
-            <h4 class="p-0 m-0">{{a.user_datos.user.email}}</h4>
-          </div>
-  
-          <div class="col-2 align-self-center">
-            <h4 class="p-0 m-0"> {{a.user_datos.telefono}}</h4>
-          </div>
-          <div class="col-2 align-self-center">
-            <h4 class="p-0 m-0"> {{a.user_datos.fecha_creacion  | date : "d/M/Y" }}</h4>
-          </div>
-          <div class="col-1 align-self-center">
-            <h4 class="p-0 m-0"> {{a.fecha_caducidad  | date : "d/M/Y" }}</h4>
-          </div>
-          <div class="col-1 align-self-center">
-            <img class="p-0 m-0" *ngIf="!a.estado" width="25vw" src="assets/imagenes/Basic_red_dot.png"> 
-            <img class="p-0 m-0" *ngIf="a.estado" width="25vw" src="assets/imagenes/Basic_green_dot.png"> 
-          </div>
-  
-        </div>
-      </div>
+    <div class="containerend">
+      <p *ngIf="showHeader"> Total de Proveedores: {{total}}</p>
     </div>
   </div>
+  <svg preserveAspectRatio="xMidYMid">
+    <path d="M0,60 L0,0 L1290,0 L1290,60" fill="#333539"  />
+    <path d="M320,60 Q448,85 550,60" fill="#333539" />
+  </svg>
+</div>
+
+ <!-- FILTROS-->
+<div class="d-flex flex-wrap header-solicitud align-items-center gap-3" *ngIf="showHeader">   
+    <div class="containerstart1" >
+      <label class="calendar-label">Desde:</label>
+      <div class="date-container" >
+        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+        <mat-datepicker #picker1></mat-datepicker>
+        <input matInput [matDatepicker]="picker1" placeholder="SELECCIONA DIA" 
+         [(ngModel)]="fechaInicio" (dateChange)="filtrarPorFechas()"
+        >
+        
+      </div>
+    </div>
+    
+    <div class="containerstart2" >
+      <label class="calendar-label">Hasta:</label>
+      <div class="date-container" >
+        <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+        <mat-datepicker #picker2></mat-datepicker>
+        <input matInput [matDatepicker]="picker2" placeholder="SELECCIONA DIA"
+         [(ngModel)]="fechaFin" (dateChange)="filtrarPorFechas()"
+        >
+      </div>
+    </div>
+
+    <div class="containerstart3">
+      <button class="search-button" id="basic-addon1">
+        <i class="bi bi-search"></i>
+      </button>
+      <div class="date-container">
+        <div class="input-group search-group">
+          <input 
+            type="text" 
+            class="form-control search-input" 
+            placeholder="BUSCAR"
+            aria-label="Buscar" 
+            aria-describedby="basic-addon1" 
+            (input)="search($event)">
+        </div> 
+      </div>       
+    </div>
+</div>
+
+  <div class="row justify-content-center align-items-center p-0" *ngIf="showHeader">
+    <div class="col-10 text-center containeradmin">
+      <div class="table-responsive">
+      <table class="table table-striped custom-table">
+        <thead>
+          <!-- Encabezado -->
+          <tr>
+            <th scope="col">Nombres</th>
+            <th scope="col">Cedula</th>
+            <th scope="col">Correo Electronico</th>
+            <th scope="col">Telefono</th>
+            <th scope="col">Fecha de actualizacion</th>
+            <th scope="col">Finalización de contrato</th>
+            <th scope="col">Estado</th>
+          </tr>
+        </thead>
+      </table>
+      <div class="table-body">
+        <table class="table table-striped custom-table">
+          <tbody>
+            <tr
+              (click)="
+              edit_prov(a); funcionMostar();" 
+              *ngFor="let a of arr_filtered_proveedor"
+              role="button"
+            >
+              <td style="color: #40378b; text-transform: uppercase"> <strong> {{a.user_datos.nombres}} {{a.apellidos}}</strong></td>
+              <td style="color: #40378b; text-transform: uppercase"> <strong> {{a.user_datos.cedula}} </strong> </td>
+              <td style="color: #40378b; text-transform: uppercase"> <strong> {{a.user_datos.user.email}} </strong></td>
+              <td style="color: #40378b; text-transform: uppercase"> <strong> {{a.user_datos.telefono}} </strong></td>
+              <td style="color: #40378b; text-transform: uppercase"> <strong> {{a.user_datos.fecha_creacion  | date : "d/M/Y" }} </strong></td>
+              <td style="color: #40378b; text-transform: uppercase"> <strong> {{a.fecha_caducidad  | date : "d/M/Y" }}</strong></td>
+              <td class="d-flex align-items-center">
+                <span
+                  *ngIf="a.user_datos.estado"
+                  class="estado-indicador bg-success me-2"
+                ></span>
+                <span *ngIf="a.user_datos.estado" class="text-success">Activo</span>
+        
+                <span
+                  *ngIf="!a.user_datos.estado"
+                  class="estado-indicador bg-secondary me-2" 
+                ></span>
+                <span *ngIf="!a.user_datos.estado" class="text-muted">Inactivo</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+    </div>
+  </div>
+
+
+    <div class="container-fluid">
+        <div class="row p-2 justify-content-end align-items-center">
+          <nav aria-label="Page navigation example">
+            <ul class="pagination">
+              <!-- Botón Anterior -->
+              <li class="page-item">
+                <a class="page-link" (click)="previous($event)">
+                  <i class="bi bi-chevron-left"></i>
+                </a>
+              </li>
+      
+              <!-- Números de Página -->
+              <div *ngFor="let n of pageNumber; let i = index" class="d-inline-block">
+                <li class="page-item">
+                  <button
+                    class="page-link azul"
+                    value="{{ n }}"
+                    (click)="iteracion($event)"
+                    [class.active]="n === currentPage"
+                  >
+                    {{ n }}
+                  </button>
+                </li>
+              </div>
+      
+              <!-- Botón Siguiente -->
+              <li class="page-item">
+                <a class="page-link" (click)="next($event)">
+                  <i class="bi bi-chevron-right"></i>
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>    
+    </div>
+  </div>
+
+
+
+
+
+  <!-- EDITAR PROVEEDOR --> 
+
+<div *ngIf="showHeaderC">
+  <div class="row justify-content-center align-items-center p-0">
+    <div class="col-10 text-center containerCrearadmin">
+      <div class="form-container">
+        <h2>EDITAR PROVEEDOR</h2>
+        <form [formGroup]="formEdit"> 
+          
+          <div class="col-md-6">
+            <div class="form-field">
+              <div class="col-5">
+                <label for="inputNombre" class="form-label"
+                  ><h3 class="m-0 p-0 fw-bold">Nombre:</h3></label
+                >
+              </div>
+              <div class="col-5">
+                <input
+                  type="text"
+                  formControlName="nombre"
+                  class="form-control"
+                  [ngClass]="isInvalidForm('nombre') ? 'is-invalid' : ''"
+                  [placeholder]="proveedor_seleccionado?.user_datos?.nombres"
+                  [(ngModel)]="proveedor_seleccionado.user_datos.nombres"/>
+                <div class="invalid-feedback">
+                    {{ getErrorMessage(formEdit, "nombre") }}
+                </div>
+                
+              </div>
+            </div>
+
+            <div class="form-field">
+              <div class="col-5">
+                <label for="inputNombre" class="form-label"
+                  ><h3 class="m-0 p-0 fw-bold">Apellidos:</h3></label
+                >
+              </div>
+              <div class="col-5">
+                <input
+                
+                type="text"
+                formControlName="apellidos"
+                class="form-control"
+                [ngClass]="isInvalidForm('apellidos') ? 'is-invalid' : ''"
+                [placeholder]="proveedor_seleccionado?.user_datos.apellidos"
+                [(ngModel)]="proveedor_seleccionado.user_datos.apellidos"
+              >
+                
+                <div class="invalid-feedback">
+                  {{ getErrorMessage(formEdit, "apellidos") }}
+                </div>
+              </div>
+            </div>
+
+            <div class="form-field">
+              <div class="col-5">
+                <label for="textareaDescripcion" class="form-label"
+                  ><h3 class="m-0 p-0 fw-bold">Correo:</h3></label
+                >
+              </div>
+              <div class="col-5">
+                <input
+                        type="text"
+                        formControlName="correo"
+                        class="form-control"
+                        [ngClass]="isInvalidForm('email') ? 'is-invalid' : ''"
+                        [placeholder]="proveedor_seleccionado?.user_datos?.user?.email"
+                        [(ngModel)]="proveedor_seleccionado.user_datos.user.email"
+                      >
+                <div class="invalid-feedback">
+                  {{ getErrorMessage(formEdit, "correo") }}
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-field">
+              <div class="col-5">
+                <label for="selectorServicioCrear" class="form-label"
+                  ><h3 class="m-0 p-0 fw-bold">Genero:</h3></label
+                >
+              </div>
+              <div class="form-field">
+                <select
+                  class="form-select"
+                  [ngClass]="isInvalidForm('genero') ? 'is-invalid' : ''"
+                  formControlName="genero"
+                  id="ge"
+                  aria-describedby="selectorServicioCrearFeedback"
+                  [(ngModel)]="proveedor_seleccionado.user_datos.genero"
+                >
+                  <option selected disabled value="">Elija una genero...</option>
+                  <option *ngFor="let c of generos" [id]="c" [value]="c">
+                    {{ c }}
+                  </option>
+                </select>
+                <div id="selectorServicioCrearFeedback" class="invalid-feedback">
+                  {{ getErrorMessage(formEdit, "genero") }}
+                </div>
+              </div>
+            </div>
+
+            <div class="form-field">
+              <div class="col-5">
+                <label for="inputNombre" class="form-label"
+                  ><h3 class="m-0 p-0 fw-bold">Cedula:</h3></label
+                >
+              </div>
+              <div class="col-5">
+                <input
+                        type="text"
+                        formControlName="cedula"
+                        class="form-control"
+                        (keypress)="numberOnly($event)"
+                        [ngClass]="isInvalidForm('cedula') ? 'is-invalid' : ''"
+                        [placeholder]="proveedor_seleccionado?.user_datos?.cedula"
+                        [value]="proveedor_seleccionado?.user_datos.cedula"
+                        [(ngModel)]="proveedor_seleccionado.user_datos.cedula"
+                      />
+                <div class="invalid-feedback">
+                  {{ getErrorMessage(formEdit, "cedula") }}
+                </div>
+              </div>
+            </div>
+
+            <div class="form-field">
+              <div class="col-5">
+                <label for="inputNombre" class="form-label"
+                  ><h3 class="m-0 p-0 fw-bold">Copia Cedula:</h3></label
+                >
+              </div>
+              <a
+              href="https://tomesoft1.pythonanywhere.com{{
+                proveedor_seleccionado?.copiaCedula
+              }}"
+              [download]="getNombreArchivo('copiaCedula', proveedor_seleccionado?.copiaCedula ).nombreArchivo"
+              >
+                <p style="color: black; font-size:12px">
+                  {{ getNombreArchivo('copiaCedula', proveedor_seleccionado?.user_datos.copiaCedula ).nombreArchivo}}
+                </p>
+              </a>
+              <input
+                type="file"
+                accept="image/*,.pdf"
+                formControlName="copiaCedula"
+                class="form-control"
+                [ngClass]="
+                  isInvalidForm('copiaCedula') ? 'is-invalid' : ''
+                "
+                (change)="loadPdfFromDevice($event)"
+              />
+              <div class="invalid-feedback">
+                {{ getErrorMessage(formEdit, "copiaCedula") }}
+              </div>
+              
+            </div>
+
+            <div class="form-field">
+              <div class="col-5">
+                <label for="textareaDescripcion" class="form-label"
+                  ><h3 class="m-0 p-0 fw-bold">Telefono:</h3></label
+                >
+              </div>
+              <div class="form-field">
+                <input
+                  class="form-control"
+                  formControlName="telefono"
+                  [ngClass]="isInvalidForm('telefono') ? 'is-invalid' : ''"
+                  type="number"
+                  [placeholder]="proveedor_seleccionado?.user_datos.telefono"
+                  [value]="proveedor_seleccionado?.user_datos.telefono"
+                  [(ngModel)]="proveedor_seleccionado.user_datos.telefono"
+                />
+                <div class="invalid-feedback">
+                  {{ getErrorMessage(formEdit, "telefono") }}
+                </div>
+              </div>
+            </div>
+
+            <div class="form-field">
+              <div class="col-5">
+                <label for="selectorServicioCrear" class="form-label"
+                  ><h3 class="m-0 p-0 fw-bold">Ciudad:</h3></label
+                >
+              </div>
+              <div class="col-5">
+                <select
+                  class="form-select"
+                  [ngClass]="isInvalidForm('ciudad') ? 'is-invalid' : ''"
+                  formControlName="ciudad"
+                  [value]="proveedor_seleccionado?.user_datos.ciudad"
+                  
+                  aria-describedby="selectorServicioCrearFeedback"
+                  [(ngModel)]="proveedor_seleccionado.user_datos.ciudad"
+                >
+                  <option selected disabled value="">Elija una ciudad...</option>
+                  <option *ngFor="let c of ciudades" [value]="c">
+                    {{ c}}
+                  </option>
+                </select>
+                <div id="selectorServicioCrearFeedback" class="invalid-feedback">
+                  {{ getErrorMessage(formEdit, "ciudad") }}
+                </div>
+              </div>
+            </div>
+
+            <div class="form-field">
+              <div class="col-5">
+                <label for="inputNombre" class="form-label">
+                  <h3 class="m-0 p-0 fw-bold">Dirección:</h3>
+                </label>
+              </div>
+              <div class="col-7">
+                <input
+                  type="text"
+                  formControlName="direccion"
+                  class="form-control"
+                  [ngClass]="isInvalidForm('direccion') ? 'is-invalid' : ''"
+                  [placeholder]="proveedor_seleccionado?.direccion"
+                  [value]="proveedor_seleccionado?.direccion"
+                  [(ngModel)]="proveedor_seleccionado.direccion"
+                  >
+                  
+                
+                <div class="invalid-feedback">
+                  {{ getErrorMessage(formEdit, "direccion") }}
+                </div>
+              </div>
+            </div>
+
+            <div class="form-field">
+              <div class="col-5">
+                <label for="inputNombre" class="form-label"
+                  ><h3 class="m-0 p-0 fw-bold">Descripcion:</h3></label
+                >
+              </div>
+              <div class="col-5">
+                <input
+                  type="text"
+                  formControlName="descripcion"
+                  class="form-control"
+                  [ngClass]="
+                    isInvalidForm('descripcion') ? 'is-invalid' : ''
+                  "
+                  [placeholder]="proveedor_seleccionado?.descripcion"
+                  [value]="proveedor_seleccionado?.descripcion"
+                  [(ngModel)]="proveedor_seleccionado.descripcion"
+                  >
+ 
+                <div class="invalid-feedback">
+                  {{ getErrorMessage(formEdit, "descripcion") }}
+                </div>
+              </div>
+            </div>
+
+            <div  class="form-field">
+              <div class="col-5">
+                <label for="inputNombre" class="form-label"
+                  ><h3 class="m-0 p-0 fw-bold">Documentación:</h3></label
+                >
+              </div>
+              <div class="col-7">
+                <a
+                  href="https://tomesoft1.pythonanywhere.com{{
+                     proveedor_seleccionado?.document[0]?.documento
+                  }}"
+                  [download]="getNombreArchivo('copiaCedula', proveedor_seleccionado?.document[0]?.documento).nombreArchivo">
+                  <p style="color: black; font-size:12px">
+                      {{ getNombreArchivo('copiaCedula',  proveedor_seleccionado?.document[0]?.documento).nombreArchivo}}
+                    
+                  </p>
+                </a>
+                <input
+                type="file"
+                accept="image/*,.pdf"
+                  formControlName="documentos"
+                  class="form-control"
+                  [ngClass]="isInvalidForm('copiaLicencia') ? 'is-invalid' : ''"
+                  (change)="loadFileFromDevice($event,'copiaLicencia')"
+                />
+                <div class="invalid-feedback">
+                  {{ getErrorMessage(formEdit, "documentos") }}
+                </div>
+              </div>
+            </div>
+
+
+
+          </div>
+
+
+          <div class="col-md-6">
+            <div class="form-field">
+              <div class="form-field  d-flex flex-column justify-content-center align-items-center text-center">
+          
+                <!-- Imagen previsualización -->
+                <img
+                  src="https://tomesoft1.pythonanywhere.com{{
+                    proveedor_seleccionado?.user_datos?.foto
+                  }}"
+                  alt="no se encontró foto de perfil"
+                  width="100"
+                  height="100"
+                />
+                         
+                <!-- Input file oculto -->
+                <input
+                  type="file"
+                  #fileInput
+                  formControlName="foto"
+                  accept="image/*"
+                  class="form-control"
+                  [ngClass]="isInvalidForm('foto') ? 'is-invalid' : ''"
+                  (change)="loadImageFromDevice($event)"
+                  style="display: none;" 
+                />
+              
+                <!-- Mensaje de error -->
+                <div class="invalid-feedback">
+                  {{ getErrorMessage(formEdit, 'imagen') }}
+                </div>
+              </div>
+            </div>
+
+            <div class="form-field">
+              <div class="col-5">
+                <label for="inputNombre" class="form-label"
+                  ><h3 class="m-0 p-0 fw-bold">Cuenta Bancaria</h3></label
+                >
+              </div>
+              <div class="col-5">
+                <label for="textareaDescripcion" class="form-label"
+                  ><h3 class="m-0 p-0 fw-bold">Tipo Cuenta:</h3></label
+                >
+              </div>
+              <div class="col-5">
+                <div class="col-7">
+                  <select
+                    formControlName="tipo_cuenta"
+                    class="form-select"
+                    [ngClass]="isInvalidForm('tipo_cuenta') ? 'is-invalid' : ''"
+                    [value]="proveedor_seleccionado?.tipo_cuenta"
+                    aria-describedby="selectorServicioCrearFeedback"
+                    [(ngModel)]="proveedor_seleccionado.tipo_cuenta">
+                  
+                    <option selected disabled value="">
+                      Elija un tipo de cuenta...
+                    </option>
+                    <option
+                      *ngFor="let c of tipoCuentas"
+                      [id]="c"
+                      [value]="c"
+                    >
+                      {{ c }}
+                    </option>
+                  </select>
+                  <div
+                    id="selectorServicioCrearFeedback"
+                    class="invalid-feedback"
+                  >
+                    {{ getErrorMessage(formEdit, "tipo_cuenta") }}
+                  </div>
+                </div>
+              </div>
+            </div>        
+  
+            <div class="form-field">
+              <div class="col-5">
+                <label for="inputNombre" class="form-label"
+                  ><h3 class="m-0 p-0 fw-bold">Número cuenta:</h3></label
+                >
+              </div>
+              <div class="col-5">
+                <input
+                type="text"
+                formControlName="numeroCuenta"
+                class="form-control"
+                (keypress)="numberOnly($event)"
+                [ngClass]="
+                  isInvalidForm('numeroCuenta') ? 'is-invalid' : ''
+                "
+                [placeholder]="proveedor_seleccionado?.numero_cuenta"
+                [value]="proveedor_seleccionado?.numero_cuenta"
+                [(ngModel)]="proveedor_seleccionado.numero_cuenta"
+              />
+              <div class="invalid-feedback">
+                {{ getErrorMessage(formEdit, "numero_cuenta") }}
+              </div>
+              </div>
+            </div>
+  
+  
+            <div class="form-field">
+              <div class="col-5">
+                <label for="textareaDescripcion" class="form-label"
+                  ><h3 class="m-0 p-0 fw-bold">Banco:</h3></label
+                >
+              </div>
+              <div class="form-field">
+                <input
+                        type="text"
+                        formControlName="banco"
+                        class="form-control"
+                        [ngClass]="isInvalidForm('banco') ? 'is-invalid' : ''"
+                        [placeholder]="proveedor_seleccionado.banco"
+                        [value]="proveedor_seleccionado?.banco"
+                        [(ngModel)]="proveedor_seleccionado.banco"
+                      />
+                      <div class="invalid-feedback">
+                        {{ getErrorMessage(formEdit, "banco") }}
+                      </div>
+              </div>
+            </div>
+
+            <div class="form-field">
+              <div class="col-5">
+                <label for="inputNombre" class="form-label"
+                  ><h3 class="m-0 p-0 fw-bold">Profesión</h3></label
+                >
+                <div class="col-5">
+                  <label for="selectorServicioCrear" class="form-label"
+                    ><h3 class="m-0 p-0 fw-bold">Licencia:</h3></label
+                  >
+                </div>
+                <div class="col-7">
+                  <select
+                    class="form-select"
+                    [ngClass]="isInvalidForm('licencia') ? 'is-invalid' : ''"
+                    formControlName="licencia"
+                    id="tienelicencia"
+                    [value]="proveedor_seleccionado?.licencia"
+                    aria-describedby="selectorServicioCrearFeedback"
+                    [(ngModel)]="proveedor_seleccionado.licencia"
+                  >
+                    <option selected disabled value="">
+                      ¿Posee una licencia?...
+                    </option>
+                    <option *ngFor="let c of licencia" [id]="c" [value]="c">
+                      {{ c }}
+                    </option>
+                  </select>
+                  <div
+                    id="selectorServicioCrearFeedback"
+                    class="invalid-feedback"
+                  >
+                    {{ getErrorMessage(formEdit, "licencia") }}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-field">
+              <div class="col-5">
+                <label for="inputNombre" class="form-label"
+                  ><h3 class="m-0 p-0 fw-bold">
+                    Años de Experiencia:
+                  </h3></label
+                >
+              </div>
+              <div class="col-7">
+                <input
+                  type="number"
+                  formControlName="ano_experiencia"
+                  class="form-control"
+                  [ngClass]="
+                    isInvalidForm('ano_experiencia') ? 'is-invalid' : ''
+                  "
+                  [placeholder]="proveedor_seleccionado?.ano_experiencia"
+                  [value]="proveedor_seleccionado?.ano_experiencia"
+                  [(ngModel)]="proveedor_seleccionado.ano_experiencia"
+                />
+                <div class="invalid-feedback">
+                  {{ getErrorMessage(formEdit, "ano_experiencia") }}
+                </div>
+              </div>
+            </div>
+
+            <div class="form-field">
+              <div class="col-5">
+                <label for="selectorServicioCrear" class="form-label"
+                  ><h3 class="m-0 p-0 fw-bold">Profesión:</h3></label
+                >
+              </div>
+              <div class="col-5">
+                <p style="color: black; font-size:12px">
+                  <span class="m-0 p-0 fw-bold">profesiones actuales:</span>  {{proveedor_seleccionado?.profesion}}
+                </p>
+                <ng-select
+                  [items]="profesiones"
+                  class="form-select"
+                  [ngClass]="
+                    isInvalidForm('profesion') ? 'is-invalid' : ''
+                  "
+                  formControlName="profesion"
+                  id="ge"
+                  
+                  aria-describedby="selectorServicioCrearFeedback"
+                  [multiple]="true">
+                </ng-select>
+                <div
+                  id="selectorServicioCrearFeedback"
+                  class="invalid-feedback"
+                >
+                  {{ getErrorMessage(formEdit, "profesion") }}
+                </div>
+              </div>
+            </div>
+
+            
+
+          </div>
+         
+        </form> 
+
+
+            <button
+            data-bs-target="#modalConfirmacion"
+            data-bs-toggle="modal"
+             class="custom-button float-right"
+            (click)="establecerMensaje('Está seguro que desea actualizar la
+            información?', 'actualizar'); showHeader = true; showHeaderC= false ; showadmi = false;">Actualizar</button>
+
+            <button
+              (click)="prepararCaducidad()"
+              class=" custom-button3 float-right btn-success"
+              data-target=".bd-example-modal-xl"
+              data-bs-target="#modalContrato"
+              data-bs-toggle="modal">Contrato
+            </button>
+
+            <button
+              class="custom-button1 float-right"
+              (click)="showHeader = true; showHeaderC= false ; showadmi = false;">
+            Cancelar
+            </button>
+        
+      </div>
+      
+      
+    </div>
+  </div>
+</div>
+<!-- FIN DE EDITAR PROVEEDOR--> 
+
+  <!-- MODAL -->
 
   <div class="modal fade" id="modalInformacionProfesion" aria-hidden="true"
     aria-labelledby="modalInformacionProfesionLabel" tabindex="-1">
@@ -292,7 +888,7 @@
   </div>
 
 
-  <!-- Modal edicion de informacion de admi -->
+  <!-- Modal edicion de informacion de admi 
   <div class="modal fade modal-xl" id="modalInformacionEdicionProfesion"
     aria-hidden="true" aria-labelledby="modalInformacionEdicionProfesionLabel"
     tabindex="-1">
@@ -667,7 +1263,7 @@
                         [ngClass]="isInvalidForm('numeroCuenta') ? 'is-invalid' : ''"
                         [placeholder]="proveedor_seleccionado?.numero_cuenta"
                         [value]="proveedor_seleccionado?.numero_cuenta">
-                      <div class="invalid-feedback"> {{getErrorMessage(formEdit, 'numeroCuenta)}} </div>
+                      <div class="invalid-feedback"> {{getErrorMessage(formEdit, 'numeroCuenta')}} </div>
                     </div>
                   </div>
                 
@@ -685,7 +1281,7 @@
                         [placeholder]="proveedor_seleccionado?.banco"
                         [value]="proveedor_seleccionado?.banco">
                       <div class="invalid-feedback"> {{getErrorMessage(formEdit,
-                        'banco)}} </div>
+                        'banco')}} </div>
                     </div>
                   </div>
   
@@ -810,12 +1406,14 @@
             información?', 'actualizar')">Actualizar</button>
         </div>
   
-        <!-- <pre>
+       <pre>
           {{actualizarProfesionesForm.value | json}}
         </pre> -->
-      </div>
+      <!--  </div>
     </div>
-  </div>
+  </div> -->
+
+
   <div class="modal fade" id="modalConfirmacion" tabindex="-1"
     aria-labelledby="modalConfirmacionLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -848,41 +1446,7 @@
       </div>
     </div>
   </div>
-  <div class="container-fluid">
-    <div class="row p-2 justify-content-center align-items-center">
-      <nav aria-label="Page navigation example">
-        <ul class="pagination">
-          <li class="page-item">
-            <a class="page-link" (click)="previous($event)">Previous</a>
-          </li>
-          <div *ngFor="let n of pageNumber; let i = index">
-            <li class="page-item">
-              <button 
-                class="page-link azul"
-                value="{{ n }}"
-                (click)="iteracion($event)"
-                *ngIf="n == currentPage"
-              >
-                {{ n }}
-              </button>
-              <button 
-                class="page-link"
-                value="{{ n }}"
-                (click)="iteracion($event)"
-                *ngIf="n != currentPage"
-              >
-                {{ n }}
-              </button>
-            </li>
-          </div>
-  
-          <li class="page-item">
-            <a class="page-link" (click)="next($event)">Next</a>
-          </li>
-        </ul>
-      </nav>
-    </div>
-  </div>
+
 
 <div
   class="modal fade"

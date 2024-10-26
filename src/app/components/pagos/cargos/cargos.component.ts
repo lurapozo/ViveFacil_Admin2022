@@ -11,7 +11,8 @@ import { PythonAnywhereService } from 'src/app/services/PythonAnywhere/python-an
   styleUrls: ['./cargos.component.css']
 })
 export class CargosComponent {
-
+  showHeader: boolean = true;
+  showHeaderC: boolean = false;
 
   arr_cargo!: Cargo[]  | undefined;
   arr_filtered_cargo!: Cargo[]  | undefined;
@@ -255,5 +256,10 @@ search(evento: any) {
     } else {
       console.log('No hay toast renderizado');
     }
+  }
+
+  crear_cargo() {
+    this.showHeader = false;
+    this.showHeaderC = true;
   }
 }

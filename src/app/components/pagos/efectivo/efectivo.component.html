@@ -1,214 +1,281 @@
-<div class="container-fluid">
-    <!-- Titulo principal -->
-    <div class="row p-2 justify-content-center align-items-center">
-      <div class="col text-center">
-
-        <h2 class="p-0 m-0"> Efectivo</h2>
-        <div class="row">
-            <div class="col">
-                <h2 class="p-0 m-0">Total Efectivo: $ {{totalEfectivo}}</h2>
-            </div>
-            <div class="col">
-                <h2 class="p-0 m-0">Total: $ {{total}}</h2>
-            </div>
-
-        </div>
-
-      </div>
+ <!-- Titulo principal-->
+ <div class="header-admi1">
+  <div class="header-text">
+    <div class="containerstart" >
+      <p *ngIf="showHeader"> Efectivo</p>
     </div>
+  </div>
+  <svg preserveAspectRatio="xMidYMid">
+    <path d="M0,60 L0,0 L1290,0 L1290,60" fill="#333539"  />
+    <path d="M320,60 Q448,85 550,60" fill="#333539" />
+  </svg>
+</div>
 
-    <!-- Buscar y agregar admi -->
-    <div class="row p-2 justify-content-center align-items-center">
-      <div class="col-lg-3">
-        <div class="input-group mb-3">
-          <input type="text" class="form-control" placeholder="Correo de proveedor"
-            aria-label="Buscar por proveedor" aria-describedby="basic-addon1"
-            (input)="searchProveedor($event)">
-        </div>
-      </div>
-      <div class="col-lg-3">
-        <div class="input-group mb-3">
-          <input type="text" class="form-control" placeholder="Correo de solicitante"
-            aria-label="Buscar por solicitante" aria-describedby="basic-addon1"
-            (input)="filterByUser($event)">
-        </div>
-      </div>
-      <div class="col-lg-3">
-        <div class="input-group mb-3">
-          <input type="date" class="form-control"
-            aria-label="Buscar por fecha" aria-describedby="basic-addon1"
-            (input)="filterByDate($event)">
-        </div>
-      </div>
-      <div class="col-lg-3">
-        <button class="btn btn-primary" (click)="exportCSV()">Exportar CSV</button>
+ <!-- FILTROS-->
+<div class="container-fluid" *ngIf="showHeader">
+  <div class="d-flex flex-wrap header-solicitud align-items-center gap-3">   
+    <div class="containerstart1" >
+      <label class="calendar-label">Desde:</label>
+      <div class="date-container" >
+        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+        <mat-datepicker #picker1></mat-datepicker>
+        <input matInput [matDatepicker]="picker1" placeholder="SELECCIONA DIA" 
+        [(ngModel)]="fechaInicio" (dateChange)="filtrarPorFechas()">
+        
       </div>
     </div>
     
-
-    <!-- Contenedor de admi -->
-    <div class="row justify-content-center align-items-center p-0">
-      <div class="col-10 text-center">
-        <!-- Titulo -->
-        <div class="row p-2 bg-primary text-white">
-          <div class="col-3 align-self-center">
-            <h3 class="p-0 m-0">Cliente</h3>
-          </div>
-
-          <div class="col-3 align-self-center">
-            <h3 class="p-0 m-0">Proveedor</h3>
-          </div>
-
-          <div class="col-2 align-self-center">
-            <h3 class="p-0 m-0">Servicio</h3>
-          </div>
-          <div class="col-3 align-self-center">
-            <h3 class="p-0 m-0">Fecha</h3>
-          </div>
-
-          <div class="col-1 align-self-center">
-            <h3 class="p-0 m-0">Valor($)</h3>
-          </div>
-        </div>
-
-        <!-- Profesion -->
-        <div (click)="efectivo_seleccionada=a" *ngFor="let a of arr_filtered_efectivo" class="row p-2 bg-light fila_info_profesion" data-bs-toggle="modal" href="#modalInformacionProfesion" role="button">
-
-            <div class="col-3 align-self-center">
-            <h4 class="p-0 m-0"> {{a.usuario}}</h4>
-          </div>
-
-          <div class="col-3 align-self-center">
-            <h4 class="p-0 m-0">{{a.solicitud?.proveedor.user_datos.nombres}} {{a.solicitud?.proveedor.user_datos.apellidos}}</h4>
-          </div>
-
-          <div class="col-2 align-self-center">
-            <h4 class="p-0 m-0">{{a.servicio}}</h4>
-          </div>
-          <div class="col-3  align-self-center">
-            <h4 class="p-0 m-0">{{a.fecha_creacion  | date: ' MMM d, y, h:mm:ss a'}}</h4>
-          </div>
-
-          <div class="col-1 align-self-center">
-            <h4 class="p-0 m-0">${{a.valor| number:'1.2-2' }}</h4>
-          </div>
-
-
-
-
-        </div>
+    <div class="containerstart2" >
+      <label class="calendar-label">Hasta:</label>
+      <div class="date-container" >
+        <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+        <mat-datepicker #picker2></mat-datepicker>
+        <input matInput [matDatepicker]="picker2" placeholder="SELECCIONA DIA"
+        [(ngModel)]="fechaFin" (dateChange)="filtrarPorFechas()">
       </div>
     </div>
 
-    <!-- Seccion paginacion -->
-  <div class="container-fluid">
-    <div class="row p-2 justify-content-center align-items-center">
-      <nav aria-label="Page navigation example">
-        <ul class="pagination">
-          <li class="page-item">
-            <a class="page-link" (click)="previous($event)">Previous</a>
-          </li>
-          <div *ngFor="let n of pageNumber; let i = index">
-            <li class="page-item">
-              <button
-                class="page-link azul"
-                value="{{ n }}"
-                (click)="iteracion($event)"
-                *ngIf="n == currentPage"
-              >
-                {{ n }}
-              </button>
-              <button
-                class="page-link"
-                value="{{ n }}"
-                (click)="iteracion($event)"
-                *ngIf="n != currentPage"
-              >
-                {{ n }}
-              </button>
-            </li>
-          </div>
+    <div class="containerstart3">
+      <button class="search-button" id="basic-addon1">
+        <i class="bi bi-search"></i>
+      </button>
+      <div class="date-container">
+        <div class="input-group search-group">
+          <input 
+            type="text" 
+            class="form-control search-input" 
+            placeholder="BUSCAR"
+            aria-label="Buscar" 
+            aria-describedby="basic-addon1" 
+            (input)="filterByUser($event)">
+        </div> 
+      </div>       
+    </div>
+  </div>
+  <div class="d-flex flex-wrap header-solicitud align-items-center gap-3">   
+    <div class="containerstart3">
+      <button class="search-button" id="basic-addon1">
+        <i class="bi bi-search"></i>
+      </button>
+      <div class="date-container">
+        <div class="input-group search-group">
+          <input 
+            type="text" 
+            class="form-control search-input" 
+            placeholder="Correo del solicitante"
+            aria-label="Correo del solicitante" 
+            aria-describedby="basic-addon1" 
+            (input)="searchProveedor($event)">
+        </div> 
+      </div>       
+    </div>
+    
+    <div class="containerstart3">
+      <button class="search-button" id="basic-addon1">
+        <i class="bi bi-search"></i>
+      </button>
+      <div class="date-container">
+        <div class="input-group search-group">
+          <input 
+            type="text" 
+            class="form-control search-input" 
+            placeholder="Correo del proveedor"
+            aria-label="Correo del proveedor" 
+            aria-describedby="basic-addon1" 
+            (input)="filterByUser($event)">
+        </div> 
+      </div>       
+    </div>
+    
+    <div class="containerstart4">
+      <button class="admin-button"
+      type="button"
+          data-bs-toggle="modal"
+          (click)="exportCSV()"
+      >
+        <span class="material-icons">add_circle</span>
+        EXPORTAR CSV
+      </button>
+    </div>
 
-          <li class="page-item">
-            <a class="page-link" (click)="next($event)">Next</a>
-          </li>
-        </ul>
-      </nav>
+  </div>
+
+  <div class="d-flex flex-wrap totales align-items-center gap-4">  
+    <div class="col">
+      <h2 class="p-0 m-0" style="color: rgb(51, 53, 57);">Total Efectivo: $ {{totalEfectivo}}</h2>
+    </div>
+    <div class="col">
+      <h2 class="p-0 m-0"  style="color: rgb(51, 53, 57);">Total: $ {{total}}</h2>
+    </div>
+  </div>
+
+
+  <!-- Contenedor de admi -->
+  <div class="row justify-content-center align-items-center p-0">
+    <div class="col-10 text-center containeradmin">
+      <div class="table-responsive">
+      <table class="table table-striped custom-table">
+        <thead>
+          <!-- Encabezado -->
+          <tr>
+            <th scope="col">CLIENTE</th>
+            <th scope="col">PROVEEDOR</th>
+            <th scope="col">SERVICIO</th>
+            <th scope="col">FECHA</th>
+            <th scope="col">HORA</th>
+            <th scope="col">ESTADO</th>
+            <th scope="col">VALOR</th>
+          </tr>
+        </thead>
+      </table>
+      <div class="table-body">
+        <table class="table table-striped custom-table">
+        <tbody>
+          <tr
+            (click)="efectivo_seleccionada=a" *ngFor="let a arr_filtered_efectivo" data-bs-toggle="modal"
+            href="#modalInformacionProfesion" role="button"
+          >
+            <td style="color: #40378b; text-transform: uppercase"> <strong> {{ a.usuario}} </strong></td>
+            <td style="color: #40378b; text-transform: uppercase"> <strong> {{a.solicitud?.proveedor.user_datos.nombres}} {{a.solicitud?.proveedor.user_datos.apellidos}} </strong> </td>
+            <td style="color: #40378b; text-transform: uppercase"> <strong> {{ a.servicio}}  </strong></td>
+            <td style="color: #40378b; text-transform: uppercase"> <strong> {{ a.fecha_creacion | date : "d/M/Y" }}</strong></td>
+            <td style="color: #40378b; text-transform: uppercase"> <strong> {{ a.fecha_creacion | date: 'HH:mm' }}  </strong></td>
+            <td class="align-items-center">
+              <span
+                *ngIf="a.estado"
+                class="estado-indicador bg-success"
+              ></span>
+              <span *ngIf="a.estado" class="text-success">Pagado</span>
+      
+              <span
+                *ngIf="!a.estado"
+                class="estado-indicador bg-danger"
+              ></span>
+              <span *ngIf="!a.estado" class="text-danger">Pendiente</span>
+            </td>
+
+            <td style="color: #40378b; text-transform: uppercase"> <strong> ${{a.valor| number:'1.2-2' }} </strong> </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+        <!-- Seccion paginacion -->
+        <div class="container-fluid">
+          <div class="row p-2 justify-content-end align-items-center">
+            <nav aria-label="Page navigation example">
+              <ul class="pagination">
+                <!-- Botón Anterior -->
+                <li class="page-item">
+                  <a class="page-link" (click)="previous($event)">
+                    <i class="bi bi-chevron-left"></i>
+                  </a>
+                </li>
+        
+                <!-- Números de Página -->
+                <div *ngFor="let n of pageNumber; let i = index" class="d-inline-block">
+                  <li class="page-item">
+                    <button
+                      class="page-link azul"
+                      value="{{ n }}"
+                      (click)="iteracion($event)"
+                      [class.active]="n === currentPage"
+                    >
+                      {{ n }}
+                    </button>
+                  </li>
+                </div>
+        
+                <!-- Botón Siguiente -->
+                <li class="page-item">
+                  <a class="page-link" (click)="next($event)">
+                    <i class="bi bi-chevron-right"></i>
+                  </a>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+  </div>
+             
+      </div>
     </div>
   </div>
 
 
 
-</div>
+
+
+
 <div class="modal fade" id="modalInformacionProfesion" aria-hidden="true"
 aria-labelledby="modalInformacionProfesionLabel" tabindex="-1">
 <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-  <div class="modal-content">
-    <div class="modal-header align-items-center">
-      <h1 class="modal-title fs-5 m-0 p-0 fw-bold"
-        id="modalInformacionProfesionLabel">Información Efectivo</h1>
-      <button type="button" class="btn-close" data-bs-dismiss="modal"
-        aria-label="Close"></button>
+<div class="modal-content">
+  <div class="modal-header align-items-center">
+    <h1 class="modal-title fs-5 m-0 p-0 fw-bold"
+      id="modalInformacionProfesionLabel">Información Efectivo</h1>
+    <button type="button" class="btn-close" data-bs-dismiss="modal"
+      aria-label="Close"></button>
+  </div>
+  <div class="modal-body mb-0">
+   <h4>Cliente</h4>
+    <div class="row p-2 align-items-center">
+      <div class="col-5">
+        <h3 class="m-0 p-0 fw-bold">Nombre:</h3>
+      </div>
+      <div class="col-7">
+        {{efectivo_seleccionada?.usuario}}
+      </div>
     </div>
-    <div class="modal-body mb-0">
-     <h4>Cliente</h4>
-      <div class="row p-2 align-items-center">
-        <div class="col-5">
-          <h3 class="m-0 p-0 fw-bold">Nombre:</h3>
-        </div>
-        <div class="col-7">
-          {{efectivo_seleccionada?.usuario}}
-        </div>
-      </div>
 
-      <div class="row p-2 align-items-center">
-        <div class="col-5">
-          <h3 class="m-0 p-0 fw-bold">Telefono:</h3>
-        </div>
-        <div class="col-7">
-          {{efectivo_seleccionada?.user_telefono}}
-        </div>
+    <div class="row p-2 align-items-center">
+      <div class="col-5">
+        <h3 class="m-0 p-0 fw-bold">Telefono:</h3>
       </div>
-
-      <div class="row p-2 align-items-center">
-        <div class="col-5">
-          <h3 class="m-0 p-0 fw-bold">Correo:</h3>
-        </div>
-        <div class="col-7">
-          {{efectivo_seleccionada?.user?.username}}
-        </div>
+      <div class="col-7">
+        {{efectivo_seleccionada?.user_telefono}}
       </div>
+    </div>
 
-      <h4>Proveedor</h4>
-      <div class="row p-2 align-items-center">
-        <div class="col-5">
-          <h3 class="m-0 p-0 fw-bold">Nombre:</h3>
-        </div>
-        <div class="col-7">
-          {{efectivo_seleccionada?.solicitud.proveedor.user_datos.nombres}} {{efectivo_seleccionada?.solicitud.proveedor.user_datos.apellidos}}
-        </div>
+    <div class="row p-2 align-items-center">
+      <div class="col-5">
+        <h3 class="m-0 p-0 fw-bold">Correo:</h3>
       </div>
-
-      <div class="row p-2 align-items-center">
-        <div class="col-5">
-          <h3 class="m-0 p-0 fw-bold">Telefono:</h3>
-        </div>
-        <div class="col-7">
-          {{efectivo_seleccionada?.solicitud.proveedor.user_datos.telefono}}
-        </div>
+      <div class="col-7">
+        {{efectivo_seleccionada?.user?.username}}
       </div>
+    </div>
 
-      <div class="row p-2 align-items-center">
-        <div class="col-5">
-          <h3 class="m-0 p-0 fw-bold">Correo:</h3>
-        </div>
-        <div class="col-7">
-          {{efectivo_seleccionada?.solicitud.proveedor.user_datos.user.username}}
-        </div>
+    <h4>Proveedor</h4>
+    <div class="row p-2 align-items-center">
+      <div class="col-5">
+        <h3 class="m-0 p-0 fw-bold">Nombre:</h3>
       </div>
+      <div class="col-7">
+        {{efectivo_seleccionada?.solicitud.proveedor.user_datos.nombres}} {{efectivo_seleccionada?.solicitud.proveedor.user_datos.apellidos}}
+      </div>
+    </div>
 
+    <div class="row p-2 align-items-center">
+      <div class="col-5">
+        <h3 class="m-0 p-0 fw-bold">Telefono:</h3>
+      </div>
+      <div class="col-7">
+        {{efectivo_seleccionada?.solicitud.proveedor.user_datos.telefono}}
+      </div>
+    </div>
+
+    <div class="row p-2 align-items-center">
+      <div class="col-5">
+        <h3 class="m-0 p-0 fw-bold">Correo:</h3>
+      </div>
+      <div class="col-7">
+        {{efectivo_seleccionada?.solicitud.proveedor.user_datos.user.username}}
+      </div>
     </div>
 
   </div>
+
+</div>
 </div>
 </div>

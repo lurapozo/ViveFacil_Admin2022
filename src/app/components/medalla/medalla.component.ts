@@ -12,6 +12,9 @@ import { BodyActualizarInsignia, BodyActualizarMedalla, BodyCrearMedalla, Insign
 })
 
 export class MedallaComponent {
+  showHeader: boolean = true;
+  showHeaderC: boolean = false;
+
   total = 0
   arr_insignia?: Medalla[];
   arr_filtered_insignia?: Medalla[];
@@ -417,5 +420,10 @@ export class MedallaComponent {
       this.pythonAnywhereService.cambio_insignia_estado(this.insignia_seleccionada.id, estado).subscribe(resp => { console.log(resp); });
       this.mostrarToastInfo('Estado de la Insignia ', 'Insignia editada correctamente', false);
     }
+  }
+
+  crear_med() {
+    this.showHeader = false;
+    this.showHeaderC = true;
   }
 }

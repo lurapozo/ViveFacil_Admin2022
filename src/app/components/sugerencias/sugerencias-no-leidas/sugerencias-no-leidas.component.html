@@ -1,56 +1,163 @@
-<div class="container-fluid">
-  <!-- Titulo principal -->
-  <div class="row p-2 justify-content-center align-items-center">
-    <div class="col text-center">
-      <h2 class="p-0 m-0">Sugerencias No Leídas</h2>
-      <h3 class="p-0 m-0">Total Sugerencias No Leídas: {{ total }}</h3>
+<!-- Titulo principal-->
+<div class="header-admi1">
+  <div class="header-text">
+    <div class="containerstart" >
+      <p> SUGERENCIA NO LEÍDAS</p>
+    </div>
+    <div class="containerend">
+      <p>Total de sugerencias NO leídas:{{total}}</p>
+    </div>
+  </div>
+  <svg preserveAspectRatio="xMidYMid">
+    <path d="M0,60 L0,0 L1290,0 L1290,60" fill="#333539"  />
+    <path d="M320,60 Q448,85 550,60" fill="#333539" />
+  </svg>
+</div>
+
+ <!-- FILTROS-->
+<div class="container-fluid" >
+  <div class="d-flex flex-wrap header-solicitud align-items-center gap-3">   
+    <div class="containerstart1" >
+      <label class="calendar-label">Desde:</label>
+      <div class="date-container" >
+        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+        <mat-datepicker #picker1></mat-datepicker>
+        <input matInput [matDatepicker]="picker1" placeholder="SELECCIONA DIA" 
+        [(ngModel)]="fechaInicio" (dateChange)="filtrarPorFechas()">
+      </div>
+    </div>
+    
+    <div class="containerstart2" >
+      <label class="calendar-label">Hasta:</label>
+      <div class="date-container" >
+        <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+        <mat-datepicker #picker2></mat-datepicker>
+        <input matInput [matDatepicker]="picker2" placeholder="SELECCIONA DIA"
+        [(ngModel)]="fechaFin" (dateChange)="filtrarPorFechas()">
+      </div>
+    </div>
+
+    <div class="containerstart3">
+      <button class="search-button" id="basic-addon1">
+        <i class="bi bi-search"></i>
+      </button>
+      <div class="date-container">
+        <div class="input-group search-group">
+          <input 
+            type="text" 
+            class="form-control search-input" 
+            placeholder="BUSCAR"
+            aria-label="Buscar" 
+            aria-describedby="basic-addon1" 
+            (input)="search($event)">
+        </div> 
+      </div>       
     </div>
   </div>
 
-  <!-- Buscar y agregar admi -->
+ <!-- CONTENIDO-->
 
   <!-- Contenedor de admi -->
   <div class="row justify-content-center align-items-center p-0">
-    <div class="col-10 text-center">
-      <!-- Titulo -->
-      <div class="row p-2 bg-primary text-white">
-        <div class="col-3 align-self-center">
-          <h3 class="p-0 m-0">Usuario</h3>
-        </div>
+    <div class="col-10 text-center containeradmin">
+      <div class="table-responsive">
+      <table class="table table-striped custom-table">
+        <thead>
+          <!-- Encabezado -->
+          <tr>
+            <th scope="col">USUARIO</th>
+            <th scope="col">DESCRIPCION</th>
+            <th scope="col">FECHA</th>
+            <th scope="col">HORA</th>
+            <th scope="col">Estado</th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        </table>
+        <div class="table-body">
+        <table class="table table-striped custom-table">
+        <tbody>
+          <tr
+            (click)="sugerencia_seleccionada = a"
+            *ngFor="let a of arr_filtered_sugerencias"
+            role="button"
+          >
+            <td style="color: #40378b; text-transform: uppercase"> <strong> {{ a.usuario }} </strong></td>
+            <td style="color: #40378b; text-transform: uppercase"> <strong> {{ a.descripcion}} </strong> </td>
+            <td style="color: #40378b; text-transform: uppercase"> <strong> {{ a.fecha_creacion | date : "d/M/Y" }} </strong> </td>
+            <td style="color: #40378b; text-transform: uppercase"> <strong> {{ a.fecha_creacion | date: 'HH:mm' }} </strong> </td>
+            <td class="align-items-center">
+              <span
+                *ngIf="a.estado"
+                class="estado-indicador bg-success me-2"
+              ></span>
+              <span *ngIf="a.estado" class="text-success">LEÍDA</span>
+      
+              <span
+                *ngIf="!a.estado"
+                class="estado-indicador bg-secondary me-2" 
+              ></span>
+              <span *ngIf="!a.estado" class="text-muted">NO LEÍDA</span>
+            </td>
+            <td>
+              <button mat-icon-button>
+                <mat-icon>settings</mat-icon>
+              </button>
+              
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 
-        <div class="col-6 align-self-center">
-          <h3 class="p-0 m-0">Descripcion</h3>
-        </div>
-
-        <div class="col-3 align-self-center">
-          <h3 class="p-0 m-0">Fecha creacion</h3>
-        </div>
+    <!-- Botones paginacion-->
+    <div class="container-fluid">
+      <div class="row p-2 justify-content-end align-items-center">
+        <nav aria-label="Page navigation example">
+          <ul class="pagination">
+            <!-- Botón Anterior -->
+            <li class="page-item">
+              <a class="page-link" (click)="previous($event)">
+                <i class="bi bi-chevron-left"></i>
+              </a>
+            </li>
+    
+            <!-- Números de Página -->
+            <div *ngFor="let n of pageNumber; let i = index" class="d-inline-block">
+              <li class="page-item">
+                <button
+                  class="page-link azul"
+                  value="{{ n }}"
+                  (click)="iteracion($event)"
+                  [class.active]="n === currentPage"
+                >
+                  {{ n }}
+                </button>
+              </li>
+            </div>
+    
+            <!-- Botón Siguiente -->
+            <li class="page-item">
+              <a class="page-link" (click)="next($event)">
+                <i class="bi bi-chevron-right"></i>
+              </a>
+            </li>
+          </ul>
+        </nav>
       </div>
-
-      <!-- Profesion -->
-      <div
-        (click)="ver(a)"
-        *ngFor="let a of arr_filtered_sugerencias"
-        class="row p-2 bg-light fila_info_profesion"
-        data-bs-toggle="modal"
-        href="#modalInformacionProfesion"
-        role="button"
-      >
-        <div class="col-3 align-self-center">
-          <h4 class="p-0 m-0">{{ a.usuario }}</h4>
-        </div>
-
-        <div class="col-6 align-self-center">
-          <h4 class="p-0 m-0">{{ a.descripcion }}</h4>
-        </div>
-
-        <div class="col-3 align-self-center">
-          <h4 class="p-0 m-0">{{ a.fecha_creacion }}</h4>
-        </div>
+    </div>
+    <!-- FIN Botones paginacion-->
+      
+      
+      
+      
       </div>
     </div>
   </div>
-</div>
+
+
+
 
 <div
   class="modal fade"
@@ -139,29 +246,3 @@
   </div>
 </div>
 
-<div class="container-fluid">
-  <div class="row p-2 justify-content-center align-items-center">
-    <nav aria-label="Page navigation example">
-      <ul class="pagination">
-        <li class="page-item">
-          <a class="page-link" (click)="previous($event)">Previous</a>
-        </li>
-        <div *ngFor="let n of pageNumber; let i = index">
-          <li class="page-item">
-            <button
-              class="page-link"
-              value="{{ n }}"
-              (click)="iteracion($event)"
-            >
-              {{ n }}
-            </button>
-          </li>
-        </div>
-
-        <li class="page-item">
-          <a class="page-link" (click)="next($event)">Next</a>
-        </li>
-      </ul>
-    </nav>
-  </div>
-</div>

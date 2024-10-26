@@ -1,0 +1,55 @@
+.input-group {
+    background-color: rgba(75, 72, 75, 0);
+    border-radius: 15px;
+    min-width: 100%;
+    height: 100%;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+h3 {
+    text-transform: uppercase;
+    color: rgba(33, 149, 181, 0.79);
+    font-weight: bold;
+}
+
+.linea {
+    background-color: rgba(98, 24, 128, 0.6);
+    height: 3px;
+    border-radius: 1px;
+}
+
+h4 {
+    text-transform: uppercase;
+    color: rgba(98, 24, 128, 0.6);
+    font-weight: bold;
+}
+
+.pagination {
+    justify-content: flex-end;
+}
+
+.page-link {
+    color: #620880;
+    font-weight: bold;
+}
+
+.active {
+    background-color: #620880;
+    border: none;
+    color: white;
+    border-radius: 50%;
+}
+
+
+
+/* Ajuste pantalla */
+@media (max-width: 768px) {
+    .header-admi1 {
+        max-width: 100%;
+    }
+
+    .header-admi1 svg {
+        padding: 10px;
+    }
+}

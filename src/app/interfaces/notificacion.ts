@@ -5,6 +5,7 @@ export interface NotificacionAnuncio {
   descripcion: string;
   ruta: string;
   imagen: string;
+  fecha_creacion: string;
 }
 
 export interface BodyCrearNotificacionAnuncio {

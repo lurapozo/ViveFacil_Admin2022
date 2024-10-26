@@ -1,0 +1,117 @@
+.header-pol {
+    background-color: rgb(51, 53, 57);
+    margin-top: 10px;
+    padding: 12px;
+}
+
+h1 {
+    color: white;
+    font-size: 20px;
+    text-transform: uppercase;
+}
+
+.containerstart {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-left: 20px;
+    margin-right: auto;
+}
+
+.header-admi1 {
+    margin-top: 10px;
+    width: 100%;
+    max-width: 1290px;
+    position: relative;
+    margin-bottom: -60px;
+}
+
+.header-admi1 svg {
+    width: 100%;
+    height: auto;
+}
+
+.header-admi {
+    background-color: rgb(51, 53, 57);
+    margin-top: 10px;
+}
+
+p {
+    color: white;
+    font-size: 20px;
+    text-transform: uppercase;
+    text-align: justify;
+}
+
+.header-text {
+    display: flex;
+    flex-direction: row;
+    margin-top: 20px;
+    position: absolute;
+    color: white;
+    z-index: 1;
+    justify-content: space-between;
+    width: 99%;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-bottom: 0;
+}
+
+.card-politicas {
+    background-color: white;
+    width: 80%;
+    height: 50%;
+}
+
+.card-body {
+    overflow-y: auto; 
+    height: 60vh; 
+}
+
+.card p {
+    color: rgb(53, 53, 53);
+    font-size: 15px;
+    padding: 10px;
+}
+
+.card-f{
+    height: 8vh;
+    background-color: white;
+    margin-top: 20px;
+    margin-bottom: 0;
+}
+ 
+.card-footer {
+    background-color: #3F3185;
+    border-radius: 0;
+    height: 10px;
+}
+
+button {
+    background-color: #3F3185;
+    border: #3F3185;
+    font-size: 30px;
+    padding: 20px 20px;
+    margin-right: 20px;
+}
+
+.custom-button {
+    background-color: #3F3185;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 24px;
+    width: 150px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.custom-button:hover {
+    background-color: #443984;
+}
+
+.float-right {
+    float: right;
+}

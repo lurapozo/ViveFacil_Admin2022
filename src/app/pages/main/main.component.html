@@ -1,55 +1,88 @@
 <!-- Contenedor principal -->
-<div class="container-fluid m-0 p-0">
-  <div class="row">
+<div class="">
+  <div class="row hcontainer">
     <!-- Cabecera -->
-    <div class="col-12 p-0">
-      <header class="p-3 mb-0 border-bottom">
+    <div class="header-container">
+      <header class="p-2 mb-0">
         <div class="container-fluid">
           <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-            <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-decoration-none">
-              <img src="assets/imagenes/logo-inicio.png" height="50vw" alt="Avatar"/>
-            </a>
+            <div class="ima-container">
+              <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-decoration-none">
+                <img src="assets/imagenes/logo-inicio.png" height="50vw" alt="Avatar"/>
+              </a>
+            </div>
+            <div class="icon-container">
+                <!-- Icono de Buscar -->
+                <div class="search-container">
+                    
+                    <input type="text" placeholder="Buscar..." class="search-input">
+                    <i class="material-icons search-icon">search</i>
+                </div>
+              
+        
+                <!-- Icono de Notificación -->
+                <i class="material-icons icon">notifications</i>
 
-            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-              <!-- Spacer -->
-            </ul>
+                <i class="material-icons user-icon">person</i>
+        
+                <!-- Icono de Menú -->
+                <i class="material-icons icon">menu</i>
+            </div>
 
-            <div class="dropdown text-end">
+            <!--<div class="dropdown text-end">
               <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
                 <img src="assets/imagenes/avatar.png" alt="mdo" width="42" height="42" class="rounded-circle">
               </a>
               <ul class="dropdown-menu text-white hidden-arrow text-center" aria-labelledby="dropdownUser1">
-                <!-- Username del admin logged in -->
+                Username del admin logged in
                 <li><a class="dropdown-item" href="#">correodeprueba98@hotmail.com</a></li>
-                <!-- Tipo de Admin -->
+                Tipo de Admin
                 <li><a class="dropdown-item" href="#">Secretario</a></li>
                 <li><hr class="dropdown-divider"></li>
                 <li><a class="dropdown-item" href="#">Cerrar Sesión</a></li>
               </ul>
-            </div>
+            </div>-->
           </div>
         </div>
       </header>
     </div>
 
     <!-- Aside -->
-    <div class="col-xl-2 col-lg-3 col-md-3 col-sm-3 p-0">
+    
+    <div id="sidebar" class="col-xl-2 col-lg-3 col-md-3 col-sm-3" >
+      <div class="profile-header">
+          <div class="profile-pic-container">
+              <img src="assets/imagenes/02.png" alt="user" class="profile-pic">
+          </div>
+          <div class="user-info">
+              <p> {{ getUsername(correoUsuario).nombre }} {{ getUsername(correoUsuario).apellido }} </p>
+              <p class="role">ADMINISTRADORA</p>
+          </div>
+      </div>
 
       <!-- Seccion lista del menú -->
       <div class="accordion rounded-0" id="asideMenuAcordion">
-
         <!-- Sección Profesiones -->
         <div class="accordion-item rounded-0">
           <h2 class="accordion-header m-0" id="panelsStayOpen-headingSix">
-            <button class="accordion-button pt-2 pb-2 collapsed rounded-0" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseSix" aria-expanded="false" aria-controls="panelsStayOpen-collapseSix">
-              <i class="bi bi-mortarboard fs-5 ps-2 pe-3"></i> Profesiones
+            <button class="accordion-button pt-2 pb-2 collapsed rounded-0" 
+             type="button" 
+             [ngClass]="{'selected': selection === 'solicitud_profesion' || selection === 'solicitud_profesion'}"
+             (click)="setSelection('solicitud_profesion')"
+            data-bs-toggle="collapse" 
+            data-bs-target="#panelsStayOpen-collapseSix" 
+            aria-expanded="false"
+            aria-controls="panelsStayOpen-collapseSix">
+            <img src="assets/imagenes/03.png" alt="Icono Profesiones" 
+            width="25" height="20" class="me-3 ms-3" /> Profesiones
+              <i [ngClass]="{'bi-chevron-down': !isOpenP, 'bi-chevron-up': isOpenP}" class="ms-auto transition-icon"></i>
             </button>
           </h2>
           <div id="panelsStayOpen-collapseSix" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingSix">
             <div class="accordion-body p-0">
               <div class="list-group rounded-0">
                 <!-- <a (click)="setSelection('profesion')" [ngClass]="selection==='profesion'? 'active':''" class="list-group-item list-group-item-action ps-4" style="cursor: pointer;">Profesiones disponibles</a> -->
-                <a (click)="setSelection('solicitud_profesion')" [ngClass]="selection==='solicitud_profesion'? 'active':''" class="list-group-item list-group-item-action ps-4" style="cursor: pointer;">Solicitud de profesiones</a>
+                <a (click)="setSelection('solicitud_profesion')" [ngClass]="{'active': selection === 'solicitud_profesion'}" class="list-group-item list-group-item-action ps-4 text-white bg-secondary" style="cursor: pointer;">Solicitud de profesiones</a>
               </div>
             </div>
           </div>
@@ -58,18 +91,24 @@
         <!-- Sección Cuentas -->
         <div class="accordion-item">
           <h2 class="accordion-header m-0" id="panelsStayOpen-headingOne">
-            <button class="accordion-button pt-2 pb-2 collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="false" aria-controls="panelsStayOpen-collapseOne">
-              <i class="bi bi-people fs-5 ps-2 pe-3"></i> Cuentas
+            <button class="accordion-button pt-2 pb-2 collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="false" aria-controls="panelsStayOpen-collapseOne"
+
+             [ngClass]="{'selected': selection === 'cuentas' || selection==='admin' || selection==='pendiente' || selection==='proveedor' || selection==='rechazado' || selection==='solicitante'}"
+             (click)="setSelection('cuentas')"
+            >
+            <img src="assets/imagenes/04.png" alt="Icono Cuentas" 
+            width="25" height="20" class="me-3 ms-3" />  Cuentas
+              <i [ngClass]="{'bi-chevron-down': !isOpenC, 'bi-chevron-up': isOpenC}" class="ms-auto transition-icon"></i>
             </button>
           </h2>
           <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingOne">
             <div class="accordion-body p-0">
               <div class="list-group rounded-0">
-                <a (click)="setSelection('admin')" [ngClass]="selection==='admin'? 'active':''" class="list-group-item list-group-item-action ps-4" style="cursor: pointer;">Administrador</a>
-                <a (click)="setSelection('pendiente')" [ngClass]="selection==='pendiente'? 'active':''" class="list-group-item list-group-item-action ps-4" style="cursor: pointer;">Pendientes</a>
-                <a (click)="setSelection('proveedor')" [ngClass]="selection==='proveedor'? 'active':''" class="list-group-item list-group-item-action ps-4" style="cursor: pointer;">Proveedores</a>
-                <a (click)="setSelection('rechazado')" [ngClass]="selection==='rechazado'? 'active':''" class="list-group-item list-group-item-action ps-4" style="cursor: pointer;">Rechazados</a>
-                <a (click)="setSelection('solicitante')" [ngClass]="selection==='solicitante'? 'active':''" class="list-group-item list-group-item-action ps-4" style="cursor: pointer;">Solicitantes</a>
+                <a (click)="setSelection('admin')" [ngClass]=" {'active': selection==='admin'}" class="list-group-item list-group-item-action ps-4 text-white bg-secondary" style="cursor: pointer;">Administrador</a>
+                <a (click)="setSelection('pendiente')" [ngClass]=" { 'active': selection==='pendiente'}" class="list-group-item list-group-item-action ps-4 text-white bg-secondary" style="cursor: pointer;">Pendientes</a>
+                <a (click)="setSelection('proveedor')" [ngClass]=" { 'active': selection==='proveedor'}" class="list-group-item list-group-item-action ps-4 text-white bg-secondary" style="cursor: pointer;">Proveedores</a>
+                <a (click)="setSelection('rechazado')" [ngClass]=" { 'active': selection==='rechazado'}" class="list-group-item list-group-item-action ps-4 text-white bg-secondary" style="cursor: pointer;">Rechazados</a>
+                <a (click)="setSelection('solicitante')" [ngClass]=" { 'active': selection==='solicitante'}" class="list-group-item list-group-item-action ps-4 text-white bg-secondary" style="cursor: pointer;">Solicitantes</a>
                 <!-- <a class="list-group-item list-group-item-action disabled">A disabled link item</a> -->
               </div>
             </div>
@@ -79,15 +118,20 @@
         <!-- Sección servicios -->
         <div class="accordion-item">
           <h2 class="accordion-header m-0" id="panelsStayOpen-headingTwo">
-            <button class="accordion-button pt-2 pb-2 collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
-              <i class="bi bi-tools fs-5 ps-2 pe-3"></i> Servicios
+            <button class="accordion-button pt-2 pb-2 collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo"
+              [ngClass]="{'selected': selection === 'servicios' || selection === 'categoria' || selection==='sub_categoria'}"
+              (click)="setSelection('servicios')"
+            >
+            <img src="assets/imagenes/05.png" alt="Icono Servicio" 
+            width="25" height="20" class="me-3 ms-3" /> Servicios
+              <i [ngClass]="{'bi-chevron-down': !isOpenS, 'bi-chevron-up': isOpenS}" class="ms-auto transition-icon"></i>
             </button>
           </h2>
           <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTwo">
             <div class="accordion-body p-0">
               <div class="list-group rounded-0">
-                <a (click)="setSelection('categoria')" [ngClass]="selection==='categoria'? 'active':''" class="list-group-item list-group-item-action ps-4" style="cursor: pointer;">Categorias</a>
-                <a (click)="setSelection('sub_categoria')" [ngClass]="selection==='sub_categoria'? 'active':''" class="list-group-item list-group-item-action ps-4" style="cursor: pointer;">Sub-categorias</a>
+                <a (click)="setSelection('categoria')" [ngClass]="{'active':selection==='categoria'}" class="list-group-item list-group-item-action ps-4 text-white bg-secondary" style="cursor: pointer;">Categorias</a>
+                <a (click)="setSelection('sub_categoria')" [ngClass]="{'active': selection==='sub_categoria'}" class="list-group-item list-group-item-action ps-4 text-white bg-secondary" style="cursor: pointer;">Sub-categorias</a>
               </div>
             </div>
           </div>
@@ -96,16 +140,21 @@
         <!-- Sección de Pagos -->
         <div class="accordion-item">
           <h2 class="accordion-header m-0" id="panelsStayOpen-headingThree">
-            <button class="accordion-button pt-2 pb-2 collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
-              <i class="bi bi-piggy-bank fs-5 ps-2 pe-3"></i> Pagos
+            <button class="accordion-button pt-2 pb-2 collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree"
+              [ngClass]="{'selected': selection === 'pagos' || selection === 'cargo' || selection==='efectivo' || selection==='tarjeta'}"
+              (click)="setSelection('pagos')"
+            >
+            <img src="assets/imagenes/06.png" alt="Icono Pagos" 
+            width="25" height="20" class="me-3 ms-3" />  Pagos
+              <i [ngClass]="{'bi-chevron-down': !isOpenPa, 'bi-chevron-up': isOpenPa}" class="ms-auto transition-icon"></i>
             </button>
           </h2>
           <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingThree">
             <div class="accordion-body p-0">
               <div class="list-group rounded-0">
-                <a (click)="setSelection('cargo')" [ngClass]="selection==='cargo'? 'active':''" class="list-group-item list-group-item-action ps-4" style="cursor: pointer;">Cargos</a>
-                <a (click)="setSelection('efectivo')" [ngClass]="selection==='efectivo'? 'active':''" class="list-group-item list-group-item-action ps-4" style="cursor: pointer;">Efectivo</a>
-                <a (click)="setSelection('tarjeta')" [ngClass]="selection==='tarjeta'? 'active':''" class="list-group-item list-group-item-action ps-4" style="cursor: pointer;">Tarjeta</a>
+                <a (click)="setSelection('cargo')" [ngClass]="{'active':selection==='cargo'}" class="list-group-item list-group-item-action ps-4 text-white bg-secondary" style="cursor: pointer;">Cargos</a>
+                <a (click)="setSelection('efectivo')" [ngClass]="{'active':selection==='efectivo'}" class="list-group-item list-group-item-action ps-4 text-white bg-secondary" style="cursor: pointer;">Efectivo</a>
+                <a (click)="setSelection('tarjeta')" [ngClass]="{'active':selection==='tarjeta'}" class="list-group-item list-group-item-action ps-4 text-white bg-secondary" style="cursor: pointer;">Tarjeta</a>
               </div>
             </div>
           </div>
@@ -131,15 +180,19 @@
         <!-- Sección Sugerencias -->
         <div class="accordion-item">
           <h2 class="accordion-header m-0" id="panelsStayOpen-headingFive">
-            <button class="accordion-button pt-2 pb-2 collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseFive" aria-expanded="false" aria-controls="panelsStayOpen-collapseFive">
-              <i class="bi bi-chat-right-quote fs-5 ps-2 pe-3"></i>Sugerencias
+            <button class="accordion-button pt-2 pb-2 collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseFive" aria-expanded="false" aria-controls="panelsStayOpen-collapseFive"
+            [ngClass]="{'selected': selection === 'sugerencia' || selection === 'sugerencia_leida' || selection === 'sugerencia_no_leida'}"
+             (click)="setSelection('sugerencia')">
+             <img src="assets/imagenes/07.png" alt="Icono Sugerencias" 
+             width="25" height="20" class="me-3 ms-3" /> Sugerencias
+              <i [ngClass]="{'bi-chevron-down': !isOpenSu, 'bi-chevron-up': isOpenSu}" class="ms-auto transition-icon"></i>
             </button>
           </h2>
           <div id="panelsStayOpen-collapseFive" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingFive">
             <div class="accordion-body p-0">
               <div class="list-group rounded-0">
-                <a (click)="setSelection('sugerencia_leida')" [ngClass]="selection==='sugerencia_leida'? 'active':''" class="list-group-item list-group-item-action ps-4" style="cursor: pointer;">Sugerencias leídas</a>
-                <a (click)="setSelection('sugerencia_no_leida')" [ngClass]="selection==='sugerencia_no_leida'? 'active':''" class="list-group-item list-group-item-action ps-4" style="cursor: pointer;">Sugerencias no leídas</a>
+                <a (click)="setSelection('sugerencia_leida')" [ngClass]="{'active':selection==='sugerencia_leida'}" class="list-group-item list-group-item-action ps-4 text-white bg-secondary" style="cursor: pointer;">Sugerencias leídas</a>
+                <a (click)="setSelection('sugerencia_no_leida')" [ngClass]="{'active':selection==='sugerencia_no_leida'}" class="list-group-item list-group-item-action ps-4 text-white bg-secondary" style="cursor: pointer;">Sugerencias no leídas</a>
               </div>
             </div>
           </div>
@@ -157,8 +210,9 @@
         <!-- Sección Medallas -->
         <div class="accordion-item rounded-0">
           <h2 class="accordion-header m-0" id="">
-            <button [ngClass]="selection==='medalla'? '':'collapsed'" (click)="setSelection('medalla')" class="accordion-button pt-2 pb-2 accordion-no-button rounded-0" type="button">
-              <i class="bi bi-award fs-5 ps-2 pe-3"></i> Medallas
+            <button [ngClass]="{'selected': selection==='medalla'}" (click)="setSelection('medalla')" class="accordion-button pt-2 pb-2 accordion-no-button rounded-0" type="button">
+              <img src="assets/imagenes/08.png" alt="Icono Medallas" 
+            width="25" height="20" class="me-3 ms-3" />  Medallas
             </button>
           </h2>
         </div>
@@ -175,8 +229,8 @@
         <!-- Sección Promoción -->
         <div class="accordion-item">
           <h2 class="accordion-header m-0" id="">
-            <button [ngClass]="selection==='promocion'? '':'collapsed'" (click)="setSelection('promocion')" class="accordion-button pt-2 pb-2 accordion-no-button" type="button">
-              <i class="bi bi-tags fs-5 ps-2 pe-3"></i> Promoción
+            <button [ngClass]="{'selected': selection==='promocion'}"(click)="setSelection('promocion')" class="accordion-button pt-2 pb-2 accordion-no-button" type="button">
+              <i class="bi bi-tags fs-5 ps-2 pe-3 ms-3"></i> Promoción
             </button>
           </h2>
         </div>
@@ -184,8 +238,8 @@
         <!-- Sección Politicas -->
         <div class="accordion-item">
           <h2 class="accordion-header m-0" id="">
-            <button [ngClass]="selection==='politica'? '':'collapsed'" (click)="setSelection('politica')" class="accordion-button pt-2 pb-2 accordion-no-button" type="button">
-              <i class="bi bi-shield-exclamation fs-5 ps-2 pe-3"></i> Politicas
+            <button [ngClass]="{'selected': selection==='politica'}" (click)="setSelection('politica')" class="accordion-button pt-2 pb-2 accordion-no-button" type="button">
+              <i class="bi bi-shield-exclamation fs-5 ps-2 pe-3 ms-3"></i> Politicas
             </button>
           </h2>
         </div>
@@ -202,31 +256,77 @@
         <!-- Sección Cupones -->
         <div class="accordion-item">
           <h2 class="accordion-header m-0" id="">
-            <button [ngClass]="selection==='cupon'? '':'collapsed'" (click)="setSelection('cupon')" class="accordion-button pt-2 pb-2 accordion-no-button" type="button">
-              <i class="bi bi-ticket-perforated fs-5 ps-2 pe-3"></i> Cupones
+            <button [ngClass]="{'selected': selection==='cupon'}" (click)="setSelection('cupon')" class="accordion-button pt-2 pb-2 accordion-no-button" type="button">
+              <i class="bi bi-ticket-perforated fs-5 ps-2 pe-3 ms-3"></i> Cupones
             </button>
           </h2>
         </div>
 
         <!-- Sección Notificaciones push -->
         <div class="accordion-item">
-          <h2 class="accordion-header m-0" id="">
-            <button [ngClass]="selection==='notificacion_push'? '':'collapsed'" (click)="setSelection('notificacion_push')" class="accordion-button pt-2 pb-2 accordion-no-button" type="button">
-              <i class="bi bi-bell fs-5 ps-2 pe-3"></i> Notificaciones Push
+          <h2 class="accordion-header m-0" id="panelsStayOpen-headingN">
+            <button class="accordion-button pt-2 pb-2 collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseN" aria-expanded="false" aria-controls="panelsStayOpen-collapseN"
+            [ngClass]="{'selected': selection==='notificacion_push' || selection === 'notificacion_automaticas' || selection === 'notificacion_masivas'}" 
+            (click)="setSelection('notificacion_masivas')"
+            >
+            <img src="assets/imagenes/12.png" alt="Icono Cuentas" 
+            width="25" height="20" class="me-3 ms-3" /> Notificaciones Push
+              <i [ngClass]="{'bi-chevron-down': !isOpenN, 'bi-chevron-up': isOpenN}" class="ms-auto transition-icon"></i>
             </button>
           </h2>
+          <div id="panelsStayOpen-collapseN" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingN">
+            <div class="accordion-body p-0">
+              <div class="list-group rounded-0">
+                <a (click)="setSelection('notificacion_automaticas')" [ngClass]="{'active':selection==='notificacion_automaticas'}" class="list-group-item list-group-item-action ps-4 text-white bg-secondary" style="cursor: pointer;">Automáticas</a>
+                <a (click)="setSelection('notificacion_masivas')" [ngClass]="{'active':selection==='notificacion_masivas'}" class="list-group-item list-group-item-action ps-4 text-white bg-secondary" style="cursor: pointer;">Masivas</a>
+              </div>
+            </div>
+          </div>
         </div>
 
+        <!-- Sección Cerrar Sesion-->
+        <div class="accordion-item cerrar-sesion-container">
+          <h2 class="accordion-header m-0">
+            <button class="accordion-button pt-2 pb-2 accordion-no-button cerrar-sesion-button" type="button"
+            (click)="logout()">
+              <i class="bi bi-box-arrow-right fs-5 ps-2 pe-3 icono-sesion"></i> 
+              <a class="dropdown-item" href="#">Cerrar Sesión</a>
+            </button>
+          </h2>
+        </div>     
+        
 
       </div>
+      
     </div>
 
     <!-- Cuerpo -->
-    <div class="col-xl-10 col-lg-9 col-md-9 col-sm-9 p-0">
+    <div class="col-xl-10 col-lg-9 col-md-9 p-0" id="principal">
 
       <!-- Vista por defecto -->
-      <div *ngIf="!selection" class="row justify-content-center align-items-center p-0 h-100">
-        <div class="col-8">
+      <div *ngIf="!selection" class="row">
+        <div class="bienvenido">
+        </div>
+
+        <div class="bienvenido-container">
+          <div class="b-container">
+              <div class="image-container">
+                  <img src="assets/imagenes/02.png"class="card-img-top img mb-3 rounded-circle custom-border" alt="...">
+              </div>
+              <h2 class="name">  {{ getUsername(correoUsuario).nombre }} {{ getUsername(correoUsuario).apellido }} </h2>
+              <p>
+                Para comenzar a utilizar la plataforma, <br>seleccione alguna opción del menú que se encuentra al lado izquierdo.
+              </p>
+              
+          
+          </div>
+          <div class="bienvenido-footer-container"> 
+            <h1>{{ correoUsuario }}</h1>
+          </div>
+          
+        </div>
+
+        <!-- <div class="col-8">
           <div class="card text-center">
             <div class="card-header">
               <h1>Bienvenido!</h1>
@@ -242,7 +342,7 @@
               proveedor@gmail.com
             </div>
           </div>
-        </div>
+        </div>-->
       </div>
 
       <!-- Seccion PROFESIONES -->
@@ -310,8 +410,10 @@
       <!-- Inyeccion Vista CUPONES -->
       <app-cupones *ngIf="selection === 'cupon'"></app-cupones>
 
-      <!-- Inyeccion Vista NOTIFICACIONES_PUSH -->
-      <app-notificaciones-push *ngIf="selection === 'notificacion_push'"></app-notificaciones-push>
+      <!-- Inyeccion Vista NOTIFICACIONES_PUSH 
+      <app-notificaciones-push *ngIf="selection === 'notificacion_push'"></app-notificaciones-push>-->
+      <app-notificaciones-automaticas *ngIf="selection === 'notificacion_automaticas'" identificador="2" ></app-notificaciones-automaticas>
+      <app-notificaciones-masivas *ngIf="selection === 'notificacion_masivas'" identificador="2" ></app-notificaciones-masivas>
 
     </div>
 
@@ -321,4 +423,3 @@
     </div>
   </div>
 </div>
-

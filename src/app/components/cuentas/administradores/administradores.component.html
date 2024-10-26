@@ -1,113 +1,877 @@
-<div class="container-fluid">
-  <!-- Titulo principal -->
-  <div class="row p-2 justify-content-center align-items-center">
-    <div class="col text-center">
-      <h2 class="p-0 m-0">Administradores</h2>
-      <h2 class="p-0 m-0">Total de administradores: {{ total }}</h2>
+
+<!------------------------------------------- PRINCIPAL --------------------------------------------------------->
+<!-- Titulo principal-->
+
+<div class="header-admi1">
+  <div class="header-text">
+    <div class="containerstart" >
+      <p *ngIf="showHeader"> ADMINISTRADOR</p>
+      <p *ngIf="showHeaderC"> Crear ADMINISTRADOR</p>
+      <p *ngIf="showadmi"> Editar ADMINISTRADOR</p>
+    </div>
+    <div class="containerend" *ngIf="showHeader">
+      <p>Total de administradores:{{total}}</p>
     </div>
   </div>
+  <svg preserveAspectRatio="xMidYMid">
+    <path d="M0,60 L0,0 L1290,0 L1290,60" fill="#333539"  />
+    <path d="M320,60 Q448,85 550,60" fill="#333539" />
+  </svg>
+</div>
 
-  <!-- Buscar y agregar admi -->
-  <div class="row p-2 justify-content-center align-items-center">
-    <div class="col-xl-7 col-lg-5"></div>
-    <div class="col-xl-3 col-lg-4">
-      <div class="input-group">
-        <input
-          type="text"
-          (input)="search($event)"
-          class="form-control"
-          placeholder="Buscar"
-          aria-label="Buscar"
-          aria-describedby="basic-addon1"
-        />
-        <button class="input-group-text" id="basic-addon1">
-          <i class="bi bi-search"></i>
-        </button>
+ <!-- FILTROS-->
+<div class="container-fluid" *ngIf="showHeader">
+  <div class="d-flex flex-wrap header-solicitud align-items-center gap-3">   
+    <div class="containerstart1" >
+      <label class="calendar-label">Desde:</label>
+      <div class="date-container" >
+        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+        <mat-datepicker #picker1></mat-datepicker>
+        <input matInput [matDatepicker]="picker1" placeholder="SELECCIONA DIA" 
+         [(ngModel)]="fechaInicio" (dateChange)="filtrarPorFechas()"
+        >
       </div>
     </div>
-    <div class="col-xl-2 col-lg-3">
-      <button
-        type="button"
-        class="btn btn-primary"
-        data-bs-toggle="modal"
-        (click)="limpiarForm('crear')"
-        href="#modalCrearProfesion"
-      >
-        Agregar Administrador
+    
+    <div class="containerstart2" >
+      <label class="calendar-label">Hasta:</label>
+      <div class="date-container" >
+        <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+        <mat-datepicker #picker2></mat-datepicker>
+        <input matInput [matDatepicker]="picker2" placeholder="SELECCIONA DIA"
+         [(ngModel)]="fechaFin" (dateChange)="filtrarPorFechas()"
+        >
+      </div>
+    </div>
+
+    <div class="containerstart3">
+      <button class="search-button" id="basic-addon1">
+        <i class="bi bi-search"></i>
       </button>
+      <div class="date-container">
+        <div class="input-group search-group">
+          <input 
+            type="text" 
+            class="form-control search-input" 
+            placeholder="BUSCAR"
+            aria-label="Buscar" 
+            aria-describedby="basic-addon1" 
+            (input)="search($event)">
+        </div> 
+      </div>       
     </div>
   </div>
+  <div class="d-flex flex-wrap header-admin">
+    <button class="admin-button"
+        type="button"
+        (click)="crearAdministrador()"
+    >
+      <span class="material-icons">add_circle</span>
+      AGREGAR ADMINISTRADOR
+    </button>
+</div>
+
+ <!-- CONTENIDO-->
+
   <!-- Contenedor de admi -->
   <div class="row justify-content-center align-items-center p-0">
-    <div class="col-10 text-center">
-      <!-- Titulo -->
-      <div class="row p-2 bg-primary text-white">
-        <div class="col-2 align-self-center">
-          <h3 class="p-0 m-0">Nombres</h3>
-        </div>
+    <div class="col-10 text-center containeradmin">
+      <div class="table-responsive">
+      <table class="table table-striped custom-table">
+        <thead>
+          <!-- Encabezado -->
+          <tr>
+            <th scope="col">Nombres</th>
+            <th scope="col">Cedula</th>
+            <th scope="col">Correo Electronico</th>
+            <th scope="col">Telefono</th>
+            <th scope="col">Fecha Creacion</th>
+            <th scope="col">Estado</th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+      </table>
+      <div class="table-body">
+      <table class="table table-striped custom-table">
+        <tbody>
+          <tr
+            *ngFor="let a of arr_filtered_admi"
+            (click)="editar(a)"
+            role="button"
+          >
+            <td style="color: #40378b; text-transform: uppercase"> <strong> {{ a.user_datos.nombres }} {{ a.user_datos.apellidos }} </strong></td>
+            <td style="color: #40378b; text-transform: uppercase"> <strong> {{ a.user_datos.cedula }} </strong> </td>
+            <td style="color: #40378b; text-transform: uppercase"> <strong> {{ a.user_datos.user.username }} </strong> </td>
+            <td style="color: #40378b; text-transform: uppercase"> <strong> {{ a.user_datos.telefono }} </strong> </td>
+            <td style="color: #40378b; text-transform: uppercase"> <strong> {{ a.user_datos.fecha_creacion | date : "d/M/Y" }}  </strong> </td>
+            <td class="d-flex align-items-center">
+              <span
+                *ngIf="a.user_datos.estado"
+                class="estado-indicador bg-success me-2"
+              ></span>
+              <span *ngIf="a.user_datos.estado" class="text-success">Activo</span>
+      
+              <span
+                *ngIf="!a.user_datos.estado"
+                class="estado-indicador bg-secondary me-2" 
+              ></span>
+              <span *ngIf="!a.user_datos.estado" class="text-muted">Inactivo</span>
+            </td>
+            <td>
+              
+              <mat-icon>settings</mat-icon>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 
-        <div class="col-2 align-self-center">
-          <h3 class="p-0 m-0">Cedula</h3>
-        </div>
 
-        <div class="col-2 align-self-center">
-          <h3 class="p-0 m-0">Correo Electronico</h3>
-        </div>
-
-        <div class="col-2 align-self-center">
-          <h3 class="p-0 m-0">Telefono</h3>
-        </div>
-        <div class="col-2 align-self-center">
-          <h3 class="p-0 m-0">Fecha Creacion</h3>
-        </div>
-        <div class="col-2 align-self-center">
-          <h3 class="p-0 m-0">Estado</h3>
+      <div class="container-fluid">
+        <div class="row p-2 justify-content-end align-items-center">
+          <nav aria-label="Page navigation example">
+            <ul class="pagination">
+              <!-- Botón Anterior -->
+              <li class="page-item">
+                <a class="page-link" (click)="previous($event)">
+                  <i class="bi bi-chevron-left"></i>
+                </a>
+              </li>
+      
+              <!-- Números de Página -->
+              <div *ngFor="let n of pageNumber; let i = index" class="d-inline-block">
+                <li class="page-item">
+                  <button
+                    class="page-link azul"
+                    value="{{ n }}"
+                    (click)="iteracion($event)"
+                    [class.active]="n === currentPage"
+                  >
+                    {{ n }}
+                  </button>
+                </li>
+              </div>
+      
+              <!-- Botón Siguiente -->
+              <li class="page-item">
+                <a class="page-link" (click)="next($event)">
+                  <i class="bi bi-chevron-right"></i>
+                </a>
+              </li>
+            </ul>
+          </nav>
         </div>
       </div>
+      
+      
+      
+      
+      </div>
+    </div>
+  </div>
+<!------------------------------------------- FIN PRINCIPAL --------------------------------------------------------->
 
-      <!-- Profesion -->
-      <div
-        (click)="admi_seleccionada = a"
-        *ngFor="let a of arr_filtered_admi"
-        class="row p-2 bg-light fila_info_profesion"
-        data-bs-toggle="modal"
-        href="#modalInformacionProfesion"
-        role="button"
-      >
-        <div class="col-2 align-self-center">
-          <h4 class="p-0 m-0">
-            {{ a.user_datos.nombres }} {{ a.user_datos.apellidos }}
-          </h4>
-        </div>
 
-        <div class="col-2 align-self-center">
-          <h4 class="p-0 m-0">{{ a.user_datos.cedula }}</h4>
-        </div>
 
-        <div class="col-2 align-self-center">
-          <h4 class="p-0 m-0">{{ a.user_datos.user.username }}</h4>
-        </div>
+<!------------------------------------------- CREAR ADMINISTRADOR --------------------------------------------------------->
 
-        <div class="col-2 align-self-center">
-          <h4 class="p-0 m-0">{{ a.user_datos.telefono }}</h4>
-        </div>
-        <div class="col-2 align-self-center">
-          <h4 class="p-0 m-0">{{ a.user_datos.fecha_creacion }}</h4>
-        </div>
-        <div class="col-2 align-self-center">
-          <span *ngIf="!a.user_datos.estado" class="badge text-bg-danger"
-            >Inactivo</span
-          >
-          <span *ngIf="a.user_datos.estado" class="badge text-bg-success"
-            >Activo</span
-          >
-        </div>
+<div *ngIf="showHeaderC">
+  <div class="row justify-content-center align-items-center p-0">
+    <div class="col-10 text-center containerCrearadmin">
+      <div class="form-container">
+        <h2>crear Administrador</h2>
+        <form [formGroup]="admiCrear">
+
+          <!-- Sección de imagen -->
+          <button class="admin-button1"
+                  type="button"
+                  (click)="crearAdministrador();"> 
+            
+            <span class="material-icons">description</span> 
+            SELECCIONAR ARCHIVO
+            <span class="material-icons">add_circle</span> 
+          </button>
+          <div class="form-field">
+            <img
+              *ngIf="existImageCrear"
+              class="rounded mx-auto d-block img-fluid w-50 image_modal"
+              [src]="imagenCrear"
+              alt="Archivo cargado correctamente"
+            />
+            <i
+              *ngIf="!existImageCrear"
+              class="rounded mx-auto d-block img-fluid w-50 bi bi-upload icono"
+            ></i>
+            
+            <input
+                class="w-100 centrar form-control"
+                [ngClass]="
+                  admiCrear.get('imagen')?.hasError('image_error')
+                    ? 'is-invalid'
+                    : '' || existImageCrear
+                    ? 'is-valid'
+                    : ''
+                "
+                type="file"
+                accept="image/png, image/jpeg"
+                (change)="loadImageFromDevice($event, 'crear')"
+              />
+            <div class="invalid-feedback">
+              {{ getErrorMessage(admiCrear, 'imagen') }}
+            </div>
+          </div>
+
+
+          <div class="form-field">
+            <div class="col-5">
+              <label for="inputNombre" class="form-label"
+                ><h3 class="m-0 p-0 fw-bold">Nombre:</h3></label
+              >
+            </div>
+            <div class="col-5">
+              <input
+                type="text"
+                formControlName="nombre"
+                class="form-control"
+                [ngClass]="
+                  isInvalidForm('nombre', 'crear')
+                    ? 'is-invalid'
+                    : admiCrear.get('nombre')?.touched ||
+                      (admiCrear.get('nombre')?.dirty &&
+                        !admiCrear.get('nombre')?.invalid)
+                    ? 'is-valid'
+                    : ''
+                "
+                id="inputNombre"
+                placeholder="nombres"
+              />
+              <div class="invalid-feedback">
+                {{ getErrorMessage(admiCrear, "nombre") }}
+              </div>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <div class="col-5">
+              <label for="inputNombre" class="form-label"
+                ><h3 class="m-0 p-0 fw-bold">Apellidos:</h3></label
+              >
+            </div>
+            <div class="col-5">
+              <input
+                type="text"
+                formControlName="apellidos"
+                class="form-control"
+                [ngClass]="
+                  isInvalidForm('apellidos', 'crear')
+                    ? 'is-invalid'
+                    : admiCrear.get('apellidos')?.touched ||
+                      (admiCrear.get('apellidos')?.dirty &&
+                        !admiCrear.get('apellidos')?.invalid)
+                    ? 'is-valid'
+                    : ''
+                "
+                id="inputApellido"
+                placeholder="apellidos"
+              />
+              <div class="invalid-feedback">
+                {{ getErrorMessage(admiCrear, "apellidos") }}
+              </div>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <div class="col-5">
+              <label for="textareaDescripcion" class="form-label"
+                ><h3 class="m-0 p-0 fw-bold">Telefono:</h3></label
+              >
+            </div>
+            <div class="form-field">
+              <input
+                type= "text"
+                class="form-control"
+                formControlName="telefono"
+                [ngClass]="
+                  isInvalidForm('telefono', 'crear') ? 'is-invalid' : ''
+                "
+                id="tel"
+                placeholder="0999999999"
+              >
+              <div class="invalid-feedback">
+                {{ getErrorMessage(admiCrear, "telefono") }}
+              </div>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <div class="col-5">
+              <label for="textareaDescripcion" class="form-label"
+                ><h3 class="m-0 p-0 fw-bold">Cedula:</h3></label
+              >
+            </div>
+            <div class="col-5">
+              <input
+                type="text"
+                class="form-control"
+                formControlName="cedula"
+                [ngClass]="isInvalidForm('cedula', 'crear') ? 'is-invalid' : ''"
+                placeholder="0960044508"
+              >
+              <div class="invalid-feedback">
+                {{ getErrorMessage(admiCrear, "cedula") }}
+              </div>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <div class="col-5">
+              <label for="textareaDescripcion" class="form-label"
+                ><h3 class="m-0 p-0 fw-bold">Correo:</h3></label
+              >
+            </div>
+            <div class="col-5">
+              <input
+                type="email"
+                class="form-control"
+                formControlName="correo"
+                [ngClass]="isInvalidForm('correo', 'crear') ? 'is-invalid' : ''"
+                id="ced"
+                placeholder="juan@example.com"
+              />
+              <div class="invalid-feedback">
+                {{ getErrorMessage(admiCrear, "correo") }}
+              </div>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <div class="col-5">
+              <label for="selectorServicioCrear" class="form-label"
+                ><h3 class="m-0 p-0 fw-bold">Ciudad:</h3></label
+              >
+            </div>
+            <div class="col-5">
+              <select
+                class="form-select"
+                [ngClass]="isInvalidForm('ciudad', 'crear') ? 'is-invalid' : ''"
+                formControlName="ciudad"
+                id="ciu"
+                aria-describedby="selectorServicioCrearFeedback"
+              >
+                <option selected disabled value="">Elija una ciudad...</option>
+                <option *ngFor="let c of ciudades" [id]="c" [value]="c">
+                  {{ c }}
+                </option>
+              </select>
+              <div id="selectorServicioCrearFeedback" class="invalid-feedback">
+                {{ getErrorMessage(admiCrear, "ciudad") }}
+              </div>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <div class="col-5">
+              <label for="selectorServicioCrear" class="form-label"
+                ><h3 class="m-0 p-0 fw-bold">Genero:</h3></label
+              >
+            </div>
+            <div class="form-field">
+              <select
+                class="form-select"
+                [ngClass]="isInvalidForm('genero', 'crear') ? 'is-invalid' : ''"
+                formControlName="genero"
+                aria-describedby="selectorServicioCrearFeedback"
+              >
+                <option selected disabled value="">Elija una genero...</option>
+                <option *ngFor="let c of generos" [id]="c" [value]="c">
+                  {{ c }}
+                </option>
+              </select>
+              <div id="selectorServicioCrearFeedback" class="invalid-feedback">
+                {{ getErrorMessage(admiCrear, "genero") }}
+              </div>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <div class="col-5">
+              <label for="selectorServicioCrear" class="form-label"
+                ><h3 class="m-0 p-0 fw-bold">Rol:</h3></label
+              >
+            </div>
+            <div class="form-field">
+              <select
+                class="form-select"
+                [ngClass]="isInvalidForm('rol', 'crear') ? 'is-invalid' : ''"
+                formControlName="rol"
+                id="ro"
+                aria-describedby="selectorServicioCrearFeedback"
+              >
+                <option selected disabled value="">Elija una rol...</option>
+                <option *ngFor="let c of roles" [id]="c" [value]="c">
+                  {{ c }}
+                </option>
+              </select>
+              <div id="selectorServicioCrearFeedback" class="invalid-feedback">
+                {{ getErrorMessage(admiCrear, "rol") }}
+              </div>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <div class="col-5">
+              <label for="textareaDescripcion" class="form-label"
+                ><h3 class="m-0 p-0 fw-bold">Contrasena:</h3></label
+              >
+            </div>
+            <div class="col-5">
+              <input
+                type="password"
+                class="form-control"
+                formControlName="password"
+                [ngClass]="
+                  isInvalidForm('password', 'crear') ? 'is-invalid' : ''
+                "
+                id="pw"
+                placeholder="*******"
+              />
+              <div class="invalid-feedback">
+                {{ getErrorMessage(admiCrear, "password") }}
+              </div>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <div class="col-5">
+              <label for="textareaDescripcion" class="form-label"
+                ><h3 class="m-0 p-0 fw-bold">Confirmar Contrasena:</h3></label
+              >
+            </div>
+            <div class="form-field">
+              <input
+                type="password"
+                class="form-control"
+                formControlName="confirmPassword"
+                [ngClass]="
+                  isInvalidForm('confirmPassword', 'crear') ? 'is-invalid' : ''
+                "
+                id="pwd"
+                placeholder="*******"
+              />
+              <div class="invalid-feedback">
+                {{ getErrorMessage(admiCrear, "confirmPassword") }}
+              </div>
+            </div>
+          </div>
+        </form>
+        <button
+          class="custom-button float-right"
+          [disabled]="admiCrear.invalid ? true : false"
+          data-bs-target="#modalConfirmacion"
+          data-bs-toggle="modal"
+          (click)="
+            establecerMensaje(
+              'Está seguro que desea crear el administrador?',
+              'crear'
+            );
+            showHeader = true; showHeaderC= false ; showadmi = false;
+          "
+          >CREAR</button> 
+          
+        
+        <button
+          class="custom-button1 float-right"
+          type="button" 
+          (click)="showHeader = true; showHeaderC= false ; showadmi = false; limpiarForm('crear')">
+        Cancelar
+        </button>  
+        
       </div>
     </div>
   </div>
 </div>
 
-<!-- Modal informacion de admi -->
+<!-- FIN CREAR ADMINISTRADOR -->
+
+
+<!-- EDITAR ADMINISTRADOR -->
+
+<div *ngIf="showadmi">
+  <div class="row justify-content-center align-items-center p-0">
+    <div class="col-10 text-center containerCrearadmin">
+      <div class="form-container">
+        <h2>Editar Administrador</h2>
+        <form [formGroup]="formEdit">
+
+          <!-- Sección de imagen -->
+          <button class="admin-button1"
+                  type="button"
+                  (click)="fileInput.click(); crearAdministrador();"> 
+            
+            <span class="material-icons">description</span> 
+            SELECCIONAR ARCHIVO
+            <span class="material-icons">add_circle</span> 
+          </button>
+          <div class="form-field">
+            <img
+                *ngIf="existImageActualizar"
+                class="image_modal rounded mx-auto d-block img-fluid w-50"
+                [src]="imagenActualizar"
+                alt="Archivo incorrecto"
+              />
+            <img
+              *ngIf="
+                !existImageActualizar &&
+                admi_seleccionada?.user_datos.foto?.foto
+              "
+              class="image_modal rounded mx-auto d-block img-fluid w-50"
+              [src]="
+                'https://tomesoft1.pythonanywhere.com' +
+                admi_seleccionada?.user_datos.foto?.foto
+              "
+              alt="Archivo correcto"
+            />
+            <i
+            *ngIf="
+              !existImageActualizar &&
+              !admi_seleccionada?.user_datos.foto?.foto
+            "
+            class="rounded mx-auto d-block img-fluid w-50 bi bi-upload icono"
+            ></i>
+            
+            <input
+              #fileInput
+              class="w-100 centrar form-control"
+              [ngClass]="
+                  formEdit.get('imagen')?.hasError('image_error')
+                    ? 'is-invalid'
+                    : '' || existImageActualizar
+                    ? 'is-valid'
+                    : ''
+              "
+              type="file"
+              accept="image/png, image/jpeg" 
+              (change)="loadImageFromDevice($event, 'actualizar')"
+              style="display: none;" 
+            />
+            <div class="invalid-feedback">
+              {{ getErrorMessage(formEdit, "imagen") }}
+            </div>
+          </div>
+
+          
+
+          <div class="form-field">
+            <div class="col-5">
+              <label for="inputNombre" class="form-label"
+                ><h3 class="m-0 p-0 fw-bold">Nombre:</h3></label
+              >
+            </div>
+            <div class="col-5">
+              <input
+                type="text"
+                formControlName="nombre"
+                class="form-control"
+                [ngClass]="
+                  isInvalidForm('nombre', 'actualizar') ? 'is-invalid' : ''
+                "
+                [placeholder]="admi_seleccionada?.user_datos.nombres"
+                [value]="admi_seleccionada?.user_datos.nombres"
+                [(ngModel)]="admi_seleccionada.user_datos.nombres">
+              
+              <div class="invalid-feedback">
+                {{ getErrorMessage(formEdit, "nombre") }}
+              </div>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <div class="col-5">
+              <label for="inputNombre" class="form-label"
+                ><h3 class="m-0 p-0 fw-bold">Apellidos:</h3></label
+              >
+            </div>
+            <div class="col-5">
+              <input
+                type="text"
+                class="form-control"
+                formControlName="apellidos"
+                [ngClass]="
+                  isInvalidForm('apellidos', 'actualizar') ? 'is-invalid' : ''
+                "
+                id="textareaDescripcion"
+                [placeholder]="admi_seleccionada?.user_datos.apellidos"
+                [value]="admi_seleccionada?.user_datos.apellidos"
+                [(ngModel)]="admi_seleccionada.user_datos.apellidos">
+              
+              <div class="invalid-feedback">
+                {{ getErrorMessage(formEdit, "apellidos") }}
+              </div>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <div class="col-5">
+              <label for="textareaDescripcion" class="form-label"
+                ><h3 class="m-0 p-0 fw-bold">Telefono:</h3></label
+              >
+            </div>
+            <div class="form-field">
+              <input
+                class="form-control"
+                formControlName="telefono"
+                [ngClass]="
+                  isInvalidForm('telefono', 'actualizar') ? 'is-invalid' : ''
+                "
+                type="number"
+                [placeholder]="admi_seleccionada?.user_datos.telefono"
+                [value]="admi_seleccionada?.user_datos.telefono"
+                [(ngModel)]="admi_seleccionada.user_datos.telefono">
+              
+              <div class="invalid-feedback">
+                {{ getErrorMessage(formEdit, "telefono") }}
+              </div>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <div class="col-5">
+              <label for="textareaDescripcion" class="form-label"
+                ><h3 class="m-0 p-0 fw-bold">Cedula:</h3></label
+              >
+            </div>
+            <div class="col-5">
+              <input
+                type="text"
+                class="form-control"
+                formControlName="cedula"
+                [ngClass]="
+                  isInvalidForm('cedula', 'actualizar') ? 'is-invalid' : ''
+                "
+                [placeholder]="admi_seleccionada?.user_datos.cedula"
+                [value]="admi_seleccionada?.user_datos.cedula"
+                [(ngModel)]="admi_seleccionada.user_datos.cedula">
+              
+              <div class="invalid-feedback">
+                {{ getErrorMessage(formEdit, "cedula") }}
+              </div>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <div class="col-5">
+              <label for="textareaDescripcion" class="form-label"
+                ><h3 class="m-0 p-0 fw-bold">Correo:</h3></label
+              >
+            </div>
+            <div class="col-5">
+              <input
+                type="email"
+                class="form-control"
+                formControlName="correo"
+                [ngClass]="
+                  isInvalidForm('correo', 'actualizar') ? 'is-invalid' : ''
+                "
+                [placeholder]="admi_seleccionada?.user_datos.user.email"
+                [value]="admi_seleccionada?.user_datos.user.email"
+                [(ngModel)]="admi_seleccionada.user_datos.user.email">
+              
+              <div class="invalid-feedback">
+                {{ getErrorMessage(formEdit, "correo") }}
+              </div>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <div class="col-5">
+              <label for="selectorServicioCrear" class="form-label"
+                ><h3 class="m-0 p-0 fw-bold">Ciudad:</h3></label
+              >
+            </div>
+            <div class="col-5">
+              <select
+                class="form-select"
+                [ngClass]="
+                  isInvalidForm('ciudad', 'actualizar') ? 'is-invalid' : ''
+                "
+                formControlName="ciudad"
+                [value]="admi_seleccionada?.user_datos.ciudad"
+                aria-describedby="selectorServicioCrearFeedback"
+                [(ngModel)]="admi_seleccionada.user_datos.ciudad">
+              
+                <option selected disabled value="">Elija una ciudad...</option>
+                <option *ngFor="let c of ciudades" [id]="c" [value]="c">
+                  {{ c }}
+                </option>
+              </select>
+              <div id="selectorServicioCrearFeedback" class="invalid-feedback">
+                {{ getErrorMessage(formEdit, "ciudad") }}
+              </div>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <div class="col-5">
+              <label for="selectorServicioCrear" class="form-label"
+                ><h3 class="m-0 p-0 fw-bold">Genero:</h3></label
+              >
+            </div>
+            <div class="form-field">
+              <select
+                class="form-select"
+                [ngClass]="
+                  isInvalidForm('genero', 'actualizar') ? 'is-invalid' : ''
+                "
+                formControlName="genero"
+                id="ge"
+                [value]="admi_seleccionada?.user_datos.genero"
+                aria-describedby="selectorServicioCrearFeedback"
+                [(ngModel)]="admi_seleccionada.user_datos.genero">
+              
+                <option selected disabled value="">Elija una genero...</option>
+                <option *ngFor="let c of generos" [id]="c" [value]="c">
+                  {{ c }}
+                </option>
+              </select>
+              <div id="selectorServicioCrearFeedback" class="invalid-feedback">
+                {{ getErrorMessage(formEdit, "genero") }}
+              </div>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <div class="col-5">
+              <label for="selectorServicioCrear" class="form-label"
+                ><h3 class="m-0 p-0 fw-bold">Rol:</h3></label
+              >
+            </div>
+            <div class="form-field">
+              <select
+                class="form-select"
+                [ngClass]="
+                  isInvalidForm('rol', 'actualizar') ? 'is-invalid' : ''
+                "
+                formControlName="rol"
+                [value]="admi_seleccionada?.user_datos.user.groups[0].name"
+                aria-describedby="selectorServicioCrearFeedback"
+                [(ngModel)]="admi_seleccionada.user_datos.user.groups[0].name">
+              
+                <option selected disabled value="">Elija una rol...</option>
+                <option *ngFor="let c of roles" [id]="c" [value]="c">
+                  {{ c }}
+                </option>
+              </select>
+              <div id="selectorServicioCrearFeedback" class="invalid-feedback">
+                {{ getErrorMessage(formEdit, "rol") }}
+              </div>
+            </div>
+          </div>
+
+          <div class="form-field">
+
+            <div class="row p-2 align-items-center">
+              <div class="col-7">
+                <label for="switchEstado" class="form-check-label"
+                  ><h3 class="m-0 p-0 fw-bold">Habilitar/Deshabilitar:</h3></label
+                >
+              </div>
+              <div
+                class="col-7 form-check form-switch d-flex justify-content-end fs-6"
+              >
+                <input
+                  (change)="cambiarEstado($event)"
+                  [checked]="admi_seleccionada?.user_datos.estado ? true : false"
+                  class="form-check-input"
+                  id="switchEstado"
+                  type="checkbox"
+                  role="switch"
+                  checked
+                  aria-describedby="switchEstadoFeedback"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!--  <div class="form-field">
+            <div class="col-5">
+              <label for="textareaDescripcion" class="form-label"
+                ><h3 class="m-0 p-0 fw-bold">Contrasena:</h3></label
+              >
+            </div>
+            <div class="col-5">
+              <input
+                type="password"
+                class="form-control"
+                formControlName="password"
+                [ngClass]="
+                  isInvalidForm('password', 'crear') ? 'is-invalid' : ''
+                "
+                id="pw"
+                placeholder="*******"
+              />
+              <div class="invalid-feedback">
+                {{ getErrorMessage(admiCrear, "password") }}
+              </div>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <div class="col-5">
+              <label for="textareaDescripcion" class="form-label"
+                ><h3 class="m-0 p-0 fw-bold">Confirmar Contrasena:</h3></label
+              >
+            </div>
+            <div class="form-field">
+              <input
+                type="password"
+                class="form-control"
+                formControlName="confirmPassword"
+                [ngClass]="
+                  isInvalidForm('confirmPassword', 'crear') ? 'is-invalid' : ''
+                "
+                id="pwd"
+                placeholder="*******"
+              />
+              <div class="invalid-feedback">
+                {{ getErrorMessage(admiCrear, "confirmPassword") }}
+              </div>
+            </div>
+          </div> -->
+        </form> 
+
+        <button
+          data-bs-target="#modalConfirmacion"
+          data-bs-toggle="modal"
+          class="custom-button float-right"
+          (click)="
+            establecerMensaje(
+              'Está seguro que desea actualizar la información?',
+              'actualizar'
+            )
+          "
+        >
+          Actualizar
+        </button>
+
+        <button
+          class="custom-button1 float-right"
+
+          (click)="showHeader = true; showHeaderC= false ; showadmi = false; limpiarForm('actualizar')">
+        Cancelar
+        </button>  
+        
+      </div>
+      
+      
+    </div>
+  </div>
+</div>
+<!-- FIN EDITAR ADMINISTRADOR -->
+
+
+<!-- Modal informacion de admi 
 <div
   class="modal fade"
   id="modalInformacionProfesion"
@@ -147,7 +911,7 @@
         </div>
 
         <div class="row p-2 align-items-center">
-          <div class="col-5">
+          <div class="col-7">
             <h3 class="m-0 p-0 fw-bold">Nombre:</h3>
           </div>
           <div class="col-7">
@@ -156,7 +920,7 @@
         </div>
 
         <div class="row p-2 align-items-center">
-          <div class="col-5">
+          <div class="col-7">
             <h3 class="m-0 p-0 fw-bold">Apellidos:</h3>
           </div>
           <div class="col-7">
@@ -165,7 +929,7 @@
         </div>
 
         <div class="row p-2 align-items-center">
-          <div class="col-5">
+          <div class="col-7">
             <h3 class="m-0 p-0 fw-bold">Cedula</h3>
           </div>
           <div class="col-7">
@@ -174,7 +938,7 @@
         </div>
 
         <div class="row p-2 align-items-center">
-          <div class="col-5">
+          <div class="col-7">
             <h3 class="m-0 p-0 fw-bold">Telefono</h3>
           </div>
           <div class="col-7">
@@ -183,7 +947,7 @@
         </div>
 
         <div class="row p-2 align-items-center">
-          <div class="col-5">
+          <div class="col-7">
             <h3 class="m-0 p-0 fw-bold">Genero</h3>
           </div>
           <div class="col-7">
@@ -192,7 +956,7 @@
         </div>
 
         <div class="row p-2 align-items-center">
-          <div class="col-5">
+          <div class="col-7">
             <h3 class="m-0 p-0 fw-bold">Rol</h3>
           </div>
           <div class="col-7">
@@ -201,7 +965,7 @@
         </div>
 
         <div class="row p-2 align-items-center">
-          <div class="col-5">
+          <div class="col-7">
             <label for="switchEstado" class="form-check-label"
               ><h3 class="m-0 p-0 fw-bold">Habilitar/Deshabilitar:</h3></label
             >
@@ -224,12 +988,17 @@
       </div>
       <div class="modal-footer">
         <button
-          (click)="limpiarForm('actualizar')"
-          class="btn btn-success"
-          data-bs-target="#modalInformacionEdicionProfesion"
+          data-bs-target="#modalConfirmacion"
           data-bs-toggle="modal"
+          class="btn btn-success"
+          (click)="
+            establecerMensaje(
+              'Está seguro que desea actualizar la información?',
+              'actualizar'
+            )
+          "
         >
-          Editar
+          Actualizar
         </button>
         <button
           class="btn btn-danger"
@@ -241,7 +1010,7 @@
       </div>
     </div>
   </div>
-</div>
+</div>-->
 <!-- Modal edicion de informacion de admi -->
 <div
   class="modal fade"
@@ -332,8 +1101,8 @@
                 [ngClass]="
                   isInvalidForm('nombre', 'actualizar') ? 'is-invalid' : ''
                 "
-                [placeholder]="admi_seleccionada?.user_datos.nombres"
-                [value]="admi_seleccionada?.user_datos.nombres"
+                placeholder="nombre"
+                [value]="admi_seleccionada?.user_datos.nombres ?? ''"
               />
               <div class="invalid-feedback">
                 {{ getErrorMessage(formEdit, "nombre") }}
@@ -348,16 +1117,17 @@
               >
             </div>
             <div class="col-7">
-              <textarea
+              <input
+                type="text"
                 class="form-control"
                 formControlName="apellidos"
                 [ngClass]="
                   isInvalidForm('apellidos', 'actualizar') ? 'is-invalid' : ''
                 "
                 id="textareaDescripcion"
-                [placeholder]="admi_seleccionada?.user_datos.apellidos"
-                [value]="admi_seleccionada?.user_datos.apellidos"
-              ></textarea>
+                placeholder="apellido"
+                [value]="admi_seleccionada?.user_datos.apellidos ?? ''"
+              >
               <div class="invalid-feedback">
                 {{ getErrorMessage(formEdit, "apellidos") }}
               </div>
@@ -377,8 +1147,8 @@
                 [ngClass]="
                   isInvalidForm('telefono', 'actualizar') ? 'is-invalid' : ''
                 "
-                type="text"
-                [value]="admi_seleccionada?.user_datos.telefono"
+                type="number"
+                [value]="admi_seleccionada?.user_datos.telefono ?? ''"
               />
               <div class="invalid-feedback">
                 {{ getErrorMessage(formEdit, "telefono") }}
@@ -400,8 +1170,8 @@
                 [ngClass]="
                   isInvalidForm('cedula', 'actualizar') ? 'is-invalid' : ''
                 "
-                [placeholder]="admi_seleccionada?.user_datos.cedula"
-                [value]="admi_seleccionada?.user_datos.cedula"
+                placeholder="cedula"
+                [value]="admi_seleccionada?.user_datos.cedula ?? ''"
               ></textarea>
               <div class="invalid-feedback">
                 {{ getErrorMessage(formEdit, "cedula") }}
@@ -423,8 +1193,8 @@
                 [ngClass]="
                   isInvalidForm('correo', 'actualizar') ? 'is-invalid' : ''
                 "
-                [placeholder]="admi_seleccionada?.user_datos.user.email"
-                [value]="admi_seleccionada?.user_datos.user.email"
+                placeholder="email@mail.com"
+                [value]="admi_seleccionada?.user_datos.user.email ?? ''"
               />
               <div class="invalid-feedback">
                 {{ getErrorMessage(formEdit, "correo") }}
@@ -582,7 +1352,7 @@
       </pre> -->
     </div>
   </div>
-</div>
+</div> 
 
 <!-- Modal crear admi -->
 <div
@@ -711,7 +1481,8 @@
               >
             </div>
             <div class="col-7">
-              <textarea
+              <input 
+              type="text"
                 class="form-control"
                 formControlName="telefono"
                 [ngClass]="
@@ -719,7 +1490,7 @@
                 "
                 id="tel"
                 placeholder="0960044508"
-              ></textarea>
+              >
               <div class="invalid-feedback">
                 {{ getErrorMessage(admiCrear, "telefono") }}
               </div>
@@ -733,12 +1504,12 @@
               >
             </div>
             <div class="col-7">
-              <textarea
+              <input type="text"
                 class="form-control"
                 formControlName="cedula"
                 [ngClass]="isInvalidForm('cedula', 'crear') ? 'is-invalid' : ''"
                 placeholder="0960044508"
-              ></textarea>
+              >
               <div class="invalid-feedback">
                 {{ getErrorMessage(admiCrear, "cedula") }}
               </div>
@@ -968,41 +1739,5 @@
         <!-- <button *ngIf="isEliminar" type="button" class="btn btn-success" (click)="onDelete()" data-bs-dismiss="modal">Confirmar</button> -->
       </div>
     </div>
-  </div>
-</div>
-
-<div class="container-fluid">
-  <div class="row p-2 justify-content-center align-items-center">
-    <nav aria-label="Page navigation example">
-      <ul class="pagination">
-        <li class="page-item">
-          <a class="page-link" (click)="previous($event)">Previous</a>
-        </li>
-        <div *ngFor="let n of pageNumber; let i = index">
-          <li class="page-item">
-            <button
-              class="page-link azul"
-              value="{{ n }}"
-              (click)="iteracion($event)"
-              *ngIf="n == currentPage"
-            >
-              {{ n }}
-            </button>
-            <button
-              class="page-link"
-              value="{{ n }}"
-              (click)="iteracion($event)"
-              *ngIf="n != currentPage"
-            >
-              {{ n }}
-            </button>
-          </li>
-        </div>
-
-        <li class="page-item">
-          <a class="page-link" (click)="next($event)">Next</a>
-        </li>
-      </ul>
-    </nav>
   </div>
 </div>

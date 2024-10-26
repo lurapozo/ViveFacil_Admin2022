@@ -9,6 +9,7 @@ import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signO
 })
 export class UserService {
   refreshObs$ = new Subject<void>();
+  correoUsuario: string | null = null;
   constructor(private auth: Auth, private http: HttpClient) { }
 
   get refresh$(){
@@ -33,5 +34,9 @@ export class UserService {
 
   sendPasswordResetEmail(email: string): Promise<void> {
     return sendPasswordResetEmail(this.auth, email);
+  }
+
+  establecerCorreo(correo: string) {
+    this.correoUsuario = correo;
   }
 }

@@ -1,249 +1,444 @@
-<div class="container-fluid">
-  <!-- Titulo principal -->
-  <div class="row p-2 justify-content-center align-items-center">
-    <div class="col text-center">
-      <h2 class="p-0 m-0">Sub-Categorias</h2>
+<!-- Titulo principal-->
+<div class="header-admi1">
+  <div class="header-text">
+    <div class="containerstart" >
+      <p *ngIf="showHeader">  SUB - CATEGORÍA</p>
+      <p *ngIf="showHeaderC"> AGREGAR SUB CATEGORÍA</p>
+    </div>
+  </div>
+  <svg preserveAspectRatio="xMidYMid">
+    <path d="M0,60 L0,0 L1290,0 L1290,60" fill="#333539"  />
+    <path d="M320,60 Q448,85 550,60" fill="#333539" />
+  </svg>
+</div>
+
+<!-- FILTROS-->
+<div class="container-fluid" *ngIf="showHeader">
+<div class="d-flex flex-wrap header-solicitud align-items-center gap-3">   
+  <div class="containerstart1" >
+    <label class="calendar-label">Desde:</label>
+    <div class="date-container" >
+      <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+      <mat-datepicker #picker1></mat-datepicker>
+      <input matInput [matDatepicker]="picker1" placeholder="SELECCIONA DIA" >
+    </div>
+  </div>
+  
+  <div class="containerstart2" >
+    <label class="calendar-label">Hasta:</label>
+    <div class="date-container" >
+      <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+      <mat-datepicker #picker2></mat-datepicker>
+      <input matInput [matDatepicker]="picker2" placeholder="SELECCIONA DIA">
     </div>
   </div>
 
-  <!-- Buscar y agregar admi -->
-  <div class="row p-2 justify-content-center align-items-center">
-    <div class="col-xl-7 col-lg-5"></div>
-    <div class="col-xl-3 col-lg-4">
-      <div class="input-group">
-        <input
-          type="text"
-          class="form-control"
-          placeholder="Buscar"
-          aria-label="Buscar"
-          aria-describedby="basic-addon1"
-          (input)="search($event)"
-        />
-        <button class="input-group-text" id="basic-addon1">
-          <i class="bi bi-search"></i>
-        </button>
-      </div>
-    </div>
-    <div class="col-xl-2 col-lg-3">
-      <button
-        type="button"
-        class="btn btn-primary"
-        data-bs-toggle="modal"
-        href="#modalCrearProfesion"
-      >
-        Agregar Sub-Categoria
-      </button>
-    </div>
+  <div class="containerstart3">
+    <button class="search-button" id="basic-addon1">
+      <i class="bi bi-search"></i>
+    </button>
+    <div class="date-container">
+      <div class="input-group search-group">
+        <input 
+          type="text" 
+          class="form-control search-input" 
+          placeholder="BUSCAR"
+          aria-label="Buscar" 
+          aria-describedby="basic-addon1" 
+          (input)="search($event)">
+      </div> 
+    </div>       
   </div>
+</div>
+<div class="d-flex flex-wrap header-admin">
+  <button class="admin-button"
+  type="button"
+      (click)="btncrearSubCategoria()"
+  >
+    <span class="material-icons">add_circle</span>
+    AGREGAR SUB-CATEGORIA
+  </button>
+</div>
 
-  <!-- Contenedor de admi -->
-  <div class="row justify-content-center align-items-center p-0">
-    <div class="col-10 text-center">
-      <!-- Titulo -->
-      <div class="row p-2 bg-primary text-white">
-        <div class="col-3 align-self-center">
-          <h3 class="p-0 m-0">Imagen</h3>
-        </div>
+<div class="header-contenedor" *ngIf="showHeader">
+  <div class="header">
+    <span class="tabla-title1">IMAGEN</span>
+    <span class="tabla-title">NOMBRE</span>
+    <span class="tabla-title">DESCRIPCIÓN</span>
+    <span class="tabla-title">ESTADO</span>
+  </div>
+</div>
 
-        <div class="col-3 align-self-center">
-          <h3 class="p-0 m-0">Nombre</h3>
-        </div>
-
-        <div class="col-3 align-self-center">
-          <h3 class="p-0 m-0">Descripcion</h3>
-        </div>
-
-        <div class="col-3 align-self-center">
-          <h3 class="p-0 m-0">Estado</h3>
-        </div>
-      </div>
-
-      <!-- Profesion -->
-      <div
-        (click)="categoria_seleccionada = a"
-        *ngFor="let a of categoria"
-        class="row p-2 bg-light fila_info_profesion"
-        data-bs-toggle="modal"
-        href="#modalInformacionProfesion"
-        role="button"
-      >
-        <div class="col-3 align-self-center">
-          <img
-            [src]="
-              a.foto
-                ? 'https://tomesoft1.pythonanywhere.com' + a.foto
-                : '../../../assets/imagenes/ProfesionDefault.png'
-            "
-            class="rounded mx-auto d-block img-fluid img_profesion"
-            alt="..."
-          />
-        </div>
-
-        <div class="col-3 align-self-center">
-          <h4 class="p-0 m-0">{{ a.nombre }}</h4>
-        </div>
-
-        <div class="col-3 align-self-center">
-          <h4 class="p-0 m-0">{{ a.descripcion }}</h4>
-        </div>
-
-        <!-- <div class="col-3 align-self-center">
-            <h4 class="p-0 m-0">{{ a.categoria }}</h4>
-          </div> -->
-
-        <div class="col-3 align-self-center">
-          <span *ngIf="!a.estado" class="badge text-bg-danger">Inactivo</span>
-          <span *ngIf="a.estado" class="badge text-bg-success">Activo</span>
-        </div>
-      </div>
+<div class="contenedor-categorias" *ngIf="showHeader">
+  <div class="categoria" *ngFor="let item of categoria">
+    <div class="item-imagen">
+      <img [src]="item.foto ? 'https://tomesoft1.pythonanywhere.com' + item.foto : '../../../assets/imagenes/ProfesionDefault.png'" class="imagen" alt="Imagen" />
+    </div>
+    <div class="item-nombre">{{ item.nombre | uppercase }}</div>
+    <div class="item-descripcion">{{ item.descripcion | uppercase }}</div>
+    <div class="item-estado d-flex align-items-center">
+      <span
+            *ngIf="item.estado"
+            class="estado-indicador bg-success me-2"
+          ></span>
+      <span *ngIf="item.estado" class="text-success">ACTIVO</span>
+      <span
+            *ngIf="!item.estado"
+            class="estado-indicador bg-secondary me-2" 
+          ></span>
+          <span *ngIf="!item.estado" class="text-muted">INACTIVO</span>
     </div>
   </div>
 </div>
 
-<div
-  class="modal fade"
-  id="modalInformacionProfesion"
-  aria-hidden="true"
-  aria-labelledby="modalInformacionProfesionLabel"
-  tabindex="-1"
->
-  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-    <div class="modal-content">
-      <div class="modal-header align-items-center">
-        <h1
-          class="modal-title fs-5 m-0 p-0 fw-bold"
-          id="modalInformacionProfesionLabel"
-        >
-          Información de Sub-Categorias
-        </h1>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
-      </div>
-      <div class="modal-body mb-0">
-        <div class="row p-2">
+ 
+</div>
+
+<!-- Crear Categoria-->
+<div *ngIf="showHeaderC">
+<div class="row justify-content-center align-items-center p-0">
+  <div class="col-10 text-center containerCrearCate">
+    <div class="form-container">
+      <h2>CREAR SUB-CATEGORÍA</h2>
+      <form [formGroup]="crearCategoria" id="formCrearCate">
+
+        <!-- Sección de imagen -->
+        <button class="admin-button1"
+                type="button"
+                (click)="fileInput.click();"> 
+          
+          <span class="material-icons">description</span> 
+          SELECCIONAR ARCHIVO
+          <span class="material-icons">add_circle</span> 
+        </button>
+        <div class="form-field">
           <img
-            [src]="
-              categoria_seleccionada?.foto
-                ? 'https://tomesoft1.pythonanywhere.com' + categoria_seleccionada?.foto
-                : 'assets/imagenes/ProfesionDefault.png'
-            "
+            *ngIf="existImageCrear"
             class="rounded mx-auto d-block img-fluid w-50 image_modal"
-            alt="..."
+            [src]="imagenCrear"
+            alt="Archivo cargado correctamente"
           />
-        </div>
-        <div class="row p-2 align-items-center">
-          <div class="col-5">
-            <h3 class="m-0 p-0 fw-bold">Nombre:</h3>
-          </div>
-          <div class="col-7">
-            {{ categoria_seleccionada?.nombre }}
+         
+          <input
+            #fileInput
+            class="w-100 centrar form-control"
+            [ngClass]="{
+              'is-invalid': crearCategoria.get('imagen')?.hasError('image_error'),
+              'is-valid': existImageCrear
+            }"
+            type="file"
+            accept="image/png, image/jpeg" 
+            (change)="loadImageFromDevice($event, 'crear')"
+            style="display: none;" 
+          />
+          <div class="invalid-feedback">
+            {{ getErrorMessage(crearCategoria, 'imagen') }}
           </div>
         </div>
 
-        <div class="row p-2 align-items-center">
+        <div class="form-field">
           <div class="col-5">
-            <h3 class="m-0 p-0 fw-bold">Descripción:</h3>
+            <label for="inputNombre" class="form-label"
+              ><h3 class="m-0 p-0 fw-bold">NOMBRES:</h3></label
+            >
           </div>
-          <div class="col-7">
-            {{ categoria_seleccionada?.descripcion }}
-          </div>
-        </div>
-
-        <!-- <div class="row p-2 align-items-center">
           <div class="col-5">
-            <label for="switchEstado" class="form-check-label">
-              <h3 class="m-0 p-0 fw-bold">Habilitar/Deshabilitar:</h3>
-            </label>
-          </div>
-          <div
-            class="col-7 form-check form-switch d-flex justify-content-end fs-6"
-          >
             <input
-              (change)="cambiarEstado($event)"
-              [checked]="categoria_seleccionada?.estado ? true : false"
-              class="form-check-input"
-              id="switchEstado"
-              type="checkbox"
-              role="switch"
-              checked
-              aria-describedby="switchEstadoFeedback"
+              type="text"
+              formControlName="nombre"
+              class="form-control"
+              [ngClass]="
+                isInvalidForm('nombre', 'crear')
+                  ? 'is-invalid'
+                  : crearCategoria.get('nombre')?.touched ||
+                    (crearCategoria.get('nombre')?.dirty &&
+                      !crearCategoria.get('nombre')?.invalid)
+                  ? 'is-valid'
+                  : ''
+              "
+              id="inputNombre"
+              placeholder="Juan luis"
             />
+            <div class="invalid-feedback">
+              {{ getErrorMessage(crearCategoria, "nombre") }}
+            </div>
           </div>
-        </div> -->
-      </div>
-      <div class="modal-footer">
-        <button
-          class="btn btn-success"
-          data-bs-target="#modalInformacionEdicionProfesion"
-          data-bs-toggle="modal"
-        >
-          Editar
-        </button>
-        <button
-          (click)="
-            establecerMensaje(
-              'Está seguro que desea crear la profesión?',
-              'eliminar'
-            )
-          "
-          class="btn btn-danger"
-          data-bs-target="#modalConfirmacion"
-          data-bs-toggle="modal"
-        >
-          Eliminar
-        </button>
-      </div>
+        </div>
+
+        <div class="form-field">
+          <div class="col-5">
+            <label for="inputNombre" class="form-label"
+              ><h3 class="m-0 p-0 fw-bold">DESCRIPCION</h3></label
+            >
+          </div>
+          <div class="col-5">
+            <textarea
+              type="text"
+              formControlName="descripcion"
+              class="form-control"
+              [ngClass]="
+                isInvalidForm('descripcion', 'crear')
+                  ? 'is-invalid'
+                  : crearCategoria.get('descripcion')?.touched ||
+                    (crearCategoria.get('descripcion')?.dirty &&
+                      !crearCategoria.get('descripcion')?.invalid)
+                  ? 'is-valid'
+                  : ''
+              "
+              id="inputApellido"
+              placeholder="Descripcion de la categoria"
+            ></textarea>
+            <div class="invalid-feedback">
+              {{ getErrorMessage(crearCategoria, "descripcion") }}
+            </div>
+          </div>
+        </div>
+
+        <div class="form-field">
+          <div class="col-5">
+            <label for="inputNombre" class="form-label"
+              ><h3 class="m-0 p-0 fw-bold">CATEGORÍA</h3></label
+            >
+          </div>
+          <div class="col-5">
+            <select
+              class="form-select"
+              formControlName="mainCategoria"
+              aria-describedby="selectorServicioCrearFeedback"
+              placeholder = " Elija una categoría..."
+            >
+              <option selected disabled [value]="primeraCat">
+                Elija una categoría...
+              </option>
+              <option
+                *ngFor="let c of listCategorias"
+                [id]="c"
+                [value]="c.nombre"
+                
+              >
+                {{ c.nombre }}
+              </option>
+            </select>
+            <div class="invalid-feedback">
+              {{ getErrorMessage(crearCategoria, "nombre") }}
+            </div>
+          </div>
+        </div>
+
+
+      
+      </form>
+      <button
+        [disabled]="crearCategoria.invalid ? true : false"
+        data-bs-target="#modalConfirmacion"
+        data-bs-toggle="modal"
+        class="custom-button float-right"
+        (click)="
+          establecerMensaje(
+            'Está seguro que desea crear la sub-categoria',
+            'crear'
+          )
+        "
+      >
+        Crear
+      </button>        
+      <button
+        class="custom-button1 float-right"
+        (click)="showHeader = true; showHeaderC= false ;">
+      Cancelar
+      </button>  
+      
     </div>
   </div>
+</div>
+</div>
+
+<!-- Fin Crear Categoria-->
+
+<div
+class="modal fade"
+id="modalInformacionProfesion"
+aria-hidden="true"
+aria-labelledby="modalInformacionProfesionLabel"
+tabindex="-1"
+>
+<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+  <div class="modal-content">
+    <div class="modal-header align-items-center">
+      <h1
+        class="modal-title fs-5 m-0 p-0 fw-bold"
+        id="modalInformacionProfesionLabel"
+      >
+        Información de Sub-Categorias
+      </h1>
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="modal"
+        aria-label="Close"
+      ></button>
+    </div>
+    <div class="modal-body mb-0">
+      <div class="row p-2">
+        <img
+          [src]="
+            categoria_seleccionada?.foto
+              ? 'https://tomesoft1.pythonanywhere.com' + categoria_seleccionada?.foto
+              : 'assets/imagenes/ProfesionDefault.png'
+          "
+          class="rounded mx-auto d-block img-fluid w-50 image_modal"
+          alt="..."
+        />
+      </div>
+      <div class="row p-2 align-items-center">
+        <div class="col-5">
+          <h3 class="m-0 p-0 fw-bold">Nombre:</h3>
+        </div>
+        <div class="col-7">
+          {{ categoria_seleccionada?.nombre }}
+        </div>
+      </div>
+
+      <div class="row p-2 align-items-center">
+        <div class="col-5">
+          <h3 class="m-0 p-0 fw-bold">Descripción:</h3>
+        </div>
+        <div class="col-7">
+          {{ categoria_seleccionada?.descripcion }}
+        </div>
+      </div>
+
+      <!-- <div class="row p-2 align-items-center">
+        <div class="col-5">
+          <label for="switchEstado" class="form-check-label">
+            <h3 class="m-0 p-0 fw-bold">Habilitar/Deshabilitar:</h3>
+          </label>
+        </div>
+        <div
+          class="col-7 form-check form-switch d-flex justify-content-end fs-6"
+        >
+          <input
+            (change)="cambiarEstado($event)"
+            [checked]="categoria_seleccionada?.estado ? true : false"
+            class="form-check-input"
+            id="switchEstado"
+            type="checkbox"
+            role="switch"
+            checked
+            aria-describedby="switchEstadoFeedback"
+          />
+        </div>
+      </div> -->
+    </div>
+    <div class="modal-footer">
+      <button
+        class="btn btn-success"
+        data-bs-target="#modalInformacionEdicionProfesion"
+        data-bs-toggle="modal"
+      >
+        Editar
+      </button>
+      <button
+        (click)="
+          establecerMensaje(
+            'Está seguro que desea crear la profesión?',
+            'eliminar'
+          )
+        "
+        class="btn btn-danger"
+        data-bs-target="#modalConfirmacion"
+        data-bs-toggle="modal"
+      >
+        Eliminar
+      </button>
+    </div>
+  </div>
+</div>
 </div>
 
 <!-- Modal edicion de informacion de profesion -->
 <div
-  class="modal fade"
-  id="modalInformacionEdicionProfesion"
-  aria-hidden="true"
-  aria-labelledby="modalInformacionEdicionProfesionLabel"
-  tabindex="-1"
+class="modal fade"
+id="modalInformacionEdicionProfesion"
+aria-hidden="true"
+aria-labelledby="modalInformacionEdicionProfesionLabel"
+tabindex="-1"
 >
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header align-items-center">
-        <h1
-          class="modal-title fs-5 m-0 p-0 fw-bold"
-          id="modalInformacionEdicionProfesionLabel"
-        >
-          Edición de Sub-Categorias
-        </h1>
-        <!-- (click)="limpiarForm('actualizar')" -->
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
-      </div>
-      <div class="modal-body mb-0">
-        <form [formGroup]="formEdit" class="">
-          <div class="row">
+<div class="modal-dialog modal-dialog-centered">
+  <div class="modal-content">
+    <div class="modal-header align-items-center">
+      <h1
+        class="modal-title fs-5 m-0 p-0 fw-bold"
+        id="modalInformacionEdicionProfesionLabel"
+      >
+        Edición de Sub-Categorias
+      </h1>
+      <!-- (click)="limpiarForm('actualizar')" -->
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="modal"
+        aria-label="Close"
+      ></button>
+    </div>
+    <div class="modal-body mb-0">
+      <form [formGroup]="formEdit" class="">
+        <div class="row">
+          <div class="col d-flex justify-content-center">
+            <img
+              *ngIf="existImageActualizar"
+              class="image_modal rounded mx-auto d-block img-fluid w-50"
+              [src]="imagenActualizar"
+              alt="Archivo incorrecto"
+            />
+            <img
+              *ngIf="!existImageActualizar && categoria_seleccionada?.foto"
+              class="image_modal rounded mx-auto d-block img-fluid w-50"
+              [src]="'https://tomesoft1.pythonanywhere.com' + categoria_seleccionada?.foto"
+              alt="Archivo incorrecto"
+            />
+            <i
+              *ngIf="!existImageActualizar && !categoria_seleccionada?.foto"
+              class="rounded mx-auto d-block img-fluid w-50 bi bi-upload icono"
+            ></i>
+          </div>
+          <div class="p-2">
+            <input
+              class="w-100 centrar form-control"
+              [ngClass]="
+                formEdit.get('imagen')?.hasError('image_error')
+                  ? 'is-invalid'
+                  : '' || existImageActualizar
+                  ? 'is-valid'
+                  : ''
+              "
+              type="file"
+              id="file_input"
+              accept="image/png, image/jpeg"
+              (change)="loadImageFromDevice($event, 'actualizar')"
+            />
+            <div class="invalid-feedback">
+              {{ getErrorMessage(formEdit, "imagen") }}
+            </div>
+          </div>
+        </div>
+
+        <!-- <div class="row">
             <div class="col d-flex justify-content-center">
               <img
-                *ngIf="existImageActualizar"
+                *ngIf="existImageActualizar2"
                 class="image_modal rounded mx-auto d-block img-fluid w-50"
-                [src]="imagenActualizar"
+                [src]="imagenActualizar2"
                 alt="Archivo incorrecto"
               />
               <img
-                *ngIf="!existImageActualizar && categoria_seleccionada?.foto"
+                *ngIf="!existImageActualizar2 && categoria_seleccionada?.foto"
                 class="image_modal rounded mx-auto d-block img-fluid w-50"
-                [src]="'https://tomesoft1.pythonanywhere.com' + categoria_seleccionada?.foto"
+                [src]="'https://tomesoft1.pythonanywhere.com' + categoria_seleccionada?.foto2"
                 alt="Archivo incorrecto"
-              />
-              <i
-                *ngIf="!existImageActualizar && !categoria_seleccionada?.foto"
+              /> -->
+        <!-- <i
+                *ngIf="!existImageActualizar2 && !categoria_seleccionada?.foto2"
                 class="rounded mx-auto d-block img-fluid w-50 bi bi-upload icono"
               ></i>
             </div>
@@ -251,458 +446,408 @@
               <input
                 class="w-100 centrar form-control"
                 [ngClass]="
-                  formEdit.get('imagen')?.hasError('image_error')
+                  formEdit.get('imagen2')?.hasError('image_error')
                     ? 'is-invalid'
-                    : '' || existImageActualizar
+                    : '' || existImageActualizar2
                     ? 'is-valid'
                     : ''
                 "
                 type="file"
                 id="file_input"
                 accept="image/png, image/jpeg"
-                (change)="loadImageFromDevice($event, 'actualizar')"
+                (change)="loadImageFromDevice2($event, 'actualizar')"
               />
               <div class="invalid-feedback">
-                {{ getErrorMessage(formEdit, "imagen") }}
+                {{ getErrorMessage(formEdit, "imagen2") }}
               </div>
+            </div>
+          </div> -->
+
+        <div class="row p-2 align-items-center">
+          <div class="col-5">
+            <label for="inputNombre" class="form-label">
+              <h3 class="m-0 p-0 fw-bold">Nombre:</h3>
+            </label>
+          </div>
+          <div class="col-7">
+            <input
+              type="text"
+              formControlName="nombre"
+              class="form-control"
+              [ngClass]="
+                isInvalidForm('nombre', 'actualizar') ? 'is-invalid' : ''
+              "
+              id="inputNombre"
+              [placeholder]="categoria_seleccionada?.nombre"
+              [value]="categoria_seleccionada?.nombre"
+            />
+            <div class="invalid-feedback">
+              {{ getErrorMessage(formEdit, "nombre") }}
             </div>
           </div>
+        </div>
 
-          <!-- <div class="row">
-              <div class="col d-flex justify-content-center">
-                <img
-                  *ngIf="existImageActualizar2"
-                  class="image_modal rounded mx-auto d-block img-fluid w-50"
-                  [src]="imagenActualizar2"
-                  alt="Archivo incorrecto"
-                />
-                <img
-                  *ngIf="!existImageActualizar2 && categoria_seleccionada?.foto"
-                  class="image_modal rounded mx-auto d-block img-fluid w-50"
-                  [src]="'https://tomesoft1.pythonanywhere.com' + categoria_seleccionada?.foto2"
-                  alt="Archivo incorrecto"
-                /> -->
-          <!-- <i
-                  *ngIf="!existImageActualizar2 && !categoria_seleccionada?.foto2"
-                  class="rounded mx-auto d-block img-fluid w-50 bi bi-upload icono"
-                ></i>
-              </div>
-              <div class="p-2">
-                <input
-                  class="w-100 centrar form-control"
-                  [ngClass]="
-                    formEdit.get('imagen2')?.hasError('image_error')
-                      ? 'is-invalid'
-                      : '' || existImageActualizar2
-                      ? 'is-valid'
-                      : ''
-                  "
-                  type="file"
-                  id="file_input"
-                  accept="image/png, image/jpeg"
-                  (change)="loadImageFromDevice2($event, 'actualizar')"
-                />
-                <div class="invalid-feedback">
-                  {{ getErrorMessage(formEdit, "imagen2") }}
-                </div>
-              </div>
-            </div> -->
-
-          <div class="row p-2 align-items-center">
-            <div class="col-5">
-              <label for="inputNombre" class="form-label">
-                <h3 class="m-0 p-0 fw-bold">Nombre:</h3>
-              </label>
-            </div>
-            <div class="col-7">
-              <input
-                type="text"
-                formControlName="nombre"
-                class="form-control"
-                [ngClass]="
-                  isInvalidForm('nombre', 'actualizar') ? 'is-invalid' : ''
-                "
-                id="inputNombre"
-                [placeholder]="categoria_seleccionada?.nombre"
-                [value]="categoria_seleccionada?.nombre"
-              />
-              <div class="invalid-feedback">
-                {{ getErrorMessage(formEdit, "nombre") }}
-              </div>
+        <div class="row p-2 align-items-center">
+          <div class="col-5">
+            <label for="textareaDescripcion" class="form-label">
+              <h3 class="m-0 p-0 fw-bold">Descripción:</h3>
+            </label>
+          </div>
+          <div class="col-7">
+            <textarea
+              class="form-control"
+              formControlName="descripcion"
+              [ngClass]="
+                isInvalidForm('descripcion', 'actualizar') ? 'is-invalid' : ''
+              "
+              id="textareaDescripcion"
+              [placeholder]="categoria_seleccionada?.descripcion"
+              [value]="categoria_seleccionada?.descripcion"
+            ></textarea>
+            <div class="invalid-feedback">
+              {{ getErrorMessage(formEdit, "descripcion") }}
             </div>
           </div>
-
-          <div class="row p-2 align-items-center">
-            <div class="col-5">
-              <label for="textareaDescripcion" class="form-label">
-                <h3 class="m-0 p-0 fw-bold">Descripción:</h3>
-              </label>
-            </div>
-            <div class="col-7">
-              <textarea
-                class="form-control"
-                formControlName="descripcion"
-                [ngClass]="
-                  isInvalidForm('descripcion', 'actualizar') ? 'is-invalid' : ''
-                "
-                id="textareaDescripcion"
-                [placeholder]="categoria_seleccionada?.descripcion"
-                [value]="categoria_seleccionada?.descripcion"
-              ></textarea>
-              <div class="invalid-feedback">
-                {{ getErrorMessage(formEdit, "descripcion") }}
-              </div>
-            </div>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button
-          class="btn btn-danger"
-          data-bs-target="#modalInformacionProfesion"
-          data-bs-toggle="modal"
-        >
-          Regresar
-        </button>
-        <button
-          data-bs-target="#modalConfirmacion"
-          data-bs-toggle="modal"
-          class="btn btn-success"
-          (click)="
-            establecerMensaje(
-              'Está seguro que desea actualizar laminformación?',
-              'actualizar'
-            )
-          "
-        >
-          Actualizar
-        </button>
-      </div>
-
-      <!-- <pre>
-          {{actualizarProfesionesForm.value | json}}
-        </pre> -->
+        </div>
+      </form>
     </div>
+    <div class="modal-footer">
+      <button
+        class="btn btn-danger"
+        data-bs-target="#modalInformacionProfesion"
+        data-bs-toggle="modal"
+      >
+        Regresar
+      </button>
+      <button
+        data-bs-target="#modalConfirmacion"
+        data-bs-toggle="modal"
+        class="btn btn-success"
+        (click)="
+          establecerMensaje(
+            'Está seguro que desea actualizar laminformación?',
+            'actualizar'
+          )
+        "
+      >
+        Actualizar
+      </button>
+    </div>
+
+    <!-- <pre>
+        {{actualizarProfesionesForm.value | json}}
+      </pre> -->
   </div>
+</div>
 </div>
 
 <!-- Modal crear profesion -->
 <div
-  class="modal fade"
-  id="modalCrearProfesion"
-  aria-hidden="true"
-  aria-labelledby="modalCrearProfesionLabel"
-  tabindex="-1"
+class="modal fade"
+id="modalCrearProfesion"
+aria-hidden="true"
+aria-labelledby="modalCrearProfesionLabel"
+tabindex="-1"
 >
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header align-items-center">
-        <h1
-          class="modal-title fs-5 m-0 p-0 fw-bold"
-          id="modalCrearProfesionLabel"
-        >
-          Crear Sub-Categoria
-        </h1>
-        <!-- (click)="limpiarForm('crear')" -->
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
-      </div>
-      <div class="modal-body mb-0">
-        <form [formGroup]="crearCategoria" class="">
-          <!-- Seccion de imagen -->
-          <div class="row">
-            <div class="col d-flex justify-content-center">
-              <img
-                *ngIf="existImageCrear"
-                class="rounded mx-auto d-block img-fluid w-50 image_modal"
-                [src]="imagenCrear"
-                alt="Archivo
-                    incorrecto"
-              />
-              <i
-                *ngIf="!existImageCrear"
-                class="rounded mx-auto d-block img-fluid w-50 bi bi-upload icono"
-              ></i>
-            </div>
-            <div class="p-2">
-              <input
-                class="w-100 centrar form-control"
-                [ngClass]="
-                  crearCategoria.get('imagen')?.hasError('image_error')
-                    ? 'is-invalid'
-                    : '' || existImageCrear
-                    ? 'is-valid'
-                    : ''
-                "
-                type="file"
-                id="file_input"
-                accept="image/png, image/jpeg"
-                (change)="loadImageFromDevice($event, 'crear')"
-              />
-              <div class="invalid-feedback">
-                {{ getErrorMessage(crearCategoria, "imagen") }}
-              </div>
+<div class="modal-dialog modal-dialog-centered">
+  <div class="modal-content">
+    <div class="modal-header align-items-center">
+      <h1
+        class="modal-title fs-5 m-0 p-0 fw-bold"
+        id="modalCrearProfesionLabel"
+      >
+        Crear Sub-Categoria
+      </h1>
+      <!-- (click)="limpiarForm('crear')" -->
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="modal"
+        aria-label="Close"
+      ></button>
+    </div>
+    <div class="modal-body mb-0">
+      <form [formGroup]="crearCategoria" class="">
+        <!-- Seccion de imagen -->
+        <div class="row">
+          <div class="col d-flex justify-content-center">
+            <img
+              *ngIf="existImageCrear"
+              class="rounded mx-auto d-block img-fluid w-50 image_modal"
+              [src]="imagenCrear"
+              alt="Archivo
+                  incorrecto"
+            />
+            <i
+              *ngIf="!existImageCrear"
+              class="rounded mx-auto d-block img-fluid w-50 bi bi-upload icono"
+            ></i>
+          </div>
+          <div class="p-2">
+            <input
+              class="w-100 centrar form-control"
+              [ngClass]="
+                crearCategoria.get('imagen')?.hasError('image_error')
+                  ? 'is-invalid'
+                  : '' || existImageCrear
+                  ? 'is-valid'
+                  : ''
+              "
+              type="file"
+              id="file_input"
+              accept="image/png, image/jpeg"
+              (change)="loadImageFromDevice($event, 'crear')"
+            />
+            <div class="invalid-feedback">
+              {{ getErrorMessage(crearCategoria, "imagen") }}
             </div>
           </div>
+        </div>
 
-          <!-- <div class="row">
-                <div class="col d-flex justify-content-center">
-                    <img
-                    *ngIf="existImageCrear2"
-                    class="rounded mx-auto d-block img-fluid w-50 image_modal"
-                    [src]="imagenCrear2"
-                    alt="Archivo
-                    incorrecto"
-                    />
-                    <i
-                    *ngIf="!existImageCrear2"
-                    class="rounded mx-auto d-block img-fluid w-50 bi bi-upload icono"
-                    ></i>
-                </div>
-                <div class="p-2">
-                    <input
-                    class="w-100 centrar form-control"
-                    [ngClass]="
-                        crearCategoria.get('imagen2')?.hasError('image_error')
-                        ? 'is-invalid'
-                        : '' || existImageCrear2
-                        ? 'is-valid'
-                        : ''
-                    "
-                    type="file"
-                    id="file_input2"
-                    accept="image/png, image/jpeg"
-                    (change)="loadImageFromDevice2($event, 'crear')"
-                    />
-                    <div class="invalid-feedback">
-                    {{ getErrorMessage(crearCategoria, "imagen2") }}
-                    </div>
-                </div>
-                </div> -->
-
-          <!-- Seccion Nombre -->
-          <div class="row p-2 align-items-center">
-            <div class="col-5">
-              <label for="inputNombre" class="form-label">
-                <h3 class="m-0 p-0 fw-bold">Nombre:</h3>
-              </label>
-            </div>
-            <div class="col-7">
-              <input
-                type="text"
-                formControlName="nombre"
-                class="form-control"
-                [ngClass]="
-                  isInvalidForm('nombre', 'crear')
-                    ? 'is-invalid'
-                    : crearCategoria.get('nombre')?.touched ||
-                      (crearCategoria.get('nombre')?.dirty &&
-                        !crearCategoria.get('nombre')?.invalid)
-                    ? 'is-valid'
-                    : ''
-                "
-                id="inputNombre"
-                placeholder="Nombre de la profesión"
-              />
-              <div class="invalid-feedback">
-                {{ getErrorMessage(crearCategoria, "nombre") }}
+        <!-- <div class="row">
+              <div class="col d-flex justify-content-center">
+                  <img
+                  *ngIf="existImageCrear2"
+                  class="rounded mx-auto d-block img-fluid w-50 image_modal"
+                  [src]="imagenCrear2"
+                  alt="Archivo
+                  incorrecto"
+                  />
+                  <i
+                  *ngIf="!existImageCrear2"
+                  class="rounded mx-auto d-block img-fluid w-50 bi bi-upload icono"
+                  ></i>
               </div>
+              <div class="p-2">
+                  <input
+                  class="w-100 centrar form-control"
+                  [ngClass]="
+                      crearCategoria.get('imagen2')?.hasError('image_error')
+                      ? 'is-invalid'
+                      : '' || existImageCrear2
+                      ? 'is-valid'
+                      : ''
+                  "
+                  type="file"
+                  id="file_input2"
+                  accept="image/png, image/jpeg"
+                  (change)="loadImageFromDevice2($event, 'crear')"
+                  />
+                  <div class="invalid-feedback">
+                  {{ getErrorMessage(crearCategoria, "imagen2") }}
+                  </div>
+              </div>
+              </div> -->
+
+        <!-- Seccion Nombre -->
+        <div class="row p-2 align-items-center">
+          <div class="col-5">
+            <label for="inputNombre" class="form-label">
+              <h3 class="m-0 p-0 fw-bold">Nombre:</h3>
+            </label>
+          </div>
+          <div class="col-7">
+            <input
+              type="text"
+              formControlName="nombre"
+              class="form-control"
+              [ngClass]="
+                isInvalidForm('nombre', 'crear')
+                  ? 'is-invalid'
+                  : crearCategoria.get('nombre')?.touched ||
+                    (crearCategoria.get('nombre')?.dirty &&
+                      !crearCategoria.get('nombre')?.invalid)
+                  ? 'is-valid'
+                  : ''
+              "
+              id="inputNombre"
+              placeholder="Nombre de la profesión"
+            />
+            <div class="invalid-feedback">
+              {{ getErrorMessage(crearCategoria, "nombre") }}
             </div>
           </div>
+        </div>
 
-          <!-- Seccion descripcion -->
-          <div class="row p-2 align-items-center">
-            <div class="col-5">
-              <label for="textareaDescripcion" class="form-label">
-                <h3 class="m-0 p-0 fw-bold">Descripción:</h3>
-              </label>
-            </div>
-            <div class="col-7">
-              <textarea
-                class="form-control"
-                formControlName="descripcion"
-                [ngClass]="
-                  isInvalidForm('descripcion', 'crear')
-                    ? 'is-invalid'
-                    : crearCategoria.get('descripcion')?.touched ||
-                      (crearCategoria.get('descripcion')?.dirty &&
-                        !crearCategoria.get('descripcion')?.invalid)
-                    ? 'is-valid'
-                    : ''
-                "
-                id="textareaDescripcion"
-                placeholder="Descripción de la profesión"
-              ></textarea>
-              <div class="invalid-feedback">
-                {{ getErrorMessage(crearCategoria, "descripcion") }}
-              </div>
+        <!-- Seccion descripcion -->
+        <div class="row p-2 align-items-center">
+          <div class="col-5">
+            <label for="textareaDescripcion" class="form-label">
+              <h3 class="m-0 p-0 fw-bold">Descripción:</h3>
+            </label>
+          </div>
+          <div class="col-7">
+            <textarea
+              class="form-control"
+              formControlName="descripcion"
+              [ngClass]="
+                isInvalidForm('descripcion', 'crear')
+                  ? 'is-invalid'
+                  : crearCategoria.get('descripcion')?.touched ||
+                    (crearCategoria.get('descripcion')?.dirty &&
+                      !crearCategoria.get('descripcion')?.invalid)
+                  ? 'is-valid'
+                  : ''
+              "
+              id="textareaDescripcion"
+              placeholder="Descripción de la profesión"
+            ></textarea>
+            <div class="invalid-feedback">
+              {{ getErrorMessage(crearCategoria, "descripcion") }}
             </div>
           </div>
-          <!-- Seccion de Categoria a la que pertenece -->
-          <div class="row p-2 align-items-center">
-            <div class="col-5">
-              <label for="selectorServicioCrear" class="form-label">
-                <h3 class="m-0 p-0 fw-bold">Categoría:</h3>
-              </label>
-            </div>
-            <div class="col-7">
-              <select
-                class="form-select"
-                formControlName="mainCategoria"
-                aria-describedby="selectorServicioCrearFeedback"
+        </div>
+        <!-- Seccion de Categoria a la que pertenece -->
+        <div class="row p-2 align-items-center">
+          <div class="col-5">
+            <label for="selectorServicioCrear" class="form-label">
+              <h3 class="m-0 p-0 fw-bold">Categoría:</h3>
+            </label>
+          </div>
+          <div class="col-7">
+            <select
+              class="form-select"
+              formControlName="mainCategoria"
+              aria-describedby="selectorServicioCrearFeedback"
+            >
+              <option selected disabled [value]="primeraCat">
+                Elija una categoría...
+              </option>
+              <option
+                *ngFor="let c of listCategorias"
+                [id]="c"
+                [value]="c.nombre"
               >
-                <option selected disabled [value]="primeraCat">
-                  Elija una categoría...
-                </option>
-                <option
-                  *ngFor="let c of listCategorias"
-                  [id]="c"
-                  [value]="c.nombre"
-                >
-                  {{ c.nombre }}
-                </option>
-              </select>
-              <div class="invalid-feedback">
-                {{ getErrorMessage(formEdit, "categoria") }}
-              </div>
+                {{ c.nombre }}
+              </option>
+            </select>
+            <div class="invalid-feedback">
+              {{ getErrorMessage(formEdit, "categoria") }}
             </div>
           </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button
-          [disabled]="crearCategoria.invalid ? true : false"
-          data-bs-target="#modalConfirmacion"
-          data-bs-toggle="modal"
-          class="btn btn-success"
-          (click)="
-            establecerMensaje(
-              'Está seguro que desea crear la profesión?',
-              'crear'
-            )
-          "
-        >
-          Crear
-        </button>
-      </div>
-
-      <!-- <pre>
-            {{crearProfesionesForm.value | json}}
-          </pre> -->
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button
+        [disabled]="crearCategoria.invalid ? true : false"
+        data-bs-target="#modalConfirmacion"
+        data-bs-toggle="modal"
+        class="btn btn-success"
+        (click)="
+          establecerMensaje(
+            'Está seguro que desea crear la profesión?',
+            'crear'
+          )
+        "
+      >
+        Crear
+      </button>
     </div>
   </div>
 </div>
+</div>
 
 <div
-  class="modal fade"
-  id="modalConfirmacion"
-  tabindex="-1"
-  aria-labelledby="modalConfirmacionLabel"
-  aria-hidden="true"
+class="modal fade"
+id="modalConfirmacion"
+tabindex="-1"
+aria-labelledby="modalConfirmacionLabel"
+aria-hidden="true"
 >
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <!-- Titulo del modal confirmacion -->
-      <div class="modal-header">
-        <h1
-          class="modal-title fs-5 m-0 p-0 fw-bold"
-          id="modalConfirmacionLabel"
-        >
-          Confirmar selección
-        </h1>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
-      </div>
+<div class="modal-dialog">
+  <div class="modal-content">
+    <!-- Titulo del modal confirmacion -->
+    <div class="modal-header">
+      <h1
+        class="modal-title fs-5 m-0 p-0 fw-bold"
+        id="modalConfirmacionLabel"
+      >
+        Confirmar selección
+      </h1>
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="modal"
+        aria-label="Close"
+      ></button>
+    </div>
 
-      <!-- Cuerpo del modal confirmacion -->
-      <div class="modal-body">
-        {{ mensajeAlerta }}
-      </div>
+    <!-- Cuerpo del modal confirmacion -->
+    <div class="modal-body">
+      {{ mensajeAlerta }}
+    </div>
 
-      <!-- Footer del modal confirmacion -->
-      <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
-          Cancelar
-        </button>
-        <button
-          *ngIf="isCrear"
-          type="button"
-          class="btn btn-success"
-          (click)="onCrear()"
-          data-bs-dismiss="modal"
-        >
-          Confirmar
-        </button>
-        <button
-          *ngIf="isActualizar"
-          type="button"
-          class="btn btn-success"
-          (click)="onActualizar()"
-          data-bs-dismiss="modal"
-        >
-          Confirmar
-        </button>
-        <button
-          *ngIf="isEliminar"
-          type="button"
-          class="btn btn-success"
-          (click)="onEliminar()"
-          data-bs-dismiss="modal"
-        >
-          Confirmar
-        </button>
-      </div>
+    <!-- Footer del modal confirmacion -->
+    <div class="modal-footer">
+      <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+        Cancelar
+      </button>
+      <button
+        *ngIf="isCrear"
+        type="button"
+        class="btn btn-success"
+        (click)="onCrear()"
+        data-bs-dismiss="modal"
+      >
+        Confirmar
+      </button>
+      <button
+        *ngIf="isActualizar"
+        type="button"
+        class="btn btn-success"
+        (click)="onActualizar()"
+        data-bs-dismiss="modal"
+      >
+        Confirmar
+      </button>
+      <button
+        *ngIf="isEliminar"
+        type="button"
+        class="btn btn-success"
+        (click)="onEliminar()"
+        data-bs-dismiss="modal"
+      >
+        Confirmar
+      </button>
     </div>
   </div>
+</div>
 </div>
 
 <!-- Toast de Información -->
 <div class="toast-container position-fixed bottom-0 end-0 p-3">
+<div
+  #liveToast
+  id="liveToast"
+  class="toast"
+  role="alert"
+  aria-live="assertive"
+  aria-atomic="true"
+>
   <div
-    #liveToast
-    id="liveToast"
-    class="toast"
-    role="alert"
-    aria-live="assertive"
-    aria-atomic="true"
+    class="toast-header"
+    [ngClass]="
+      isErrorToast
+        ? ' bg-danger'
+        : '
+      bg-success'
+    "
   >
-    <div
-      class="toast-header"
-      [ngClass]="
-        isErrorToast
-          ? ' bg-danger'
-          : '
-        bg-success'
-      "
-    >
-      <img
-        src="../../../assets/imagenes/notification_logo.png"
-        class="rounded me-2"
-        width="25px"
-        alt="..."
-      />
-      <strong class="me-auto text-light">{{ tituloToast }}</strong>
-      <small class="text-light">Ahora</small>
-      <button
-        type="button"
-        class="btn-close"
-        data-bs-dismiss="toast"
-        aria-label="Close"
-      ></button>
-    </div>
-    <div
-      class="toast-body bg-opacity-25"
-      [ngClass]="isErrorToast ? ' bg-danger' : ' bg-success'"
-    >
-      {{ mensajeToast }}
-    </div>
+    <strong class="me-auto text-light">{{ tituloToast }}</strong>
+    <small class="text-light">Ahora</small>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="toast"
+      aria-label="Close"
+    ></button>
   </div>
+  <div
+    class="toast-body bg-opacity-25"
+    [ngClass]="isErrorToast ? ' bg-danger' : ' bg-success'"
+  >
+    {{ mensajeToast }}
+  </div>
+</div>
 </div>

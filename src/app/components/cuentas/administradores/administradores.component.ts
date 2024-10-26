@@ -31,6 +31,14 @@ total=0
   mensajeAlerta: string = '';
   isCrear = false; isActualizar = false; isEliminar = false;
 
+  showHeader: boolean = true;
+  showHeaderC: boolean = false;
+  showadmi: boolean = false;
+
+  fechaInicio: Date | null = null;
+  fechaFin: Date | null = null;
+  fechasFiltradas: any[] = [];
+
   admi: BodyCrearAdministrador = {
     username: "",
     email: "",
@@ -481,5 +489,39 @@ total=0
           this.currentPage = 1;
         });
       })
+    }
+
+    crearAdministrador() {
+      this.showHeader = false;
+      this.showHeaderC = true;
+      this.showadmi = false;
+    }
+  
+    cancelar() {
+      this.showHeader = true;
+      this.showHeaderC = false;
+      this.showadmi = false;
+    }
+  
+    editar(admi: any) {
+      this.admi_seleccionada = admi;
+      this.showHeader = false;
+      this.showHeaderC = false;
+      this.showadmi = true;
+    }
+  
+    filtrarPorFechas() {
+      if (this.fechaInicio && this.fechaFin) {
+        const fechaInicio = new Date(this.fechaInicio);
+        const fechaFin = new Date(this.fechaFin);
+  
+        this.arr_filtered_admi = this.arr_admi.filter(a => {
+          const fechaCreacion = new Date(a.user_datos.fecha_creacion);
+          if (this.fechaInicio && this.fechaFin) {
+            return fechaCreacion >= fechaInicio && fechaCreacion <= fechaFin;
+          }
+          return true;
+        });
+      }
     }
 }

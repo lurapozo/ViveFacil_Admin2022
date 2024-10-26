@@ -35,7 +35,11 @@ export class PendientesComponent{
   mostrar1=false;
   mostrar2=false;
   fileImgPerfil: File| null = null;
+  fileImgPerfil1: File| null = null;
+  fileImgPerfil2: File| null = null;
+  fileImgPerfil3: File| null = null;
   filePDF: File| null = null;
+  filePDF1: File| null = null;
   filePDF2: File| null = null;
   filePDF3: File| null = null;
   copiaCedulaNombre= null;
@@ -43,7 +47,17 @@ export class PendientesComponent{
   copiaDocumentosNombre= null;
   mensajeIncompleto: string[] = [];
   mensajeIncompletoString = 'Campos completos';
+  nombre: any;
+
   // imgPerfil: string| null = null;
+
+  showHeader: boolean = true;
+  showHeaderC: boolean = false;
+  showadmi: boolean = false;
+
+  fechaInicio: Date | null = null;
+  fechaFin: Date | null = null;
+  fechasFiltradas: any[] = [];
   
   formEdit: FormGroup = new FormGroup({
     nombre: new FormControl('', [Validators.required]),
@@ -66,16 +80,16 @@ export class PendientesComponent{
     genero: new FormControl('', [Validators.required]),
     profesion: new FormControl('', [Validators.required]),
     licencia: new FormControl('', [Validators.required]),
-    copiaCedula: new FormControl(this.filePDF),
+    copiaCedula: new FormControl(this.filePDF1 || this.fileImgPerfil1),
     tipo_cuenta: new FormControl('', [Validators.required]),
     numero_cuenta: new FormControl('', [Validators.required]),
     banco: new FormControl('', [Validators.required]),
     ano_experiencia: new FormControl('', [Validators.required]),
-    copiaLicencia: new FormControl(this.filePDF2),
+    copiaLicencia: new FormControl(this.filePDF2 || this.fileImgPerfil2),
     documentos: new FormControl(''),
     descripcion: new FormControl(''),
     foto: new FormControl(this.fileImgPerfil),
-    filesDocuments: new FormControl([this.filePDF3]),
+    filesDocuments: new FormControl([this.filePDF3 || this.fileImgPerfil3]),
     // foto: new FormControl('', [Validators.required]),
   });
   formNegar: FormGroup = new FormGroup({
@@ -191,13 +205,13 @@ export class PendientesComponent{
       genero: this.formEdit.value.genero,
       telefono: this.formEdit.value.telefono,
       cedula: this.formEdit.value.cedula,
-      copiaCedula: this.filePDF,
+      copiaCedula: this.filePDF || this.fileImgPerfil,
       ciudad: this.formEdit.value.ciudad,
       direccion: this.formEdit.value.direccion,
       email: this.formEdit.value.correo,
       descripcion: this.formEdit.value.descripcion,
       licencia: this.formEdit.value.licencia,
-      copiaLicencia: this.filePDF2,
+      copiaLicencia: this.filePDF2 || this.fileImgPerfil2,
       profesion: this.formEdit.value.profesion,
       ano_experiencia: this.formEdit.value.ano_experiencia,
       banco: this.formEdit.value.banco,
@@ -205,7 +219,7 @@ export class PendientesComponent{
       tipo_cuenta: this.formEdit.value.tipo_cuenta,
       foto: this.fileImgPerfil,
       //planilla_servicios: this.formEdit.value.planilla_servicios
-      filesDocuments: [this.filePDF3]
+      filesDocuments: [this.filePDF3 || this.fileImgPerfil3] 
     }
     console.log("VALORES DEL COSO")
     console.log(this.formEdit)
@@ -276,6 +290,7 @@ export class PendientesComponent{
     }
   });
 
+  
   loadPdfFromDevice(event:any) {
     const file: File = event.target.files[0];
     console.log("Archivo de Copia de Cedula")
@@ -291,7 +306,62 @@ export class PendientesComponent{
     }
   };
 
-  loadPdf2FromDevice(event:any) {
+  loadImageFromDeviceCI(event:any) {
+    const file: File = event.target.files[0];
+    if(file){
+      this.extraerBase64(file)
+      .then((imagen: any) => {
+        this.formEdit.value.copiaCedula=file;
+        this.fileImgPerfil1 = file;
+        // this.imgPerfil = imagen.base;
+      })
+      .catch(err => console.log(err));
+    }
+  };
+
+  loadImageFromDeviceLI(event:any) {
+    const file: File = event.target.files[0];
+    if(file){
+      this.extraerBase64(file)
+      .then((imagen: any) => {
+        this.formEdit.value.copiaLicencia=file;
+        this.fileImgPerfil2 = file;
+        // this.imgPerfil = imagen.base;
+      })
+      .catch(err => console.log(err));
+    }
+  };
+
+  loadImageFromDeviceDocCurri(event:any) {
+    const file: File = event.target.files[0];
+    if(file){
+      this.extraerBase64(file)
+      .then((imagen: any) => {
+        this.formEdit.value.filesDocuments=file;
+        this.fileImgPerfil3 = file;
+        // this.imgPerfil = imagen.base;
+      })
+      .catch(err => console.log(err));
+    }
+  };
+
+  loadPdfFromDeviceCI(event:any) {
+    const file: File = event.target.files[0];
+    console.log("Archivo de Copia de Cedula")
+    console.log(event.target.files)
+    if(file){
+      this.extraerBase64(file)
+      .then((imagen: any) => {
+        this.formEdit.value.copiaCedula=file;
+        this.filePDF1 = file;
+        // this.imgPerfil = imagen.base;
+      })
+      .catch(err => console.log(err));
+    }
+  };
+
+
+  loadPdfFromDeviceLI(event:any) {
     const file: File = event.target.files[0];
     console.log("Archivo de Copia de Licencia")
     console.log(event.target.files)
@@ -306,18 +376,74 @@ export class PendientesComponent{
     }
   };
 
-  loadPdf3FromDevice(event:any) {
+  loadPdfFromDeviceDocCurri(event:any) {
     const file: File = event.target.files[0];
+    console.log("Archivo de Copia de Curriculum")
+    console.log(event.target.files)
     if(file){
       this.extraerBase64(file)
       .then((imagen: any) => {
-        this.formEdit.value.copiaLicencia=file;
-        this.filePDF3 = file;
+        this.formEdit.value.documentos=file;
+        this.filePDF3= file;
         // this.imgPerfil = imagen.base;
       })
       .catch(err => console.log(err));
     }
   };
+
+  
+  loadFileFromDevice(event: any, formField: string) {
+    const file: File = event.target.files[0];  
+    if (file) {
+      const fileType = file.type;  
+      if(formField== 'copiaCedula'){
+        if (fileType.includes('image')) {
+          this.loadImageFromDeviceCI(event); 
+          console.log("Archivo Cedula image")
+        } else if (fileType === 'application/pdf') {
+          this.loadPdfFromDeviceCI(event); 
+          console.log("Archivo Cedula pdf")
+        } 
+      }else if(formField== 'copiaLicencia'){
+        if (fileType.includes('image')) {
+          this.loadImageFromDeviceLI(event); 
+          console.log("Archivo Licencia image")
+        } else if (fileType === 'application/pdf') {
+          this.loadPdfFromDeviceLI(event); 
+          console.log("Archivo Licencia pdf")
+        } 
+      }else if(formField== 'curriculum'){
+        if (fileType.includes('image')) {
+          this.loadImageFromDeviceDocCurri(event); 
+          console.log("Archivo Curriculum image")
+        } else if (fileType === 'application/pdf') {
+          this.loadPdfFromDeviceDocCurri(event); 
+          console.log("Archivo Currilculum pdf")
+        } 
+      }   
+    }
+  } 
+
+  getNombreArchivo(tipo: string, archivo: File): { nombreArchivo: string, archivo: File| null } {
+    const { nombres, apellidos } = this.pendiente_seleccionada || {};
+    
+    const archivoUrl = this.pendiente_seleccionada?.[tipo]; 
+    
+    const extension = archivoUrl ? archivoUrl.split('.').pop() : 'pdf'; 
+  
+    if (!nombres || !apellidos) {
+      return { nombreArchivo: 'archivo_descargado', archivo: null };
+    }
+    
+    // Si el tipo está definido, formateamos el nombre del archivo
+    if (tipo != '' && archivo!=null) {
+      this.nombre = `${nombres}_${apellidos}_${tipo}.${extension}`;
+      return { nombreArchivo: this.nombre , archivo };
+    }
+    
+    // Retorna un nombre de archivo predeterminado si no se proporciona un tipo
+    return { nombreArchivo: 'No hay documento disponible', archivo : null};
+  }
 
   onAceptar() {
     let pendiente: BodyCrearProveedorPendiente = {
@@ -348,172 +474,172 @@ export class PendientesComponent{
     if (email && password) {
       this.pythonAnywhereService.getSolicitantePythonAny(email).subscribe((arrSolicitante: Array<Solicitante2>) => {
         if (arrSolicitante.length === 0) {
-          var validator=0;
+          var validator = 0;
           const dataRegisto = new FormData();
           dataRegisto.append('tipo', 'Proveedor');
           dataRegisto.append('password', password);
           console.log(this.pendiente_seleccionada)
-          if(this.pendiente_seleccionada.email != null && this.pendiente_seleccionada.email != ""){
+          if (this.pendiente_seleccionada.email != null && this.pendiente_seleccionada.email != "") {
             dataRegisto.append('email', this.pendiente_seleccionada.email);
-          }else{
+          } else {
             this.mensajeIncompleto.push("correo")
             console.log("Problema en Email")
-            validator=1;
+            validator = 1;
           }
-          if(this.pendiente_seleccionada.nombres != null && this.pendiente_seleccionada.nombres != ""){
+          if (this.pendiente_seleccionada.nombres != null && this.pendiente_seleccionada.nombres != "") {
             dataRegisto.append('nombres', this.pendiente_seleccionada.nombres);
-          }else{
+          } else {
             this.mensajeIncompleto.push("nombre")
             console.log("Problema en Nombres")
-            validator=1;
+            validator = 1;
           }
-          if(this.pendiente_seleccionada.apellidos != null && this.pendiente_seleccionada.apellidos != ""){
+          if (this.pendiente_seleccionada.apellidos != null && this.pendiente_seleccionada.apellidos != "") {
             dataRegisto.append('apellidos', this.pendiente_seleccionada.apellidos);
-          }else{
+          } else {
             this.mensajeIncompleto.push("apellido")
             console.log("Problema en Apellidos")
-            validator=1;
+            validator = 1;
           }
-          if(this.pendiente_seleccionada.telefono != null && this.pendiente_seleccionada.telefono != ""){
+          if (this.pendiente_seleccionada.telefono != null && this.pendiente_seleccionada.telefono != "") {
             dataRegisto.append('telefono', this.pendiente_seleccionada.telefono);
-          }else{
+          } else {
             this.mensajeIncompleto.push("telefono")
             console.log("Problema en telefono")
-            validator=1;
+            validator = 1;
           }
-          if(this.pendiente_seleccionada.cedula != null && this.pendiente_seleccionada.cedula != ""){
+          if (this.pendiente_seleccionada.cedula != null && this.pendiente_seleccionada.cedula != "") {
             dataRegisto.append('cedula', this.pendiente_seleccionada.cedula);
-          }else{
+          } else {
             this.mensajeIncompleto.push("cédula")
             console.log("Problema en cedula")
-            validator=1;
+            validator = 1;
           }
-          if(this.pendiente_seleccionada.genero != null && this.pendiente_seleccionada.genero != ""){
+          if (this.pendiente_seleccionada.genero != null && this.pendiente_seleccionada.genero != "") {
             dataRegisto.append('genero', this.pendiente_seleccionada.genero);
-          }else{
+          } else {
             this.mensajeIncompleto.push("género")
 
             console.log("Problema en genero")
-            validator=1;
+            validator = 1;
           }
-          if(this.pendiente_seleccionada.ciudad != null && this.pendiente_seleccionada.ciudad != ""){
+          if (this.pendiente_seleccionada.ciudad != null && this.pendiente_seleccionada.ciudad != "") {
             dataRegisto.append('ciudad', this.pendiente_seleccionada.ciudad);
-          }else{
+          } else {
             this.mensajeIncompleto.push("ciudad")
 
             console.log("Problema en ciudad")
-            validator=1;
+            validator = 1;
           }
-          if(this.pendiente_seleccionada.foto != null && this.pendiente_seleccionada.foto != ""){
+          if (this.pendiente_seleccionada.foto != null && this.pendiente_seleccionada.foto != "") {
             dataRegisto.append('foto', this.pendiente_seleccionada.foto);
-          }else{
+          } else {
             this.mensajeIncompleto.push("foto")
 
             console.log("Problema en foto")
-            validator=1;
+            validator = 1;
           }
-          if(this.pendiente_seleccionada.banco != null && this.pendiente_seleccionada.banco != ""){
+          if (this.pendiente_seleccionada.banco != null && this.pendiente_seleccionada.banco != "") {
             dataRegisto.append('banco', this.pendiente_seleccionada.banco);
-          }else{
+          } else {
             this.mensajeIncompleto.push("banco")
 
             console.log("ERROR EN banco")
-            validator=1;
+            validator = 1;
           }
-          if(this.pendiente_seleccionada.numero_cuenta != null && this.pendiente_seleccionada.numero_cuenta != ""){
+          if (this.pendiente_seleccionada.numero_cuenta != null && this.pendiente_seleccionada.numero_cuenta != "") {
             dataRegisto.append('numero_cuenta', this.pendiente_seleccionada.numero_cuenta);
-          }else{
+          } else {
             this.mensajeIncompleto.push("número de cuenta")
 
             console.log("ERROR EN numero_cuenta")
-            validator=1;
+            validator = 1;
           }
-          if(this.pendiente_seleccionada.tipo_cuenta != null && this.pendiente_seleccionada.tipo_cuenta != ""){
+          if (this.pendiente_seleccionada.tipo_cuenta != null && this.pendiente_seleccionada.tipo_cuenta != "") {
             dataRegisto.append('tipo_cuenta', this.pendiente_seleccionada.tipo_cuenta);
-          }else{
+          } else {
             this.mensajeIncompleto.push("tipo de cuenta")
 
             console.log("ERROR EN tipo_cuenta")
-            validator=1;
+            validator = 1;
           }
-          if(this.pendiente_seleccionada.ano_experiencia != null && this.pendiente_seleccionada.ano_experiencia >= 0){
+          if (this.pendiente_seleccionada.ano_experiencia != null && this.pendiente_seleccionada.ano_experiencia >= 0) {
             dataRegisto.append('ano_experiencia', this.pendiente_seleccionada.ano_experiencia);
-          }else{
+          } else {
             this.mensajeIncompleto.push("años de experiencia")
 
             console.log("ERROR EN ano_experienccia")
-            validator=1;
+            validator = 1;
           }
-          if(this.pendiente_seleccionada.profesion != null && this.pendiente_seleccionada.profesion != ""){
+          if (this.pendiente_seleccionada.profesion != null && this.pendiente_seleccionada.profesion != "") {
             dataRegisto.append('profesion', this.pendiente_seleccionada.profesion);
-          }else{
+          } else {
             this.mensajeIncompleto.push("profesión")
 
             console.log("ERROR EN profesion")
-            validator=1;
+            validator = 1;
           }
-          if(this.pendiente_seleccionada.direccion != null && this.pendiente_seleccionada.direccion != ""){
+          if (this.pendiente_seleccionada.direccion != null && this.pendiente_seleccionada.direccion != "") {
             dataRegisto.append('direccion', this.pendiente_seleccionada.direccion);
-          }else{
+          } else {
             this.mensajeIncompleto.push("dirección")
 
             console.log("ERROR EN direccion")
-            validator=1;
+            validator = 1;
           }
-          if(this.pendiente_seleccionada.licencia != null && this.pendiente_seleccionada.licencia != ""){
+          if (this.pendiente_seleccionada.licencia != null && this.pendiente_seleccionada.licencia != "") {
             dataRegisto.append('licencia', this.pendiente_seleccionada.licencia);
-          }else{
+          } else {
             this.mensajeIncompleto.push("licencia")
 
             console.log("ERROR EN licencia")
-            validator=1;
+            validator = 1;
           }
-          if(this.pendiente_seleccionada.copiaCedula != null && this.pendiente_seleccionada.copiaCedula != ""){
+          if (this.pendiente_seleccionada.copiaCedula != null && this.pendiente_seleccionada.copiaCedula != "") {
             dataRegisto.append('copiaCedula', this.pendiente_seleccionada.copiaCedula);
-          }else{
+          } else {
             this.mensajeIncompleto.push("copia de cédula")
 
             console.log("ERROR EN copiaCedula")
-            validator=1;
+            validator = 1;
           }
-          if(this.pendiente_seleccionada.copiaLicencia != null && this.pendiente_seleccionada.copiaLicencia != ""){
+          if (this.pendiente_seleccionada.copiaLicencia != null && this.pendiente_seleccionada.copiaLicencia != "") {
             dataRegisto.append('copiaLicencia', this.pendiente_seleccionada.copiaLicencia);
-          }else{
+          } else {
             this.mensajeIncompleto.push("copia de licencia")
 
             console.log("ERROR EN copiaLicencia")
-            validator=1;
+            validator = 1;
           }
-          if(this.pendiente_seleccionada.descripcion != null && this.pendiente_seleccionada.descripcion != ""){
+          if (this.pendiente_seleccionada.descripcion != null && this.pendiente_seleccionada.descripcion != "") {
             dataRegisto.append('descripcion', this.pendiente_seleccionada.descripcion);
-          }else{
+          } else {
             this.mensajeIncompleto.push("descripción")
 
             console.log("ERROR EN descripcion")
-            validator=1;
+            validator = 1;
           }
-          if(this.pendiente_seleccionada.ano_experiencia != null && this.pendiente_seleccionada.ano_experiencia != ""){
+          if (this.pendiente_seleccionada.ano_experiencia != null && this.pendiente_seleccionada.ano_experiencia != "") {
             dataRegisto.append('ano_experiencia', this.pendiente_seleccionada.ano_experiencia);
-          }else{
+          } else {
             this.mensajeIncompleto.push("años de experiencia")
 
             console.log("ERROR EN ano_experiencia")
-            validator=1;
+            validator = 1;
           }
-          if(this.pendiente_seleccionada.documentsPendientes != null && this.pendiente_seleccionada.documentsPendientes != ""){
+          if (this.pendiente_seleccionada.documentsPendientes != null && this.pendiente_seleccionada.documentsPendientes != "") {
             dataRegisto.append('filesDocuments', this.pendiente_seleccionada.documentsPendientes[0].document);
-          }else{
+          } else {
             this.mensajeIncompleto.push("documentación")
 
             console.log("ERROR EN filesDocuments")
-            validator=1;
+            validator = 1;
           }
-          
+
           console.log("dataRegisto")
           console.log(dataRegisto)
           console.log("validator " + validator)
           console.log(this.pendiente_seleccionada.profesion)
-          if(validator == 0){
+          if (validator == 0) {
             // Registro PythonAnywhere
             this.pythonAnywhereService.postRegistro(dataRegisto).subscribe(async (resp: any) => {
               if (!resp.error) {
@@ -540,14 +666,15 @@ export class PendientesComponent{
                     // this.isRegistered = true;
                   });
               } else {
+                console.log(resp.error);
                 console.log('Hubo un error al registrar en PythonAnywhere', resp.error);
                 // this.presentAlert('Error en el registro :(', 'Vuelva a intentarlo pronto...', false);
               }
             });
-          }else{
+          } else {
             // TODO: Mostrar mensaje de campos incompletos
             if (this.mensajeIncompleto.length > 0) {
-              this.mensajeIncompletoString = "Campos incompletos: " + this.mensajeIncompleto.join(', ') 
+              this.mensajeIncompletoString = "Campos incompletos: " + this.mensajeIncompleto.join(', ')
               console.log(this.mensajeIncompletoString)
 
               this.mensajeIncompleto = []
@@ -563,8 +690,8 @@ export class PendientesComponent{
   }
 
   onNegar() {
-    let razon='';
-    if(this.formNegar.value.razon != null && this.formNegar.value.razon != ""){
+    let razon = '';
+    if (this.formNegar.value.razon != null && this.formNegar.value.razon != "") {
       razon = this.formNegar.value.razon
     }
     console.log(razon)
@@ -721,12 +848,30 @@ export class PendientesComponent{
     return this.formEdit.get(subForm)?.invalid && this.formEdit.get(subForm)?.touched || this.formEdit.get(subForm)?.dirty && this.getErrorMessage(this.formEdit, subForm).length !== 0;
 
   }
-  
-  funcionMostar(){
+
+  funcionMostar() {
     console.log("asdasdasdasdasxzczxcfwef")
     console.log(this.pendiente_seleccionada)
     console.log(this.pendiente_seleccionada.copiaLicencia)
   }
+
+  edit_pend(a: any) {
+    this.showHeader = false;
+    this.showHeaderC = true;
+    this.showadmi = true;
+    this.pendiente_seleccionada = a;
+
+    this.copiaCedulaNombre = this.pendiente_seleccionada?.copiaCedula.substring(
+      this.pendiente_seleccionada?.copiaCedula.lastIndexOf('/') + 1
+    );
+    this.copiaLicenciaNombre = this.pendiente_seleccionada?.copiaLicencia.substring(
+      this.pendiente_seleccionada?.copiaLicencia.lastIndexOf('/') + 1
+    );
+    this.copiaDocumentosNombre = this.pendiente_seleccionada?.documentsPendientes[0]?.document.substring(
+      this.pendiente_seleccionada?.documentsPendientes[0]?.document.lastIndexOf('/') + 1
+    );
+  }
+
 
 
   next(event: any) {
@@ -760,7 +905,7 @@ export class PendientesComponent{
 
   }
 
-  numberOnly(event:any): boolean {
+  numberOnly(event: any): boolean {
     const charCode = (event.which) ? event.which : event.keyCode;
     if (charCode > 31 && (charCode < 48 || charCode > 57)) {
       return false;
@@ -768,11 +913,26 @@ export class PendientesComponent{
     return true;
   }
 
-  numberOnlyPluss(event:any): boolean {
+  numberOnlyPluss(event: any): boolean {
     const charCode = (event.which) ? event.which : event.keyCode;
     if (charCode != 43 && charCode > 31 && (charCode < 48 || charCode > 57)) {
       return false;
     }
     return true;
+  }
+
+  filtrarPorFechas() {
+    if (this.fechaInicio && this.fechaFin) {
+      const fechaInicio = new Date(this.fechaInicio);
+      const fechaFin = new Date(this.fechaFin);
+
+      this.arr_filtered_pendiente= this.arr_pendiente.filter(a => {
+        const fechaCreacion = new Date(a.fecha_registro );
+        if (this.fechaInicio && this.fechaFin) {
+          return fechaCreacion >= fechaInicio && fechaCreacion <= fechaFin;
+        }
+        return true;
+      });
+    }
   }
 }

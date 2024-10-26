@@ -1,40 +1,112 @@
-<body>
-<div class="d-flex justify-content-center p-2">
-    <div class="p-0 my-5 justify-content-center align-items-center">
-        <div id="logo-img-container" class="form-row col-md-12">
-            <div class="col-md-8 form-group">
-                <img id="logo" src='assets/imagenes/logo-inicio.png'>
+<body>   
+    <div id="container-primary" class="d-flex justify-content-center align-items-center vh-100">
+        <div id="container-text" class="p-2 text-center">
+            <div id="logo-img-container" class="form-row col-md-12 d-flex justify-content-center">
+                <div class="col-md-8 form-group">
+                    <img id="logo" src='assets/imagenes/VIVE FÁCIL.png'>
+                </div>
+            </div>
+            <div id="logo-img-container" class="w-100 d-flex flex-column justify-content-center">
+                <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="w-100 d-flex flex-column pt-3 rounded-2 justify-content-center" *ngIf="showLogin">
+    
+                    <div class="form-group contTexto d-flex">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    <img src="assets/imagenes/USER.png" alt="Ícono de Usuario">
+                                </span>
+                            </div>
+                            <input id="id_correo" type="text" class="form-control" placeholder="USUARIO" formControlName="email">
+                        </div>
+                    </div>
+                    
+                    <br>
+                    
+                    <div class="form-group contTexto d-flex">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    <img src="assets/imagenes/PASSWORD.png" alt="Ícono de Contraseña">
+                                </span>
+                            </div>
+                            <input id="id_password" type="password" class="form-control" placeholder="CONTRASEÑA" formControlName="password">
+                        </div>
+                    </div>
+    
+                    <div *ngIf="isLoginFailed" style="color:#f5e500">
+                        <br>
+                        Credenciales incorrectas, por favor inténtalo de nuevo.
+                    </div>
+                    
+                    <div class="form-group contTexto my-2 d-flex" id="form-x">
+                        <div class="form-check mt-2">
+                            <input
+                              id="rememberMe"
+                              type="checkbox"
+                              class="form-check-input"
+                              [(ngModel)]="rememberMe"
+                              [ngModelOptions]="{ standalone: true }"
+                            />
+                            <label class="form-check-label" for="rememberMe">
+                              Recuérdame
+                            </label>
+                          </div>
+                                <a href="" id="labelContrasena"
+                                (click)="restablecerContra($event)"
+                                >¿Olvidaste tu contraseña?</a>
+                    </div>
+                    <div class="w-100 d-flex flex-column pt-3 rounded-2 justify-content-center">
+                        <div class="form-row my-2">
+                            <button class="submit">
+                                INICIAR SESIÓN
+                            </button>
+                        </div>
+            
+                        <div class="form-row mt-2">
+                            <a href="/register" class="text-decoration-none">REGÍSTRATE</a>
+                        </div>
+                    </div>                     
+                </form>
+    
+                <!-- Olvidar Contraseña -->
+                <form class="w-100 d-flex flex-row pt-3 rounded-2 justify-content-center" *ngIf="showResetPassword">                            
+                    <div class="form-group contTexto d-flex flex-column" >
+                        <div class="w-100 d-flex flex-column pt-3 rounded-2 justify-content-center">
+                            <div class="form-row mt-1">
+                                <a class="text-decoration-none">RESETEAR CONTRASEÑA</a>
+                            </div>
+                        </div>  
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    <img src="assets/imagenes/USER.png" alt="Ícono de Usuario">
+                                </span>
+                            </div>
+                            <input 
+                                id="id_correo_re" 
+                                class="form-control"
+                                type="email" 
+                                [(ngModel)]="resetEmail" 
+                                placeholder="Correo electrónico"
+                                />
+                        </div>
+    
+                        <div class="w-100 d-flex flex-column pt-3 rounded-2 justify-content-center">
+                            <div class="form-row my-2">
+                                <button (click)="enviarEnlaceReset()" class="submit">ENVIAR ENLACE</button>
+                            </div>
+                
+                            <div class="form-row my-2">
+                                <a (click)="volverAlLogin()" class="text-decoration-none">Volver al login</a>
+                            </div>
+                        </div> 
+    
+                    <br>  
+                    
+                    </div>
+                </form>
+    
             </div>
         </div>
-        <div id="logo-img-container" class="form-row col-md-12">
-            <form [formGroup]="loginForm" class="w-100 d-flex flex-column pt-3 rounded-2 justify-content-center">
-                
-                
-                <div class="form-group contTexto my-2">
-                    <input id="id_correo" type="text" class="form-control" placeholder="Usuario" formControlName="email">
-                </div>
-                
-                <br>
-
-
-            
-                <div class="form-group contTexto my-2">
-                    <input id="id_password" type="password" class="form-control" placeholder="Contraseña" formControlName="password">
-                </div>
-                
-
-                <!-- <div class="form-row col-md-12">
-                    <div class="col-md-8 form-group labelDiv">
-                        <a href="" id="labelContrasena">¿Olvidaste tu contraseña?</a>
-                    </div>
-                </div> -->
-            </form>
-        </div>
-        <div class="form-row my-2">
-            <button (click)="onSubmit()" class="btn btn-primary">
-                INICIAR SESIÓN
-            </button>
-        </div>
     </div>
-</div>
 </body>

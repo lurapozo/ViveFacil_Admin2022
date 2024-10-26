@@ -1,0 +1,150 @@
+<!-- Titulo principal-->
+<div class="header-admi1">
+    <div class="header-text">
+      <div class="containerstart" >
+        <p *ngIf="showHeader"> Notificaiones Automaticas</p>
+      </div>
+    </div>
+    <svg preserveAspectRatio="xMidYMid">
+      <path d="M0,60 L0,0 L1290,0 L1290,60" fill="#333539"  />
+      <path d="M320,60 Q448,85 550,60" fill="#333539" />
+    </svg>
+  </div>
+  
+   <!-- FILTROS-->
+  <div class="container-fluid" *ngIf="showHeader">
+    <div class="d-flex flex-wrap header-solicitud align-items-center gap-3">   
+      <div class="containerstart1" >
+        <label class="calendar-label">Desde:</label>
+        <div class="date-container" >
+          <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+          <mat-datepicker #picker1></mat-datepicker>
+          <input matInput [matDatepicker]="picker1" placeholder="SELECCIONA DIA" 
+          [(ngModel)]="fechaInicio" (dateChange)="filtrarPorFechas()"
+          >
+          
+        </div>
+      </div>
+      
+      <div class="containerstart2" >
+        <label class="calendar-label">Hasta:</label>
+        <div class="date-container" >
+          <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+          <mat-datepicker #picker2></mat-datepicker>
+          <input matInput [matDatepicker]="picker2" placeholder="SELECCIONA DIA"
+          [(ngModel)]="fechaFin" (dateChange)="filtrarPorFechas()"
+          >
+          
+        </div>
+      </div>
+  
+      <div class="containerstart3">
+        <button class="search-button" id="basic-addon1">
+          <i class="bi bi-search"></i>
+        </button>
+        <div class="date-container">
+          <div class="input-group search-group">
+            <input 
+              type="text" 
+              class="form-control search-input" 
+              placeholder="BUSCAR"
+              aria-label="Buscar" 
+              aria-describedby="basic-addon1" 
+              (input)="search($event)"
+             >
+          </div> 
+        </div>       
+      </div>
+    </div>
+    <div class="d-flex flex-wrap header-solicitud align-items-center gap-3">         
+        <button class="admin-button"
+        type="button"
+            data-bs-toggle="modal"
+        >
+          <span class="material-icons">add_circle</span>
+          AGREGAR NOTIFICACION
+        </button>
+        <div class="filtro-container">
+            <button class="admin-button1"
+                type="button"
+                (click)="toggleFiltro()"
+            >
+            <span class="material-icons">filter_list</span> 
+              FILTRAR
+              <mat-icon [class.rotate]="mostrarFiltro">expand_more</mat-icon>
+            </button>
+
+          
+            <!-- Opciones desplegables del filtro -->
+            <div *ngIf="mostrarFiltro" class="filtro-opciones">
+              <div (click)="filtrar('todos')" [class.selected]="filtroActual === 'todos'" class="filtro-opcion">TODOS</div>
+              <div (click)="filtrar('cumpleaños')" [class.selected]="filtroActual === 'cumpleaños'" class="filtro-opcion">CUMPLEAÑOS</div>
+            </div>
+        </div>
+          
+
+          
+    </div>
+
+
+<div class="container overf">
+    
+        <!-- Lista de notificaciones -->
+    <div *ngFor="let notificacion of arr_filtered_notificacion; let i = index" class="notificacion-item">
+        <div class="row">
+        <!-- Contenido de cada notificación -->
+            <div class="col-md-6">
+                <div class="notificacion">
+                    <div class="icono-editar">
+                      <img src="assets/imagenes/16.png" alt="Icono edit" 
+                        width="5px" height="5px" class="me-3 ms-3" /> 
+                    </div>
+                    <div class="icono-campana">
+                        <mat-icon>notifications</mat-icon>
+                    </div>
+
+                    <div class="contenido-notificacion">
+                        <div class="fecha">
+                          <span>{{ notificacion.fecha_creacion | date: 'dd/MM/yyyy' }}</span>
+
+                          </div>
+                        <div class="icono-texto">
+                            <div>
+                            <strong class="titulo">{{ notificacion.titulo }}</strong>
+                            <p class="mensaje">{{ notificacion.mensaje }}</p>
+                            </div>
+                        </div>
+                     
+                    </div>
+                    <div class="icono-borrar">
+                        <button class="eliminar" (click)="borrar_notificacion(notificacion.id)">
+                          <img src="assets/imagenes/19.png" alt="Icono edit" 
+                          width="5px" height="5px" class="me-3 ms-3" />
+                        </button> 
+                    </div>
+                  </div>
+                  
+
+            </div>
+
+
+            <div class="col-md-6">
+              <div class="notificacion-acciones">
+                <button [class]="isEnabled ? 'enabled-class' : 'disabled-class'" (click)="toggleEnabled()">
+                  {{ isEnabled ? 'HABILITADO' : 'DESHABILITADO' }}
+                  
+                </button>
+              
+          
+                  <button class="enviar-ahora" >
+                      <div class="icono-texto">
+                          <img src="assets/imagenes/20.png" alt="Icono Servicio" />
+                          <p>ENVIAR<br>AHORA</p> 
+                      </div>
+                  </button> 
+              </div>
+          </div>
+          
+        </div>
+    </div>
+</div>

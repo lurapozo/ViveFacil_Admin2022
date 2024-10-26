@@ -4,14 +4,21 @@ import { DomSanitizer } from '@angular/platform-browser';
 import * as moment from 'moment';
 import { BodyCuponActualizar, Cupon, CuponCrear } from 'src/app/interfaces/cupon';
 import { PythonAnywhereService } from 'src/app/services/PythonAnywhere/python-anywhere.service';
+import { BodyActualizarCategoria, BodyCrearCategoria, Categoria } from 'src/app/interfaces/categoria';
+import { BodyCrearSubCategoria, BodyResponseCrearSubCategoria, SubCategoria } from 'src/app/interfaces/sub-categoria';
+
 @Component({
   selector: 'app-cupones',
   templateUrl: './cupones.component.html',
   styleUrls: ['./cupones.component.css']
 })
 export class CuponesComponent {
+  fechaInicio: Date | null = null; 
+  fechaFin: Date | null = null; 
+  fechasFiltradas: any[] = [];
+  participante = ['Solicitante','Proveedor']
   codigo=Math.random().toString(36).substr(2, 6);
-  arr_cupon!: Cupon[] | undefined;
+  arr_cupon!: Cupon[] |  [];
   arr_filtered_cupon!: any | undefined;
   condicionNext = false
   currentPage = 1
@@ -29,7 +36,11 @@ export class CuponesComponent {
   activoCond = false
   mensajeAlerta: string = '';
   isCrear = false; isActualizar = false; isEliminar = false;
-  categoria!: any[];
+  dropdownOpen: boolean = false;
+  categoria?: SubCategoria[];
+  listCategorias?: Categoria[];
+  primeraCat?: string;
+
   constructor(private pythonAnywhereService: PythonAnywhereService, private sanitizer: DomSanitizer) {
     this.pythonAnywhereService.obtener_cupones().subscribe(resp => {
       this.arr_cupon = Object(resp)
@@ -38,8 +49,21 @@ export class CuponesComponent {
       console.log(this.arr_filtered_cupon)
       console.log(resp)
     });
-    this.pythonAnywhereService.obtener_categorias().subscribe((resp: any[]) => {
+    this.pythonAnywhereService.obtener_servicios().subscribe((resp: any[]) => {
       this.categoria = resp
+      console.log("cat",resp)
+    })
+
+    this.pythonAnywhereService.obtener_categorias().subscribe((resp: any[]) => {
+      this.listCategorias = resp
+      if(this.listCategorias.length>0){
+        this.primeraCat=this.listCategorias[0].nombre
+      }else{
+        this.primeraCat=''
+      }
+      
+      console.log("list sub",resp)
+
     })
 
     const imagenCrearControl = this.cuponCrear.get('imagen') as FormControl;
@@ -48,7 +72,7 @@ export class CuponesComponent {
     imagenActualizarControl.addValidators(this.createImageValidator(this.formEdit.get('imagen') as AbstractControl, 'actualizar'));
   }
 
-
+  
   cuponCrear: FormGroup = new FormGroup({
     titulo: new FormControl('', [Validators.required]),
     codigo: new FormControl('', [Validators.required]),
@@ -63,6 +87,7 @@ export class CuponesComponent {
     Validators.maxLength(2), Validators.pattern(/^[0-9]+$/)]),
     imagen: new FormControl(this.fileImagenActualizar),
     categoria: new FormControl(''),
+    participante:new FormControl('', [Validators.required]),
 
 
   });
@@ -80,6 +105,7 @@ export class CuponesComponent {
     Validators.maxLength(2), Validators.pattern(/^[0-9]+$/)]),
     imagen: new FormControl(this.fileImagenActualizar),
     categoria: new FormControl('Automotriz'),
+    participante:new FormControl('', [Validators.required]),
 
   });
 
@@ -93,6 +119,12 @@ export class CuponesComponent {
 
 
   }
+
+  abrirSelectorArchivo(event: Event, fileInput: HTMLInputElement): void {
+    event.stopPropagation();  
+    fileInput.click();  
+  }
+
   ver(cupon: any) {
     this.cupon_seleccionada = cupon
     if (this.activoCond) {
@@ -164,6 +196,12 @@ export class CuponesComponent {
       case 'titulo':
         if (itemControl.hasError('required')) {
           return 'El campo Titulo es requerido';
+        }
+        return '';
+      
+        case 'participante':
+        if (itemControl.hasError('required')) {
+          return 'El campo Participante es requerido';
         }
         return '';
 
@@ -358,6 +396,7 @@ export class CuponesComponent {
       porcentaje: 0,
       fecha_iniciacion: '',
       fecha_expiracion: '',
+      participantes: '',
       puntos: 0,
       tipo_categoria: 'Automotriz',
       cantidad: 0
@@ -367,6 +406,7 @@ export class CuponesComponent {
     const descripcion = this.cuponCrear.get('descripcion')?.value;
     const inicio = this.cuponCrear.get('inicio')?.value;
     const fin = this.cuponCrear.get('fin')?.value;
+    const participantes = this.cuponCrear.get('participante')?.value;
     const cantidad = this.cuponCrear.get('cantidad')?.value;
     const puntos = this.cuponCrear.get('punto')?.value;
     const categoria = 'Automotriz';
@@ -375,7 +415,7 @@ export class CuponesComponent {
 
 
 
-    if (titulo && descripcion && inicio && fin && cantidad && puntos && categoria && descuento) {
+    if (titulo && descripcion && inicio && fin && cantidad && puntos && categoria && descuento && participantes) {
       cupon.codigo = codigo
       cupon.titulo = titulo
       cupon.descripcion = descripcion
@@ -385,6 +425,7 @@ export class CuponesComponent {
       cupon.cantidad = cantidad
       cupon.puntos = puntos
       cupon.tipo_categoria = categoria
+      cupon.participantes = participantes
       console.log(cupon)
       if (foto && this.existImageCrear) {
 
@@ -525,5 +566,30 @@ export class CuponesComponent {
     } else {
       console.log('No hay toast renderizado');
     }
+  }
+
+  filtrarPorFechas() {
+    if (this.fechaInicio && this.fechaFin) {
+      const fechaInicio = new Date(this.fechaInicio);
+      const fechaFin = new Date(this.fechaFin);
+
+      this.arr_filtered_cupon= this.arr_cupon.filter(a => {
+        const fechaIni= new Date(a.fecha_iniciacion);
+        const fechaIFni= new Date(a.fecha_expiracion);
+        if (this.fechaInicio && this.fechaFin) {
+          return fechaInicio >= fechaInicio && fechaIFni <= fechaFin;
+        }
+        return true;
+      });
+    }
+  }
+
+  toggleDropdown() {
+    this.dropdownOpen = !this.dropdownOpen;
+  }
+
+  seleccionarOpcion(opcion: string) {
+    console.log('Opción seleccionada:', opcion);
+    this.dropdownOpen = false; 
   }
 }

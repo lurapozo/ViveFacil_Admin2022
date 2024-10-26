@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { PythonAnywhereService } from 'src/app/services/PythonAnywhere/python-anywhere.service';
 import { UserService } from 'src/app/services/user/user.service';
 import { Router } from '@angular/router';
@@ -18,8 +18,36 @@ export class LoginComponent {
   hide = true;
   isRegistered = true;
 
+  showLogin: boolean = true;
+  showResetPassword: boolean = false;
+  isLoginFailed: boolean = false;
+  rememberMe: boolean = false;
+  resetEmail: string = '';
 
-  constructor(private userService: UserService, private router: Router, private pythonAnywhereService: PythonAnywhereService) { }
+  constructor(private userService: UserService,private fb: FormBuilder, private router: Router, private pythonAnywhereService: PythonAnywhereService) { }
+
+  ngOnInit() {
+    // Inicializar el formulario
+    this.loginForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', Validators.required],
+    });
+    this.loadSavedCredentials();
+  } 
+
+  loadSavedCredentials() {
+    const savedEmail = localStorage.getItem('email');
+    const savedPassword = localStorage.getItem('password');
+    const rememberMe = localStorage.getItem('rememberMe') === 'true';
+
+    if (rememberMe && savedEmail && savedPassword) {
+      this.loginForm.patchValue({
+        email: savedEmail,
+        password: savedPassword,
+      });
+      this.rememberMe = true; // Actualiza el estado de rememberMe
+    }
+  }
 
   onSubmit(){
     console.log("Intento de Login")
@@ -29,6 +57,15 @@ export class LoginComponent {
     console.log(pass)
     if(email && pass){
       console.log("entra aca")
+      if (this.rememberMe) {
+        localStorage.setItem('email', email);
+        localStorage.setItem('password', pass);
+        localStorage.setItem('rememberMe', 'true');
+        console.log('Datos guardados en localStorage:', email, pass);
+      } else {
+        // Limpiar localStorage si no se quiere recordar
+        localStorage.clear(); 
+      }
       this.userService.login(email, pass)
         .then((respuesta) => {
           // this.pythonAnywhereService.cambioContrasenia(email,pass).subscribe((res: any)=>
@@ -85,8 +122,10 @@ export class LoginComponent {
               if (!tokenPythonAny){
                 tokenPythonAny=""
               }
-              console.log('Se obtiene token de python anywhere auth y se lo guarda en el local storage: ', tokenPythonAny);
+              //console.log('Se obtiene token de python anywhere auth y se lo guarda en el local storage: ', tokenPythonAny);
               localStorage.setItem('tokenPythonAnywhere', tokenPythonAny);
+              console.log(email)
+              this.userService.establecerCorreo(email);
               // this.pythonAnywhereService.getAdminByCorreo(email).subscribe((admin: any) => {
               //   if(admin){
               //     console.log('Respuesta de proveedor: ', admin);
@@ -130,5 +169,26 @@ export class LoginComponent {
       default:
         return '';
     }
+  }
+
+  restablecerContra(event: Event) {
+    event.preventDefault();
+    this.showLogin = false;
+    this.showResetPassword = true;
+  }
+
+  enviarEnlaceReset() {
+    if (this.resetEmail) {
+      this.userService.sendPasswordResetEmail(this.resetEmail)
+        .then(() => alert('Se ha enviado el enlace de restablecimiento.'))
+        .catch((error) => alert('Error al enviar el enlace: ' + error.message));
+    } else {
+      alert('Por favor, ingresa un correo válido.');
+    }
+  }
+
+  volverAlLogin() {
+    this.showLogin = true;
+    this.showResetPassword = false;
   }
 }

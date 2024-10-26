@@ -34,6 +34,8 @@ import { SolicitantesComponent } from './components/cuentas/solicitantes/solicit
 import { AdministradoresComponent } from './components/cuentas/administradores/administradores.component';
 import { SugerenciasLeidasComponent } from './components/sugerencias/sugerencias-leidas/sugerencias-leidas.component';
 import { SugerenciasNoLeidasComponent } from './components/sugerencias/sugerencias-no-leidas/sugerencias-no-leidas.component';
+import { NotificacionesAutomaticasComponent } from './components/notificaciones-push/notificaciones-automaticas/notificaciones-automaticas.component';
+import { NotificacionesMasivasComponent } from './components/notificaciones-push/notificaciones-masivas/notificaciones-masivas.component';
 import { LoginComponent } from './pages/login/login.component';
 import { SpinnerComponent } from './components/spinner/spinner/spinner.component';
 import { SpinnerInterceptor } from './interceptor/spinner.interceptor';
@@ -42,6 +44,7 @@ import { provideAuth, getAuth} from '@angular/fire/auth';
 import {initializeApp, provideFirebaseApp} from '@angular/fire/app';
 import { environment } from '../environments/environment';
 import { AngularFireModule } from '@angular/fire/compat';
+import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 // import { IgxComboModule } from "igniteui-angular";  
 // // to use ngModel in page  
 // import { FormsModule } from "@angular/forms"; 
@@ -49,6 +52,13 @@ import { AngularFireModule } from '@angular/fire/compat';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { FormsModule } from '@angular/forms';
 import { MedallaComponent } from './components/medalla/medalla.component';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatButtonModule } from '@angular/material/button';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -76,6 +86,8 @@ import { MedallaComponent } from './components/medalla/medalla.component';
     AdministradoresComponent,
     SugerenciasLeidasComponent,
     SugerenciasNoLeidasComponent,
+    NotificacionesAutomaticasComponent,
+    NotificacionesMasivasComponent,
     LoginComponent,
     SpinnerComponent,
     MedallaComponent,
@@ -93,8 +105,15 @@ import { MedallaComponent } from './components/medalla/medalla.component';
     NgxPaginationModule,
     NgSelectModule,
     FormsModule,
+    MatIconModule,
+    MatMenuModule ,
+    MatButtonModule ,
+    MatNativeDateModule,
+    MatFormFieldModule,
+    MatInputModule,
     provideFirebaseApp( () => initializeApp(environment.firebase)),
     AngularFireModule.initializeApp(environment.firebase),
+    provideFirestore(() => getFirestore()), 
     provideAuth(() => getAuth()), // AuthModule
   ],
   providers: [ UserService, {provide: HTTP_INTERCEPTORS,useClass:SpinnerInterceptor,multi:true}],

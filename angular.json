@@ -14,7 +14,9 @@
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "allowedCommonJsDependencies": [
-              "moment"
+              "moment",
+              "papaparse",
+              "file-saver"
             ],
             "outputPath": "dist",
             "index": "src/index.html",
