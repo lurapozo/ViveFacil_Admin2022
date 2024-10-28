@@ -4,6 +4,11 @@
     padding: 12px;
 }
 
+.imaCup{
+    width: 250px;
+    height: 250px;
+}
+
 p {
     color: white;
     font-size: 20px;

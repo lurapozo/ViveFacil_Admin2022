@@ -64,7 +64,7 @@
   <div class="d-flex flex-wrap header-admin">
     <button class="admin-button"
         type="button"
-        (click)="crearAdministrador()"
+        (click)="crearAdministrador();limpiarForm('crear');"
     >
       <span class="material-icons">add_circle</span>
       AGREGAR ADMINISTRADOR
@@ -187,7 +187,7 @@
           <!-- Sección de imagen -->
           <button class="admin-button1"
                   type="button"
-                  (click)="crearAdministrador();"> 
+                  (click)="fileInput2.click();"> 
             
             <span class="material-icons">description</span> 
             SELECCIONAR ARCHIVO
@@ -202,10 +202,11 @@
             />
             <i
               *ngIf="!existImageCrear"
-              class="rounded mx-auto d-block img-fluid w-50 bi bi-upload icono"
+              class="rounded mx-auto d-block img-fluid w-50 bi"
             ></i>
             
             <input
+                #fileInput2
                 class="w-100 centrar form-control"
                 [ngClass]="
                   admiCrear.get('imagen')?.hasError('image_error')
@@ -217,6 +218,7 @@
                 type="file"
                 accept="image/png, image/jpeg"
                 (change)="loadImageFromDevice($event, 'crear')"
+                style="display: none;" 
               />
             <div class="invalid-feedback">
               {{ getErrorMessage(admiCrear, 'imagen') }}
@@ -508,7 +510,7 @@
           <!-- Sección de imagen -->
           <button class="admin-button1"
                   type="button"
-                  (click)="fileInput.click(); crearAdministrador();"> 
+                  (click)="fileInput1.click();"> 
             
             <span class="material-icons">description</span> 
             SELECCIONAR ARCHIVO
@@ -538,11 +540,11 @@
               !existImageActualizar &&
               !admi_seleccionada?.user_datos.foto?.foto
             "
-            class="rounded mx-auto d-block img-fluid w-50 bi bi-upload icono"
+            class="rounded mx-auto d-block img-fluid w-50 bi"
             ></i>
             
             <input
-              #fileInput
+              #fileInput1
               class="w-100 centrar form-control"
               [ngClass]="
                   formEdit.get('imagen')?.hasError('image_error')

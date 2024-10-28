@@ -480,7 +480,12 @@ form button {
 }
 
 .modal-content {
-    width: 4500px;
+    width: auto;
+}
+
+.modal-content1{
+    background-color: white;
+    border-radius: 10px;
 }
 
 

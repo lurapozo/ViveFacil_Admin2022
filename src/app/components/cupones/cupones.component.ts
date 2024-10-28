@@ -81,12 +81,12 @@ export class CuponesComponent {
     Validators.maxLength(2), Validators.pattern(/^[0-9]+$/)]),
     cantidad: new FormControl('', [Validators.required, Validators.minLength(1),
     Validators.maxLength(2), Validators.pattern(/^[0-9]+$/)]),
-    inicio: new FormControl(''),
+    inicio:new FormControl('', [Validators.required]),
     fin: new FormControl('', [Validators.required]),
-    punto: new FormControl('', [Validators.required, Validators.minLength(1),
+    punto: new FormControl('10', [Validators.required, Validators.minLength(1),
     Validators.maxLength(2), Validators.pattern(/^[0-9]+$/)]),
     imagen: new FormControl(this.fileImagenActualizar),
-    categoria: new FormControl(''),
+    categoria:new FormControl('', [Validators.required]),
     participante:new FormControl('', [Validators.required]),
 
 
@@ -101,7 +101,7 @@ export class CuponesComponent {
     Validators.maxLength(2), Validators.pattern(/^[0-9]+$/)]),
     inicio: new FormControl('', [Validators.required]),
     fin: new FormControl('', [Validators.required]),
-    punto: new FormControl('', [Validators.required, Validators.minLength(1),
+    punto: new FormControl('10', [Validators.required, Validators.minLength(1),
     Validators.maxLength(2), Validators.pattern(/^[0-9]+$/)]),
     imagen: new FormControl(this.fileImagenActualizar),
     categoria: new FormControl('Automotriz'),
@@ -185,6 +185,18 @@ export class CuponesComponent {
 
 
   getErrorMessage(formGroup: FormGroup, item: string): string {
+    console.log('Estado del formulario:', this.cuponCrear.valid ? 'Válido' : 'Inválido');
+  console.log('Errores del formulario:', this.cuponCrear.errors);
+
+  // Revisa cada campo para ver cuál está inválido
+  Object.keys(this.cuponCrear.controls).forEach((key) => {
+    const controlErrors = this.cuponCrear.get(key)?.errors;
+    if (controlErrors) {
+      console.log(`Campo inválido: ${key}`, controlErrors);
+    }
+  });
+
+
     const itemControl: FormControl = formGroup.get(item) as FormControl;
     switch (item) {
       case 'imagen':
@@ -220,7 +232,7 @@ export class CuponesComponent {
           return ' Solo se permiten números.';
         }
         return '';
-      case 'punto':
+      /*case 'punto':
         if (itemControl.hasError('required')) {
           return 'El campo punto es requerido';
         } else if (itemControl.hasError('maxlength')) {
@@ -228,7 +240,7 @@ export class CuponesComponent {
         } else if (itemControl.hasError('pattern')) {
           return ' Solo se permiten números.';
         }
-        return '';
+        return '';*/
       case 'categoria':
         if (itemControl.hasError('required')) {
           return 'El campo categoria es requerido';
@@ -266,6 +278,7 @@ export class CuponesComponent {
 
 
       default:
+        console.log("error")
         return '';
     }
   }
@@ -389,6 +402,7 @@ export class CuponesComponent {
   });
 
   onCrear() {
+    console.log("click en crear")
     let cupon: CuponCrear = {
       codigo: '',
       titulo: '',
@@ -397,9 +411,10 @@ export class CuponesComponent {
       fecha_iniciacion: '',
       fecha_expiracion: '',
       participantes: '',
-      puntos: 0,
-      tipo_categoria: 'Automotriz',
-      cantidad: 0
+      puntos: 10,
+      tipo_categoria: '',
+      cantidad: 0,
+      estado: false
     }
     const codigo = this.cuponCrear.get('codigo')?.value;
     const titulo = this.cuponCrear.get('titulo')?.value;
@@ -408,10 +423,10 @@ export class CuponesComponent {
     const fin = this.cuponCrear.get('fin')?.value;
     const participantes = this.cuponCrear.get('participante')?.value;
     const cantidad = this.cuponCrear.get('cantidad')?.value;
-    const puntos = this.cuponCrear.get('punto')?.value;
-    const categoria = 'Automotriz';
+    const puntos = 10;
+    const categoria = this.cuponCrear.get('categoria')?.value;
     const descuento = this.cuponCrear.get('descuento')?.value;
-    const foto = this.cuponCrear.get('imagen')?.value
+    const foto = this.cuponCrear.get('imagen')?.value as File;
 
 
 
@@ -426,7 +441,8 @@ export class CuponesComponent {
       cupon.puntos = puntos
       cupon.tipo_categoria = categoria
       cupon.participantes = participantes
-      console.log(cupon)
+      cupon.estado = true;
+      
       if (foto && this.existImageCrear) {
 
         cupon.foto = foto;
@@ -435,6 +451,7 @@ export class CuponesComponent {
 
       }
       this.pythonAnywhereService.crear_cupon(cupon).subscribe(resp => {
+        console.log("Cupon",cupon)
         this.limpiarForm('crear');
         this.mostrarToastInfo('Estado del Cupon ', 'Cupon Creado correctamente', false);
         this.pythonAnywhereService.obtener_cupones().subscribe(resp => {

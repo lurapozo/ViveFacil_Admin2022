@@ -71,7 +71,7 @@
             <th scope="col">ID</th>
             <th scope="col">TITULO</th>
             <th scope="col">PORCENTAJE</th>
-            <th scope="col"></th>
+           
           </tr>
         </thead>
       </table>
@@ -79,7 +79,8 @@
         <table class="table table-striped custom-table">
         <tbody>
           <tr
-            (click)="ver(a)" *ngFor="let a of arr_filtered_cargo" 
+            (click)="ver(a)" *ngFor="let a of arr_filtered_cargo" data-bs-toggle="modal"
+          href="#modalInformacionProfesion" role="button"
           >
             <td style="color: #40378b; text-transform: uppercase"> <strong> {{ a.id }} </strong></td>
             <td class="d-flex align-items-center">
@@ -91,19 +92,6 @@
             <td style="color: #40378b; text-transform: uppercase"> <strong> {{ a.porcentaje }} </strong> </td>
             <td>
               <mat-icon>settings</mat-icon>
-              <button mat-icon-button [matMenuTriggerFor]="menu">
-                <mat-icon>more_vert</mat-icon>
-              </button>
-              <mat-menu #menu="matMenu">
-                <button mat-menu-item >
-                  <mat-icon>edit</mat-icon>
-                  <span>Editar</span>
-                </button>
-                <button mat-menu-item >
-                  <mat-icon>delete</mat-icon>
-                  <span>Eliminar</span>
-                </button>
-              </mat-menu>
           </td>
           </tr>
         </tbody>
@@ -245,7 +233,7 @@ aria-labelledby="modalInformacionProfesionLabel" tabindex="-1">
 <div class="modal-content">
   <div class="modal-header align-items-center">
     <h1 class="modal-title fs-5 m-0 p-0 fw-bold"
-      id="modalInformacionProfesionLabel">Información de Cargo</h1>
+      id="modalInformacionProfesionLabel" style="color: #0ea3b7;">Información de Cargo</h1>
     <button type="button" class="btn-close" data-bs-dismiss="modal"
       aria-label="Close"></button>
   </div>
@@ -306,7 +294,7 @@ aria-labelledby="modalInformacionEdicionProfesionLabel" tabindex="-1">
 <div class="modal-content">
   <div class="modal-header align-items-center">
     <h1 class="modal-title fs-5 m-0 p-0 fw-bold"
-      id="modalInformacionEdicionProfesionLabel">Edición de Cargo</h1>
+      id="modalInformacionEdicionProfesionLabel" style="color: #0ea3b7;">Edición de Cargo</h1>
     <!-- (click)="limpiarForm('actualizar')" -->
     <button
       type="button"
@@ -498,12 +486,9 @@ aria-labelledby="modalCrearProfesionLabel" tabindex="-1">
       data-bs-target="#modalConfirmacion"
       data-bs-toggle="modal"
       class="btn btn-success" 
-      (click)="establecerMensaje('Está seguro que desea crear la  profesión?', 'crear')">Crear</button>
+      (click)="establecerMensaje('Está seguro que desea crear la  cargo?', 'crear')">Crear</button>
   </div>
 
-  <!-- <pre>
-      {{crearProfesionesForm.value | json}}
-    </pre> -->
 </div>
 </div>
 </div>

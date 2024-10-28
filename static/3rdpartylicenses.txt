@@ -113,6 +113,9 @@ Apache-2.0
 @firebase/component
 Apache-2.0
 
+@firebase/firestore
+Apache-2.0
+
 @firebase/installations
 Apache-2.0
 
@@ -126,6 +129,9 @@ Apache-2.0
 Apache-2.0
 
 @firebase/util
+Apache-2.0
+
+@firebase/webchannel-wrapper
 Apache-2.0
 
 @ng-select/ng-select
@@ -206,6 +212,8 @@ firebase/app-check
 firebase/auth
 
 firebase/compat/app
+
+firebase/firestore
 
 firebase/messaging
 

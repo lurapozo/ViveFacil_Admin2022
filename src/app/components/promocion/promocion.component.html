@@ -103,6 +103,7 @@
 <div class="contenedor-categorias">
   <div class="categoria"  (click)="ver(item)"
   *ngFor="let item of arr_filtered_promocion"
+        href="#modalInformacionEdicionProfesion"
         role="button"
         >
     <div class="item-imagen">
@@ -358,6 +359,7 @@ tabindex="-1"
       <h1
         class="modal-title fs-5 m-0 p-0 fw-bold"
         id="modalInformacionEdicionProfesionLabel"
+        style="color: #0ea3b7;"
       >
         Edición de Cupones
       </h1>
@@ -860,7 +862,7 @@ tabindex="-1"
                     ? 'is-valid'
                     : ''
                 "
-                placeholder="%"
+                placeholder="Cantidad"
               />
               <div class="invalid-feedback">
                 {{ getErrorMessage(promocionCrear, "cantidad") }}
@@ -957,7 +959,7 @@ tabindex="-1"
           <div class="form-field">
             <div class="col-5">
               <label for="inputNombre" class="form-label"
-                ><h3 class="m-0 p-0 fw-bold">Fecha Expiracion:</h3>
+                ><h3 class="m-0 p-0 fw-bold">Fecha Inicio:</h3>
               </label>
             </div>
             <div class="col-7">
@@ -1045,7 +1047,7 @@ aria-labelledby="modalConfirmacionLabel"
 aria-hidden="true"
 >
 <div class="modal-dialog">
-  <div class="modal-content">
+  <div id="modalConfirma" class="modal-content">
     <!-- Titulo del modal confirmacion -->
     <div class="modal-header">
       <h1

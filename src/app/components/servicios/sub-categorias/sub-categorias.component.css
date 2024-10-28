@@ -29,6 +29,8 @@
     margin-bottom: 10px;
     min-height: 60vh;
     padding: 20px;
+    max-height: 98vh;
+    overflow-y: auto;
 }
 
 .header-solicitud {
@@ -319,6 +321,11 @@ h4 {
     border: none;
     color: white;
     border-radius: 50%;
+}
+
+img{
+    height: 5%;
+    width: 5%;
 }
 
 /*C ADMI*/

@@ -120,8 +120,8 @@ total=0
     // Validators
     const imagenCrearControl = this.admiCrear.get('imagen') as FormControl;
     imagenCrearControl.addValidators(this.createImageValidator(this.admiCrear.get('imagen') as AbstractControl, 'crear'));
-    // const imagenActualizarControl = this.actualizarProfesionesForm.get('imagen') as FormControl;
-    // imagenActualizarControl.addValidators(this.createImageValidator(this.actualizarProfesionesForm.get('imagen') as AbstractControl, 'actualizar'));
+    const imagenActualizarControl = this.formEdit.get('imagen') as FormControl;
+    imagenActualizarControl.addValidators(this.createImageValidator(this.formEdit.get('imagen') as AbstractControl, 'actualizar'));
   }
 
 
@@ -166,11 +166,11 @@ total=0
             this.fileImagenCrear = file;
             this.imagenCrear = imagen.base;
           }
-          // else if(tipo === 'actualizar'){
-          //   this.actualizarProfesionesForm.get('imagen')?.setValue(file);
-          //   this.fileImagenActualizar = file;
-          //   this.imagenActualizar = imagen.base;
-          // }
+          else if(tipo === 'actualizar'){
+            this.formEdit.get('imagen')?.setValue(file);
+            this.fileImagenActualizar = file;
+             this.imagenActualizar = imagen.base;
+          }
         })
         .catch(err => console.log(err));
     }
@@ -315,10 +315,10 @@ total=0
               this.admiCrear.get('imagen')?.setValue(null);
               this.existImageCrear = false;
             }
-            // else if(tipo === 'actualizar'){
-            //   this.actualizarProfesionesForm.get('imagen')?.setValue(null);
-            //   this.existImageActualizar = false;
-            // }
+            else if(tipo === 'actualizar'){
+              this.formEdit.get('imagen')?.setValue(null);
+              this.existImageActualizar = false;
+            }
             return { image_error: 'Solo imágenes con formato jpg, jpeg, png o jfif.' };
           }
           console.log('Formato de imagen correcto');
@@ -343,7 +343,7 @@ total=0
     this.admi.email = this.admiCrear.value.correo
     this.admi.password = this.admiCrear.value.password
     this.admi.tipo = "Administrador"
-    this.admi.apellidos = this.admiCrear.value.apellido
+    this.admi.apellidos = this.admiCrear.value.apellidos
     this.admi.cedula = this.admiCrear.value.cedula
     this.admi.ciudad = this.admiCrear.value.ciudad
     this.admi.rol = this.admiCrear.value.rol

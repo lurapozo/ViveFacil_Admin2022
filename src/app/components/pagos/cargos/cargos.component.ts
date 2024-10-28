@@ -14,6 +14,8 @@ export class CargosComponent {
   showHeader: boolean = true;
   showHeaderC: boolean = false;
 
+  showEditModal = false;
+
   arr_cargo!: Cargo[]  | undefined;
   arr_filtered_cargo!: Cargo[]  | undefined;
   condicionNext = false
@@ -51,11 +53,9 @@ formEdit
 
 });
 
-ver(cupon:any){
-  this.cargo_seleccionada=cupon
-  
+ver(cargo:any){
+  this.cargo_seleccionada= cargo
 }
-
 
 limpiarForm(tipo: string) {
   if(tipo === 'crear') {

@@ -153,12 +153,12 @@
           />
           <i
             *ngIf="!existImageCrear"
-            class="rounded mx-auto d-block img-fluid w-50 bi bi-upload icono"
+            class="rounded mx-auto d-block img-fluid w-50 bi"
           ></i>
           
           <input
             #fileInput
-            class="w-100 centrar form-control"
+            class="w-30 centrar altura-custom form-control"
             [ngClass]="{
               'is-invalid': crearCategoria.get('imagen')?.hasError('image_error'),
               'is-valid': existImageCrear
@@ -196,7 +196,7 @@
                   : ''
               "
               id="inputNombre"
-              placeholder="Juan luis"
+              placeholder="Nombre categoria"
             />
             <div class="invalid-feedback">
               {{ getErrorMessage(crearCategoria, "nombre") }}
@@ -243,9 +243,9 @@
         class="custom-button float-right"
         (click)="
           establecerMensaje(
-            'Está seguro que desea crear la profesión?',
+            'Está seguro que desea crear la categoria?',
             'crear'
-          )
+          ); showHeader = true; showHeaderC= false ;
         "
       >
         Crear

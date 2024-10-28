@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 /* eslint-disable max-len */
 import { Injectable } from '@angular/core';
 import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut,  sendPasswordResetEmail } from '@angular/fire/auth';
+import { initializeApp } from 'firebase/app';
+import { firebaseConfig } from 'src/app/services/Firebase/firebase.config';
 
 @Injectable({
   providedIn: 'root'

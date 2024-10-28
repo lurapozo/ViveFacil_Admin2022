@@ -106,7 +106,26 @@ export class NotificacionesMasivasComponent {
           return 'Debe llenar este campo para establecer el título de la notificación';
         }
         return '';
-
+      case 'nombre':
+          if (itemControl.hasError('required')) {
+            return 'Debe llenar este campo para establecer el nombre de la notificación';
+          }
+          return '';
+      case 'frec':
+          if (itemControl.hasError('required')) {
+            return 'Debe llenar este campo para establecer la frec de la notificación';
+          }
+          return '';
+      case 'inicio':
+            if (itemControl.hasError('required')) {
+              return 'Debe llenar este campo para establecer el inicio de la notificación';
+            }
+            return '';
+      case 'fin':
+              if (itemControl.hasError('required')) {
+                return 'Debe llenar este campo para establecer fin de la notificación';
+              }
+              return '';
       case 'descripcion':
         if (itemControl.hasError('required')) {
           return 'Debe llenar este campo para establecer la descripción de la notificación';

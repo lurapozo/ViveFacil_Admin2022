@@ -54,6 +54,7 @@ export class NotificacionesAutomaticasComponent {
       this.arr_filtered_notificacion =  this.arr_noti;
       console.log("noti delete", this.arr_filtered_notificacion)
     });
+    
   }
   
   toggleEnabled() {

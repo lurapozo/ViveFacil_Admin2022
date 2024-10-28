@@ -443,6 +443,7 @@ tabindex="-1"
             <input
               type="date"
               id="start"
+              formControlName="inicio"
               [ngClass]="
                 isInvalidForm('inicio', 'crear')
                   ? 'is-invalid'
@@ -454,9 +455,11 @@ tabindex="-1"
               "
               required
               pattern="\d{4}-\d{2}-\d{2}"
-              formControlName="inicio"
               min="{{ getCurrentDate() }}"
             />
+            </div>
+            <div class="invalid-feedback">
+              {{ getErrorMessage(cuponCrear, "inicio") }}
             </div>
         </div>
 
@@ -516,7 +519,7 @@ tabindex="-1"
 </div>
 
 <!-------------------------------------------------------------------------------------------------------->
-<div
+<!--<div
 class="modal fade"
 id="modalInformacionProfesion"
 aria-hidden="true"
@@ -572,15 +575,6 @@ tabindex="-1"
         </div>
       </div>
 
-      <!-- <div class="row p-2 align-items-center">
-        <div class="col-5">
-          <h3 class="m-0 p-0 fw-bold">Categoria:</h3>
-        </div>
-        <div class="col-7">
-          {{ cupon_seleccionada?.tipo_categoria }}
-        </div>
-      </div> -->
-
       <div class="row p-2 align-items-center">
         <div class="col-5">
           <h3 class="m-0 p-0 fw-bold">Descuento:</h3>
@@ -623,7 +617,7 @@ tabindex="-1"
         </div>
       </div>
 
-      <!-- <div class="row p-2 align-items-center">
+     <div class="row p-2 align-items-center">
         <div class="col-5">
           <label for="switchEstado" class="form-check-label"
             ><h3 class="m-0 p-0 fw-bold">Habilitar/Deshabilitar:</h3></label
@@ -643,7 +637,7 @@ tabindex="-1"
             aria-describedby="switchEstadoFeedback"
           />
         </div>
-      </div> -->
+      </div> 
     </div>
     <div class="modal-footer">
       <button
@@ -670,9 +664,9 @@ tabindex="-1"
     </div>
   </div>
 </div>
-</div>
+</div>--->
 
-<div
+ <!-- <div
 class="modal fade"
 id="modalInformacionEdicionProfesion"
 aria-hidden="true"
@@ -688,7 +682,6 @@ tabindex="-1"
       >
         Edición de Cupones
       </h1>
-      <!-- (click)="limpiarForm('actualizar')" -->
       <button
         type="button"
         class="btn-close"
@@ -931,13 +924,12 @@ tabindex="-1"
       </button>
     </div>
 
-    <!-- <pre>
-      {{actualizarProfesionesForm.value | json}}
-    </pre> -->
   </div>
 </div>
-</div>
-<!-- Modal crear admi -->
+</div>-->
+<!-- Modal crear admi 
+
+
 <div
 class="modal fade"
 id="modalCrearProfesion"
@@ -954,7 +946,6 @@ tabindex="-1"
       >
         Crear Cupon
       </h1>
-      <!-- (click)="limpiarForm('crear')" -->
       <button
         type="button"
         class="btn-close"
@@ -964,7 +955,7 @@ tabindex="-1"
     </div>
     <div class="modal-body mb-0">
       <form [formGroup]="cuponCrear" class="">
-        <!-- Seccion de imagen -->
+
 
         <div class="row">
           <div class="col d-flex justify-content-center">
@@ -1170,47 +1161,6 @@ tabindex="-1"
           </div>
         </div>
 
-        <!-- <div class="row p-2 align-items-center">
-          <div class="col-5">
-            <label for="selectorServicioCrear" class="form-label"
-              ><h3 class="m-0 p-0 fw-bold">Categoria:</h3></label
-            >
-          </div>
-          <div class="col-7">
-            <select
-              class="form-select"
-              [ngClass]="
-                isInvalidForm('categoria', 'crear') ? 'is-invalid' : ''
-              "
-              formControlName="categoria"
-              class="form-control"
-              [ngClass]="
-                isInvalidForm('categoria', 'crear')
-                  ? 'is-invalid'
-                  : cuponCrear.get('categoria')?.touched ||
-                    (cuponCrear.get('categoria')?.dirty &&
-                      !cuponCrear.get('categoria')?.invalid)
-                  ? 'is-valid'
-                  : ''
-              "
-              aria-describedby="selectorServicioCrearFeedback"
-            >
-              <option selected disabled value="">
-                Elija una Categoria...
-              </option>
-              <option
-                *ngFor="let c of categoria"
-                [id]="c.nombre"
-                [value]="c.nombre"
-              >
-                {{ c.nombre }}
-              </option>
-            </select>
-            <div id="selectorServicioCrearFeedback" class="invalid-feedback">
-              {{ getErrorMessage(cuponCrear, "categoria") }}
-            </div>
-          </div>
-        </div> -->
 
         <div class="row p-2 align-items-center">
           <div class="col-5">
@@ -1290,12 +1240,9 @@ tabindex="-1"
       </button>
     </div>
 
-    <!-- <pre>
-        {{crearProfesionesForm.value | json}}
-      </pre> -->
   </div>
 </div>
-</div>
+</div>-->
 
 <!-- Modal de confirmacion (Alerta) -->
 <div

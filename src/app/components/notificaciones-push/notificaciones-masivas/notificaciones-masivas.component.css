@@ -18,9 +18,9 @@ p {
     margin-left: 50px;
     margin-top: 3px;
     margin-bottom: 3px;
-    max-height: 76vh;
+    max-height: 35vh;
     overflow-y: auto;
-    padding: 15px;
+    padding: 5px;
 }
 
 

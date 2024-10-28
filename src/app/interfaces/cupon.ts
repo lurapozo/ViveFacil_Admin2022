@@ -22,6 +22,7 @@ export interface CuponCrear {
   fecha_iniciacion: string;
   fecha_expiracion: string;
   participantes: string;
+  estado: boolean;
   puntos: number;
   foto?:File
   tipo_categoria: string;

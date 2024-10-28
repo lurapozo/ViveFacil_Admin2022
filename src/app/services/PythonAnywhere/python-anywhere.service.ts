@@ -34,8 +34,9 @@ import { PagosTarjetaUser } from 'src/app/interfaces/tarjeta';
 })
 export class PythonAnywhereService {
   API_URL = `https://tomesoft1.pythonanywhere.com`;
-  //API_URL = `https://127.0.0.1:8000`;
   administradores = 'https://tomesoft1.pythonanywhere.com/administradores';
+  //API_URL = `http://127.0.0.1:8000`;
+  //administradores = 'http://127.0.0.1:8000/administradores';
   private _refresh$ = new Subject<void>();
   constructor(private http: HttpClient) { }
 
@@ -1162,7 +1163,7 @@ obtener_politicas(){
 }
   */
   crear_cupon(bodyCrear: CuponCrear) {
-
+    console.log("service crear cupon")
     const dataCrear = new FormData();
     dataCrear.append("codigo", bodyCrear.codigo);
     bodyCrear.foto ? dataCrear.append("foto", bodyCrear.foto) : null;
@@ -1174,6 +1175,7 @@ obtener_politicas(){
     dataCrear.append("fecha_iniciacion", bodyCrear.fecha_iniciacion);
     dataCrear.append("fecha_expiracion", bodyCrear.fecha_expiracion);
     dataCrear.append("descripcion", bodyCrear.descripcion);
+    dataCrear.append("participantes", bodyCrear.participantes);
     return this.http.post(this.API_URL + '/cupones/', dataCrear);
   }
 
