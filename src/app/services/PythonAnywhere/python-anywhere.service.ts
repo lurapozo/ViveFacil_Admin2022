@@ -645,11 +645,11 @@ obtener_politicas(){
   }
 
   getSolicitantePythonAny(user: string): Observable<Array<Solicitante>> {
-    return this.http.get(`https://tomesoft1.pythonanywhere.com/solicitante/${user}`) as Observable<Array<Solicitante>>;
+    return this.http.get(`${this.API_URL}/solicitante/${user}`) as Observable<Array<Solicitante>>;
   }
 
   postRegistro(body: any) {
-    return this.http.post('https://tomesoft1.pythonanywhere.com/registro/', body);
+    return this.http.post(`${this.API_URL}/registro/`, body);
   }
   /**
    * Función que edita la información de un objeto ProveedorPendiente

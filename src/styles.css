@@ -8,6 +8,7 @@ body {
 body {
     margin: 0;
     background-color: aliceblue;
+    overflow-x:hidden;
 }
 
 * {
@@ -25,9 +26,10 @@ body {
     --vivefacil-celeste-secundario: #11becc;
 }
 
+/*
 ::-webkit-scrollbar {
     display: none;
-}
+}*/
 
 /*headers*/
 .header-admi1 {
@@ -216,8 +218,8 @@ mat-datepicker-toggle {
     overflow-x: auto;
 }
 
-.table-body{
-    max-height: 60vh; 
+.table-body {
+    max-height: 60vh;
     overflow-y: auto;
 }
 
@@ -244,7 +246,7 @@ th {
 
 .custom-table tbody tr:nth-child(odd) {
     background-color: #11c0cc6c;
-    transition: background-color 0.5s ease; 
+    transition: background-color 0.5s ease;
 }
 
 
@@ -361,4 +363,3 @@ input {
     border: none;
     transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
 }
-

@@ -526,11 +526,11 @@
               <div class="col-5">
                 <input
                 type="text"
-                formControlName="numeroCuenta"
+                formControlName="numero_cuenta"
                 class="form-control"
                 (keypress)="numberOnly($event)"
                 [ngClass]="
-                  isInvalidForm('numeroCuenta') ? 'is-invalid' : ''
+                  isInvalidForm('numero_cuenta') ? 'is-invalid' : ''
                 "
                 [placeholder]="proveedor_seleccionado?.numero_cuenta"
                 [value]="proveedor_seleccionado?.numero_cuenta"
@@ -555,7 +555,7 @@
                         formControlName="banco"
                         class="form-control"
                         [ngClass]="isInvalidForm('banco') ? 'is-invalid' : ''"
-                        [placeholder]="proveedor_seleccionado.banco"
+                        [placeholder]="proveedor_seleccionado?.banco"
                         [value]="proveedor_seleccionado?.banco"
                         [(ngModel)]="proveedor_seleccionado.banco"
                       />
@@ -618,9 +618,9 @@
                   [ngClass]="
                     isInvalidForm('ano_experiencia') ? 'is-invalid' : ''
                   "
-                  [placeholder]="proveedor_seleccionado?.ano_experiencia"
-                  [value]="proveedor_seleccionado?.ano_experiencia"
-                  [(ngModel)]="proveedor_seleccionado.ano_experiencia"
+                  [placeholder]="proveedor_seleccionado?.ano_profesion"
+                  [value]="proveedor_seleccionado?.ano_profesion"
+                  [(ngModel)]="proveedor_seleccionado.ano_profesion"
                 />
                 <div class="invalid-feedback">
                   {{ getErrorMessage(formEdit, "ano_experiencia") }}

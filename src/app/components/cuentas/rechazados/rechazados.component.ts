@@ -264,7 +264,7 @@ export class RechazadosComponent {
           return 'Debe llenar este campo';
         }
         return '';
-      case 'tipoCuenta':
+      case 'tipo_cuenta':
         if (itemControl.hasError('required')) {
           return 'Debe llenar este campo';
         }
@@ -619,8 +619,18 @@ export class RechazadosComponent {
     
     const archivoUrl = this.rechazados_seleccionada?.[tipo]; 
     
-    const extension = archivoUrl ? archivoUrl.split('.').pop() : 'pdf'; 
-  
+    let extension = 'pdf'; // Valor predeterminado
+
+    // Verificar si archivo es un objeto File o una URL/ruta
+    if (typeof archivoUrl === 'string') {
+      const partes = archivoUrl.split('.');
+      extension = partes.length > 1 ? partes.pop()?.toLowerCase() || 'pdf' : 'pdf';
+    } else if (archivo && archivo.name) {
+      const partes = archivo.name.split('.');
+      extension = partes.length > 1 ? partes.pop()?.toLowerCase() || 'pdf' : 'pdf';
+    }
+
+    console.log('Archivo recibido:', archivoUrl);
     if (!nombres || !apellidos) {
       return { nombreArchivo: 'archivo_descargado', archivo: null };
     }

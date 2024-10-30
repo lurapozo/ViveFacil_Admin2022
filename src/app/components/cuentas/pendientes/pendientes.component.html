@@ -389,11 +389,11 @@
             <div class="col-7">
               <a
                 href="https://tomesoft1.pythonanywhere.com{{
-                  getNombreArchivo('copiaCedula', pendiente_seleccionada?.documentsPendientes[0]?.document).nombreArchivo
+                  pendiente_seleccionada?.documentsPendientes[0]?.document
                 }}"
-                [download]="getNombreArchivo('copiaCedula', pendiente_seleccionada?.documentsPendientes[0]?.document).nombreArchivo">
+                [download]="getNombreArchivo('documentos', pendiente_seleccionada?.documentsPendientes[0]?.document).nombreArchivo">
                 <p style="color: black; font-size:12px">
-                    {{ getNombreArchivo('copiaCedula', pendiente_seleccionada?.documentsPendientes[0]?.document).nombreArchivo}}
+                    {{ getNombreArchivo('documentos', pendiente_seleccionada?.documentsPendientes[0]?.document).nombreArchivo}}
                   
                 </p>
               </a>
@@ -402,8 +402,8 @@
               accept="image/*,.pdf"
                 formControlName="documentos"
                 class="form-control"
-                [ngClass]="isInvalidForm('copiaLicencia') ? 'is-invalid' : ''"
-                (change)="loadFileFromDevice($event,'copiaLicencia')"
+                [ngClass]="isInvalidForm('documentos') ? 'is-invalid' : ''"
+                (change)="loadFileFromDevice($event,'curriculum')"
               />
               <div class="invalid-feedback">
                 {{ getErrorMessage(formEdit, "documentos") }}
@@ -647,13 +647,28 @@
         data-bs-toggle="modal"
         class="custom-button float-right"
         (click)="
-          isAceptar = true;
-          isNegar = false;
-          mensajeAlerta = 'Está seguro que desea aprobar la solicitud?'
+          establecerMensaje(
+              'Está seguro que desea actualizar la información?',
+              'aceptar'
+            );showHeader = true; showHeaderC= false ; showadmi = false;
+          
         "
       >
         Aprobar
       </button>
+      <button
+          data-bs-target="#modalConfirmacion2"
+          data-bs-toggle="modal"
+          class="custom-button3 float-right btn-success"
+          (click)="
+            establecerMensaje(
+              'Está seguro que desea actualizar la información?',
+              'actualizar'
+            );showHeader = true; showHeaderC= false ; showadmi = false;
+          "
+        >
+          Actualizar
+        </button>
 
       <button
       data-bs-target="#modalConfirmacion3"
@@ -663,7 +678,7 @@
         establecerMensaje(
           'Está seguro que desea Negar la información?',
           'negar'
-        )
+        ); showHeader = true; showHeaderC= false ; showadmi = false;
       "
     >
       Negar

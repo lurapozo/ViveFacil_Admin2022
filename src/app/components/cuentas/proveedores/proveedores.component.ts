@@ -70,12 +70,12 @@ export class ProveedoresComponent {
     direccion: new FormControl('', [Validators.required]),
     genero: new FormControl('', [Validators.required]),
     profesion: new FormControl('', [Validators.required]),
-    licencia: new FormControl('', [Validators.required]),
+    licencia: new FormControl(''),
     copiaCedula: new FormControl(this.filePDF),
-    TipoCuenta: new FormControl('', [Validators.required]),
-    numeroCuenta: new FormControl('', [Validators.required]),
+    tipo_cuenta: new FormControl('', [Validators.required]),
+    numero_cuenta: new FormControl('', [Validators.required]),
     banco: new FormControl('', [Validators.required]),
-    experiencia: new FormControl('', [Validators.required]),
+    ano_profesion: new FormControl('', [Validators.required]),
     copiaLicencia: new FormControl(this.filePDF2),
     descripcion: new FormControl(''),
     foto: new FormControl(this.fileImgPerfil),
@@ -166,7 +166,7 @@ export class ProveedoresComponent {
       licencia: this.proveedor_seleccionado.licencia,
       copiaLicencia: this.proveedor_seleccionado.copiaLicencia,
       profesion: this.proveedor_seleccionado.profesion,
-      ano_experiencia: this.proveedor_seleccionado.ano_experiencia,
+      ano_experiencia: this.proveedor_seleccionado.ano_profesion,
       banco: this.proveedor_seleccionado.banco,
       numero_cuenta: this.proveedor_seleccionado.numero_cuenta,
       tipo_cuenta: this.proveedor_seleccionado.tipo_cuenta,
@@ -242,12 +242,12 @@ export class ProveedoresComponent {
           return 'Debe llenar este campo';
         }
         return '';
-      case 'tipoCuenta':
+      case 'tipo_cuenta':
         if (itemControl.hasError('required')) {
           return 'Debe llenar este campo';
         }
         return '';
-      case 'numeroCuenta':
+      case 'numero_cuenta':
         if (itemControl.hasError('required')) {
           return 'Debe llenar este campo';
         }
@@ -284,11 +284,11 @@ export class ProveedoresComponent {
     const licencia = this.proveedor_seleccionado?.licencia;
     const copiaCedula = this.proveedor_seleccionado?.copiaCedula;
     const profesion = this.proveedor_seleccionado?.profesion;
-    const experiencia = this.proveedor_seleccionado?.user_datos.user_datos.ano_profesion;
+    const ano_experiencia = this.proveedor_seleccionado?.user_datos.ano_profesion;
     const banco = this.proveedor_seleccionado?.user_datos.banco;
-    const numeroCuenta = this.proveedor_seleccionado?.user_datos.numero_cuenta;
+    const numero_cuenta = this.proveedor_seleccionado?.user_datos.numero_cuenta;
     const copiaLicencia = this.proveedor_seleccionado?.copiaLicencia;
-    const tipoCuenta = this.proveedor_seleccionado?.user_datos.copiaLicencia;
+    const tipo_cuenta = this.proveedor_seleccionado?.tipo_cuenta;
     const documentos: any[] = this.proveedor_seleccionado?.user_datos.documentsPendientes;
     const descripcion = this.proveedor_seleccionado?.user_datos.descripcion;
     const foto = this.proveedor_seleccionado?.foto;
@@ -304,11 +304,11 @@ export class ProveedoresComponent {
     licencia ? this.formEdit.get('licencia')?.setValue(licencia) : this.formEdit.get('licencia')?.reset();
     copiaCedula ? this.formEdit.get('copiaCedula')?.setValue(copiaCedula) : this.formEdit.get('copiaCedula')?.reset();
     profesion ? this.formEdit.get('profesion')?.setValue(profesion) : this.formEdit.get('profesion')?.reset();
-    experiencia ? this.formEdit.get('experiencia')?.setValue(experiencia) : this.formEdit.get('experiencia')?.reset();
+    ano_experiencia ? this.formEdit.get('ano_experiencia')?.setValue(ano_experiencia) : this.formEdit.get('ano_experiencia')?.reset();
     banco ? this.formEdit.get('banco')?.setValue(banco) : this.formEdit.get('banco')?.reset();
-    numeroCuenta ? this.formEdit.get('numeroCuenta')?.setValue(numeroCuenta) : this.formEdit.get('numeroCuenta')?.reset();
+    numero_cuenta ? this.formEdit.get('numero_cuenta')?.setValue(numero_cuenta) : this.formEdit.get('numero_Cuenta')?.reset();
     copiaLicencia ? this.formEdit.get('copiaLicencia')?.setValue(copiaLicencia) : this.formEdit.get('copiaLicencia')?.reset();
-    tipoCuenta ? this.formEdit.get('tipoCuenta')?.setValue(tipoCuenta) : this.formEdit.get('tipoCuenta')?.reset();
+    tipo_cuenta ? this.formEdit.get('tipo_cuenta')?.setValue(tipo_cuenta) : this.formEdit.get('tipo_cuenta')?.reset();
     documentos ? this.formEdit.get('documentos')?.setValue(documentos) : this.formEdit.get('documentos')?.reset();
     descripcion ? this.formEdit.get('descripcion')?.setValue(descripcion) : this.formEdit.get('descripcion')?.reset();
     foto ? this.formEdit.get('foto')?.setValue(foto) : this.formEdit.get('foto')?.reset();
@@ -330,15 +330,15 @@ export class ProveedoresComponent {
       descripcion: this.formEdit.value.descripcion,
       licencia: this.formEdit.value.licencia,
       profesion: this.formEdit.value.profesion,
-      ano_experiencia: this.formEdit.value.ano_experiencia,
+      ano_experiencia: this.formEdit.value.ano_profesion,
       banco: this.formEdit.value.banco,
       numero_cuenta: this.formEdit.value.numero_cuenta,
       tipo_cuenta: this.formEdit.value.tipo_cuenta,
       foto: this.fileImgPerfil,
       //planilla_servicios: this.formEdit.value.planilla_servicios
-      filesDocuments: [this.filePDF3],
-      copiaLicencia: this.filePDF2,
-      copiaCedula: this.filePDF1,
+      filesDocuments: [this.filePDF3 || this.fileImgPerfil3],
+      copiaLicencia: this.filePDF2 || this.fileImgPerfil2,
+      copiaCedula: this.filePDF1 || this.fileImgPerfil1,
     }
     const id = this.proveedor_seleccionado.id
 
@@ -679,16 +679,6 @@ export class ProveedoresComponent {
   edit_prov(a: any) {
     this.showHeader = false;
     this.showHeaderC = true;
-    this.proveedor_seleccionado = a;
-
-    this.copiaCedulaNombre = this.proveedor_seleccionado?.copiaCedula.substring(
-      this.proveedor_seleccionado?.copiaCedula.lastIndexOf('/') + 1
-    );
-    this.copiaLicenciaNombre = this.proveedor_seleccionado?.copiaLicencia.substring(
-      this.proveedor_seleccionado?.copiaLicencia.lastIndexOf('/') + 1
-    );
-    this.copiaDocumentosNombre = this.proveedor_seleccionado?.documentsPendientes[0]?.document.substring(
-      this.proveedor_seleccionado?.documentsPendientes[0]?.document.lastIndexOf('/') + 1
-    );
+    this.proveedor_seleccionado = a;    
   }
 }

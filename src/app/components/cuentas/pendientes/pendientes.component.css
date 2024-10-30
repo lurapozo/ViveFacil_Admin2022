@@ -337,6 +337,21 @@
     margin-bottom: 20px;
     margin-right: 20px;
   }
+
+  .custom-button3{
+    background-color: rgb(6, 84, 34) ;
+    color:#ffffff;
+    border: 1px solid rgb(6, 84, 34) ;
+    border-radius: 8px;
+    padding: 12px 24px;
+    width: 150px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-bottom: 20px;
+    margin-right: 20px;
+  }
   
   .custom-button:hover {
     background-color: #6b60a8;

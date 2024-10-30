@@ -19,6 +19,7 @@ export class MainComponent {
   arr_admi: any[] = [];
   datos!: any[];
   correoUsuario: string | null = '';
+  user: any;
 
   constructor(private userService: UserService, private pythonAnywhereService: PythonAnywhereService, private router: Router) {
     this.pythonAnywhereService.obtener_administradores().subscribe(resp => {
@@ -31,6 +32,18 @@ export class MainComponent {
   ngOnInit() {
     this.correoUsuario = this.userService.correoUsuario;
     console.log("Usuario: ", this.correoUsuario)
+    this.checkUserAuthentication();
+  }
+
+  checkUserAuthentication() {
+    const savedUser = localStorage.getItem('user'); 
+
+    if (savedUser) {
+      this.user = JSON.parse(savedUser); 
+      console.log('Nombre del usuario:', savedUser); 
+    } else {
+      this.router.navigate(['/login']);
+    }
   }
 
   getUsername(email: string | null): { nombre: string; apellido: string } {

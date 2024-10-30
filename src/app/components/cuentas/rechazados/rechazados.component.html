@@ -390,11 +390,11 @@
               <div class="col-7">
                 <a
                   href="https://tomesoft1.pythonanywhere.com{{
-                    getNombreArchivo('copiaCedula', rechazados_seleccionada?.documentsPendientes[0]?.document).nombreArchivo
+                    rechazados_seleccionada?.documentsPendientes[0]?.document
                   }}"
-                  [download]="getNombreArchivo('copiaCedula', rechazados_seleccionada?.documentsPendientes[0]?.document).nombreArchivo">
+                  [download]="getNombreArchivo('documentos', rechazados_seleccionada?.documentsPendientes[0]?.document).nombreArchivo">
                   <p style="color: black; font-size:12px">
-                      {{ getNombreArchivo('copiaCedula', rechazados_seleccionada?.documentsPendientes[0]?.document).nombreArchivo}}
+                      {{ getNombreArchivo('documentos', rechazados_seleccionada?.documentsPendientes[0]?.document).nombreArchivo}}
                     
                   </p>
                 </a>
@@ -501,18 +501,18 @@
               <div class="col-5">
                 <input
                 type="text"
-                formControlName="numero_cuenta"
+                formControlName="numeroCuenta"
                 class="form-control"
                 (keypress)="numberOnly($event)"
                 [ngClass]="
-                  isInvalidForm('numero_cuenta') ? 'is-invalid' : ''
+                  isInvalidForm('numeroCuenta') ? 'is-invalid' : ''
                 "
                 [placeholder]="rechazados_seleccionada?.numero_cuenta"
                 [value]="rechazados_seleccionada?.numero_cuenta"
                 [(ngModel)]="rechazados_seleccionada.numero_cuenta">
               
               <div class="invalid-feedback">
-                {{ getErrorMessage(formEdit, "numero_cuenta") }}
+                {{ getErrorMessage(formEdit, "numeroCuenta") }}
               </div>
               </div>
             </div>
@@ -588,17 +588,17 @@
               <div class="col-7">
                 <input
                   type="number"
-                  formControlName="ano_experiencia"
+                  formControlName="experiencia"
                   class="form-control"
                   [ngClass]="
-                    isInvalidForm('ano_experiencia') ? 'is-invalid' : ''
+                    isInvalidForm('experiencia') ? 'is-invalid' : ''
                   "
                   [placeholder]="rechazados_seleccionada?.ano_experiencia"
                   [value]="rechazados_seleccionada?.ano_experiencia"
                   [(ngModel)]="rechazados_seleccionada.ano_experiencia">
                 
                 <div class="invalid-feedback">
-                  {{ getErrorMessage(formEdit, "ano_experiencia") }}
+                  {{ getErrorMessage(formEdit, "experiencia") }}
                 </div>
               </div>
             </div>
@@ -666,7 +666,7 @@
           data-bs-toggle="modal"
           class="custom-button float-right"
           (click)="establecerMensaje('Está seguro que desea devolver esta
-          solicitud a la lista de pendientes?', 'aceptar')">Pendiente</button>
+          solicitud a la lista de pendientes?', 'aceptar') ; showHeader = true; showHeaderC= false ; showadmi = false;">Pendiente</button>
 
 
           <button

@@ -55,7 +55,7 @@
               <img src="assets/imagenes/02.png" alt="user" class="profile-pic">
           </div>
           <div class="user-info">
-              <p> {{ getUsername(correoUsuario).nombre }} {{ getUsername(correoUsuario).apellido }} </p>
+              <p> {{ getUsername(user.email).nombre }} {{ getUsername(user.email).apellido }}</p>
               <p class="role">ADMINISTRADORA</p>
           </div>
       </div>
@@ -313,7 +313,7 @@
               <div class="image-container">
                   <img src="assets/imagenes/02.png"class="card-img-top img mb-3 rounded-circle custom-border" alt="...">
               </div>
-              <h2 class="name">  {{ getUsername(correoUsuario).nombre }} {{ getUsername(correoUsuario).apellido }} </h2>
+              <h2 class="name">  {{ getUsername(user.email).nombre }} {{ getUsername(user.email).apellido }}</h2>
               <p>
                 Para comenzar a utilizar la plataforma, <br>seleccione alguna opción del menú que se encuentra al lado izquierdo.
               </p>

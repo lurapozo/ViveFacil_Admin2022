@@ -79,7 +79,7 @@ export class PendientesComponent{
     direccion: new FormControl('', [Validators.required]),
     genero: new FormControl('', [Validators.required]),
     profesion: new FormControl('', [Validators.required]),
-    licencia: new FormControl('', [Validators.required]),
+    licencia: new FormControl('',),
     copiaCedula: new FormControl(this.filePDF1 || this.fileImgPerfil1),
     tipo_cuenta: new FormControl('', [Validators.required]),
     numero_cuenta: new FormControl('', [Validators.required]),
@@ -605,10 +605,11 @@ export class PendientesComponent{
           if (this.pendiente_seleccionada.copiaLicencia != null && this.pendiente_seleccionada.copiaLicencia != "") {
             dataRegisto.append('copiaLicencia', this.pendiente_seleccionada.copiaLicencia);
           } else {
-            this.mensajeIncompleto.push("copia de licencia")
+            dataRegisto.append('copiaLicencia', "sin licencia");
+            /*this.mensajeIncompleto.push("copia de licencia")
 
             console.log("ERROR EN copiaLicencia")
-            validator = 1;
+            validator = 1;*/
           }
           if (this.pendiente_seleccionada.descripcion != null && this.pendiente_seleccionada.descripcion != "") {
             dataRegisto.append('descripcion', this.pendiente_seleccionada.descripcion);
@@ -815,7 +816,7 @@ export class PendientesComponent{
     const banco = this.pendiente_seleccionada?.banco;
     const numero_cuenta = this.pendiente_seleccionada?.numero_cuenta;
     const copiaLicencia = this.pendiente_seleccionada?.copiaLicencia;
-    const tipo_cuenta = this.pendiente_seleccionada?.copiaLicencia;
+    const tipo_cuenta = this.pendiente_seleccionada?.tipo_cuenta;
     const documentos: any[] = this.pendiente_seleccionada?.documentsPendientes;
     const descripcion = this.pendiente_seleccionada?.descripcion;
     const foto = this.pendiente_seleccionada?.foto;
