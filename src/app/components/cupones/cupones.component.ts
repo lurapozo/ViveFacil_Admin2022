@@ -13,13 +13,13 @@ import { BodyCrearSubCategoria, BodyResponseCrearSubCategoria, SubCategoria } fr
   styleUrls: ['./cupones.component.css']
 })
 export class CuponesComponent {
-  fechaInicio: Date | null = null; 
-  fechaFin: Date | null = null; 
+  fechaInicio: Date | null = null;
+  fechaFin: Date | null = null;
   fechasFiltradas: any[] = [];
-  participante = ['Solicitante','Proveedor']
-  codigo=Math.random().toString(36).substr(2, 6);
-  arr_cupon!: Cupon[] |  [];
-  arr_filtered_cupon!: any | undefined;
+  participante = ['Solicitante', 'Proveedor']
+  codigo = Math.random().toString(36).substr(2, 6);
+  arr_cupon!: Cupon[] | [];
+  arr_filtered_cupon!: Cupon[] | [];
   condicionNext = false
   currentPage = 1
   pageNumber: number[] = [];
@@ -45,16 +45,17 @@ export class CuponesComponent {
     this.pythonAnywhereService.obtener_cupones().subscribe(resp => {
       this.arr_cupon = Object(resp)
       this.arr_filtered_cupon = this.arr_cupon
-      console.log("aaaaa")
+      console.log("Lista Cupones")
       console.log(this.arr_filtered_cupon)
       console.log(resp)
     });
-    this.pythonAnywhereService.obtener_servicios().subscribe((resp: any[]) => {
+
+    /*this.pythonAnywhereService.obtener_servicios().subscribe((resp: any[]) => {
       this.categoria = resp
       console.log("cat",resp)
-    })
+    })*/
 
-    this.pythonAnywhereService.obtener_categorias().subscribe((resp: any[]) => {
+    /*this.pythonAnywhereService.obtener_categorias().subscribe((resp: any[]) => {
       this.listCategorias = resp
       if(this.listCategorias.length>0){
         this.primeraCat=this.listCategorias[0].nombre
@@ -64,6 +65,9 @@ export class CuponesComponent {
       
       console.log("list sub",resp)
 
+    })*/
+    this.pythonAnywhereService.obtener_categorias().subscribe((resp: any[]) => {
+      this.categoria = resp
     })
 
     const imagenCrearControl = this.cuponCrear.get('imagen') as FormControl;
@@ -72,7 +76,7 @@ export class CuponesComponent {
     imagenActualizarControl.addValidators(this.createImageValidator(this.formEdit.get('imagen') as AbstractControl, 'actualizar'));
   }
 
-  
+
   cuponCrear: FormGroup = new FormGroup({
     titulo: new FormControl('', [Validators.required]),
     codigo: new FormControl('', [Validators.required]),
@@ -81,13 +85,13 @@ export class CuponesComponent {
     Validators.maxLength(2), Validators.pattern(/^[0-9]+$/)]),
     cantidad: new FormControl('', [Validators.required, Validators.minLength(1),
     Validators.maxLength(2), Validators.pattern(/^[0-9]+$/)]),
-    inicio:new FormControl('', [Validators.required]),
+    inicio: new FormControl('', [Validators.required]),
     fin: new FormControl('', [Validators.required]),
     punto: new FormControl('10', [Validators.required, Validators.minLength(1),
     Validators.maxLength(2), Validators.pattern(/^[0-9]+$/)]),
     imagen: new FormControl(this.fileImagenActualizar),
-    categoria:new FormControl('', [Validators.required]),
-    participante:new FormControl('', [Validators.required]),
+    categoria: new FormControl('', [Validators.required]),
+    participantes: new FormControl('', [Validators.required]),
 
 
   });
@@ -105,24 +109,38 @@ export class CuponesComponent {
     Validators.maxLength(2), Validators.pattern(/^[0-9]+$/)]),
     imagen: new FormControl(this.fileImagenActualizar),
     categoria: new FormControl('Automotriz'),
-    participante:new FormControl('', [Validators.required]),
+    participantes: new FormControl('', [Validators.required]),
 
   });
 
   cambiarEstado(event: any) {
     let estado = event.srcElement.checked
-    if (this.cupon_seleccionada.cupon) {
-      this.pythonAnywhereService.cambio_cupon_estado(this.cupon_seleccionada.cupon.id, estado).subscribe(resp => {
-        this.mostrarToastInfo('Estado de la Insignia ', 'Insignia editada correctamente', false);
-       });
+    const id = this.cupon_seleccionada.id
+    console.log("cambiar estado")
+    if (this.cupon_seleccionada) {
+      this.pythonAnywhereService.cambio_cupon_estado(id, estado).subscribe({
+        next: (resp) => {
+          this.mostrarToastInfo('Estado de la Insignia', 'Insignia editada correctamente', false);
+          this.actualizarCup();
+        },
+        error: (err) => {
+          console.error("Error al cambiar el estado:", err);
+          this.mostrarToastInfo('Error', 'No se pudo cambiar el estado', true);
+        }
+      });
     }
+  }
 
-
+  actualizarCup() {
+    this.pythonAnywhereService.obtener_cupones().subscribe(resp => {
+      this.arr_cupon = Object(resp)
+      this.arr_filtered_cupon = this.arr_cupon
+    });
   }
 
   abrirSelectorArchivo(event: Event, fileInput: HTMLInputElement): void {
-    event.stopPropagation();  
-    fileInput.click();  
+    event.stopPropagation();
+    fileInput.click();
   }
 
   ver(cupon: any) {
@@ -138,7 +156,7 @@ export class CuponesComponent {
   }
 
   limpiarForm(tipo: string) {
-    this.codigo=Math.random().toString(36).substr(2, 6);
+    this.codigo = Math.random().toString(36).substr(2, 6);
     if (tipo === 'crear') {
       this.existImageCrear = false;
       this.cuponCrear.get('titulo')?.reset();
@@ -157,14 +175,14 @@ export class CuponesComponent {
 
     } else if (tipo === 'actualizar') {
 
-      const titulo = this.cupon_seleccionada?.cupon.titulo;
-      const descripcion = this.cupon_seleccionada?.cupon.descripcion;
-      const descuento = this.cupon_seleccionada?.cupon.porcentaje;
-      const cantidad = this.cupon_seleccionada?.cupon.cantidad;
-      const punto = this.cupon_seleccionada?.cupon.puntos;
+      const titulo = this.cupon_seleccionada?.titulo;
+      const descripcion = this.cupon_seleccionada?.descripcion;
+      const descuento = this.cupon_seleccionada?.porcentaje;
+      const cantidad = this.cupon_seleccionada?.cantidad;
+      const punto = this.cupon_seleccionada?.puntos;
       const categoria = 'Automotriz';
-      const inicio = this.cupon_seleccionada?.cupon.fecha_iniciacion;
-      const fin = this.cupon_seleccionada?.cupon.fecha_expiracion;
+      const inicio = this.cupon_seleccionada?.fecha_iniciacion;
+      const fin = this.cupon_seleccionada?.fecha_expiracion;
 
 
       this.existImageActualizar = false;
@@ -185,18 +203,6 @@ export class CuponesComponent {
 
 
   getErrorMessage(formGroup: FormGroup, item: string): string {
-    console.log('Estado del formulario:', this.cuponCrear.valid ? 'Válido' : 'Inválido');
-  console.log('Errores del formulario:', this.cuponCrear.errors);
-
-  // Revisa cada campo para ver cuál está inválido
-  Object.keys(this.cuponCrear.controls).forEach((key) => {
-    const controlErrors = this.cuponCrear.get(key)?.errors;
-    if (controlErrors) {
-      console.log(`Campo inválido: ${key}`, controlErrors);
-    }
-  });
-
-
     const itemControl: FormControl = formGroup.get(item) as FormControl;
     switch (item) {
       case 'imagen':
@@ -210,10 +216,10 @@ export class CuponesComponent {
           return 'El campo Titulo es requerido';
         }
         return '';
-      
-        case 'participante':
+
+      case 'participantes':
         if (itemControl.hasError('required')) {
-          return 'El campo Participante es requerido';
+          return 'El campo participantes es requerido';
         }
         return '';
 
@@ -278,7 +284,6 @@ export class CuponesComponent {
 
 
       default:
-        console.log("error")
         return '';
     }
   }
@@ -421,7 +426,7 @@ export class CuponesComponent {
     const descripcion = this.cuponCrear.get('descripcion')?.value;
     const inicio = this.cuponCrear.get('inicio')?.value;
     const fin = this.cuponCrear.get('fin')?.value;
-    const participantes = this.cuponCrear.get('participante')?.value;
+    const participantes = this.cuponCrear.get('participantes')?.value;
     const cantidad = this.cuponCrear.get('cantidad')?.value;
     const puntos = 10;
     const categoria = this.cuponCrear.get('categoria')?.value;
@@ -442,7 +447,7 @@ export class CuponesComponent {
       cupon.tipo_categoria = categoria
       cupon.participantes = participantes
       cupon.estado = true;
-      
+
       if (foto && this.existImageCrear) {
 
         cupon.foto = foto;
@@ -451,8 +456,8 @@ export class CuponesComponent {
 
       }
       this.pythonAnywhereService.crear_cupon(cupon).subscribe(resp => {
-        console.log("Cupon",cupon)
-        this.limpiarForm('crear');
+        console.log("Cupon", cupon)
+        //this.limpiarForm('crear');
         this.mostrarToastInfo('Estado del Cupon ', 'Cupon Creado correctamente', false);
         this.pythonAnywhereService.obtener_cupones().subscribe(resp => {
           this.arr_cupon = Object(resp)
@@ -548,15 +553,15 @@ export class CuponesComponent {
     console.log('Escribe en el buscador: ', texto)
     this.arr_filtered_cupon = this.arr_cupon;
     if (texto && texto.trim() !== '') {
-      this.arr_filtered_cupon = this.arr_filtered_cupon?.filter((solicitud:any) => {
+      this.arr_filtered_cupon = this.arr_filtered_cupon?.filter((solicitud: any) => {
         return solicitud.titulo.toLowerCase().includes(texto.toLowerCase())
       });
     }
   }
 
   onDelete() {
-    if (this.cupon_seleccionada.cupon) {
-      this.pythonAnywhereService.eliminar_cupon(this.cupon_seleccionada.cupon.id).subscribe(resp => {
+    if (this.cupon_seleccionada) {
+      this.pythonAnywhereService.eliminar_cupon(this.cupon_seleccionada.id).subscribe(resp => {
         this.mostrarToastInfo('Estado del Cupon ', 'Cupon Eliminado correctamente', false)
         this.pythonAnywhereService.obtener_cupones().subscribe(resp => {
           this.arr_cupon = Object(resp)
@@ -565,7 +570,7 @@ export class CuponesComponent {
 
         });
       }
-        )
+      )
     }
 
   }
@@ -590,9 +595,9 @@ export class CuponesComponent {
       const fechaInicio = new Date(this.fechaInicio);
       const fechaFin = new Date(this.fechaFin);
 
-      this.arr_filtered_cupon= this.arr_cupon.filter(a => {
-        const fechaIni= new Date(a.fecha_iniciacion);
-        const fechaIFni= new Date(a.fecha_expiracion);
+      this.arr_filtered_cupon = this.arr_cupon.filter(a => {
+        const fechaIni = new Date(a.fecha_iniciacion);
+        const fechaIFni = new Date(a.fecha_expiracion);
         if (this.fechaInicio && this.fechaFin) {
           return fechaInicio >= fechaInicio && fechaIFni <= fechaFin;
         }
@@ -607,6 +612,6 @@ export class CuponesComponent {
 
   seleccionarOpcion(opcion: string) {
     console.log('Opción seleccionada:', opcion);
-    this.dropdownOpen = false; 
+    this.dropdownOpen = false;
   }
 }

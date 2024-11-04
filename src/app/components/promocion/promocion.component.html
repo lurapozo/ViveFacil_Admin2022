@@ -102,9 +102,10 @@
 
 <div class="contenedor-categorias">
   <div class="categoria"  (click)="ver(item)"
-  *ngFor="let item of arr_filtered_promocion"
-        href="#modalInformacionEdicionProfesion"
-        role="button"
+      *ngFor="let item of arr_filtered_promocion"
+      data-bs-toggle="modal"
+      href="#modalInformacionProfesion"
+      role="button"
         >
     <div class="item-imagen">
       <img [src]="item.foto ? 'https://tomesoft1.pythonanywhere.com' + item.foto : '../../../assets/imagenes/ProfesionDefault.png'" class="imagen" alt="Imagen" />
@@ -201,7 +202,7 @@ tabindex="-1"
         class="modal-title fs-5 m-0 p-0 fw-bold"
         id="modalInformacionProfesionLabel"
       >
-        Información de cupones
+        Información Promocion
       </h1>
       <button
         type="button"
@@ -219,7 +220,7 @@ tabindex="-1"
                 ? 'https://tomesoft1.pythonanywhere.com' + promocion_seleccionada?.foto
                 : 'assets/imagenes/ProfesionDefault.png'
             "
-            class="rounded mx-auto d-block img-fluid w-50 image_modal"
+            class="rounded mx-auto d-block img-fluid custom-width image_modal"
             alt="..."
           />
         </div>
@@ -326,7 +327,7 @@ tabindex="-1"
         (click)="
           establecerMensaje(
             'Está seguro que desea eliminar la
-        profesión?',
+        promoción?',
             'eliminar'
           )
         "
@@ -361,7 +362,7 @@ tabindex="-1"
         id="modalInformacionEdicionProfesionLabel"
         style="color: #0ea3b7;"
       >
-        Edición de Cupones
+        Edición de Promocion
       </h1>
       <!-- (click)="limpiarForm('actualizar')" -->
       <button
@@ -377,24 +378,35 @@ tabindex="-1"
           <div class="col d-flex justify-content-center">
             <img
               *ngIf="existImageActualizar"
-              class="image_modal rounded mx-auto d-block img-fluid w-50"
+              class="image_modal rounded mx-auto d-block img-fluid custom-width"
               [src]="imagenActualizar"
               alt="Archivo incorrecto"
             />
             <img
               *ngIf="!existImageActualizar && promocion_seleccionada?.foto"
-              class="image_modal rounded mx-auto d-block img-fluid w-50"
+              class="image_modal rounded mx-auto d-block img-fluid custom-width"
               [src]="'https://tomesoft1.pythonanywhere.com' + promocion_seleccionada?.foto"
               alt="Archivo incorrecto"
             />
             <i
               *ngIf="!existImageActualizar && !promocion_seleccionada?.foto"
-              class="rounded mx-auto d-block img-fluid w-50 bi bi-upload icono"
+              class="rounded mx-auto d-block img-fluid custom-width bi bi-upload icono"
             ></i>
           </div>
           <div class="p-2">
+            <div class="form-field">
+              <button class="admin-button1"
+                  type="button"
+                   (click)="abrirSelectorArchivo($event, fileInput1)">
+                                 
+              <span class="material-icons">description</span> 
+              SELECCIONAR ARCHIVO
+              <span class="material-icons">add_circle</span> 
+              </button>
+          </div>
             <input
-              class="w-100 centrar form-control"
+              #fileInput1
+              class="w-80 centrar form-control admin-button"
               [ngClass]="
                 formEdit.get('imagen')?.hasError('image_error')
                   ? 'is-invalid'
@@ -406,6 +418,7 @@ tabindex="-1"
               id="file_input"
               accept="image/png, image/jpeg"
               (change)="loadImageFromDevice($event, 'actualizar')"
+              style="display: none;"
             />
             <div class="invalid-feedback">
               {{ getErrorMessage(formEdit, "imagen") }}
@@ -715,7 +728,7 @@ tabindex="-1"
             >
             <img
               *ngIf="existImageCrear"
-              class="rounded mx-auto d-block img-fluid w-50 image_modal"
+              class="rounded mx-auto d-block img-fluid custom-width image_modal"
               [src]="imagenCrear"
               alt="Archivo
               incorrecto"
@@ -1025,7 +1038,7 @@ tabindex="-1"
         class="custom-button3"
         (click)="
           establecerMensaje(
-            'Está seguro que desea crear la promoción',
+            'Está seguro que desea crear la promoción?',
             'crear'
           )
         "

@@ -90,6 +90,8 @@
             <tr
               (click)="ver(a);"
               *ngFor="let a of arr_filtered_soli"
+              data-bs-toggle="modal"
+              href="#modalInformacionProfesion"
               role="button"
             >
               <td style="color: #40378b; text-transform: uppercase"> <strong> {{ a.user_datos.nombres }} {{ a.user_datos.apellidos }}</strong></td>
@@ -380,6 +382,7 @@
         <h1
           class="modal-title fs-5 m-0 p-0 fw-bold"
           id="modalInformacionProfesionLabel"
+          style="color: #0ea3b7;"
         >
           Información de Administradores
         </h1>
@@ -492,8 +495,7 @@
       <div class="modal-footer">
         <button
           class="btn btn-danger"
-          data-bs-target="#modalConfirmacion"
-          data-bs-toggle="modal"
+          data-bs-dismiss="modal"
         >
           Cerrar
         </button>

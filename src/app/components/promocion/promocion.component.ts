@@ -56,8 +56,6 @@ export class PromocionComponent {
     });
     this.pythonAnywhereService.obtener_categorias().subscribe((resp:any[])=>{
      this.categoria=resp
-     
-  
     })
 
     const imagenCrearControl = this.promocionCrear.get('imagen') as FormControl;

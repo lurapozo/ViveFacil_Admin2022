@@ -102,19 +102,19 @@
       <div class="item-imagen">
         <img
         [src]="
-          a.cupon.foto
+          a.foto
             ? 'https://tomesoft1.pythonanywhere.com' + a.foto
             : 'assets/imagenes/ProfesionDefault.png'
         "
-        class="rounded mx-auto d-block img-fluid img_profesion"
+        class="imagen"
         alt="..."
       />
       </div>
-      <div class="item-nombre">{{ a.cupon.codigo }}</div>
-      <div class="item-descripcion">{{ a.cupon.titulo }}</div>
-      <div class="item-descripcion">{{ a.cupon.cantidad }}</div>
-      <div class="item-descripcion">{{ a.cupon.fecha_iniciacion | date : "d/M/Y"}}</div>
-      <div class="item-descripcion">{{ a.cupon.fecha_expiracion | date : "d/M/Y"}}</div>
+      <div class="item-nombre">{{ a.codigo }}</div>
+      <div class="item-descripcion">{{ a.titulo }}</div>
+      <div class="item-descripcion">{{ a.cantidad }}</div>
+      <div class="item-descripcion">{{ a.fecha_iniciacion | date : "d/M/Y"}}</div>
+      <div class="item-descripcion">{{ a.fecha_expiracion | date : "d/M/Y"}}</div>
       <div class="item-estado d-flex align-items-center">
         <span
               *ngIf="a.estado"
@@ -192,7 +192,7 @@ tabindex="-1"
             >
             <img
               *ngIf="existImageCrear"
-              class="rounded mx-auto d-block img-fluid w-50 image_modal"
+              class="rounded mx-auto d-block img-fluid custom-width image_modal"
               [src]="imagenCrear"
               alt="Archivo
               incorrecto"
@@ -360,16 +360,16 @@ tabindex="-1"
               <select
                 class="form-select"
                 [ngClass]="
-                  isInvalidForm('participante', 'crear') ? 'is-invalid' : ''
+                  isInvalidForm('participantes', 'crear') ? 'is-invalid' : ''
                 "
-                formControlName="participante"
+                formControlName="participantes"
                 class="form-control"
                 [ngClass]="
-                  isInvalidForm('participante', 'crear')
+                  isInvalidForm('participantes', 'crear')
                     ? 'is-invalid'
-                    : cuponCrear.get('participante')?.touched ||
-                      (cuponCrear.get('participante')?.dirty &&
-                        !cuponCrear.get('participante')?.invalid)
+                    : cuponCrear.get('participantes')?.touched ||
+                      (cuponCrear.get('participantes')?.dirty &&
+                        !cuponCrear.get('participantes')?.invalid)
                     ? 'is-valid'
                     : ''
                 "
@@ -383,7 +383,7 @@ tabindex="-1"
                 </option>
               </select>
               <div class="invalid-feedback">
-                {{ getErrorMessage(cuponCrear, "participante") }}
+                {{ getErrorMessage(cuponCrear, "participantes") }}
               </div>
             </div>
           </div> 
@@ -505,7 +505,7 @@ tabindex="-1"
         class="custom-button3"
         (click)="
           establecerMensaje(
-            'Está seguro que desea crear la promoción',
+            'Está seguro que desea crear el cupon?',
             'crear'
           )
         "
@@ -519,7 +519,7 @@ tabindex="-1"
 </div>
 
 <!-------------------------------------------------------------------------------------------------------->
-<!--<div
+<div
 class="modal fade"
 id="modalInformacionProfesion"
 aria-hidden="true"
@@ -547,7 +547,7 @@ tabindex="-1"
         <div class="row p-2">
           <img
             [src]="
-              cupon_seleccionada?.cupon.foto
+              cupon_seleccionada?.foto
                 ? 'https://tomesoft1.pythonanywhere.com' + cupon_seleccionada?.foto
                 : 'assets/imagenes/ProfesionDefault.png'
             "
@@ -562,7 +562,7 @@ tabindex="-1"
           <h3 class="m-0 p-0 fw-bold">Titulo:</h3>
         </div>
         <div class="col-7">
-          {{ cupon_seleccionada?.cupon.titulo }}
+          {{ cupon_seleccionada?.titulo }}
         </div>
       </div>
 
@@ -571,7 +571,7 @@ tabindex="-1"
           <h3 class="m-0 p-0 fw-bold">Codigo:</h3>
         </div>
         <div class="col-7">
-          {{ cupon_seleccionada?.cupon.codigo }}
+          {{ cupon_seleccionada?.codigo }}
         </div>
       </div>
 
@@ -580,7 +580,7 @@ tabindex="-1"
           <h3 class="m-0 p-0 fw-bold">Descuento:</h3>
         </div>
         <div class="col-7">
-          {{ cupon_seleccionada?.cupon.porcentaje }}
+          {{ cupon_seleccionada?.porcentaje }}
         </div>
       </div>
 
@@ -589,7 +589,7 @@ tabindex="-1"
           <h3 class="m-0 p-0 fw-bold">Cantidad</h3>
         </div>
         <div class="col-7">
-          {{ cupon_seleccionada?.cupon.cantidad }}
+          {{ cupon_seleccionada?.cantidad }}
         </div>
       </div>
 
@@ -599,7 +599,7 @@ tabindex="-1"
         </div>
         <div class="col-7">
           {{
-            cupon_seleccionada?.cupon.fecha_iniciacion
+            cupon_seleccionada?.fecha_iniciacion
               | date : " MMM d, y, h:mm:ss a"
           }}
         </div>
@@ -611,7 +611,7 @@ tabindex="-1"
         </div>
         <div class="col-7">
           {{
-            cupon_seleccionada?.cupon.fecha_iniciacion
+            cupon_seleccionada?.fecha_iniciacion
               | date : " MMM d, y, h:mm:ss a"
           }}
         </div>
@@ -628,7 +628,7 @@ tabindex="-1"
         >
           <input
             (change)="cambiarEstado($event)"
-            [checked]="cupon_seleccionada?.cupon.estado ? true : false"
+            [checked]="cupon_seleccionada?.estado ? true : false"
             class="form-check-input"
             id="switchEstado"
             type="checkbox"
@@ -646,7 +646,7 @@ tabindex="-1"
         data-bs-toggle="modal"
         (click)="
           establecerMensaje(
-            'Está seguro que desea eliminar la profesión?',
+            'Está seguro que desea eliminar el cupon?',
             'eliminar'
           )
         "
@@ -664,9 +664,9 @@ tabindex="-1"
     </div>
   </div>
 </div>
-</div>--->
+</div>
 
- <!-- <div
+<div
 class="modal fade"
 id="modalInformacionEdicionProfesion"
 aria-hidden="true"
@@ -700,13 +700,13 @@ tabindex="-1"
               alt="Archivo incorrecto"
             />
             <img
-              *ngIf="!existImageActualizar && cupon_seleccionada?.cupon.foto"
+              *ngIf="!existImageActualizar && cupon_seleccionada?.foto"
               class="image_modal rounded mx-auto d-block img-fluid w-50"
-              [src]="'https://tomesoft1.pythonanywhere.com' + cupon_seleccionada?.cupon.foto"
+              [src]="'https://tomesoft1.pythonanywhere.com' + cupon_seleccionada?.foto"
               alt="Archivo incorrecto"
             />
             <i
-              *ngIf="!existImageActualizar && !cupon_seleccionada?.cupon.foto"
+              *ngIf="!existImageActualizar && !cupon_seleccionada?.foto"
               class="rounded mx-auto d-block img-fluid w-50 bi bi-upload icono"
             ></i>
           </div>
@@ -746,8 +746,8 @@ tabindex="-1"
                 isInvalidForm('titulo', 'actualizar') ? 'is-invalid' : ''
               "
               value="Mark"
-              [placeholder]="cupon_seleccionada?.cupon.titulo"
-              [value]="cupon_seleccionada?.cupon.titulo"
+              [placeholder]="cupon_seleccionada?.titulo"
+              [value]="cupon_seleccionada?.titulo"
             />
             <div class="invalid-feedback">
               {{ getErrorMessage(cuponCrear, "titulo") }}
@@ -769,7 +769,7 @@ tabindex="-1"
               [ngClass]="
                 isInvalidForm('descripcion', 'actualizar') ? 'is-invalid' : ''
               "
-              [value]="cupon_seleccionada?.cupon.descripcion"
+              [value]="cupon_seleccionada?.descripcion"
             ></textarea>
             <div class="invalid-feedback">
               {{ getErrorMessage(cuponCrear, "descripcion") }}
@@ -791,7 +791,7 @@ tabindex="-1"
               [ngClass]="
                 isInvalidForm('descuento', 'actualizar') ? 'is-invalid' : ''
               "
-              [value]="cupon_seleccionada?.cupon.porcentaje"
+              [value]="cupon_seleccionada?.porcentaje"
             />
             <div class="invalid-feedback">
               {{ getErrorMessage(cuponCrear, "descuento") }}
@@ -813,7 +813,7 @@ tabindex="-1"
               [ngClass]="
                 isInvalidForm('cantidad', 'actualizar') ? 'is-invalid' : ''
               "
-              [value]="cupon_seleccionada?.cupon.cantidad"
+              [value]="cupon_seleccionada?.cantidad"
             />
             <div class="invalid-feedback">
               {{ getErrorMessage(cuponCrear, "cantidad") }}
@@ -829,12 +829,12 @@ tabindex="-1"
           </div>
           <div class="col-7">
             <small>{{
-              cupon_seleccionada?.cupon.fecha_iniciacion
+              cupon_seleccionada?.fecha_iniciacion
                 | date : " MMM d, y, h:mm:ss a"
             }}</small>
             <input
               type="date"
-              [value]="cupon_seleccionada?.cupon.fecha_iniciacion"
+              [value]="cupon_seleccionada?.fecha_iniciacion"
               id="start"
               [ngClass]="
                 isInvalidForm('inicio', 'actualizar') ? 'is-invalid' : ''
@@ -856,11 +856,11 @@ tabindex="-1"
           </div>
           <div class="col-7">
             <small>{{
-              cupon_seleccionada?.cupon.fecha_expiracion
+              cupon_seleccionada?.fecha_expiracion
                 | date : " MMM d, y, h:mm:ss a"
             }}</small>
             <input
-              [value]="cupon_seleccionada?.cupon.fecha_expiracion"
+              [value]="cupon_seleccionada?.fecha_expiracion"
               [ngClass]="
                 isInvalidForm('fin', 'actualizar') ? 'is-invalid' : ''
               "
@@ -890,7 +890,7 @@ tabindex="-1"
               [ngClass]="
                 isInvalidForm('punto', 'actualizar') ? 'is-invalid' : ''
               "
-              [value]="cupon_seleccionada?.cupon.puntos"
+              [value]="cupon_seleccionada?.puntos"
             />
             <div class="invalid-feedback">
               {{ getErrorMessage(cuponCrear, "punto") }}
@@ -926,7 +926,7 @@ tabindex="-1"
 
   </div>
 </div>
-</div>-->
+</div>
 <!-- Modal crear admi 
 
 

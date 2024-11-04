@@ -175,10 +175,15 @@ export class NotificacionesPushComponent {
 
   onCrearNotificacion(){
     const bodyNotificacion: BodyCrearNotificacionAnuncio = {
+      nombre: '',
       titulo: '',
-      mensaje: '',
       descripcion: '',
-      ruta: ''
+      tipo_proveedores: '',
+      frecuencia: '',
+      fecha_iniciacion: '',
+      fecha_expiracion: '',
+      hora: '',
+      ruta: '',
     };
     const titulo = this.crearNotificacionForm.get('titulo')?.value;
     const mensaje = this.crearNotificacionForm.get('mensaje')?.value;
@@ -187,7 +192,6 @@ export class NotificacionesPushComponent {
     const imagen = this.crearNotificacionForm.get('imagen')?.value;
     if(titulo && mensaje && descripcion && ruta) {
       bodyNotificacion.titulo = titulo;
-      bodyNotificacion.mensaje = mensaje;
       bodyNotificacion.descripcion = descripcion;
       bodyNotificacion.ruta = ruta;
       if(imagen && this.existImageNotificacion){

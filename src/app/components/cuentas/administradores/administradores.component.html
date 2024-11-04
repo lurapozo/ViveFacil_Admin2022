@@ -1724,7 +1724,7 @@
           *ngIf="isCrear"
           type="button"
           class="btn btn-success"
-          (click)="onCrear()"
+          (click)="onCrear(); showHeader = true; showHeaderC= false ; showadmi = false; "
           data-bs-dismiss="modal"
         >
           Confirmar
@@ -1733,7 +1733,7 @@
           *ngIf="isActualizar"
           type="button"
           class="btn btn-success"
-          (click)="onActualizar()"
+          (click)="onActualizar(); showHeader = true; showHeaderC= false ; showadmi = false; "
           data-bs-dismiss="modal"
         >
           Confirmar

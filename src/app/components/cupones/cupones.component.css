@@ -53,6 +53,11 @@ p {
     margin-bottom: 0;
 }
 
+.custom-width {
+    width: auto; 
+    height: 100px;
+}
+
 .containerstart {
     justify-content: flex-start;
     margin-left: 20px;
@@ -248,7 +253,7 @@ mat-datepicker-toggle {
     margin-left: 15px;
     margin-right: 15px;
     overflow-y: auto;
-    max-height: 55vh;
+    max-height: 42vh;
 }
 
 .categoria {
@@ -273,8 +278,8 @@ mat-datepicker-toggle {
 }
 
 .item-imagen img {  
-    width: 140px;
-    height: 120px;
+    width: 50px;
+    height: 50px;
 }
 
 .item-nombre,
@@ -517,7 +522,7 @@ form button {
     border: none;
     border-radius: 8px;
     padding: 12px 24px;
-    width: 150px;
+    width: auto;
     font-size: 16px;
     font-weight: bold;
     cursor: pointer;
@@ -548,7 +553,12 @@ form button {
 }
 
 .modal-content {
-    width: 4500px;
+    width: auto;
+}
+
+.modal-content1{
+    background-color: white;
+    border-radius: 10px;
 }
 
 

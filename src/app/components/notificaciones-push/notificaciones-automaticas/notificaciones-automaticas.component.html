@@ -3,16 +3,18 @@
     <div class="header-text">
       <div class="containerstart" >
         <p *ngIf="showHeader"> Notificaiones Automaticas</p>
+        <p *ngIf="showHeaderC"> Crear notificacion</p>
+        <p *ngIf="showHeaderE"> Editar Notificaión </p>
       </div>
     </div>
     <svg preserveAspectRatio="xMidYMid">
       <path d="M0,60 L0,0 L1290,0 L1290,60" fill="#333539"  />
       <path d="M320,60 Q448,85 550,60" fill="#333539" />
     </svg>
-  </div>
+</div>
   
-   <!-- FILTROS-->
-  <div class="container-fluid" *ngIf="showHeader">
+  <!-- FILTROS-->
+<div class="container-fluid" *ngIf="showHeader">
     <div class="d-flex flex-wrap header-solicitud align-items-center gap-3">   
       <div class="containerstart1" >
         <label class="calendar-label">Desde:</label>
@@ -56,11 +58,9 @@
         </div>       
       </div>
     </div>
+
     <div class="d-flex flex-wrap header-solicitud align-items-center gap-3">         
-        <button class="admin-button"
-        type="button"
-            data-bs-toggle="modal"
-        >
+        <button class="admin-button" type="button" (click)="crear_noti();" >
           <span class="material-icons">add_circle</span>
           AGREGAR NOTIFICACION
         </button>
@@ -77,26 +77,30 @@
           
             <!-- Opciones desplegables del filtro -->
             <div *ngIf="mostrarFiltro" class="filtro-opciones">
-              <div (click)="filtrar('todos')" [class.selected]="filtroActual === 'todos'" class="filtro-opcion">TODOS</div>
-              <div (click)="filtrar('cumpleaños')" [class.selected]="filtroActual === 'cumpleaños'" class="filtro-opcion">CUMPLEAÑOS</div>
+              <div
+                *ngFor="let filtro of filtrosDisponibles"
+                (click)="filtrar(filtro)"
+                [class.selected]="filtroActual === filtro"
+                class="filtro-opcion"
+              >
+                {{ filtro | titlecase }} 
+              </div>
             </div>
         </div>
-          
+    </div>       
+</div>
 
-          
-    </div>
-
-
-<div class="container overf">
+<!-- MOSTRAR NOTIFICACION -->
+<div class="container overf" *ngIf="showHeader">
     
         <!-- Lista de notificaciones -->
-    <div *ngFor="let notificacion of arr_filtered_notificacion; let i = index" class="notificacion-item">
+    <div *ngFor="let notificacion of arr_filtered_notificacion" class="notificacion-item">
         <div class="row">
         <!-- Contenido de cada notificación -->
             <div class="col-md-6">
                 <div class="notificacion">
                     <div class="icono-editar">
-                      <img src="assets/imagenes/16.png" alt="Icono edit" 
+                      <img src="assets/imagenes/16.png" alt="Icono edit" (click)="editar(notificacion)"
                         width="5px" height="5px" class="me-3 ms-3" /> 
                     </div>
                     <div class="icono-campana">
@@ -105,13 +109,13 @@
 
                     <div class="contenido-notificacion">
                         <div class="fecha">
-                          <span>{{ notificacion.fecha_creacion | date: 'dd/MM/yyyy' }}</span>
+                          <span>Fecha: {{ notificacion.fecha_creacion | date: 'dd/MM/yyyy' }}</span>
 
                           </div>
                         <div class="icono-texto">
                             <div>
                             <strong class="titulo">{{ notificacion.titulo }}</strong>
-                            <p class="mensaje">{{ notificacion.mensaje }}</p>
+                            <p class="mensaje">{{ notificacion.descripcion }}</p>
                             </div>
                         </div>
                      
@@ -130,12 +134,10 @@
 
             <div class="col-md-6">
               <div class="notificacion-acciones">
-                <button [class]="isEnabled ? 'enabled-class' : 'disabled-class'" (click)="toggleEnabled()">
-                  {{ isEnabled ? 'HABILITADO' : 'DESHABILITADO' }}
-                  
+                <button [class]="notificacion.estado ? 'enabled-class' : 'disabled-class'" (click)="cambiarEstado(notificacion)">
+                  {{ notificacion.estado ? 'HABILITADO' : 'DESHABILITADO' }} 
                 </button>
-              
-          
+                
                   <button class="enviar-ahora" >
                       <div class="icono-texto">
                           <img src="assets/imagenes/20.png" alt="Icono Servicio" />
@@ -148,3 +150,666 @@
         </div>
     </div>
 </div>
+
+<!-- CREAR NOTIFICACION CONTENIDO -->
+<div *ngIf="showHeaderC">
+  <div class="row justify-content-center align-items-center p-0">
+    <div class="col-10 text-center containerCrearCate">
+      <div class="form-container">
+        <h2>Crear Notificación</h2>
+        <form [formGroup]="crearNotificacionForm" id="formCrearCate">
+
+          <!-- Sección de imagen -->
+          <div class="cont-ped">
+            <div class="form-field">
+                <button class="admin-button1"
+                    type="button"
+                    (click)="fileInput.click();"
+                        >              
+                <span class="material-icons">description</span> 
+                SELECCIONAR ARCHIVO
+                <span class="material-icons">add_circle</span> 
+                </button>
+            </div>
+            <div class="form-field">
+                
+                    <div for="file_input">
+                        <img *ngIf="existImageNotificacion" class="image_modal rounded mx-auto d-block img-fluid w-50" [src]="imagenNotificacion" alt="Archivo incorrecto">
+                        <i *ngIf="!existImageNotificacion" class="rounded mx-auto d-block img-fluid w-50"></i>
+                    </div>
+                    <div class="col-1 d-flex p-2 ">
+                        <button (click)="eliminarImagen()" type="button" class="btn btn-outline-danger" aria-label="Close">
+                        <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
+            </div>
+            <div class="form-field">
+                    <input #fileInput
+                      class="w-100 form-control"
+                      [ngClass]="crearNotificacionForm.get('imagen')?.hasError('image_error') ? 'is-invalid' : '' || (existImageNotificacion)? 'is-valid' : ''"
+                      type="file"
+                      id="file_input"
+                      accept="image/png, image/jpeg"
+                      (change)="loadImageFromDevice($event, 'actualizar')"
+                      style="display: none;" 
+                    >
+                <div class="invalid-feedback">{{getErrorMessage(crearNotificacionForm, 'imagen')}}</div>
+              <div class="invalid-feedback">
+                {{ getErrorMessage(crearNotificacionForm, 'imagen') }}
+              </div>
+            </div>
+          </div>
+          
+          <div class="row">
+            <div class="form-field">
+              <div class="col-5">
+                <label for="inputNombre" class="form-label"
+                  ><h3 class="m-0 p-0 fw-bold">Nombre:</h3></label
+                >
+              </div>
+              <div class="col-5">
+                <input
+                  type="text"
+                  formControlName="nombre"
+                  class="form-control"
+                  [ngClass]="
+                    isInvalidForm('nombre')
+                      ? 'is-invalid'
+                      :  crearNotificacionForm.get('nombre')?.touched ||
+                        ( crearNotificacionForm.get('nombre')?.dirty &&
+                          ! crearNotificacionForm.get('nombre')?.invalid)
+                      ? 'is-valid'
+                      : ''
+                  "
+                  id="inputNombre"
+                  placeholder="Ingrese nombre"
+                />
+                <div class="invalid-feedback"> {{getErrorMessage(crearNotificacionForm, 'nombre')}} </div>
+              </div>
+            </div>
+
+            <div class="form-field">
+                <div class="col-5">
+                    <label for="inputNombre" class="form-label"><h3 class="m-0 p-0">Título:</h3></label>
+                </div>
+                <div class="col-7">
+                    <input
+                    type="text"
+                    formControlName="titulo"
+                    class="form-control"
+                    [ngClass]=" isInvalidForm('titulo')
+                      ? 'is-invalid'
+                      :  crearNotificacionForm.get('titulo')?.touched ||
+                        ( crearNotificacionForm.get('titulo')?.dirty &&
+                          ! crearNotificacionForm.get('titulo')?.invalid)
+                      ? 'is-valid'
+                      : ''
+                    "
+                    id="inputNombre"
+                    placeholder="Título de la notificación"
+                    >
+                    <div class="invalid-feedback"> {{getErrorMessage(crearNotificacionForm, 'titulo')}} </div>
+                </div>
+            </div>
+
+            <div class="form-field">
+              <div class="col-5">
+                <label for="inputtitulo" class="form-label"
+                  ><h3 class="m-0 p-0 fw-bold">Descripcion</h3></label
+                >
+              </div>
+              <div class="col-5">
+                <textarea
+                  type="text"
+                  formControlName="descripcion"
+                  class="form-control"
+                  [ngClass]="
+                    isInvalidForm('descripcion')
+                      ? 'is-invalid'
+                      :  crearNotificacionForm.get('descripcion')?.touched ||
+                        ( crearNotificacionForm.get('descripcion')?.dirty &&
+                          ! crearNotificacionForm.get('descripcion')?.invalid)
+                      ? 'is-valid'
+                      : ''
+                  "
+                  id="inputdescripcion"
+                  placeholder="Ingrese descripcion"
+                ></textarea>
+                <div class="invalid-feedback">
+                  {{ getErrorMessage( crearNotificacionForm, "descripcion") }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+           <div class="cont-ped">
+                <div class="form-field">
+                    <div class="col-5">
+                        <label for="textareaDescripcion" class="form-label"
+                        ><h3 class="m-0 p-0 fw-bold">Tipo de proveedores: </h3></label
+                        >
+                    </div>
+                    <div class="col-7">
+                        <select
+                          class="form-select"
+                          [ngClass]="isInvalidForm('tipo_proveedores') ? 'is-invalid' : ''"
+                          formControlName="tipo_proveedores"                      
+                          aria-describedby="selectorServicioCrearFeedback"
+                        >
+                        <option selected disabled value="">Tipo proveedor</option>
+                        <option *ngFor="let c of proveedores" [value]="c.nombre">
+                          {{ c.nombre }}
+                        </option>
+                        </select>
+                      <div id="selectorServicioCrearFeedback" class="invalid-feedback">
+                        {{ getErrorMessage(crearNotificacionForm, "tipo_proveedores") }}
+                      </div>
+                    </div>
+                </div>
+                
+                <div class="form-field">
+                    <div class="col-5">
+                        <label for="textareaDescripcion" class="form-label"
+                        ><h3 class="m-0 p-0 fw-bold">Frecuencia: </h3></label
+                        >
+                    </div>
+                    <div class="col-7">
+                      <select
+                            class="form-select"
+                            [ngClass]="isInvalidForm('tipo') ? 'is-invalid' : ''"
+                            formControlName="frecuencia"                      
+                            aria-describedby="selectorServicioCrearFeedback"
+                          >
+                          <option selected disabled value="">Frecuencia</option>
+                          <option *ngFor="let f of frecuencia" [id]="f" [value]="f">
+                            {{ f }}
+                          </option>
+                          </select>
+                        <div class="invalid-feedback">
+                        {{ getErrorMessage(crearNotificacionForm, "frecuencia") }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cont-ped">
+                <div class="form-field">
+                  <div class="col-5">
+                    <label for="inputNombre" class="form-label"
+                      ><h3 class="m-0 p-0 fw-bold">Fecha de Inicio:</h3></label
+                    >
+                  </div>
+                  <div class="col-7">
+                    <input
+                      type="date"
+                      id="start"
+                      [ngClass]="
+                        isInvalidForm('fecha_iniciacion')
+                          ? 'is-invalid'
+                          : crearNotificacionForm.get('fecha_iniciacion')?.touched ||
+                            (crearNotificacionForm.get('fecha_iniciacion')?.dirty &&
+                              !crearNotificacionForm.get('fecha_iniciacion')?.invalid)
+                          ? 'is-valid'
+                          : ''
+                      "
+                      required
+                      pattern="\d{4}-\d{2}-\d{2}"
+                      formControlName="fecha_iniciacion"
+                      min="{{ getCurrentDate() }}"
+                    />
+                    <div class="invalid-feedback">
+                      {{ getErrorMessage(crearNotificacionForm, "fecha_iniciacion") }}
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="form-field">
+                  <div class="col-5">
+                    <label for="inputNombre" class="form-label"
+                      ><h3 class="m-0 p-0 fw-bold">Fecha de Fin:</h3></label
+                    >
+                  </div>
+                  <div class="col-7">
+                    <input
+                      type="date"
+                      id="end"
+                      [ngClass]="
+                        isInvalidForm('fecha_expiracion')
+                          ? 'is-invalid'
+                          : crearNotificacionForm.get('fecha_expiracion')?.touched ||
+                            (crearNotificacionForm.get('fecha_expiracion')?.dirty &&
+                              !crearNotificacionForm.get('fecha_expiracion')?.invalid)
+                          ? 'is-valid'
+                          : ''
+                      "
+                      required
+                      pattern="\d{4}-\d{2}-\d{2}"
+                      formControlName="fecha_expiracion"
+                      min="{{ getCurrentDate() }}"
+                    />
+                    <div class="invalid-feedback">
+                      {{ getErrorMessage(crearNotificacionForm, "fecha_expiracion") }}
+                    </div>
+                  </div>
+                </div>
+            </div>
+            
+            <div class="cont-ped">
+                <div class="form-field">
+                <div class="col-5">
+                    <label for="textareaDescripcion" class="form-label"
+                    ><h3 class="m-0 p-0 fw-bold">Hora: </h3></label
+                    >
+                </div>
+                <div class="col-7">
+                  <input type="time" 
+                  formControlName="hora"
+                  [ngClass]="
+                        isInvalidForm('hora')
+                          ? 'is-invalid'
+                          : crearNotificacionForm.get('hora')?.touched ||
+                            (crearNotificacionForm.get('hora')?.dirty &&
+                              !crearNotificacionForm.get('hora')?.invalid)
+                          ? 'is-valid'
+                          : ''
+                      "
+                   class="form-control" />
+                    <div class="invalid-feedback">
+                    {{ getErrorMessage(crearNotificacionForm, "hora") }}
+                    </div>
+                </div>
+    
+                </div>
+
+            <div class="form-field">
+              <div class="col-7">
+                <button
+                [disabled]="crearNotificacionForm.invalid? true : false"
+                data-bs-target="#modalConfirmacion"
+                data-bs-toggle="modal"
+                class="custom-button float-right"
+                (click)="
+                    establecerMensaje('Está seguro que desea crear la notificación?');
+                  ">
+                  Crear
+                </button>
+  
+              </div>
+            </div>
+          </div>         
+
+           </form> 
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EDITAR NOTIFICACION CONTENIDO -->
+<div *ngIf="showHeaderE">
+  <!-- FORM CONTENIDO -->
+ <div class="row justify-content-center align-items-center p-0">
+   <div class="col-10 text-center containerCrearCate">
+     <div class="form-container">
+       <h2>Editar Notificación</h2>
+       <form [formGroup]="crearNotificacionForm" id="formCrearCate">
+
+         <!-- Sección de imagen -->
+         <div class="cont-ped">
+           <div class="form-field">
+               <button class="admin-button1"
+                   type="button"
+                   (click)="fileInput.click();"
+                       >              
+               <span class="material-icons">description</span> 
+               SELECCIONAR ARCHIVO
+               <span class="material-icons">add_circle</span> 
+               </button>
+           </div>
+           <div class="form-field">
+               
+                   <div for="file_input">
+                       <img *ngIf="existImageNotificacion" class="image_modal rounded mx-auto d-block img-fluid w-50" [src]="imagenNotificacion" alt="Archivo incorrecto">
+                       <i *ngIf="!existImageNotificacion" class="rounded mx-auto d-block img-fluid w-50"></i>
+                   </div>
+                   <div class="col-1 d-flex p-2 ">
+                       <button (click)="eliminarImagen()" type="button" class="btn btn-outline-danger" aria-label="Close">
+                       <i class="bi bi-trash"></i>
+                       </button>
+                   </div>
+           </div>
+           <div class="form-field">
+                   <input #fileInput
+                     class="w-100 form-control"
+                     [ngClass]="crearNotificacionForm.get('imagen')?.hasError('image_error') ? 'is-invalid' : '' || (existImageNotificacion)? 'is-valid' : ''"
+                     type="file"
+                     id="file_input"
+                     accept="image/png, image/jpeg"
+                     (change)="loadImageFromDevice($event, 'actualizar')"
+                     style="display: none;" 
+                   >
+               <div class="invalid-feedback">{{getErrorMessage(crearNotificacionForm, 'imagen')}}</div>
+             <div class="invalid-feedback">
+               {{ getErrorMessage(crearNotificacionForm, 'imagen') }}
+             </div>
+           </div>
+         </div>
+         
+         <div class="row">
+           <div class="form-field">
+             <div class="col-5">
+               <label for="inputNombre" class="form-label"
+                 ><h3 class="m-0 p-0 fw-bold">Nombre:</h3></label
+               >
+             </div>
+             <div class="col-5">
+               <input
+                 type="text"
+                 formControlName="nombre"
+                 class="form-control"
+                 [ngClass]="
+                   isInvalidForm('nombre') ? 'is-invalid' : ''
+                 "
+                 id="inputNombre"
+                 placeholder="Ingrese nombre"
+               
+               />
+             </div>
+           </div>
+
+           <div class="form-field">
+               <div class="col-5">
+                   <label for="inputNombre" class="form-label"><h3 class="m-0 p-0">Título:</h3></label>
+               </div>
+               <div class="col-7">
+                   <input
+                   type="text"
+                   formControlName="titulo"
+                   class="form-control"
+                   [ngClass]="isInvalidForm('titulo') ? 'is-invalid' : ''"
+                   id="inputNombre"
+                   placeholder="Título de la notificación"
+                   [(ngModel)]="noti_seleccionada.titulo"
+                   >
+                   <div class="invalid-feedback"> {{getErrorMessage(crearNotificacionForm, 'titulo')}} </div>
+               </div>
+           </div>
+
+           <div class="form-field">
+             <div class="col-5">
+               <label for="inputtitulo" class="form-label"
+                 ><h3 class="m-0 p-0 fw-bold">Descripcion</h3></label
+               >
+             </div>
+             <div class="col-5">
+               <textarea
+                 type="text"
+                 formControlName="descripcion"
+                 class="form-control"
+                 [ngClass]="
+                   isInvalidForm('descripcion')
+                     ? 'is-invalid'
+                     :  crearNotificacionForm.get('descripcion')?.touched ||
+                       ( crearNotificacionForm.get('descripcion')?.dirty &&
+                         ! crearNotificacionForm.get('descripcion')?.invalid)
+                     ? 'is-valid'
+                     : ''
+                 "
+                 id="inputdescripcion"
+                 placeholder="Ingrese descripcion"
+               ></textarea>
+               <div class="invalid-feedback">
+                 {{ getErrorMessage( crearNotificacionForm, "descripcion") }}
+               </div>
+             </div>
+           </div>
+         </div>
+
+         <div class="cont-ped">
+               <div class="form-field">
+                   <div class="col-5">
+                       <label for="textareaDescripcion" class="form-label"
+                       ><h3 class="m-0 p-0 fw-bold">Tipo de proveedores: </h3></label
+                       >
+                   </div>
+                   <div class="col-7">
+                       <select
+                         class="form-select"
+                         [ngClass]="isInvalidForm('tipo') ? 'is-invalid' : ''"
+                         formControlName="tipo"                      
+                         aria-describedby="selectorServicioCrearFeedback"
+                       >
+                       <option selected disabled value="">Tipo proveedor</option>
+                       <option *ngFor="let c of categoria" [value]="c">
+                         {{ c.nombre}}
+                       </option>
+                       </select>
+                     <div id="selectorServicioCrearFeedback" class="invalid-feedback">
+                       {{ getErrorMessage(crearNotificacionForm, "tiposprov") }}
+                     </div>
+                   </div>
+               </div>
+               
+               <div class="form-field">
+                   <div class="col-5">
+                       <label for="textareaDescripcion" class="form-label"
+                       ><h3 class="m-0 p-0 fw-bold">Frecuencia: </h3></label
+                       >
+                   </div>
+                   <div class="col-7">
+                     <select
+                           class="form-select"
+                           [ngClass]="isInvalidForm('tipo') ? 'is-invalid' : ''"
+                           formControlName="frec"                      
+                           aria-describedby="selectorServicioCrearFeedback"
+                         >
+                         <option selected disabled value="">Tipo proveedor</option>
+                         <option *ngFor="let c of frecuencia" [value]="c">
+                           {{ c }}
+                         </option>
+                         </select>
+                       <div class="invalid-feedback">
+                       {{ getErrorMessage(crearNotificacionForm, "frec") }}
+                       </div>
+                   </div>
+               </div>
+           </div>
+
+           <div class="cont-ped">
+               <div class="form-field">
+                 <div class="col-5">
+                   <label for="inputNombre" class="form-label"
+                     ><h3 class="m-0 p-0 fw-bold">Fecha de Inicio:</h3></label
+                   >
+                 </div>
+                 <div class="col-7">
+                   <input
+                     type="date"
+                     id="start"
+                     [ngClass]="
+                       isInvalidForm('inicio')
+                         ? 'is-invalid'
+                         : crearNotificacionForm.get('inicio')?.touched ||
+                           (crearNotificacionForm.get('inicio')?.dirty &&
+                             !crearNotificacionForm.get('inicio')?.invalid)
+                         ? 'is-valid'
+                         : ''
+                     "
+                     required
+                     pattern="\d{4}-\d{2}-\d{2}"
+                     formControlName="inicio"
+                     min="{{ getCurrentDate() }}"
+                   />
+                   <div class="invalid-feedback">
+                     {{ getErrorMessage(crearNotificacionForm, "inicio") }}
+                   </div>
+                 </div>
+               </div>
+               
+               <div class="form-field">
+                 <div class="col-5">
+                   <label for="inputNombre" class="form-label"
+                     ><h3 class="m-0 p-0 fw-bold">Fecha de Fin:</h3></label
+                   >
+                 </div>
+                 <div class="col-7">
+                   <input
+                     type="date"
+                     id="start"
+                     [ngClass]="
+                       isInvalidForm('fin')
+                         ? 'is-invalid'
+                         : crearNotificacionForm.get('fin')?.touched ||
+                           (crearNotificacionForm.get('fin')?.dirty &&
+                             !crearNotificacionForm.get('fin')?.invalid)
+                         ? 'is-valid'
+                         : ''
+                     "
+                     required
+                     pattern="\d{4}-\d{2}-\d{2}"
+                     formControlName="fin"
+                     min="{{ getCurrentDate() }}"
+                   />
+                   <div class="invalid-feedback">
+                     {{ getErrorMessage(crearNotificacionForm, "fin") }}
+                   </div>
+                 </div>
+               </div>
+           </div>
+           
+           <div class="cont-ped">
+               <div class="form-field">
+               <div class="col-5">
+                   <label for="textareaDescripcion" class="form-label"
+                   ><h3 class="m-0 p-0 fw-bold">Hora: </h3></label
+                   >
+               </div>
+               <div class="col-7">
+                 <input type="time" 
+                 [ngClass]="
+                       isInvalidForm('hora')
+                         ? 'is-invalid'
+                         : crearNotificacionForm.get('hora')?.touched ||
+                           (crearNotificacionForm.get('hora')?.dirty &&
+                             !crearNotificacionForm.get('hora')?.invalid)
+                         ? 'is-valid'
+                         : ''
+                     "
+                 [(ngModel)]="horaSeleccionada" class="form-control" />
+                   <div class="invalid-feedback">
+                   {{ getErrorMessage(crearNotificacionForm, "hora") }}
+                   </div>
+               </div>
+   
+               </div>
+
+           <div class="form-field">
+             <div class="col-7">
+               <button
+               [disabled]="crearNotificacionForm.invalid? true : false"
+               data-bs-target="#modalConfirmacion"
+               data-bs-toggle="modal"
+               class="custom-button float-right"
+               (click)="establecerMensaje('Está seguro que desea crear la notificación?')"
+               >
+                 Crear
+               </button>
+
+              <button
+                class="custom-button1 float-right"
+                (click)="showHeader = true; showHeaderC= false ; showHeaderE= false;">
+                Cancelar
+              </button>
+
+             </div>
+           </div>
+         </div>         
+
+       </form> 
+       
+     </div>
+   </div>
+ </div>
+
+</div>
+
+
+<!-- Modal de confirmacion (Alerta) -->
+<div class="modal fade" id="modalConfirmacion" tabindex="-1" aria-labelledby="modalConfirmacionLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <!-- Titulo del modal confirmacion -->
+      <div class="modal-header">
+        <h1 class="modal-title fs-5 m-0 p-0" id="modalConfirmacionLabel">Confirmar selección</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <!-- Cuerpo del modal confirmacion -->
+      <div class="modal-body">
+        {{mensajeAlerta}}
+      </div>
+
+      <!-- Footer del modal confirmacion -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" 
+                class="btn btn-success" 
+                (click)="onCrearNotificacion();
+                  showHeader = true; 
+                  showHeaderC = false; 
+                  showHeaderE = false;" 
+                data-bs-dismiss="modal">
+              Confirmar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de confirmacion (Alerta) -->
+<div class="modal fade" id="modalConfirmacion1" tabindex="-1" aria-labelledby="modalConfirmacionLabel" aria-hidden="true">
+<div class="modal-dialog">
+  <div class="modal-content">
+    <!-- Titulo del modal confirmacion -->
+    <div class="modal-header">
+      <h1 class="modal-title fs-5 m-0 p-0" id="modalConfirmacionLabel">Confirmar selección</h1>
+      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+
+    <!-- Cuerpo del modal confirmacion -->
+    <div class="modal-body">
+      {{mensajeAlerta}}
+    </div>
+
+    <!-- Footer del modal confirmacion -->
+    <div class="modal-footer">
+      <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+      <button type="button" 
+              class="btn btn-success" 
+              (click)="onActualizar();
+                showHeader = true; 
+                showHeaderC = false; 
+                showHeaderE = false;" 
+              data-bs-dismiss="modal">
+            Confirmar
+      </button>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- Toast de Información -->
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+  <div #liveToast id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header" [ngClass]="isErrorToast? ' bg-danger' : ' bg-success'">
+      <strong class="me-auto text-light">{{tituloToast}}</strong>
+      <small class="text-light">Ahora</small>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body bg-opacity-25" [ngClass]="isErrorToast? ' bg-danger' : ' bg-success'">
+      {{mensajeToast}}
+    </div>
+  </div>
+</div>
+
+

@@ -425,5 +425,5 @@ export class MedallaComponent {
   crear_med() {
     this.showHeader = false;
     this.showHeaderC = true;
-  }
+  } 
 }

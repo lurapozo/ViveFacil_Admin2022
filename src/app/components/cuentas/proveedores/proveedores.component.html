@@ -613,17 +613,17 @@
               <div class="col-7">
                 <input
                   type="number"
-                  formControlName="ano_experiencia"
+                  formControlName="ano_profesion"
                   class="form-control"
                   [ngClass]="
-                    isInvalidForm('ano_experiencia') ? 'is-invalid' : ''
+                    isInvalidForm('ano_profesion') ? 'is-invalid' : ''
                   "
                   [placeholder]="proveedor_seleccionado?.ano_profesion"
                   [value]="proveedor_seleccionado?.ano_profesion"
                   [(ngModel)]="proveedor_seleccionado.ano_profesion"
                 />
                 <div class="invalid-feedback">
-                  {{ getErrorMessage(formEdit, "ano_experiencia") }}
+                  {{ getErrorMessage(formEdit, "ano_profesion") }}
                 </div>
               </div>
             </div>
@@ -1491,7 +1491,7 @@
       <!-- Footer del modal confirmacion -->
       <div class="modal-footer">
         <!-- Add a click event handler to the button -->
-        <button type="button" class="btn btn-success" data-bs-dismiss="modal" (click)="actualizarCaducidad(selectedDate.value)">
+        <button type="button" class="btn btn-success" data-bs-dismiss="modal" (click)="actualizarCaducidad(selectedDate.value);showHeader = true; showHeaderC= false ; showadmi = false;">
           Aceptar
         </button>
       </div>

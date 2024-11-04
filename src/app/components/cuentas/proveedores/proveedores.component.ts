@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { BodyEmail } from 'src/app/interfaces/email';
-import { BodyActualizarProveedorPendiente, BodyCrearProveedorPendiente, BodyResponseCrearProveedorPendiente, SerializerCrearProveedorPendiente } from 'src/app/interfaces/proveedor';
+import { BodyActualizarProveedor, BodyActualizarProveedorPendiente, BodyCrearProveedorPendiente, BodyResponseCrearProveedorPendiente, SerializerCrearProveedorPendiente } from 'src/app/interfaces/proveedor';
 import { PythonAnywhereService } from 'src/app/services/PythonAnywhere/python-anywhere.service';
 
 @Component({
@@ -284,7 +284,7 @@ export class ProveedoresComponent {
     const licencia = this.proveedor_seleccionado?.licencia;
     const copiaCedula = this.proveedor_seleccionado?.copiaCedula;
     const profesion = this.proveedor_seleccionado?.profesion;
-    const ano_experiencia = this.proveedor_seleccionado?.user_datos.ano_profesion;
+    const ano_profesion = this.proveedor_seleccionado?.user_datos.ano_profesion;
     const banco = this.proveedor_seleccionado?.user_datos.banco;
     const numero_cuenta = this.proveedor_seleccionado?.user_datos.numero_cuenta;
     const copiaLicencia = this.proveedor_seleccionado?.copiaLicencia;
@@ -304,7 +304,7 @@ export class ProveedoresComponent {
     licencia ? this.formEdit.get('licencia')?.setValue(licencia) : this.formEdit.get('licencia')?.reset();
     copiaCedula ? this.formEdit.get('copiaCedula')?.setValue(copiaCedula) : this.formEdit.get('copiaCedula')?.reset();
     profesion ? this.formEdit.get('profesion')?.setValue(profesion) : this.formEdit.get('profesion')?.reset();
-    ano_experiencia ? this.formEdit.get('ano_experiencia')?.setValue(ano_experiencia) : this.formEdit.get('ano_experiencia')?.reset();
+    ano_profesion ? this.formEdit.get('ano_profesion')?.setValue(ano_profesion) : this.formEdit.get('ano_profesion')?.reset();
     banco ? this.formEdit.get('banco')?.setValue(banco) : this.formEdit.get('banco')?.reset();
     numero_cuenta ? this.formEdit.get('numero_cuenta')?.setValue(numero_cuenta) : this.formEdit.get('numero_Cuenta')?.reset();
     copiaLicencia ? this.formEdit.get('copiaLicencia')?.setValue(copiaLicencia) : this.formEdit.get('copiaLicencia')?.reset();
@@ -318,7 +318,7 @@ export class ProveedoresComponent {
     const ddasda = this.proveedor_seleccionado?.fecha_caducidad
   }
   onActualizar() {
-    const proveedor: BodyActualizarProveedorPendiente = {
+    const proveedor: BodyActualizarProveedor= {
       nombres: this.formEdit.value.nombre,
       apellidos: this.formEdit.value.apellidos,
       genero: this.formEdit.value.genero,
@@ -330,7 +330,7 @@ export class ProveedoresComponent {
       descripcion: this.formEdit.value.descripcion,
       licencia: this.formEdit.value.licencia,
       profesion: this.formEdit.value.profesion,
-      ano_experiencia: this.formEdit.value.ano_profesion,
+      ano_profesion: this.formEdit.value.ano_profesion,
       banco: this.formEdit.value.banco,
       numero_cuenta: this.formEdit.value.numero_cuenta,
       tipo_cuenta: this.formEdit.value.tipo_cuenta,

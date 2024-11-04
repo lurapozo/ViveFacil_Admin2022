@@ -13,7 +13,7 @@ import { BodyEmail, BodyResponseEmail } from 'src/app/interfaces/email';
 import { BodyActualizarGroup, BodyCrearGroup, Group, Permission } from 'src/app/interfaces/group';
 import { BodyActualizarInsignia, BodyActualizarMedalla, BodyCrearInsignia, BodyCrearMedalla, BodyResponseCrearInsignia, Insignia, Medalla } from 'src/app/interfaces/insignia';
 import { BodyLogin, BodyLoginResponse } from 'src/app/interfaces/login';
-import { BodyCrearNotificacionAnuncio, NotificacionAnuncio } from 'src/app/interfaces/notificacion';
+import { BodyActualizarNotificacionAnuncio, BodyCrearNotificacionAnuncio, BodyCrearNotificacionAutomatica, NotificacionAnuncio } from 'src/app/interfaces/notificacion';
 import { PaymentEfectivo, PaymentPaginacion, PaymentTarjeta } from 'src/app/interfaces/payment';
 import { BodyActualizarPlan, BodyActualizarPlanProveedor, BodyCrearPlan, BodyCrearPlanProveedor, BodyResponseCrearPlan, Plan, PlanProveedor } from 'src/app/interfaces/plan';
 import { BodyActualizarProfesion, BodyCrearProfesion, BodyResponseActualizarProfesion, BodyResponseCrearProfesion, Profesion } from 'src/app/interfaces/profesion';
@@ -40,13 +40,13 @@ export class PythonAnywhereService {
   private _refresh$ = new Subject<void>();
   constructor(private http: HttpClient) { }
 
-get refresh$(){
+  get refresh$() {
     return this._refresh$
-}
+  }
 
-obtener_politicas(){
-  return this.http.get(`${this.API_URL}/politics/`)
-}
+  obtener_politicas() {
+    return this.http.get(`${this.API_URL}/politics/`)
+  }
   //------------------------------------------------ SECCIÓN SOLICITANTES -------------------------------------------------
   /**
    * Obtiene todos los solicitantes, y los entrega en un formato con paginación.
@@ -119,7 +119,7 @@ obtener_politicas(){
    * @param id Recibe un string indicando el ID del Solicitante (ID más externo de la tabla de solicitante).
    * @returns Devuelve un Observable con el objeto Solicitante el cuál fue modificado.
    */
-  cambio_solicitante_estado( estado: boolean, id: string ): Observable<Solicitante> {
+  cambio_solicitante_estado(estado: boolean, id: string): Observable<Solicitante> {
     return this.http.put(`${this.API_URL}/solicitante_estado/${id}`, {
       estado: estado,
     }) as Observable<Solicitante>;
@@ -360,7 +360,7 @@ obtener_politicas(){
    * @returns Devuelve un Observable con la respuesta OK(200) o Error(500).
    */
   cambio_cupon_estado(id: string, estado: boolean): Observable<any> {
-    return this.http.put(`${this.API_URL}/cupon_estado/?id=${id}`, { estado: estado, });
+    return this.http.put(`${this.API_URL}/cupon_estado/?id=${id}`, { estado: estado });
   }
 
   /**
@@ -483,8 +483,8 @@ obtener_politicas(){
     return this.http.delete(`${this.API_URL}/administrador_delete/${id}`);
   }
 
-  cambio_administrador_estado(id:any,estado:any){
-    return this.http.put(`${this.API_URL}/administrador_estado/?id=${id}`,{ estado: estado, });
+  cambio_administrador_estado(id: any, estado: any) {
+    return this.http.put(`${this.API_URL}/administrador_estado/?id=${id}`, { estado: estado, });
   }
 
   /**
@@ -666,7 +666,7 @@ obtener_politicas(){
     pendiente.append('genero', data.genero)
     pendiente.append('telefono', data.telefono)
     pendiente.append('cedula', data.cedula)
-    if(  data.copiaCedula != null){
+    if (data.copiaCedula != null) {
       pendiente.append('copiaCedula', data.copiaCedula as any)
     }
     pendiente.append('ciudad', data.ciudad)
@@ -674,23 +674,23 @@ obtener_politicas(){
     pendiente.append('email', data.email)
     pendiente.append('descripcion', data.descripcion)
     pendiente.append('licencia', data.licencia)
-    if(  data.copiaLicencia != null){
+    if (data.copiaLicencia != null) {
       pendiente.append('copiaLicencia', data.copiaLicencia)
     }
     pendiente.append('profesion', data.profesion)
     //ARREGLAR
-    if( data.ano_experiencia != null){
-      pendiente.append('ano_experiencia', data.ano_experiencia  as any)
+    if (data.ano_experiencia != null) {
+      pendiente.append('ano_experiencia', data.ano_experiencia as any)
     }
     pendiente.append('banco', data.banco)
     pendiente.append('numero_cuenta', data.numero_cuenta)
     pendiente.append('tipo_cuenta', data.tipo_cuenta)
-    if(  data.foto != null){
-      pendiente.append( 'foto', data.foto)
+    if (data.foto != null) {
+      pendiente.append('foto', data.foto)
     }
     //ARREGLAR
-    if( data.filesDocuments != null){
-      pendiente.append('filesDocuments', data.filesDocuments[0]  as any)
+    if (data.filesDocuments != null) {
+      pendiente.append('filesDocuments', data.filesDocuments[0] as any)
     }
     //planilla_servicios: data.planilla_servicios
     console.log("LA COSAS ESAS LASMASD")
@@ -699,14 +699,14 @@ obtener_politicas(){
     return this.http.put(`${this.API_URL}/proveedores_pendientes/${id}`, pendiente) as Observable<ProveedorPendiente>;
   }
 
-  editar_proveedor_proveedor(id: string, data: BodyActualizarProveedorPendiente): Observable<ProveedorPendiente> {
+  editar_proveedor_proveedor(id: string, data: BodyActualizarProveedor): Observable<Proveedor> {
     const pendiente = new FormData();
     pendiente.append('nombres', data.nombres)
     pendiente.append('apellidos', data.apellidos)
     pendiente.append('genero', data.genero)
     pendiente.append('telefono', data.telefono)
     pendiente.append('cedula', data.cedula)
-    if(  data.copiaCedula != null){
+    if (data.copiaCedula != null) {
       pendiente.append('copiaCedula', data.copiaCedula as any)
     }
     pendiente.append('ciudad', data.ciudad)
@@ -714,29 +714,29 @@ obtener_politicas(){
     pendiente.append('email', data.email)
     pendiente.append('descripcion', data.descripcion)
     pendiente.append('licencia', data.licencia)
-    if(  data.copiaLicencia != null){
+    if (data.copiaLicencia != null) {
       pendiente.append('copiaLicencia', data.copiaLicencia)
     }
     pendiente.append('profesion', data.profesion)
     //ARREGLAR
-    if( data.ano_experiencia != null){
-      pendiente.append('ano_experiencia', data.ano_experiencia  as any)
+    if (data.ano_profesion != null) {
+      pendiente.append('ano_profesion', data.ano_profesion as any)
     }
     pendiente.append('banco', data.banco)
     pendiente.append('numero_cuenta', data.numero_cuenta)
     pendiente.append('tipo_cuenta', data.tipo_cuenta)
-    if(  data.foto != null){
-      pendiente.append( 'foto', data.foto)
+    if (data.foto != null) {
+      pendiente.append('foto', data.foto)
     }
     //ARREGLAR
-    if( data.filesDocuments != null){
-      pendiente.append('filesDocuments', data.filesDocuments[0]  as any)
+    if (data.filesDocuments != null) {
+      pendiente.append('filesDocuments', data.filesDocuments[0] as any)
     }
     //planilla_servicios: data.planilla_servicios
     console.log("LA COSAS ESAS LASMASD")
     console.log(pendiente)
     console.log(pendiente.get("foto"))
-    return this.http.put(`${this.API_URL}/proveedores_proveedores/${id}`, pendiente) as Observable<ProveedorPendiente>;
+    return this.http.put(`${this.API_URL}/proveedores_proveedores/${id}`, pendiente) as Observable<Proveedor>;
   }
 
   /**
@@ -915,11 +915,11 @@ obtener_politicas(){
    */
   add_profesion(bodyCrear: BodyCrearProfesion): Observable<BodyResponseCrearProfesion> {
     const dataCrear = new FormData();
-    if(bodyCrear.nombre && bodyCrear.descripcion && bodyCrear.servicio){
+    if (bodyCrear.nombre && bodyCrear.descripcion && bodyCrear.servicio) {
       dataCrear.append("nombre", bodyCrear.nombre);
       dataCrear.append("descripcion", bodyCrear.descripcion);
       dataCrear.append("servicio", bodyCrear.servicio);
-      bodyCrear.foto? dataCrear.append("foto", bodyCrear.foto) : null;
+      bodyCrear.foto ? dataCrear.append("foto", bodyCrear.foto) : null;
     }
     return this.http.post(this.API_URL + '/profesiones/', dataCrear) as Observable<BodyResponseCrearProfesion>;
   }
@@ -945,7 +945,7 @@ obtener_politicas(){
    * @returns Devuelve un Observable con un Array de un objeto Servicio
    */
   obtener_servicios(): Observable<Servicio[]> {
-    return this.http.get(this.API_URL + '/servicios/')as Observable<Servicio[]>;
+    return this.http.get(this.API_URL + '/servicios/') as Observable<Servicio[]>;
   }
 
   /**
@@ -1043,7 +1043,7 @@ obtener_politicas(){
    * @param data profesion y ano_experiencia. EJ: data = {"profesion": "Jardinero", ano_experiencia: 5 }
    * @returns Devuelve status un Observable con un objeto BodyResponseCrearProfesionProveedor
    */
-  crear_profesiones_proveedor(user: string, data: BodyCrearProfesionProveedor) : Observable<BodyResponseCrearProfesionProveedor> {
+  crear_profesiones_proveedor(user: string, data: BodyCrearProfesionProveedor): Observable<BodyResponseCrearProfesionProveedor> {
     return this.http.post(`${this.API_URL}/proveedor_profesiones/${user}`, data) as Observable<BodyResponseCrearProfesionProveedor>;
   }
 
@@ -1094,7 +1094,8 @@ obtener_politicas(){
  * @returns Devuelve un Observable con un objeto Cupones
    */
   obtener_cupones() {
-    return this.http.get(this.API_URL + '/all_cupcategorias/');
+    //return this.http.get(this.API_URL + '/all_cupcategorias/');
+    return this.http.get(this.API_URL + '/cupones/');
   }
 
   /**
@@ -1191,7 +1192,7 @@ obtener_politicas(){
    * @author Margarita Mawyin
    * @returns Devuelve un Observable con un arreglo de objetos PaymentEfectivo
    */
-  obtener_pagos_efectivo() : Observable<Array<PaymentEfectivo>> {
+  obtener_pagos_efectivo(): Observable<Array<PaymentEfectivo>> {
     return this.http.get(this.API_URL + '/pago_efectivos/') as Observable<Array<PaymentEfectivo>>;
   }
 
@@ -1201,7 +1202,7 @@ obtener_politicas(){
    * @author Margarita Mawyin
    * @returns Devuelve un Observable con un objeto ProveedorPaginacion
    */
-  obtener_pagos_efectivoP(page=1) : Observable<any> {
+  obtener_pagos_efectivoP(page = 1): Observable<any> {
     return this.http.get(`${this.API_URL}/pago_efectivosP/?page=${page}`) as Observable<any>;
   }
 
@@ -1211,8 +1212,8 @@ obtener_politicas(){
  * @author Margarita Mawyin
  * @returns Devuelve un Observable con un objeto ProveedorPaginacion
  */
-  obtener_pagos_tarjetaP(page=1) :  Observable<any>{
-    return this.http.get(`${this.API_URL}/pago_tarjetasP/?page=${page}`) as  Observable<any>;
+  obtener_pagos_tarjetaP(page = 1): Observable<any> {
+    return this.http.get(`${this.API_URL}/pago_tarjetasP/?page=${page}`) as Observable<any>;
 
   }
 
@@ -1283,7 +1284,7 @@ obtener_politicas(){
  * @author Margarita Mawyin
  * @returns Devuelve un Observable con un arreglo de objetos PaymentTarjeta
  */
-  obtener_pagos_tarjeta() : Observable<Array<PaymentTarjeta>>{
+  obtener_pagos_tarjeta(): Observable<Array<PaymentTarjeta>> {
     return this.http.get(this.API_URL + '/pago_tarjetas/') as Observable<Array<PaymentTarjeta>>;
   }
 
@@ -1298,8 +1299,8 @@ obtener_politicas(){
    * @param pago_ID un id de  obtener_pagos_tarjeta()
    * @returns Devuelve un Observable con un objeto PagosTarjetaUser
    */
-  obtener_pago_solT(pago_ID: any) : Observable<PagosTarjetaUser> {
-    return this.http.get(`${this.API_URL}/pagosol_tarjeta/${pago_ID}`)  as Observable<PagosTarjetaUser>;
+  obtener_pago_solT(pago_ID: any): Observable<PagosTarjetaUser> {
+    return this.http.get(`${this.API_URL}/pagosol_tarjeta/${pago_ID}`) as Observable<PagosTarjetaUser>;
   }
   //FALTA
   enviar_correo_alerta(correo: any, asunto: any, texto: any) {
@@ -1326,7 +1327,7 @@ obtener_politicas(){
    * @param id
    * @returns Retorna un objeto Sugerencia
    */
-  obtener_sugerencia(id: any): Observable<Sugerencia>{
+  obtener_sugerencia(id: any): Observable<Sugerencia> {
     return this.http.get(`${this.API_URL}/suggestion/${id}`) as Observable<Sugerencia>;
   }
 
@@ -1337,7 +1338,7 @@ obtener_politicas(){
   * @param id
   * @returns Retorna objetos de ProveedorPaginacion
   */
-  obtener_sugerenciasLeidas(page = 1) : Observable<ProveedorPaginacion>{
+  obtener_sugerenciasLeidas(page = 1): Observable<ProveedorPaginacion> {
     return this.http.get(`${this.API_URL}/read-suggestions/?page=${page}`) as Observable<ProveedorPaginacion>;
   }
 
@@ -1348,7 +1349,7 @@ obtener_politicas(){
   * @param id
   * @returns Retorna objetos de ProveedorPaginacion
   */
-  obtener_sugerenciasNoLeidas(page = 1) : Observable<ProveedorPaginacion> {
+  obtener_sugerenciasNoLeidas(page = 1): Observable<ProveedorPaginacion> {
     return this.http.get(`${this.API_URL}/unread-suggestions/?page=${page}`) as Observable<ProveedorPaginacion>;
   }
 
@@ -1359,13 +1360,13 @@ obtener_politicas(){
   * @param id
   * @returns Retorna 5 objetos de Ciudades
   */
-  getCiudades() : Observable<Ciudad> {
+  getCiudades(): Observable<Ciudad> {
     return this.http.get(`${this.API_URL}/ciudades/`) as Observable<Ciudad>;
   }
 
   //NO hay metodo put ciudades en la BD
-  crear_Ciudades(ciudad: Ciudad)  {
-    return this.http.put(`${this.API_URL}/ciudades/`, ciudad) ;
+  crear_Ciudades(ciudad: Ciudad) {
+    return this.http.put(`${this.API_URL}/ciudades/`, ciudad);
   }
 
   /**
@@ -1374,7 +1375,7 @@ obtener_politicas(){
   * @author Margarita Mawyin
   * @returns Retorna arreglo de objetos  Plan
   */
-  obtener_planes() : Observable<Array<Plan>> {
+  obtener_planes(): Observable<Array<Plan>> {
     return this.http.get(this.API_URL + '/planes/') as Observable<Array<Plan>>;
   }
 
@@ -1404,10 +1405,10 @@ obtener_politicas(){
    * @param bodyCrear Recibe un Objeto BodyActualizarPlan la cual se encarga de actualizar un plan con los campos necesarios.
    * @returns Devuelve un Observable con un objeto Plan
    */
-  actualizar_plan(bodyActualizar: BodyActualizarPlan) : Observable<Plan> {
+  actualizar_plan(bodyActualizar: BodyActualizarPlan): Observable<Plan> {
 
     const dataUpdate = new FormData();
-    bodyActualizar.id ? dataUpdate.append('id', bodyActualizar.id):null
+    bodyActualizar.id ? dataUpdate.append('id', bodyActualizar.id) : null
     bodyActualizar.nombre ? dataUpdate.append('nombre', bodyActualizar.nombre) : null;
     bodyActualizar.imagen ? dataUpdate.append('imagen', bodyActualizar.imagen) : null;
     bodyActualizar.descripcion ? dataUpdate.append('descripcion', bodyActualizar.descripcion) : null;
@@ -1417,10 +1418,10 @@ obtener_politicas(){
 
     return this.http.put(this.API_URL + '/planes/', dataUpdate) as Observable<Plan>;
   }
-  actualizar_plan_estado(bodyActualizar: BodyActualizarPlan) : Observable<Plan> {
+  actualizar_plan_estado(bodyActualizar: BodyActualizarPlan): Observable<Plan> {
 
     const dataUpdate = new FormData();
-    bodyActualizar.id ? dataUpdate.append('id', bodyActualizar.id):null
+    bodyActualizar.id ? dataUpdate.append('id', bodyActualizar.id) : null
     bodyActualizar.estado ? dataUpdate.append('estado', bodyActualizar.estado.toString()) : null;
 
     return this.http.put(this.API_URL + '/planes/', dataUpdate) as Observable<Plan>;
@@ -1433,7 +1434,7 @@ obtener_politicas(){
    * @param id Recibe el id del plan . ID se puede sacar de obtener_planes()
    * @returns Retorna un objeto Plan
    */
-  borrar_plan(id: any) : Observable<Plan>{
+  borrar_plan(id: any): Observable<Plan> {
     return this.http.delete(`${this.API_URL}/planes/${id}`) as Observable<Plan>;
   }
 
@@ -1445,7 +1446,7 @@ obtener_politicas(){
    * @param page Recibe un numero de pagina. 1
    * @returns Retorna un objeto ProveedorPaginacion
    */
-  obtener_publicidades(page=1) : any {
+  obtener_publicidades(page = 1): any {
     return this.http.get(`${this.API_URL}/publicidades/?page=${page}`)
   }
 
@@ -1458,7 +1459,7 @@ obtener_politicas(){
    * @param page Recive un numero de pagina
    * @returns Retorna un objeto ProveedorPaginacion
    */
-  filtrar_publicidadName(buscar: string, page: string) : Observable<ProveedorPaginacion>{
+  filtrar_publicidadName(buscar: string, page: string): Observable<ProveedorPaginacion> {
     return this.http.get(
       `${this.API_URL}/publicidades_search/?page=${page}&buscar=${buscar}`
     ) as Observable<ProveedorPaginacion>;
@@ -1496,14 +1497,14 @@ obtener_politicas(){
 
 
 
-/**
- *
- * @param bodyActualizar
- * @returns
- */
+  /**
+   *
+   * @param bodyActualizar
+   * @returns
+   */
   actualizar_publicidad(bodyActualizar: BodyActualizarPublicidad): Observable<Publicidad> {
     const dataUpdate = new FormData();
-    bodyActualizar.id ? dataUpdate.append('id', bodyActualizar.id):null
+    bodyActualizar.id ? dataUpdate.append('id', bodyActualizar.id) : null
     bodyActualizar.titulo ? dataUpdate.append('titulo', bodyActualizar.titulo) : null;
     bodyActualizar.imagen ? dataUpdate.append('imagen', bodyActualizar.imagen) : null;
     bodyActualizar.descripcion ? dataUpdate.append('descripcion', bodyActualizar.descripcion) : null;
@@ -1572,15 +1573,73 @@ obtener_politicas(){
   }
 
   /**
+   * Funcion que trae las notificaciones
+   *
+   * @returns Retorna un objeto Notificacion
+   */
+  get_notificacion(): Observable<NotificacionAnuncio> {
+    return this.http.get(`${this.API_URL}/notificaciones/`) as Observable<NotificacionAnuncio>;
+  }
+
+  delete_notificacion(id: any) {
+    return this.http.delete(`${this.API_URL}/notificaciones/${id}`);
+  }
+
+  crear_notificacion(bodyCrear: BodyCrearNotificacionAutomatica): Observable<any> {
+    const dataCrear = new FormData();
+    dataCrear.append("nombre", bodyCrear.nombre);
+    dataCrear.append("titulo", bodyCrear.titulo);
+    dataCrear.append("descripcion", bodyCrear.descripcion);
+    dataCrear.append("tipo_proveedores", bodyCrear.tipo_proveedores);
+    dataCrear.append("frecuencia", bodyCrear.frecuencia);
+    dataCrear.append("fecha_inicio", bodyCrear.fecha_iniciacion);
+    dataCrear.append("fecha_expiracion", bodyCrear.fecha_expiracion);
+    dataCrear.append("hora", bodyCrear.hora);
+    dataCrear.append("ruta", bodyCrear.ruta);
+    bodyCrear.imagen ? dataCrear.append("imagen", bodyCrear.imagen) : null;
+    return this.http.post(`${this.API_URL}/notificaciones/`, dataCrear) as Observable<any>;
+  }
+
+  cambio_notificacion_estado(id: string, estado: boolean): Observable<any> {
+    return this.http.put(`${this.API_URL}/notificaciones_estado/?id=${id}`, {
+      estado: estado,
+    }) as Observable<any>;
+  }
+
+  /**
    * Funcion que trae las notificaciones/anuncios
    *
    * @returns Retorna un objeto NotificacionAnuncio
    */
-  get_notificacion(): Observable<NotificacionAnuncio> {
+  get_notificacion_masiva(): Observable<NotificacionAnuncio> {
     return this.http.get(`${this.API_URL}/notificacion-anuncio/`) as Observable<NotificacionAnuncio>;
   }
 
-  delete_notificacion(id: any){ 
+  put_notificacion_masiva(bodyActualizar: BodyActualizarNotificacionAnuncio, id: any): Observable<NotificacionAnuncio> {
+    const dataActualizar = new FormData();
+    dataActualizar.append("nombre", bodyActualizar.nombre);
+    dataActualizar.append("titulo", bodyActualizar.titulo);
+    dataActualizar.append("descripcion", bodyActualizar.descripcion);
+    dataActualizar.append("tipo_proveedores", bodyActualizar.tipo_proveedores);
+    dataActualizar.append("frecuencia", bodyActualizar.frecuencia);
+    dataActualizar.append("fecha_inicio", bodyActualizar.fecha_iniciacion);
+    dataActualizar.append("fecha_expiracion", bodyActualizar.fecha_expiracion);
+    dataActualizar.append("hora", bodyActualizar.hora);
+    dataActualizar.append("ruta", bodyActualizar.ruta);
+    if (bodyActualizar.imagen) {
+      dataActualizar.append("imagen", bodyActualizar.imagen);
+    }
+
+    return this.http.put(`${this.API_URL}/notificacion-anuncio/${id}`, dataActualizar) as Observable<NotificacionAnuncio>;
+  }
+
+  cambio_notificacion_masiva_estado(id: string, estado: boolean): Observable<any> {
+    return this.http.put(`${this.API_URL}/notificacion-anuncio-estado/?id=${id}`, {
+      estado: estado,
+    }) as Observable<any>;
+  }
+
+  delete_notificacion_masiva(id: any) {
     return this.http.delete(`${this.API_URL}/notificacion-anuncio/${id}`);
   }
 
@@ -1594,9 +1653,14 @@ obtener_politicas(){
    */
   send_notificacion(bodyCrear: BodyCrearNotificacionAnuncio): Observable<any> {
     const dataCrear = new FormData();
+    dataCrear.append("nombre", bodyCrear.nombre);
     dataCrear.append("titulo", bodyCrear.titulo);
-    dataCrear.append("mensaje", bodyCrear.mensaje);
     dataCrear.append("descripcion", bodyCrear.descripcion);
+    dataCrear.append("tipo_proveedores", bodyCrear.tipo_proveedores);
+    dataCrear.append("frecuencia", bodyCrear.frecuencia);
+    dataCrear.append("fecha_iniciacion", bodyCrear.fecha_iniciacion);
+    dataCrear.append("fecha_expiracion", bodyCrear.fecha_expiracion);
+    dataCrear.append("hora", bodyCrear.hora);
     dataCrear.append("ruta", bodyCrear.ruta);
     bodyCrear.imagen ? dataCrear.append("imagen", bodyCrear.imagen) : null;
     return this.http.post(`${this.API_URL}/notificacion-anuncio/`, dataCrear) as Observable<any>;
@@ -1810,8 +1874,8 @@ obtener_politicas(){
    * @param bodyCrear Recibe un Objeto BodyActualizarProfesion el cual se ectualiza una profesion con los campos necesarios.
    * @returns
    */
-  actualizar_profesion(bodyCrear: BodyActualizarProfesion) : Observable<BodyResponseActualizarProfesion>{
-    if(bodyCrear.foto) {
+  actualizar_profesion(bodyCrear: BodyActualizarProfesion): Observable<BodyResponseActualizarProfesion> {
+    if (bodyCrear.foto) {
       console.log('Hay un File (foto): ', bodyCrear.foto);
     }
     const dataCrear = new FormData();
@@ -1876,22 +1940,22 @@ obtener_politicas(){
     return this.http.delete(`${this.API_URL}/profesion_prov/${id}`);
   }
 
-  cambioContrasenia(correo: string, contrasenia: string){
+  cambioContrasenia(correo: string, contrasenia: string) {
     return this.http.get(`${this.API_URL}/cambiocontrasenia/${correo}/${contrasenia}`);
   }
 
-  loginPythonAnywhere(bodyLogin: BodyLogin): Observable<BodyLoginResponse>{
-    return this.http.post(this.API_URL+'/login/', bodyLogin) as Observable<BodyLoginResponse>;
+  loginPythonAnywhere(bodyLogin: BodyLogin): Observable<BodyLoginResponse> {
+    return this.http.post(this.API_URL + '/login/', bodyLogin) as Observable<BodyLoginResponse>;
   }
-  loginAdminPythonAnywhere(bodyLogin: BodyLogin): Observable<BodyLoginResponse>{
-    return this.http.post(this.API_URL+'/loginadmin/', bodyLogin) as Observable<BodyLoginResponse>;
+  loginAdminPythonAnywhere(bodyLogin: BodyLogin): Observable<BodyLoginResponse> {
+    return this.http.post(this.API_URL + '/loginadmin/', bodyLogin) as Observable<BodyLoginResponse>;
   }
 
-  getAdminByCorreo(correo: string){
+  getAdminByCorreo(correo: string) {
     return this.http.get("https://tomesoft1.pythonanywhere.com/datos-admin/" + correo);
   }
-  actualizarCaducidad(id: number, numero: any){
-    return this.http.put(`${this.API_URL}/actualizar_caducidad/${id}`,numero);
+  actualizarCaducidad(id: number, numero: any) {
+    return this.http.put(`${this.API_URL}/actualizar_caducidad/${id}`, numero);
   }
 }
 

@@ -79,10 +79,7 @@ export interface BodyActualizarProveedorPendiente {
 }
 
 export interface BodyActualizarProveedor {
-  id: number;
-  username: string;
   email: string;
-  emailNuevo: string;
   nombres: string;
   apellidos: string;
   ciudad: string;
@@ -97,8 +94,10 @@ export interface BodyActualizarProveedor {
   tipo_cuenta: string;
   copiaCedula: File | null;
   copiaLicencia: File | null;
-  filesDocuments: File[] | null;
+  filesDocuments: (File | null)[]; 
   ano_profesion: string;
+  profesion: string;
+  foto: File | null;
 }
 
 export interface BodyCrearProveedor {
