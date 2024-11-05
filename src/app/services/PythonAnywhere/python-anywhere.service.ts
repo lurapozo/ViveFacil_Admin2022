@@ -761,6 +761,10 @@ export class PythonAnywhereService {
     return this.http.delete(`${this.API_URL}/proveedor_delete/${id}`);
   }
 
+  eliminar_proveedor1(id: number) {
+    return this.http.delete(`${this.API_URL}/proveedores_proveedores/delete/${id}}`);
+  }
+
   //-----------------------------------------------------------------------------------------------------------------------
 
 
@@ -1053,6 +1057,12 @@ export class PythonAnywhereService {
     return this.http.delete(
       `${this.API_URL}/proveedores_pendientes/${id}`
     );
+  }
+
+  cambio_pendiente_estado(id: string, estado: boolean): Observable<any> {
+    return this.http.put(`${this.API_URL}/proveedores_pendientes_estado/?id=${id}`, {
+      estado: estado,
+    }) as Observable<any>;
   }
   eliminar_proveedores(id: any) {//FALTA
     return this.http.delete(

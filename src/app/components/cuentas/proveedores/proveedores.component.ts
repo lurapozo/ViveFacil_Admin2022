@@ -681,4 +681,15 @@ export class ProveedoresComponent {
     this.showHeaderC = true;
     this.proveedor_seleccionado = a;    
   }
+
+  eliminarProveedor(proveedor: any) {
+    const id = proveedor.id;
+    if (id) {
+        this.pythonAnywhereService.eliminar_proveedor1(id).subscribe(resp => {
+            console.log("Proveedor eliminado exitosamente:", resp);
+        }, error => {
+            console.error("Error al eliminar el proveedor:", error);
+        });
+    }
+  }
 }
