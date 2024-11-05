@@ -122,6 +122,11 @@
     margin: 0;
     font-size: 14px;
     color: #333;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Muestra solo 2 líneas */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis; 
 }
 
 .fecha {
