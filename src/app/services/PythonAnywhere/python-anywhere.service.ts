@@ -13,7 +13,7 @@ import { BodyEmail, BodyResponseEmail } from 'src/app/interfaces/email';
 import { BodyActualizarGroup, BodyCrearGroup, Group, Permission } from 'src/app/interfaces/group';
 import { BodyActualizarInsignia, BodyActualizarMedalla, BodyCrearInsignia, BodyCrearMedalla, BodyResponseCrearInsignia, Insignia, Medalla } from 'src/app/interfaces/insignia';
 import { BodyLogin, BodyLoginResponse } from 'src/app/interfaces/login';
-import { BodyActualizarNotificacionAnuncio, BodyCrearNotificacionAnuncio, BodyCrearNotificacionAutomatica, NotificacionAnuncio } from 'src/app/interfaces/notificacion';
+import { BodyActualizarNotificacionAnuncio, BodyActualizarNotificacionAutomatica, BodyCrearNotificacionAnuncio, BodyCrearNotificacionAutomatica, NotificacionAnuncio } from 'src/app/interfaces/notificacion';
 import { PaymentEfectivo, PaymentPaginacion, PaymentTarjeta } from 'src/app/interfaces/payment';
 import { BodyActualizarPlan, BodyActualizarPlanProveedor, BodyCrearPlan, BodyCrearPlanProveedor, BodyResponseCrearPlan, Plan, PlanProveedor } from 'src/app/interfaces/plan';
 import { BodyActualizarProfesion, BodyCrearProfesion, BodyResponseActualizarProfesion, BodyResponseCrearProfesion, Profesion } from 'src/app/interfaces/profesion';
@@ -1608,6 +1608,24 @@ export class PythonAnywhereService {
     dataCrear.append("ruta", bodyCrear.ruta);
     bodyCrear.imagen ? dataCrear.append("imagen", bodyCrear.imagen) : null;
     return this.http.post(`${this.API_URL}/notificaciones/`, dataCrear) as Observable<any>;
+  }
+
+  put_notificacion_auto(bodyActualizar: BodyActualizarNotificacionAutomatica, id: any): Observable<NotificacionAnuncio> {
+    const dataActualizar = new FormData();
+    dataActualizar.append("nombre", bodyActualizar.nombre);
+    dataActualizar.append("titulo", bodyActualizar.titulo);
+    dataActualizar.append("descripcion", bodyActualizar.descripcion);
+    dataActualizar.append("tipo_proveedores", bodyActualizar.tipo_proveedores);
+    dataActualizar.append("frecuencia", bodyActualizar.frecuencia);
+    dataActualizar.append("fecha_inicio", bodyActualizar.fecha_iniciacion);
+    dataActualizar.append("fecha_expiracion", bodyActualizar.fecha_expiracion);
+    dataActualizar.append("hora", bodyActualizar.hora);
+    dataActualizar.append("ruta", bodyActualizar.ruta);
+    if (bodyActualizar.imagen) {
+      dataActualizar.append("imagen", bodyActualizar.imagen);
+    }
+
+    return this.http.put(`${this.API_URL}/notificaciones/${id}`, dataActualizar) as Observable<NotificacionAnuncio>;
   }
 
   cambio_notificacion_estado(id: string, estado: boolean): Observable<any> {

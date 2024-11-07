@@ -24,17 +24,31 @@
                     
                     <div class="form-group contTexto d-flex">
                         <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">
-                                    <img src="assets/imagenes/PASSWORD.png" alt="Ícono de Contraseña">
-                                </span>
-                            </div>
-                            <input id="id_password" type="password" class="form-control" placeholder="CONTRASEÑA" formControlName="password">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text">
+                              <img src="assets/imagenes/PASSWORD.png" alt="Ícono de Contraseña">
+                            </span>
+                          </div>
+                          <!-- Campo de Contraseña -->
+                          <input 
+                            id="id_password" 
+                            [type]="passwordVisible ? 'text' : 'password'" 
+                            class="form-control" 
+                            placeholder="CONTRASEÑA" 
+                            formControlName="password">
+                          
+                          <!-- Ícono de ojo para mostrar/ocultar contraseña -->
+                          <div class="input-group-append">
+                            <span class="input-group-text1" (click)="togglePasswordVisibility()">
+                              <!-- Ícono de ojo usando Bootstrap Icons -->
+                              <i class="bi" [ngClass]="{'bi-eye': !passwordVisible, 'bi-eye-slash': passwordVisible}" ></i>
+                            </span>
+                          </div>
                         </div>
-                    </div>
+                      </div>
+                     
     
-                    <div *ngIf="isLoginFailed" style="color:#f5e500">
-                        <br>
+                    <div *ngIf="isLoginFailed" style="color:#f5e500; margin-top:10px;">
                         Credenciales incorrectas, por favor inténtalo de nuevo.
                     </div>
                     

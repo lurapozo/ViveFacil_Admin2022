@@ -452,7 +452,7 @@ export class NotificacionesAutomaticasComponent {
       console.log("Formulario inválido");
       return;
     } else {
-      this.pythonAnywhereService.put_notificacion_masiva(notiEditar,id.toString()).subscribe({
+      this.pythonAnywhereService.put_notificacion_auto(notiEditar,id.toString()).subscribe({
         next: resp => {
           console.log("Notificación actualizada:", resp);
           this.get_notificaciones();

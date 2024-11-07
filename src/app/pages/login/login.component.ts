@@ -23,8 +23,9 @@ export class LoginComponent {
   isLoginFailed: boolean = false;
   rememberMe: boolean = false;
   resetEmail: string = '';
+  passwordVisible = false;
 
-  constructor(private userService: UserService,private fb: FormBuilder, private router: Router, private pythonAnywhereService: PythonAnywhereService) { }
+  constructor(private userService: UserService, private fb: FormBuilder, private router: Router, private pythonAnywhereService: PythonAnywhereService) { }
 
   ngOnInit() {
     // Inicializar el formulario
@@ -33,7 +34,11 @@ export class LoginComponent {
       password: ['', Validators.required],
     });
     this.loadSavedCredentials();
-  } 
+  }
+
+  togglePasswordVisibility() {
+    this.passwordVisible = !this.passwordVisible;
+  }
 
   loadSavedCredentials() {
     const savedEmail = localStorage.getItem('email');
@@ -49,13 +54,14 @@ export class LoginComponent {
     }
   }
 
-  onSubmit(){
+  onSubmit() {
+    this.isLoginFailed = false;
     console.log("Intento de Login")
     const email = this.loginForm.value.email;
     const pass = this.loginForm.value.password;
     console.log(email)
     console.log(pass)
-    if(email && pass){
+    if (email && pass) {
       console.log("entra aca")
       if (this.rememberMe) {
         localStorage.setItem('email', email);
@@ -64,7 +70,7 @@ export class LoginComponent {
         console.log('Datos guardados en localStorage:', email, pass);
       } else {
         // Limpiar localStorage si no se quiere recordar
-        localStorage.clear(); 
+        localStorage.clear();
       }
       this.userService.login(email, pass)
         .then((respuesta) => {
@@ -112,15 +118,16 @@ export class LoginComponent {
           this.pythonAnywhereService.loginAdminPythonAnywhere(bodyLogin).subscribe((resp) => {
             console.log("aca hace login o algo asi");
             console.log(resp);
-            if(resp.error){
+            if (resp.error) {
               console.log(resp.error);
               this.isRegistered = false;
+              this.isLoginFailed = true;
             }
             else {
               console.log("aca crea token");
               let tokenPythonAny = resp.token;
-              if (!tokenPythonAny){
-                tokenPythonAny=""
+              if (!tokenPythonAny) {
+                tokenPythonAny = ""
               }
               //console.log('Se obtiene token de python anywhere auth y se lo guarda en el local storage: ', tokenPythonAny);
               localStorage.setItem('tokenPythonAnywhere', tokenPythonAny);
@@ -141,17 +148,25 @@ export class LoginComponent {
               // localStorage.setItem('admin', admin);
               this.router.navigate(['/main']);
             }
+          }, (error) => {
+            // En caso de error en la petición HTTP, manejar aquí
+            console.log("Credenciales Incorrectas");
+            this.isLoginFailed = true;  // Establecer como 'true' si hubo un error de red o servidor
           });
+
         })
         .catch(error => {
           console.log(error);
           this.isRegistered = false;
+          this.isLoginFailed = true;
         })
-      ;
+        ;
+    } else {
+      this.isLoginFailed = true;
     }
   }
 
-  getErrorMessage( formGroup: FormGroup, item: string): string {
+  getErrorMessage(formGroup: FormGroup, item: string): string {
     const itemControl: FormControl = formGroup.get(item) as FormControl;
     switch (item) {
       case 'email':

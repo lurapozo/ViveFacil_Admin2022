@@ -628,6 +628,10 @@
                     >
                   </div>
                   <div class="col-7">
+                    <small>{{
+                      noti_seleccionada?.fecha_iniciacion
+                        | date : " MMM d, y, h:mm:ss a"
+                    }}</small>
                     <input
                       type="date"
                       id="start"
@@ -641,10 +645,9 @@
                           : ''
                       "
                       required
-                      pattern="\d{4}-\d{2}-\d{2}"
                       formControlName="fecha_iniciacion"
                       min="{{ getCurrentDate() }}"
-                      [value]="noti_seleccionada?.fecha_iniciacion"
+                      [value]="noti_seleccionada?.fecha_iniciacion | date:'yyyy-MM-ddTHH:mm'"
                       [(ngModel)]="noti_seleccionada.fecha_iniciacion"
                     />
                     <div class="invalid-feedback">
@@ -659,8 +662,12 @@
                       ><h3 class="m-0 p-0 fw-bold">Fecha de Fin:</h3></label>
                   </div>
                   <div class="col-7">
+                    <small>{{
+                      noti_seleccionada?.fecha_expiracion
+                        | date : " MMM d, y, h:mm:ss a"
+                    }}</small>
                     <input
-                      type="date"
+                      type="datetime-local"
                       id="start"
                       [ngClass]="
                         isInvalidForm('fecha_expiracion')
@@ -671,12 +678,10 @@
                           ? 'is-valid'
                           : ''
                       "
-                      required
-                      pattern="\d{4}-\d{2}-\d{2}"
+                      
                       formControlName="fecha_expiracion"
-                      min="{{ getCurrentDate() }}"
-                      [value]="noti_seleccionada?.fecha_expiracion"
-                      [(ngModel)]="noti_seleccionada.fecha_expiracion" 
+                      [(ngModel)]="noti_seleccionada.fecha_expiracion"
+                      [value]="noti_seleccionada?.fecha_expiracion | date:'yyyy-MM-ddTHH:mm'" 
                     />
                     <div class="invalid-feedback">
                       {{ getErrorMessage(editNotificacionForm, "fecha_expiracion") }}

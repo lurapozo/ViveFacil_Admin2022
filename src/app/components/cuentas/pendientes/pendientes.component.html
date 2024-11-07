@@ -76,7 +76,7 @@
         <table class="table table-striped custom-table">
           <tbody>
             <tr
-              (click)="
+              (click)="get_proveedores_pendientes_act();
                 edit_pend(a);"
               *ngFor="let a of arr_filtered_pendiente"
               role="button"
@@ -272,6 +272,7 @@
             </a>
             <input
               type="file"
+              #fileInput1
               accept="image/*,.pdf"
               formControlName="copiaCedula"
               class="form-control"
@@ -299,7 +300,6 @@
                 [ngClass]="isInvalidForm('telefono') ? 'is-invalid' : ''"
                 type="number"
                 [placeholder]="pendiente_seleccionada?.telefono"
-                [value]="pendiente_seleccionada?.telefono"
                 [(ngModel)]="pendiente_seleccionada.telefono">
               
               <div class="invalid-feedback">
@@ -319,7 +319,6 @@
                 class="form-select"
                 [ngClass]="isInvalidForm('ciudad') ? 'is-invalid' : ''"
                 formControlName="ciudad"
-                [value]="pendiente_seleccionada?.ciudad"
                 aria-describedby="selectorServicioCrearFeedback"
                 [(ngModel)]="pendiente_seleccionada.ciudad">
               
@@ -346,7 +345,6 @@
                 formControlName="direccion"
                 class="form-control"
                 [ngClass]="isInvalidForm('direccion') ? 'is-invalid' : ''"
-                [value]="pendiente_seleccionada?.direccion"
                 [placeholder]="pendiente_seleccionada?.direccion"
                 [(ngModel)]="pendiente_seleccionada.direccion">
               
@@ -371,7 +369,6 @@
                   isInvalidForm('descripcion') ? 'is-invalid' : ''
                 "
                 [placeholder]="pendiente_seleccionada?.descripcion"
-                [value]="pendiente_seleccionada?.descripcion"
                 [(ngModel)]="pendiente_seleccionada.descripcion">
               
               <div class="invalid-feedback">
@@ -399,6 +396,7 @@
               </a>
               <input
               type="file"
+              #fileInput1
               accept="image/*,.pdf"
                 formControlName="documentos"
                 class="form-control"
@@ -434,6 +432,8 @@
               <input
                 type="file"
                 #fileInput
+          
+                #fileInput1
                 formControlName="foto"
                 accept="image/*"
                 class="form-control"
@@ -466,7 +466,6 @@
                   formControlName="tipo_cuenta"
                   class="form-select"
                   [ngClass]="isInvalidForm('tipo_cuenta') ? 'is-invalid' : ''"
-                  [value]="pendiente_seleccionada?.tipo_cuenta"
                   aria-describedby="selectorServicioCrearFeedback"
                   [(ngModel)]="pendiente_seleccionada.tipo_cuenta">
                 
@@ -507,7 +506,6 @@
                 isInvalidForm('numero_cuenta') ? 'is-invalid' : ''
               "
               [placeholder]="pendiente_seleccionada?.numero_cuenta"
-              [value]="pendiente_seleccionada?.numero_cuenta"
               [(ngModel)]="pendiente_seleccionada.numero_cuenta">
             
             <div class="invalid-feedback">
@@ -530,7 +528,6 @@
                       class="form-control"
                       [ngClass]="isInvalidForm('banco') ? 'is-invalid' : ''"
                       [placeholder]="pendiente_seleccionada?.banco"
-                      [value]="pendiente_seleccionada?.banco"
                       [(ngModel)]="pendiente_seleccionada.banco">
                     
                     <div class="invalid-feedback">
@@ -555,7 +552,6 @@
                   [ngClass]="isInvalidForm('licencia') ? 'is-invalid' : ''"
                   formControlName="licencia"
                   id="tienelicencia"
-                  [value]="pendiente_seleccionada?.licencia"
                   aria-describedby="selectorServicioCrearFeedback"
                   [(ngModel)]="pendiente_seleccionada.licencia">
                 >
@@ -575,7 +571,34 @@
               </div>
             </div>
           </div>
-
+          <div  class="form-field">
+            <div class="col-5">
+              <label for="inputNombre" class="form-label"
+                ><h3 class="m-0 p-0 fw-bold">Documentación Licencia:</h3></label
+              >
+            </div>
+            <div class="col-7">
+              <a
+                href="https://tomesoft1.pythonanywhere.com{{
+                    pendiente_seleccionada?.copiaLicencia
+                  }}"
+                [download]="getNombreArchivo('copiaLicencia',  pendiente_seleccionada?.copiaLicencia).nombreArchivo">
+                <p style="color: black; font-size:12px">
+                    {{ getNombreArchivo('documentos',  pendiente_seleccionada?.copiaLicencia).nombreArchivo}}
+                  
+                </p>
+              </a>
+              <input
+              type="file"
+              #fileInput1
+              accept="image/*,.pdf"
+                formControlName="copiaLicencia"
+                class="form-control"
+                (change)="loadFileFromDevice($event,'copiaLicencia')"
+              />
+            </div>
+          </div>
+          
           <div class="form-field">
             <div class="col-5">
               <label for="inputNombre" class="form-label"
@@ -593,7 +616,6 @@
                   isInvalidForm('ano_experiencia') ? 'is-invalid' : ''
                 "
                 [placeholder]="pendiente_seleccionada?.ano_experiencia"
-                [value]="pendiente_seleccionada?.ano_experiencia"
                 [(ngModel)]="pendiente_seleccionada.ano_experiencia">
               
               <div class="invalid-feedback">
@@ -650,7 +672,7 @@
           establecerMensaje(
               'Está seguro que desea actualizar la información?',
               'aceptar'
-            );showHeader = true; showHeaderC= false ; showadmi = false;
+            );get_proveedores_pendientes_act();showHeader = true; showHeaderC= false ; showadmi = false;
           
         "
       >

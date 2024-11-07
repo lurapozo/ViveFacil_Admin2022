@@ -12,12 +12,13 @@ import { UserService } from 'src/app/services/user/user.service';
   templateUrl: './pendientes.component.html',
   styleUrls: ['./pendientes.component.css']
 })
-export class PendientesComponent{
+export class PendientesComponent {
   @ViewChild('modalConfirmacion4') modalConfirmacion4: ElementRef | any;
-  generos = ['Masculino', 'Femenino', 'Otro'];
-  ciudades = ['Guayaquil', 'Quito', 'Cuenca', 'Sto. Domingo', 'Ibarra'];
-  tipoCuentas = ['Ahorro', 'Corriente'];
-  licencia = ['Si', 'No'];
+  @ViewChild('fileInput1') fileInput1!: ElementRef;
+  generos: string[];
+  ciudades: string[];
+  tipoCuentas: string[];
+  licencia: string[];
   profesiones: string[] = [];
   total = 0
   arr_pendiente!: any[];
@@ -32,19 +33,19 @@ export class PendientesComponent{
   mensajeAlerta: string = '';
   isAceptar = true; isNegar = true;
   habilitar = ''
-  mostrar1=false;
-  mostrar2=false;
-  fileImgPerfil: File| null = null;
-  fileImgPerfil1: File| null = null;
-  fileImgPerfil2: File| null = null;
-  fileImgPerfil3: File| null = null;
-  filePDF: File| null = null;
-  filePDF1: File| null = null;
-  filePDF2: File| null = null;
-  filePDF3: File| null = null;
-  copiaCedulaNombre= null;
-  copiaLicenciaNombre= null;
-  copiaDocumentosNombre= null;
+  mostrar1 = false;
+  mostrar2 = false;
+  fileImgPerfil: File | null = null;
+  fileImgPerfil1: File | null = null;
+  fileImgPerfil2: File | null = null;
+  fileImgPerfil3: File | null = null;
+  filePDF: File | null = null;
+  filePDF1: File | null = null;
+  filePDF2: File | null = null;
+  filePDF3: File | null = null;
+  copiaCedulaNombre = null;
+  copiaLicenciaNombre = null;
+  copiaDocumentosNombre = null;
   mensajeIncompleto: string[] = [];
   mensajeIncompletoString = 'Campos completos';
   nombre: any;
@@ -58,7 +59,7 @@ export class PendientesComponent{
   fechaInicio: Date | null = null;
   fechaFin: Date | null = null;
   fechasFiltradas: any[] = [];
-  
+
   formEdit: FormGroup = new FormGroup({
     nombre: new FormControl('', [Validators.required]),
     apellidos: new FormControl('', [Validators.required]),
@@ -80,16 +81,16 @@ export class PendientesComponent{
     genero: new FormControl('', [Validators.required]),
     profesion: new FormControl('', [Validators.required]),
     licencia: new FormControl('',),
-    copiaCedula: new FormControl(this.filePDF1 || this.fileImgPerfil1),
+    copiaCedula: new FormControl(this.filePDF1 || this.fileImgPerfil1 || ''),
     tipo_cuenta: new FormControl('', [Validators.required]),
     numero_cuenta: new FormControl('', [Validators.required]),
     banco: new FormControl('', [Validators.required]),
     ano_experiencia: new FormControl('', [Validators.required]),
-    copiaLicencia: new FormControl(this.filePDF2 || this.fileImgPerfil2),
+    copiaLicencia: new FormControl(this.filePDF2 || this.fileImgPerfil2 || ''),
     documentos: new FormControl(''),
     descripcion: new FormControl(''),
     foto: new FormControl(this.fileImgPerfil),
-    filesDocuments: new FormControl([this.filePDF3 || this.fileImgPerfil3]),
+    filesDocuments: new FormControl([this.filePDF3 || this.fileImgPerfil3 || '']),
     // foto: new FormControl('', [Validators.required]),
   });
   formNegar: FormGroup = new FormGroup({
@@ -97,15 +98,28 @@ export class PendientesComponent{
   });
   constructor(
     private pythonAnywhereService: PythonAnywhereService,
-    private userService: UserService, 
+    private userService: UserService,
     private sanitizer: DomSanitizer
-    ) {
-
-    this.get_proveedores_pendientes();
-    this. get_servicios();    
+  ) {
+    this.generos = ['Masculino', 'Femenino', 'Otro'];
+    this.ciudades = ['Guayaquil', 'Quito', 'Cuenca', 'Sto. Domingo', 'Ibarra'];
+    this.tipoCuentas = ['Ahorro', 'Corriente'];
+    this.licencia = ['Si', 'No'];
   }
 
-  get_proveedores_pendientes(){
+  ngOnInit() {
+    this.get_servicios();
+    this.get_proveedores_pendientes_act();
+    this.get_proveedores_pendientes();
+  }
+
+  resetFileInput() {
+    if (this.fileInput1 && (this.fileInput1.nativeElement.value === null || this.fileInput1.nativeElement.value === undefined)) {
+      this.fileInput1.nativeElement.value = ''; 
+    }
+  }
+
+  get_proveedores_pendientes() {
     this.pythonAnywhereService.obtener_proveedores_pendientes().subscribe(resp => {
       this.total = Object(resp).total_objects
       this.arr_pendiente = Object(resp).results;
@@ -122,7 +136,7 @@ export class PendientesComponent{
     });
   }
 
-  get_proveedores_pendientes_act(){
+  get_proveedores_pendientes_act() {
     this.pythonAnywhereService.obtener_proveedores_pendientes().subscribe(resp => {
       this.total = Object(resp).total_objects
       this.arr_pendiente = Object(resp).results;
@@ -133,11 +147,11 @@ export class PendientesComponent{
     });
   }
 
-  get_servicios(){
+  get_servicios() {
     this.pythonAnywhereService.obtener_servicios().subscribe(resp => {
       console.log(resp)
-      for (let i=0; i<resp.length; i++){
-        this.profesiones= [...this.profesiones, resp[i].nombre];
+      for (let i = 0; i < resp.length; i++) {
+        this.profesiones = [...this.profesiones, resp[i].nombre];
       }
     });
   }
@@ -170,8 +184,8 @@ export class PendientesComponent{
 
   onCrear() {
     let pendiente: BodyCrearProveedorPendiente = {
-      nombres: this.pendiente_seleccionada.nombres+"1",
-      apellidos: this.pendiente_seleccionada.apellidos+"1",
+      nombres: this.pendiente_seleccionada.nombres + "1",
+      apellidos: this.pendiente_seleccionada.apellidos + "1",
       genero: this.pendiente_seleccionada.genero,
       telefono: this.pendiente_seleccionada.telefono,
       cedula: this.pendiente_seleccionada.cedula,
@@ -215,6 +229,8 @@ export class PendientesComponent{
   }
 
   onEditar() {
+    this.get_proveedores_pendientes_act();
+    this.resetFileInput();
     let pendiente: BodyActualizarProveedorPendiente = {
       nombres: this.formEdit.value.nombre,
       apellidos: this.formEdit.value.apellidos,
@@ -235,23 +251,22 @@ export class PendientesComponent{
       tipo_cuenta: this.formEdit.value.tipo_cuenta,
       foto: this.fileImgPerfil,
       //planilla_servicios: this.formEdit.value.planilla_servicios
-      filesDocuments: [this.filePDF3 || this.fileImgPerfil3] 
+      filesDocuments: [this.filePDF3 || this.fileImgPerfil3]
     }
     console.log("VALORES DEL COSO")
     console.log(this.formEdit)
     console.log("LA COSAS ESAS LASMASD")
     console.log(pendiente)
     console.log("profesion: " + pendiente.profesion)
-    if(pendiente.descripcion === ""){
+    if (pendiente.descripcion === "") {
       // if(this.pendiente_seleccionada.descripcion === ""){
       //   pendiente.descripcion = " "
       // }
-      pendiente.descripcion = this.pendiente_seleccionada.descripcion
+      pendiente.descripcion = this.pendiente_seleccionada.descripcion || ""
     }
     this.pythonAnywhereService.editar_proveedor_pendiente(this.pendiente_seleccionada.id, pendiente).subscribe(resp => {
       console.log(resp)
       this.get_proveedores_pendientes_act();
-      this.get_proveedores_pendientes();
     })
   }
 
@@ -260,16 +275,16 @@ export class PendientesComponent{
     return stringImage.match(new RegExp('https?.*')) !== null;
   }
 
-  loadImageFromDevice(event:any) {
+  loadImageFromDevice(event: any) {
     const file: File = event.target.files[0];
-    if(file){
+    if (file) {
       this.extraerBase64(file)
-      .then((imagen: any) => {
-        this.formEdit.value.foto=file;
-        this.fileImgPerfil = file;
-        // this.imgPerfil = imagen.base;
-      })
-      .catch(err => console.log(err));
+        .then((imagen: any) => {
+          this.formEdit.value.foto = file;
+          this.fileImgPerfil = file;
+          // this.imgPerfil = imagen.base;
+        })
+        .catch(err => console.log(err));
     }
   };
 
@@ -300,159 +315,159 @@ export class PendientesComponent{
     }
   });
 
-  
-  loadPdfFromDevice(event:any) {
+
+  loadPdfFromDevice(event: any) {
     const file: File = event.target.files[0];
     console.log("Archivo de Copia de Cedula")
     console.log(event.target.files)
-    if(file){
+    if (file) {
       this.extraerBase64(file)
-      .then((imagen: any) => {
-        this.formEdit.value.copiaCedula=file;
-        this.filePDF = file;
-        // this.imgPerfil = imagen.base;
-      })
-      .catch(err => console.log(err));
+        .then((imagen: any) => {
+          this.formEdit.value.copiaCedula = file;
+          this.filePDF = file;
+          // this.imgPerfil = imagen.base;
+        })
+        .catch(err => console.log(err));
     }
   };
 
-  loadImageFromDeviceCI(event:any) {
+  loadImageFromDeviceCI(event: any) {
     const file: File = event.target.files[0];
-    if(file){
+    if (file) {
       this.extraerBase64(file)
-      .then((imagen: any) => {
-        this.formEdit.value.copiaCedula=file;
-        this.fileImgPerfil1 = file;
-        // this.imgPerfil = imagen.base;
-      })
-      .catch(err => console.log(err));
+        .then((imagen: any) => {
+          this.formEdit.value.copiaCedula = file;
+          this.fileImgPerfil1 = file;
+          // this.imgPerfil = imagen.base;
+        })
+        .catch(err => console.log(err));
     }
   };
 
-  loadImageFromDeviceLI(event:any) {
+  loadImageFromDeviceLI(event: any) {
     const file: File = event.target.files[0];
-    if(file){
+    if (file) {
       this.extraerBase64(file)
-      .then((imagen: any) => {
-        this.formEdit.value.copiaLicencia=file;
-        this.fileImgPerfil2 = file;
-        // this.imgPerfil = imagen.base;
-      })
-      .catch(err => console.log(err));
+        .then((imagen: any) => {
+          this.formEdit.value.copiaLicencia = file;
+          this.fileImgPerfil2 = file;
+          // this.imgPerfil = imagen.base;
+        })
+        .catch(err => console.log(err));
     }
   };
 
-  loadImageFromDeviceDocCurri(event:any) {
+  loadImageFromDeviceDocCurri(event: any) {
     const file: File = event.target.files[0];
-    if(file){
+    if (file) {
       this.extraerBase64(file)
-      .then((imagen: any) => {
-        this.formEdit.value.filesDocuments=file;
-        this.fileImgPerfil3 = file;
-        // this.imgPerfil = imagen.base;
-      })
-      .catch(err => console.log(err));
+        .then((imagen: any) => {
+          this.formEdit.value.filesDocuments = file;
+          this.fileImgPerfil3 = file;
+          // this.imgPerfil = imagen.base;
+        })
+        .catch(err => console.log(err));
     }
   };
 
-  loadPdfFromDeviceCI(event:any) {
+  loadPdfFromDeviceCI(event: any) {
     const file: File = event.target.files[0];
     console.log("Archivo de Copia de Cedula")
     console.log(event.target.files)
-    if(file){
+    if (file) {
       this.extraerBase64(file)
-      .then((imagen: any) => {
-        this.formEdit.value.copiaCedula=file;
-        this.filePDF1 = file;
-        // this.imgPerfil = imagen.base;
-      })
-      .catch(err => console.log(err));
+        .then((imagen: any) => {
+          this.formEdit.value.copiaCedula = file;
+          this.filePDF1 = file;
+          // this.imgPerfil = imagen.base;
+        })
+        .catch(err => console.log(err));
     }
   };
 
 
-  loadPdfFromDeviceLI(event:any) {
+  loadPdfFromDeviceLI(event: any) {
     const file: File = event.target.files[0];
     console.log("Archivo de Copia de Licencia")
     console.log(event.target.files)
-    if(file){
+    if (file) {
       this.extraerBase64(file)
-      .then((imagen: any) => {
-        this.formEdit.value.copiaLicencia=file;
-        this.filePDF2 = file;
-        // this.imgPerfil = imagen.base;
-      })
-      .catch(err => console.log(err));
+        .then((imagen: any) => {
+          this.formEdit.value.copiaLicencia = file;
+          this.filePDF2 = file;
+          // this.imgPerfil = imagen.base;
+        })
+        .catch(err => console.log(err));
     }
   };
 
-  loadPdfFromDeviceDocCurri(event:any) {
+  loadPdfFromDeviceDocCurri(event: any) {
     const file: File = event.target.files[0];
     console.log("Archivo de Copia de Curriculum")
     console.log(event.target.files)
-    if(file){
+    if (file) {
       this.extraerBase64(file)
-      .then((imagen: any) => {
-        this.formEdit.value.documentos=file;
-        this.filePDF3= file;
-        // this.imgPerfil = imagen.base;
-      })
-      .catch(err => console.log(err));
+        .then((imagen: any) => {
+          this.formEdit.value.filesDocuments = file;
+          this.filePDF3 = file;
+          // this.imgPerfil = imagen.base;
+        })
+        .catch(err => console.log(err));
     }
   };
 
-  
+
   loadFileFromDevice(event: any, formField: string) {
-    const file: File = event.target.files[0];  
+    const file: File = event.target.files[0];
     if (file) {
-      const fileType = file.type;  
-      if(formField== 'copiaCedula'){
+      const fileType = file.type;
+      if (formField == 'copiaCedula') {
         if (fileType.includes('image')) {
-          this.loadImageFromDeviceCI(event); 
+          this.loadImageFromDeviceCI(event);
           console.log("Archivo Cedula image")
         } else if (fileType === 'application/pdf') {
-          this.loadPdfFromDeviceCI(event); 
+          this.loadPdfFromDeviceCI(event);
           console.log("Archivo Cedula pdf")
-        } 
-      }else if(formField== 'copiaLicencia'){
+        }
+      } else if (formField == 'copiaLicencia') {
         if (fileType.includes('image')) {
-          this.loadImageFromDeviceLI(event); 
+          this.loadImageFromDeviceLI(event);
           console.log("Archivo Licencia image")
         } else if (fileType === 'application/pdf') {
-          this.loadPdfFromDeviceLI(event); 
+          this.loadPdfFromDeviceLI(event);
           console.log("Archivo Licencia pdf")
-        } 
-      }else if(formField== 'curriculum'){
+        }
+      } else if (formField == 'curriculum') {
         if (fileType.includes('image')) {
-          this.loadImageFromDeviceDocCurri(event); 
+          this.loadImageFromDeviceDocCurri(event);
           console.log("Archivo Curriculum image")
         } else if (fileType === 'application/pdf') {
-          this.loadPdfFromDeviceDocCurri(event); 
+          this.loadPdfFromDeviceDocCurri(event);
           console.log("Archivo Currilculum pdf")
-        } 
-      }   
+        }
+      }
     }
-  } 
+  }
 
-  getNombreArchivo(tipo: string, archivo: File): { nombreArchivo: string, archivo: File| null } {
+  getNombreArchivo(tipo: string, archivo: File): { nombreArchivo: string, archivo: File | null } {
     const { nombres, apellidos } = this.pendiente_seleccionada || {};
-    
-    const archivoUrl = this.pendiente_seleccionada?.[tipo]; 
-    
-    const extension = archivoUrl ? archivoUrl.split('.').pop() : 'pdf'; 
-  
+
+    const archivoUrl = this.pendiente_seleccionada?.[tipo];
+
+    const extension = archivoUrl ? archivoUrl.split('.').pop() : 'pdf';
+
     if (!nombres || !apellidos) {
       return { nombreArchivo: 'archivo_descargado', archivo: null };
     }
-    
+
     // Si el tipo está definido, formateamos el nombre del archivo
-    if (tipo != '' && archivo!=null) {
+    if (tipo != '' && archivo != null) {
       this.nombre = `${nombres}_${apellidos}_${tipo}.${extension}`;
-      return { nombreArchivo: this.nombre , archivo };
+      return { nombreArchivo: this.nombre, archivo };
     }
-    
+
     // Retorna un nombre de archivo predeterminado si no se proporciona un tipo
-    return { nombreArchivo: 'No hay documento disponible', archivo : null};
+    return { nombreArchivo: 'No hay documento disponible', archivo: null };
   }
 
   onAceptar() {
@@ -663,9 +678,7 @@ export class PendientesComponent{
                     this.pythonAnywhereService.eliminar_proveedores_pendientes(this.pendiente_seleccionada.id).subscribe(resp => {
                       this.cambiarEstado(this.pendiente_seleccionada);
                       console.log(resp)
-                      
                       this.get_proveedores_pendientes_act();
-                      this.get_proveedores_pendientes();
                     })
                   })
                   .catch((error) => {
@@ -673,7 +686,7 @@ export class PendientesComponent{
                     // this.isRegistered = true;
                   });
               } else {
-                console.log("error",resp.error);
+                console.log("error", resp.error);
                 console.log('Hubo un error al registrar en PythonAnywhere', resp.error);
                 // this.presentAlert('Error en el registro :(', 'Vuelva a intentarlo pronto...', false);
               }
@@ -872,23 +885,12 @@ export class PendientesComponent{
   }
 
   edit_pend(a: any) {
+    this.get_proveedores_pendientes_act();
     this.showHeader = false;
     this.showHeaderC = true;
     this.showadmi = true;
     this.pendiente_seleccionada = a;
-
-    this.copiaCedulaNombre = this.pendiente_seleccionada?.copiaCedula.substring(
-      this.pendiente_seleccionada?.copiaCedula.lastIndexOf('/') + 1
-    );
-    this.copiaLicenciaNombre = this.pendiente_seleccionada?.copiaLicencia.substring(
-      this.pendiente_seleccionada?.copiaLicencia.lastIndexOf('/') + 1
-    );
-    this.copiaDocumentosNombre = this.pendiente_seleccionada?.documentsPendientes[0]?.document.substring(
-      this.pendiente_seleccionada?.documentsPendientes[0]?.document.lastIndexOf('/') + 1
-    );
   }
-
-
 
   next(event: any) {
 
@@ -942,8 +944,8 @@ export class PendientesComponent{
       const fechaInicio = new Date(this.fechaInicio);
       const fechaFin = new Date(this.fechaFin);
 
-      this.arr_filtered_pendiente= this.arr_pendiente.filter(a => {
-        const fechaCreacion = new Date(a.fecha_registro );
+      this.arr_filtered_pendiente = this.arr_pendiente.filter(a => {
+        const fechaCreacion = new Date(a.fecha_registro);
         if (this.fechaInicio && this.fechaFin) {
           return fechaCreacion >= fechaInicio && fechaCreacion <= fechaFin;
         }
