@@ -37,6 +37,7 @@ export class PythonAnywhereService {
   administradores = 'https://tomesoft1.pythonanywhere.com/administradores';
   //API_URL = `http://127.0.0.1:8000`;
   //administradores = 'http://127.0.0.1:8000/administradores';
+
   private _refresh$ = new Subject<void>();
   constructor(private http: HttpClient) { }
 
@@ -701,39 +702,56 @@ export class PythonAnywhereService {
 
   editar_proveedor_proveedor(id: string, data: BodyActualizarProveedor): Observable<Proveedor> {
     const pendiente = new FormData();
-    pendiente.append('nombres', data.nombres)
-    pendiente.append('apellidos', data.apellidos)
-    pendiente.append('genero', data.genero)
-    pendiente.append('telefono', data.telefono)
-    pendiente.append('cedula', data.cedula)
-    if (data.copiaCedula != null) {
-      pendiente.append('copiaCedula', data.copiaCedula as any)
+    const userDatos = {
+      id: data.user_datos.id,
+      user: data.user_datos.user,
+      tipo: data.user_datos.tipo,
+      nombres: data.user_datos.nombres,
+      apellidos: data.user_datos.apellidos,
+      cedula: data.user_datos.cedula,
+      ciudad: data.user_datos.ciudad,
+      codigo_invitacion: data.user_datos.codigo_invitacion,
+      telefono: data.user_datos.telefono,
+      genero: data.user_datos.genero,
+      foto: data.user_datos.foto,
+      estado: data.user_datos.estado,
+      fecha_creacion: data.user_datos.fecha_creacion,
+      puntos: data.user_datos.puntos
+    };
+    pendiente.append("user_datos", JSON.stringify(userDatos));
+    pendiente.append("apellidos", data.user_datos.apellidos);
+    pendiente.append("ciudad", data.user_datos.ciudad);
+    pendiente.append("cedula", data.user_datos.cedula);
+    pendiente.append("telefono", data.user_datos.telefono);
+    pendiente.append("genero", data.user_datos.genero);
+
+    pendiente.append("direccion", data.direccion);
+    pendiente.append("descripcion", data.descripcion);
+    pendiente.append("licencia", data.licencia);
+
+    if (data.copiaCedula) {
+      pendiente.append("copiaCedula", data.copiaCedula) as any;
     }
-    pendiente.append('ciudad', data.ciudad)
-    pendiente.append('direccion', data.direccion)
-    pendiente.append('email', data.email)
-    pendiente.append('descripcion', data.descripcion)
-    pendiente.append('licencia', data.licencia)
-    if (data.copiaLicencia != null) {
-      pendiente.append('copiaLicencia', data.copiaLicencia)
+
+    if (data.copiaLicencia) {
+      pendiente.append("copiaLicencia", data.copiaLicencia);
     }
-    pendiente.append('profesion', data.profesion)
-    //ARREGLAR
-    if (data.ano_profesion != null) {
-      pendiente.append('ano_profesion', data.ano_profesion as any)
-    }
-    pendiente.append('banco', data.banco)
-    pendiente.append('numero_cuenta', data.numero_cuenta)
-    pendiente.append('tipo_cuenta', data.tipo_cuenta)
-    if (data.foto != null) {
-      pendiente.append('foto', data.foto)
+
+    pendiente.append("profesion", data.profesion);
+    pendiente.append("ano_profesion", data.ano_profesion);
+    pendiente.append("banco", data.banco);
+    pendiente.append("numero_cuenta", data.numero_cuenta);
+    pendiente.append("tipo_cuenta", data.tipo_cuenta);
+
+    // Agregar imagen de perfil si es nueva
+    if (data.user_datos.foto != null) {
+      pendiente.append("foto", data.user_datos.foto);
     }
     //ARREGLAR
     if (data.filesDocuments != null) {
       pendiente.append('filesDocuments', data.filesDocuments[0] as any)
     }
     //planilla_servicios: data.planilla_servicios
-    console.log("LA COSAS ESAS LASMASD")
     console.log(pendiente)
     console.log(pendiente.get("foto"))
     return this.http.put(`${this.API_URL}/proveedores_proveedores/${id}`, pendiente) as Observable<Proveedor>;

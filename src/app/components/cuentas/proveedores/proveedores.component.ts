@@ -319,14 +319,23 @@ export class ProveedoresComponent {
   }
   onActualizar() {
     const proveedor: BodyActualizarProveedor= {
-      nombres: this.formEdit.value.nombre,
-      apellidos: this.formEdit.value.apellidos,
-      genero: this.formEdit.value.genero,
-      telefono: this.formEdit.value.telefono,
-      cedula: this.formEdit.value.cedula,
-      ciudad: this.formEdit.value.ciudad,
+      user_datos: {
+          id: this.proveedor_seleccionado.user_datos.id,
+          user: this.proveedor_seleccionado.user,
+          tipo: this.proveedor_seleccionado.user_datos.tipo,
+          nombres: this.formEdit.value.nombre,
+          apellidos: this.formEdit.value.apellidos,
+          cedula: this.formEdit.value.cedula,
+          ciudad: this.formEdit.value.ciudad,
+          codigo_invitacion: this.proveedor_seleccionado.user_datos.codigo_invitacion,
+          telefono: this.formEdit.value.telefono,
+          genero: this.formEdit.value.genero,
+          foto: this.proveedor_seleccionado.user_datos.foto,
+          estado: true,
+          fecha_creacion: this.proveedor_seleccionado.user_datos.estado,
+          puntos: this.proveedor_seleccionado.puntos
+      },     
       direccion: this.formEdit.value.direccion,
-      email: this.formEdit.value.correo,
       descripcion: this.formEdit.value.descripcion,
       licencia: this.formEdit.value.licencia,
       profesion: this.formEdit.value.profesion,

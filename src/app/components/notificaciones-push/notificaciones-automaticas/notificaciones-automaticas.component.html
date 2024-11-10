@@ -140,8 +140,10 @@
                 
                   <button class="enviar-ahora" >
                       <div class="icono-texto">
+                        <button [class]="notificacion.estado ? 'enabled-class' : 'disabled-class'" (click)="cambiarEstado(notificacion)">
                           <img src="assets/imagenes/20.png" alt="Icono Servicio" />
-                          <p>ENVIAR<br>AHORA</p> 
+                          <p>ENVIAR<br>AHORA</p>
+                        </button>
                       </div>
                   </button> 
               </div>

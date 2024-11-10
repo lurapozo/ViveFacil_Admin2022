@@ -79,13 +79,7 @@ export interface BodyActualizarProveedorPendiente {
 }
 
 export interface BodyActualizarProveedor {
-  email: string;
-  nombres: string;
-  apellidos: string;
-  ciudad: string;
-  cedula: string;
-  telefono: string;
-  genero: string;
+  user_datos : Datos,
   direccion: string;
   licencia: string;
   descripcion: string;
