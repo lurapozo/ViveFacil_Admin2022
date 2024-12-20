@@ -1,7 +1,7 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
-import { BodyActualizarNotificacionAutomatica, BodyCrearNotificacionAnuncio, BodyCrearNotificacionAutomatica, NotificacionAnuncio} from 'src/app/interfaces/notificacion';
+import { BodyActualizarNotificacionAutomatica, BodyCrearNotificacionAnuncio, BodyCrearNotificacionAutomatica, NotificacionAnuncio } from 'src/app/interfaces/notificacion';
 import { PythonAnywhereService } from 'src/app/services/PythonAnywhere/python-anywhere.service';
 import * as moment from 'moment';
 
@@ -46,7 +46,7 @@ export class NotificacionesAutomaticasComponent {
   categoria?: any[];
   proveedores?: any[];
   frecuencia = ['Una vez al día', 'Dos veces al día', 'Otro'];
-  
+
   crearNotificacionForm = new FormGroup({
     nombre: new FormControl('', [Validators.required]),
     titulo: new FormControl('', [Validators.required]),
@@ -76,7 +76,7 @@ export class NotificacionesAutomaticasComponent {
   constructor(private pythonAnywhereService: PythonAnywhereService, private sanitizer: DomSanitizer) {
     this.get_servicios();
     this.get_notificaciones();
-    
+
   }
 
   get_servicios() {
@@ -85,9 +85,9 @@ export class NotificacionesAutomaticasComponent {
     })
   }
 
-  get_notificaciones(){
+  get_notificaciones() {
     this.pythonAnywhereService.get_notificacion().subscribe((resp: any) => {
-      const noti =  resp.results
+      const noti = resp.results
       this.arr_noti = Object(noti);
       this.arr_filtered_notificacion = this.arr_noti;
       console.log("noti", this.arr_filtered_notificacion)
@@ -96,25 +96,25 @@ export class NotificacionesAutomaticasComponent {
   }
 
   generarFiltros() {
-    const titulosUnicos = new Set(this.arr_filtered_notificacion?.map(n => n.titulo.toLowerCase())); 
+    const titulosUnicos = new Set(this.arr_filtered_notificacion?.map(n => n.titulo.toLowerCase()));
     console.log("unicos", titulosUnicos)
-    this.filtrosDisponibles = ['todos', ...Array.from(titulosUnicos)]; 
+    this.filtrosDisponibles = ['todos', ...Array.from(titulosUnicos)];
   }
 
-  crear_noti(){
+  crear_noti() {
     this.showHeader = false;
     this.showHeaderC = true;
     this.showHeaderE = false;
   }
 
-  editar(noti : any){
+  editar(noti: any) {
     this.noti_seleccionada = noti;
     this.showHeader = false;
     this.showHeaderC = false;
     this.showHeaderE = true;
   }
 
-  establecerMensaje(mensaje: string){
+  establecerMensaje(mensaje: string) {
     this.mensajeAlerta = mensaje;
   }
 
@@ -184,18 +184,18 @@ export class NotificacionesAutomaticasComponent {
     }
   }
 
-  createImageValidator(controlImage: AbstractControl, tipo: string){
+  createImageValidator(controlImage: AbstractControl, tipo: string) {
     return () => {
       const file = controlImage.value as File;
 
-      if(file && file.name){
+      if (file && file.name) {
         console.log('Ingresa al validator if');
         console.log(file);
         const tokensImgName: any[] = file.name.split('.');
         console.log(tokensImgName);
-        if(tokensImgName.length === 2 ){
+        if (tokensImgName.length === 2) {
           const imgExtension = tokensImgName[1];
-          if(imgExtension !== 'jpg' && imgExtension !== 'jpeg' && imgExtension !== 'png' && imgExtension !== 'jfif'){
+          if (imgExtension !== 'jpg' && imgExtension !== 'jpeg' && imgExtension !== 'png' && imgExtension !== 'jfif') {
             console.log('Entra en error de imagen');
             this.crearNotificacionForm.get('imagen')?.setValue(null);
             this.existImageNotificacion = false;
@@ -217,7 +217,7 @@ export class NotificacionesAutomaticasComponent {
     this.tituloToast = titulo;
     this.mensajeToast = mensaje;
     const toast = document.getElementById('liveToast');
-    if(toast){
+    if (toast) {
       toast.classList.add('show');
       setTimeout(() => {
         toast.classList.remove('show');
@@ -228,11 +228,11 @@ export class NotificacionesAutomaticasComponent {
     }
   }
 
-  isInvalidForm(subForm: string){
-    return this.crearNotificacionForm.get(subForm)?.invalid && this.crearNotificacionForm.get(subForm)?.touched || this.crearNotificacionForm.get(subForm)?.dirty  && this.getErrorMessage(this.crearNotificacionForm, subForm).length!==0;
+  isInvalidForm(subForm: string) {
+    return this.crearNotificacionForm.get(subForm)?.invalid && this.crearNotificacionForm.get(subForm)?.touched || this.crearNotificacionForm.get(subForm)?.dirty && this.getErrorMessage(this.crearNotificacionForm, subForm).length !== 0;
   }
 
-  getErrorMessage( formGroup: FormGroup, item: string): string {
+  getErrorMessage(formGroup: FormGroup, item: string): string {
     const itemControl: FormControl = formGroup.get(item) as FormControl;
     switch (item) {
       case 'imagen':
@@ -247,25 +247,25 @@ export class NotificacionesAutomaticasComponent {
         }
         return '';
       case 'nombre':
-          if (itemControl.hasError('required')) {
-            return 'Debe llenar este campo para establecer el nombre de la notificación';
-          }
-          return '';
+        if (itemControl.hasError('required')) {
+          return 'Debe llenar este campo para establecer el nombre de la notificación';
+        }
+        return '';
       case 'frec':
-          if (itemControl.hasError('required')) {
-            return 'Debe llenar este campo para establecer la frec de la notificación';
-          }
-          return '';
+        if (itemControl.hasError('required')) {
+          return 'Debe llenar este campo para establecer la frec de la notificación';
+        }
+        return '';
       case 'inicio':
-            if (itemControl.hasError('required')) {
-              return 'Debe llenar este campo para establecer el inicio de la notificación';
-            }
-            return '';
+        if (itemControl.hasError('required')) {
+          return 'Debe llenar este campo para establecer el inicio de la notificación';
+        }
+        return '';
       case 'fin':
-              if (itemControl.hasError('required')) {
-                return 'Debe llenar este campo para establecer fin de la notificación';
-              }
-              return '';
+        if (itemControl.hasError('required')) {
+          return 'Debe llenar este campo para establecer fin de la notificación';
+        }
+        return '';
       case 'descripcion':
         if (itemControl.hasError('required')) {
           return 'Debe llenar este campo para establecer la descripción de la notificación';
@@ -302,16 +302,16 @@ export class NotificacionesAutomaticasComponent {
     this.crearNotificacionForm.get('imagen')?.reset();
   }
 
-  loadImageFromDevice(event:any, tipo: string) {
+  loadImageFromDevice(event: any, tipo: string) {
     const file: File = event.target.files[0];
-    if(file){
+    if (file) {
       this.extraerBase64(file)
-      .then((imagen: any) => {
-        this.crearNotificacionForm.get('imagen')?.setValue(file);
-        this.fileImagenNotificacion = file;
-        this.imagenNotificacion = imagen.base;
-      })
-      .catch(err => console.log(err));
+        .then((imagen: any) => {
+          this.crearNotificacionForm.get('imagen')?.setValue(file);
+          this.fileImagenNotificacion = file;
+          this.imagenNotificacion = imagen.base;
+        })
+        .catch(err => console.log(err));
     }
   };
 
@@ -378,8 +378,8 @@ export class NotificacionesAutomaticasComponent {
     const hora = this.crearNotificacionForm.get('hora')?.value;
     const ruta = 'ruta';
     const imagen = this.crearNotificacionForm.get('imagen')?.value;
-    console.log('nombre',this.crearNotificacionForm);
-    
+    console.log('nombre', this.crearNotificacionForm);
+
     if (nombre && titulo && descripcion && tipo_proveedores && frecuencia && fecha_iniciacion && fecha_expiracion && hora && ruta) {
       bodyNotificacion.nombre = nombre;
       bodyNotificacion.titulo = titulo;
@@ -408,7 +408,7 @@ export class NotificacionesAutomaticasComponent {
         }
       });
     } else {
-      console.log("body",bodyNotificacion)
+      console.log("body", bodyNotificacion)
       console.error('Los campos principales para crear la notificacion estan incompletos.');
     }
   }
@@ -430,7 +430,7 @@ export class NotificacionesAutomaticasComponent {
 
     const id = this.noti_seleccionada.id;
     notiEditar.id = id;
-    console.log("id",id)
+    console.log("id", id)
     // Asignar valores con validación
     notiEditar.nombre = this.editNotificacionForm.get('nombre')?.value ?? '';
     notiEditar.titulo = this.editNotificacionForm.get('titulo')?.value ?? '';
@@ -442,7 +442,7 @@ export class NotificacionesAutomaticasComponent {
     notiEditar.hora = this.editNotificacionForm.get('hora')?.value ?? '';
     notiEditar.ruta = this.noti_seleccionada.ruta;
     const imagen = this.editNotificacionForm.get('imagen')?.value;
-    console.log('edit',this.editNotificacionForm);
+    console.log('edit', this.editNotificacionForm);
     console.log(this.editNotificacionForm);
     if (imagen && this.existImageNotificacion) {
       notiEditar.imagen = imagen;
@@ -452,11 +452,11 @@ export class NotificacionesAutomaticasComponent {
       console.log("Formulario inválido");
       return;
     } else {
-      this.pythonAnywhereService.put_notificacion_auto(notiEditar,id.toString()).subscribe({
+      this.pythonAnywhereService.put_notificacion_auto(notiEditar, id.toString()).subscribe({
         next: resp => {
           console.log("Notificación actualizada:", resp);
           this.get_notificaciones();
-      },
+        },
       });
     }
   }
@@ -469,6 +469,15 @@ export class NotificacionesAutomaticasComponent {
       this.pythonAnywhereService.cambio_notificacion_estado(id, nuevoEstado).subscribe(resp => { console.log(resp); });
       this.get_notificaciones();
       this.mostrarToastInfo('Estado de notificacion ', 'Notificacion editada correctamente', false);
+    }
+  }
+
+  enviarNotificacionauto(notificacion: any) {
+    const id = notificacion.id
+    if (id) {    
+      this.pythonAnywhereService.enviar_noti_auto(id).subscribe(resp => { console.log(resp); })
+      this.get_notificaciones();
+      this.mostrarToastInfo('Estado de notificacion ', 'Notificacion enviada correctamente', false);
     }
   }
 

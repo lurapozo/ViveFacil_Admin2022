@@ -132,12 +132,12 @@
         <table class="table table-striped custom-table">
         <tbody>
           <tr
-            (click)="efectivo_seleccionada=a" *ngFor="let a arr_filtered_efectivo" data-bs-toggle="modal"
+            (click)="efect_sele(a)" *ngFor="let a of arr_filtered_efectivo" data-bs-toggle="modal"
             href="#modalInformacionProfesion" role="button"
           >
             <td style="color: #40378b; text-transform: uppercase"> <strong> {{ a.usuario}} </strong></td>
-            <td style="color: #40378b; text-transform: uppercase"> <strong> {{a.solicitud?.proveedor.user_datos.nombres}} {{a.solicitud?.proveedor.user_datos.apellidos}} </strong> </td>
-            <td style="color: #40378b; text-transform: uppercase"> <strong> {{ a.servicio}}  </strong></td>
+            <td style="color: #40378b; text-transform: uppercase"> <strong> {{ a.solicitud?.proveedor.user_datos.nombres}} {{a.solicitud?.proveedor.user_datos.apellidos}} </strong> </td>
+            <td style="color: #40378b; text-transform: uppercase"> <strong> {{ a.solicitud?.servicio.nombre}}  </strong></td>
             <td style="color: #40378b; text-transform: uppercase"> <strong> {{ a.fecha_creacion | date : "d/M/Y" }}</strong></td>
             <td style="color: #40378b; text-transform: uppercase"> <strong> {{ a.fecha_creacion | date: 'HH:mm' }}  </strong></td>
             <td class="align-items-center">

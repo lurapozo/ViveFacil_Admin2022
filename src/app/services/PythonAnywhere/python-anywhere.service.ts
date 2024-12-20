@@ -1345,9 +1345,10 @@ export class PythonAnywhereService {
    * @returns  retorna un status 200=OK o 400=BAD_REQUEST
    */
 
-  editar_sugerencia_estado(sugerencia: any, id: any) {
-    return this.http.put(`${this.API_URL}/suggestion/${id}`, sugerencia);
+  editar_sugerencia_estado(sugerencia: boolean, id: any) {
+    return this.http.put(`${this.API_URL}/suggestion_estado/?id=${id}`, {estado: sugerencia,});
   }
+
   /**
    * Funcion que trae la sugerencia por ID especificado
    *
@@ -1651,6 +1652,11 @@ export class PythonAnywhereService {
       estado: estado,
     }) as Observable<any>;
   }
+
+  enviar_noti_auto(id: string): Observable<any> {
+    return this.http.post(`${this.API_URL}/notificacion-anuncio/${id}/envio`, {});
+  } 
+
 
   /**
    * Funcion que trae las notificaciones/anuncios

@@ -137,7 +137,7 @@
               {{ notificacion.estado ? 'HABILITADO' : 'DESHABILITADO' }} 
             </button>
           
-            <button class="enviar-ahora" >
+            <button class="enviar-ahora" (click)="enviarNotificacionmasiva(notificacion)">
               <div class="icono-texto">
                   <img src="assets/imagenes/20.png" alt="Icono Servicio" />
                   <p>ENVIAR<br>AHORA</p> 

@@ -138,12 +138,10 @@
                   {{ notificacion.estado ? 'HABILITADO' : 'DESHABILITADO' }} 
                 </button>
                 
-                  <button class="enviar-ahora" >
+                  <button class="enviar-ahora" (click)="enviarNotificacionauto(notificacion)">
                       <div class="icono-texto">
-                        <button [class]="notificacion.estado ? 'enabled-class' : 'disabled-class'" (click)="cambiarEstado(notificacion)">
                           <img src="assets/imagenes/20.png" alt="Icono Servicio" />
                           <p>ENVIAR<br>AHORA</p>
-                        </button>
                       </div>
                   </button> 
               </div>

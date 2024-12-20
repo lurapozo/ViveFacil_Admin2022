@@ -48,54 +48,63 @@ constructor(private pythonAnywhereService: PythonAnywhereService, private saniti
 
   });
   this.pythonAnywhereService.valor_total_tarjeta().subscribe(resp => {
-    const valor = Number(resp);
-    if (resp === null || isNaN(valor)) {
+    const valor = Number(Object(resp).valor__sum);
+    if (valor === null || isNaN(valor)) {
       this.totalTarjeta  = '00.00';
       console.log("Es null o 0")
     } else {
-      this.totalTarjeta = Object(resp).valor__sum.toFixed(2)
-      console.log(resp)
+      this.totalTarjeta = valor.toFixed(2)
     }
   })
   this.pythonAnywhereService.valor_total().subscribe((resp: any) => {
-    if (resp === null || isNaN(resp)) {
+    const valor = parseFloat(Object(resp).total);
+    if(valor === null || isNaN(valor)) {
       this.total = '00.00';
       console.log("Es null o 0")
     } else {
-      this.total = parseFloat(resp).toFixed(2);
+      this.total = valor.toFixed(2);
     }
-    console.log(resp);
   })
   this.pythonAnywhereService.valor_total_pay_tarjeta().subscribe(resp => {
-    const valor = Number(resp);
-    if (resp === null || isNaN(valor)) {
+    const valor = Number(Object(resp).cargo_paymentez__sum);
+    if (valor=== null || isNaN(valor)) {
       this.totalPayment = '00.00';
       console.log("Es null o 0")
     } else {
-      this.totalPayment = Object(resp).cargo_paymentez__sum.toFixed(2)
+      this.totalPayment = valor.toFixed(2)
       console.log(resp)
     }
   })
 
   this.pythonAnywhereService.valor_total_banc_tarjeta().subscribe(resp => {
-    if (resp === null || isNaN(resp)) {
+    const valor = Number(resp.cargo_banco__sum);
+    if (valor === null || isNaN(valor)) {
       this.totalBanco = '00.00';
       console.log("Es null o 0")
     } else {
-    this.totalBanco = resp.cargo_banco__sum.toFixed(2)
+    this.totalBanco = valor.toFixed(2)
     console.log("valor")
     }
     console.log(resp)
   })
 
   this.pythonAnywhereService.valor_total_sis_tarjeta().subscribe(resp => {
-    this.totalSistema = Object(resp).argo_sistema__sum
-
+    const valor = Number(Object(resp).argo_sistema__sum);
+    if (valor === null || isNaN(valor)) {
+      this.totalSistema = '00.00';
+      console.log("Es null o 0")
+    } else {
+    this.totalSistema= valor.toFixed(2)
+    console.log("valor")
+    }
     console.log(resp)
   })
 }
  
-
+  tarjeta_sele(a: any){
+    this.tarjeta_seleccionada =  a;
+    console.log(a)
+  }
 
   next(event: any) {
 

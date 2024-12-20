@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
+import { Sugerencia } from 'src/app/interfaces/sugerencia';
 import { PythonAnywhereService } from 'src/app/services/PythonAnywhere/python-anywhere.service';
 
 @Component({
@@ -15,22 +16,29 @@ export class SugerenciasLeidasComponent {
   currentPage = 1
   pageNumber: number[] = [];
   sugerencia_seleccionada: any;
+  tituloToast = '';
+  mensajeToast = '';
+  isErrorToast = false;
 
-  fechaInicio: Date | null = null; 
-  fechaFin: Date | null = null; 
+  fechaInicio: Date | null = null;
+  fechaFin: Date | null = null;
   fechasFiltradas: any[] = [];
 
   constructor(private pythonAnywhereService: PythonAnywhereService, private sanitizer: DomSanitizer) {
 
+    this.getSugerencias();
+  }
+
+  getSugerencias(){
     this.pythonAnywhereService.obtener_sugerenciasLeidas(1).subscribe(resp => {
       this.total = Object(resp).total_objects
       this.arr_sugerencias = Object(resp).results;
 
-      this.arr_filtered_sugerencias= this.arr_sugerencias;
-      if ( Object(resp).next != null) {
+      this.arr_filtered_sugerencias = this.arr_sugerencias;
+      if (Object(resp).next != null) {
         this.condicionNext = true
       }
-   
+
       for (let index = 1; index <= Object(resp).total_pages; index++) {
         this.pageNumber.push(index)
 
@@ -39,14 +47,33 @@ export class SugerenciasLeidasComponent {
     });
   }
 
+  ver(a: any) {
+    this.sugerencia_seleccionada = a;
+    console.log("su", this.sugerencia_seleccionada);
+  }
 
+  cambiarEstado(sugerencia: any) {
+    const id = sugerencia.id
+    const estado = sugerencia.estado
+    const nuevoEstado = !estado;
+    if (id) {
+      this.pythonAnywhereService.editar_sugerencia_estado(nuevoEstado,id).subscribe(resp => { console.log(resp); });
+    }
+    this.pythonAnywhereService.obtener_sugerenciasNoLeidas(1).subscribe(resp => {
+      this.total = Object(resp).total_objects
+      this.arr_sugerencias = Object(resp).results;
+
+      this.arr_filtered_sugerencias = this.arr_sugerencias;  
+    });
+  }
+  
   next(event: any) {
 
     this.currentPage = this.currentPage + 1
     this.pythonAnywhereService.obtener_sugerenciasLeidas(this.currentPage).subscribe(resp => {
       this.arr_sugerencias = Object(resp).results;
-      this.arr_filtered_sugerencias= this.arr_sugerencias;
-    
+      this.arr_filtered_sugerencias = this.arr_sugerencias;
+
 
     });
   }
@@ -56,26 +83,26 @@ export class SugerenciasLeidasComponent {
     this.currentPage = this.currentPage - 1
     this.pythonAnywhereService.obtener_sugerenciasLeidas(this.currentPage).subscribe(resp => {
       this.arr_sugerencias = Object(resp).results;
-      this.arr_filtered_sugerencias= this.arr_sugerencias;
-    
+      this.arr_filtered_sugerencias = this.arr_sugerencias;
+
 
     });
   }
 
   iteracion(event: any) {
- 
+
     this.pythonAnywhereService.obtener_sugerenciasLeidas(event.target.value).subscribe(resp => {
       this.arr_sugerencias = Object(resp).results;
-      this.arr_filtered_sugerencias= this.arr_sugerencias;
+      this.arr_filtered_sugerencias = this.arr_sugerencias;
       this.currentPage = Object(resp).current_page_number
       if (Object(resp).next != null) {
         this.condicionNext = true
       }
 
     })
-    };
+  };
 
-    
+
   search(evento: any) {
     const texto = evento.target.value;
     console.log('Escribe en el buscador: ', texto)
@@ -92,7 +119,7 @@ export class SugerenciasLeidasComponent {
       const fechaInicio = new Date(this.fechaInicio);
       const fechaFin = new Date(this.fechaFin);
 
-      this.arr_filtered_sugerencias= this.arr_sugerencias.filter(a => {
+      this.arr_filtered_sugerencias = this.arr_sugerencias.filter(a => {
         const fechaCreacion = new Date(a.fecha_creacion);
         if (this.fechaInicio && this.fechaFin) {
           return fechaCreacion >= fechaInicio && fechaCreacion <= fechaFin;
@@ -101,6 +128,7 @@ export class SugerenciasLeidasComponent {
       });
     }
   }
+
 
 }
 

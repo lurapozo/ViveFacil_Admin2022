@@ -5,16 +5,16 @@
 
 export const environment = {
   firebase: {
-    apiKey: 'AIzaSyB9RIQgcP43-2-taFc4SQnCc1ZoSz_ZDTU',
-    authDomain: 'to-me-292901.firebaseapp.com',
-    databaseURL: 'https://to-me-292901.firebaseio.com',
-    projectId: 'to-me-292901',
-    storageBucket: 'to-me-292901.appspot.com',
-    messagingSenderId: '233470508425',
-    appId: '1:233470508425:web:72202908c1d2863d893558',
+    apiKey: "AIzaSyBa34Ewlyeqo4CYMus3t2IwI2l1Kil-d0c",
+    authDomain: "vive-facil-66ae4.firebaseapp.com",
+    databaseURL: "https://vive-facil-66ae4-default-rtdb.firebaseio.com",
+    projectId: "vive-facil-66ae4",
+    storageBucket: "vive-facil-66ae4.firebasestorage.app",
+    messagingSenderId: "488204411614",
+    appId: "1:488204411614:web:09336209e1b0238eedd84f",
     measurementId: 'G-1VYKMRKC94',
   },
-  mapsKey: 'AIzaSyBeJ8bZ0stXQ8IdY4-EGKFKywChNSIdXhw',
+  mapsKey: 'AIzaSyCDSFcxY82AImZmMoPMjUAzlqkoZoAbuAk',
   production: false,
 };
 

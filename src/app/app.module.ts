@@ -123,7 +123,5 @@ import { firebaseConfig } from 'src/app/services/Firebase/firebase.config';
   bootstrap: [AppComponent],
 })
 export class AppModule {
-  constructor() {
-    initializeApp(firebaseConfig);
-  }
+
 }

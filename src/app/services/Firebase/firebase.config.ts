@@ -5,16 +5,14 @@ import { getAnalytics } from "firebase/analytics";
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 export const firebaseConfig = {
-  apiKey: "AIzaSyB9RIQgcP43-2-taFc4SQnCc1ZoSz_ZDTU",
-  authDomain: "to-me-292901.firebaseapp.com",
-  databaseURL: "https://to-me-292901.firebaseio.com",
-  projectId: "to-me-292901",
-  storageBucket: "to-me-292901.appspot.com",
-  messagingSenderId: "233470508425",
-  appId: "1:233470508425:web:72202908c1d2863d893558",
-  measurementId: "G-1VYKMRKC94"
+  apiKey: "AIzaSyBa34Ewlyeqo4CYMus3t2IwI2l1Kil-d0c",
+  authDomain: "vive-facil-66ae4.firebaseapp.com",
+  databaseURL: "https://vive-facil-66ae4-default-rtdb.firebaseio.com",
+  projectId: "vive-facil-66ae4",
+  storageBucket: "vive-facil-66ae4.firebasestorage.app",
+  messagingSenderId: "488204411614",
+  appId: "1:488204411614:web:09336209e1b0238eedd84f"
 };
 
 // Initialize Firebase

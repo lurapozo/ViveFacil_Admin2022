@@ -80,6 +80,8 @@
           <tr
             (click)="sugerencia_seleccionada = a"
             *ngFor="let a of arr_filtered_sugerencias"
+            data-bs-toggle="modal"
+            href="#modalInformacionProfesion"
             role="button"
           >
             <td style="color: #40378b; text-transform: uppercase"> <strong> {{ a.usuario }} </strong></td>
@@ -232,6 +234,31 @@
             {{ sugerencia_seleccionada?.fecha_creacion }}
           </div>
         </div>
+
+        <div class="row p-2 align-items-center">
+          <div class="col-5">
+            <h3 class="m-0 p-0 fw-bold">Estado: {{ sugerencia_seleccionada?.estado ? 'Leída' : 'No Leída' }}
+  
+              <div
+                class="col-5"
+              >
+                <input
+                  (change)="cambiarEstado(sugerencia_seleccionada)"
+                  [checked]=" sugerencia_seleccionada?.estado ? true : false"
+                  class="form-check-input"
+                  id="switchEstado"
+                  type="checkbox"
+                  role="switch"
+                  checked
+                  aria-describedby="switchEstadoFeedback"
+                />
+              </div>
+                </h3>
+          </div>
+          
+        </div>
+
+        
       </div>
       <div class="modal-footer">
         <button

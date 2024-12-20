@@ -22,7 +22,7 @@ export class EfectivoComponent {
   condicionNext = false
   currentPage = 1
   pageNumber: number[] = [];
-  efectivo_seleccionada:  PaymentEfectivo  | undefined;
+  efectivo_seleccionada:  any;
   mensajeAlerta: string = '';
   totalEfectivo:any
   total:any
@@ -33,6 +33,7 @@ export class EfectivoComponent {
     this.arr_efectivo = resp.results
     this.arr_filtered_efectivo =  this.arr_efectivo
     console.log(this.arr_filtered_efectivo, "arr_filtered_efectivo")
+    console.log("efe",this.efectivo_seleccionada);
     if (resp.next != null) {
       this.condicionNext = true
     }
@@ -43,28 +44,30 @@ export class EfectivoComponent {
   
     });
     this.pythonAnywhereService.valor_total_efectivo().subscribe(resp => {
-      const valor = Number(resp);
-      if (resp === null || isNaN(valor)) {
+      const valor = Number(Object(resp).valor__sum);
+      if (valor=== null || isNaN(valor)) {
         this.totalEfectivo = '00.00';
-        console.log("Es null o 0")
+        console.log("Efectivo null o 0")
       } else {
-        this.totalEfectivo = Object(resp).valor__sum.toFixed(2)
-        console.log(resp)
+        this.totalEfectivo = valor.toFixed(2)
       }
     })
     this.pythonAnywhereService.valor_total().subscribe((resp: any) => {
-      if (resp === null || isNaN(resp)) {
+      const valor = parseFloat(Object(resp).total);
+      if (valor === null || isNaN(valor)) {
         this.total = '00.00';
-        console.log("Efectivo es null o 0")
+        console.log("Valor total es 0")
       } else {
-        this.total = parseFloat(resp).toFixed(2);
+        this.total = valor.toFixed(2);
       }
-      console.log(resp);
     })
    
 }
 
-
+  efect_sele(a: any){
+    this.efectivo_seleccionada =  a;
+    console.log(a)
+  }
   next(event: any) {
 
     this.currentPage = this.currentPage + 1
@@ -126,7 +129,7 @@ export class EfectivoComponent {
         id: tarjeta.id,
         usuario: tarjeta.usuario ?? '',
         solicitante_correo: tarjeta.user?.username ?? '',
-        tarjeta: 'SI',
+        tarjeta: 'NO',
         promocion: tarjeta.promocion?.porcentaje ?? '',
         valor: tarjeta.valor.toFixed(2),
         descripcion: tarjeta.descripcion,
