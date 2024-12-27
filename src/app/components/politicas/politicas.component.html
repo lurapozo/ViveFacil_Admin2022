@@ -15,12 +15,20 @@
   
       <div class="card" style="width: 100%;">
           <div class="card-body">
-              <p class="card-text">{{politicas}}</p>
-          </div>
+              <p class="card-text" *ngIf="!isEditing">{{politicas}}</p>
+              <textarea
+                *ngIf="isEditing"
+                class="form-control form-control-pol"
+                style="heiight: 100%;"
+                [(ngModel)]="politicas"
+              ></textarea>
+            </div>
           <div class="card-f">
-            <button
-            class="custom-button float-right"
-            >Editar</button>        
+            <button *ngIf="!isEditing" class="custom-button float-right" (click)="enableEditMode()">Editar</button>  
+            
+            <button *ngIf="isEditing" class="custom-button float-right" (click)="saveChanges(politicas)">Guardar</button>
+            <button *ngIf="isEditing" class="custom-button float-right" (click)="cancelEdit()">Cancelar</button>
+            
           </div>
           <div class=" card-footer">
           </div>       

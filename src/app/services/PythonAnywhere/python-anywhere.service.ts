@@ -48,6 +48,14 @@ export class PythonAnywhereService {
   obtener_politicas() {
     return this.http.get(`${this.API_URL}/politics/`)
   }
+
+  put_politicas(identifier: string, terminos: string): Observable<any> {
+    const body = {
+      identifier: identifier,
+      terminos: terminos
+    };
+    return this.http.put(`${this.API_URL}/politics/${identifier}/`, body);
+  }
   //------------------------------------------------ SECCIÓN SOLICITANTES -------------------------------------------------
   /**
    * Obtiene todos los solicitantes, y los entrega en un formato con paginación.
