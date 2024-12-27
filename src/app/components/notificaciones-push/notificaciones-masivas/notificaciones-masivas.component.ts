@@ -155,9 +155,6 @@ export class NotificacionesMasivasComponent {
     this.toggleFiltro();
   }
 
-  habilitarDeshabilitar(index: number) {
-    //this.arr_filtered_notificacion[index].habilitado = !this.arr_filtered_notificacion[index].habilitado;
-  }
 
   enviarNotificacion(index: number) {
     return "";
@@ -489,7 +486,7 @@ export class NotificacionesMasivasComponent {
   enviarNotificacionmasiva(notificacion: any) {
     const id = notificacion.id
     if (id) {    
-      this.pythonAnywhereService.enviar_noti_auto(id).subscribe(resp => { console.log(resp); })
+      this.pythonAnywhereService.enviar_noti_masi(id).subscribe(resp => { console.log(resp); })
       this.get_notificaciones();
       this.mostrarToastInfo('Estado de notificacion ', 'Notificacion enviada correctamente', false);
     }

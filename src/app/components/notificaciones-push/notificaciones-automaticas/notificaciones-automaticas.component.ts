@@ -147,15 +147,6 @@ export class NotificacionesAutomaticasComponent {
     this.toggleFiltro();
   }
 
-  habilitarDeshabilitar(index: number) {
-    //this.arr_filtered_notificacion[index].habilitado = !this.arr_filtered_notificacion[index].habilitado;
-  }
-
-  enviarNotificacion(index: number) {
-    return "";
-    //alert(`Notificación enviada: ${this.arr_filtered_notificacion?[index].mensaje}`);
-  }
-
   search(evento: any) {
     const texto = evento.target.value;
     console.log('Escribe en el buscador: ', texto)
