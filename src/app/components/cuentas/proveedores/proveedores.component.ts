@@ -71,15 +71,16 @@ export class ProveedoresComponent {
     genero: new FormControl('', [Validators.required]),
     profesion: new FormControl('', [Validators.required]),
     licencia: new FormControl(''),
-    copiaCedula: new FormControl(this.filePDF),
+    copiaCedula: new FormControl(this.filePDF1 || this.fileImgPerfil1 || ''),
     tipo_cuenta: new FormControl('', [Validators.required]),
     numero_cuenta: new FormControl('', [Validators.required]),
     banco: new FormControl('', [Validators.required]),
     ano_profesion: new FormControl('', [Validators.required]),
-    copiaLicencia: new FormControl(this.filePDF2),
+    copiaLicencia:  new FormControl(this.filePDF2 || this.fileImgPerfil2 || ''),
     descripcion: new FormControl(''),
     foto: new FormControl(this.fileImgPerfil),
-    documentos: new FormControl([this.filePDF3]),
+    documentos: new FormControl(''),
+    filesDocuments: new FormControl([this.filePDF3 || this.fileImgPerfil3 || '']),
   });
 
   constructor(private pythonAnywhereService: PythonAnywhereService, private sanitizer: DomSanitizer) {
@@ -112,6 +113,18 @@ export class ProveedoresComponent {
     this.loadGeneros();
     this.loadCiudades();
   }
+
+  get_proveedores_act(){
+    this.pythonAnywhereService.obtener_proveedores_proveedores().subscribe(resp => {
+      this.total = Object(resp).total_objects
+      this.arr_proveedor = Object(resp).results;
+      console.log(resp, "resp")
+      this.arr_filtered_proveedor = this.arr_proveedor;
+      console.log(this.arr_filtered_proveedor)
+      this.currentPage = 1;  
+    });
+  }
+
   
   loadGeneros() {
     this.generos = ['Masculino', 'Femenino', 'Otro']; 
@@ -318,7 +331,8 @@ export class ProveedoresComponent {
     const ddasda = this.proveedor_seleccionado?.fecha_caducidad
   }
   onActualizar() {
-    const proveedor: BodyActualizarProveedor= {
+    this.get_proveedores_act();
+    let proveedor: BodyActualizarProveedor= {
       user_datos: {
           id: this.proveedor_seleccionado.user_datos.id,
           user: this.proveedor_seleccionado.user,
@@ -330,7 +344,7 @@ export class ProveedoresComponent {
           codigo_invitacion: this.proveedor_seleccionado.user_datos.codigo_invitacion,
           telefono: this.formEdit.value.telefono,
           genero: this.formEdit.value.genero,
-          foto: this.proveedor_seleccionado.user_datos.foto,
+          foto: this.formEdit.value.foto,
           estado: true,
           fecha_creacion: this.proveedor_seleccionado.user_datos.estado,
           puntos: this.proveedor_seleccionado.puntos
@@ -349,7 +363,6 @@ export class ProveedoresComponent {
       copiaLicencia: this.filePDF2 || this.fileImgPerfil2,
       copiaCedula: this.filePDF1 || this.fileImgPerfil1,
     }
-    const id = this.proveedor_seleccionado.id
 
     console.log("VALORES DEL COSO")
     console.log(this.formEdit)
@@ -362,18 +375,11 @@ export class ProveedoresComponent {
       // }
       proveedor.descripcion = this.proveedor_seleccionado.descripcion
     }
-    this.pythonAnywhereService.editar_proveedor_proveedor(id, proveedor).subscribe(resp => {
+    this.pythonAnywhereService.editar_proveedor_proveedor(this.proveedor_seleccionado.id, proveedor).subscribe(resp => {
       console.log(resp)
-      this.pythonAnywhereService.obtener_proveedores_proveedores().subscribe(resp => {
-        this.total = Object(resp).total_objects
-        this.arr_proveedor = Object(resp).results;
-        console.log(resp, "resp")
-        this.arr_filtered_proveedor = this.arr_proveedor;
-        console.log(this.arr_filtered_proveedor)
-        this.currentPage = 1;  
-      });
-    })
-    
+      this.get_proveedores_act();
+    })    
+    this.get_proveedores_act();
   }
 
   isInvalidForm(subForm: string) {
@@ -461,7 +467,7 @@ export class ProveedoresComponent {
       this.extraerBase64(file)
       .then((imagen: any) => {
         this.formEdit.value.copiaCedula=file;
-        this.filePDF = file;
+        this.filePDF1 = file;
         // this.imgPerfil = imagen.base;
       })
       .catch(err => console.log(err));
@@ -665,11 +671,17 @@ export class ProveedoresComponent {
   } 
 
   getNombreArchivo(tipo: string, archivo: File): { nombreArchivo: string, archivo: File| null } {
-    const { nombres, apellidos } = this.proveedor_seleccionado|| {};
+    let nombres = this.proveedor_seleccionado?.user_datos?.nombres;
+    let apellidos = this.proveedor_seleccionado?.user_datos?.apellidos;
+    let archivoUrl = "";
+
+    if(tipo=="document"){
+      archivoUrl = this.proveedor_seleccionado?.document.at(-1)?.documento
+    }else{
+      archivoUrl = this.proveedor_seleccionado?.[tipo];
+    }
     
-    const archivoUrl = this.proveedor_seleccionado?.[tipo]; 
-    
-    const extension = archivoUrl ? archivoUrl.split('.').pop() : 'pdf'; 
+    let extension = archivoUrl ? archivoUrl.split('.').pop() : 'pdf'; 
   
     if (!nombres || !apellidos) {
       return { nombreArchivo: 'archivo_descargado', archivo: null };

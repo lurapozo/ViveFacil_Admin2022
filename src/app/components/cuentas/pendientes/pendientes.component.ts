@@ -452,7 +452,12 @@ export class PendientesComponent {
   getNombreArchivo(tipo: string, archivo: File): { nombreArchivo: string, archivo: File | null } {
     const { nombres, apellidos } = this.pendiente_seleccionada || {};
 
-    const archivoUrl = this.pendiente_seleccionada?.[tipo];
+    let archivoUrl = "";
+    if(tipo=="documentos"){
+      archivoUrl = this.pendiente_seleccionada?.documentsPendientes.at(-1)?.document
+    }else{
+      archivoUrl = this.pendiente_seleccionada?.[tipo];
+    }
 
     const extension = archivoUrl ? archivoUrl.split('.').pop() : 'pdf';
 

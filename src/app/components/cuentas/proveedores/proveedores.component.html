@@ -80,7 +80,7 @@
           <tbody>
             <tr
               (click)="
-              edit_prov(a); funcionMostar();" 
+              edit_prov(a); funcionMostar(); get_proveedores_act();" 
               *ngFor="let a of arr_filtered_proveedor"
               role="button"
             >
@@ -289,7 +289,7 @@
               [download]="getNombreArchivo('copiaCedula', proveedor_seleccionado?.copiaCedula ).nombreArchivo"
               >
                 <p style="color: black; font-size:12px">
-                  {{ getNombreArchivo('copiaCedula', proveedor_seleccionado?.user_datos.copiaCedula ).nombreArchivo}}
+                  {{ getNombreArchivo('copiaCedula', proveedor_seleccionado?.copiaCedula ).nombreArchivo}}
                 </p>
               </a>
               <input
@@ -300,7 +300,7 @@
                 [ngClass]="
                   isInvalidForm('copiaCedula') ? 'is-invalid' : ''
                 "
-                (change)="loadPdfFromDevice($event)"
+                (change)="loadFileFromDevice($event,'copiaCedula')"
               />
               <div class="invalid-feedback">
                 {{ getErrorMessage(formEdit, "copiaCedula") }}
@@ -415,11 +415,11 @@
               <div class="col-7">
                 <a
                   href="https://tomesoft1.pythonanywhere.com{{
-                     proveedor_seleccionado?.document[0]?.documento
+                     proveedor_seleccionado?.document.at(-1)?.documento
                   }}"
-                  [download]="getNombreArchivo('copiaCedula', proveedor_seleccionado?.document[0]?.documento).nombreArchivo">
+                  [download]="getNombreArchivo('document', proveedor_seleccionado?.document.at(-1)?.documento).nombreArchivo">
                   <p style="color: black; font-size:12px">
-                      {{ getNombreArchivo('copiaCedula',  proveedor_seleccionado?.document[0]?.documento).nombreArchivo}}
+                      {{ getNombreArchivo('document',  proveedor_seleccionado?.document.at(-1)?.documento).nombreArchivo}}
                     
                   </p>
                 </a>
@@ -428,8 +428,8 @@
                 accept="image/*,.pdf"
                   formControlName="documentos"
                   class="form-control"
-                  [ngClass]="isInvalidForm('copiaLicencia') ? 'is-invalid' : ''"
-                  (change)="loadFileFromDevice($event,'copiaLicencia')"
+                  [ngClass]="isInvalidForm('curriculum') ? 'is-invalid' : ''"
+                  (change)="loadFileFromDevice($event,'curriculum')"
                 />
                 <div class="invalid-feedback">
                   {{ getErrorMessage(formEdit, "documentos") }}
@@ -671,7 +671,7 @@
             data-bs-toggle="modal"
              class="custom-button float-right"
             (click)="establecerMensaje('Está seguro que desea actualizar la
-            información?', 'actualizar'); showHeader = true; showHeaderC= false ; showadmi = false;">Actualizar</button>
+            información?', 'editar'); showHeader = true; showHeaderC= false ; showadmi = false; get_proveedores_act();">Actualizar</button>
 
             <button
               (click)="prepararCaducidad()"
@@ -887,531 +887,6 @@
     </div>
   </div>
 
-
-  <!-- Modal edicion de informacion de admi 
-  <div class="modal fade modal-xl" id="modalInformacionEdicionProfesion"
-    aria-hidden="true" aria-labelledby="modalInformacionEdicionProfesionLabel"
-    tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header align-items-center">
-          <h1 class="modal-title fs-5 m-0 p-0 fw-bold"
-            id="modalInformacionEdicionProfesionLabel">
-            Edición Proveedores
-          </h1>
-
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="modal"
-            aria-label="Close"></button>
-        </div>
-        <div class="modal-body mb-0">
-          <form [formGroup]="formEdit" class="">
-            <div class="row p-2">
-              <div class="row">
-                <div class="col-8 align-self-center">
-                  <div class="row p-2 align-items-center">
-                    <div class="col-5">
-                      <label for="inputNombre" class="form-label"><h3 class="m-0 p-0 fw-bold">Nombre:</h3></label>
-                    </div>
-                    <div class="col-7">
-                      <input type="text" formControlName="nombre" class="form-control"
-                      [ngClass]="isInvalidForm('nombre') ? 'is-invalid' : ''"
-                        [placeholder]="proveedor_seleccionado?.user_datos.nombres"
-                        [value]="proveedor_seleccionado?.user_datos.nombres">
-                      <div class="invalid-feedback"> {{getErrorMessage(formEdit, 'nombre')}} </div>
-                    </div>
-                  </div>
-        
-                  <div class="row p-2 align-items-center">
-                    <div class="col-5">
-                      <label for="inputNombre" class="form-label"><h3 class="m-0 p-0 fw-bold">Apellidos:</h3></label>
-                    </div>
-                    <div class="col-7">
-                      <input
-                        type="text"
-                        formControlName="apellidos"
-                        class="form-control"
-                        [ngClass]="isInvalidForm('apellidos') ?
-                        'is-invalid' : ''"
-                        [placeholder]="proveedor_seleccionado?.user_datos.apellidos"
-                        [value]="proveedor_seleccionado?.user_datos.apellidos">
-                      <div class="invalid-feedback"> {{getErrorMessage(formEdit,
-                        'apellidos')}} </div>
-                    </div>
-                  </div>
-
-                  <div class="row p-2 align-items-center">
-                    <div class="col-5">
-                      <label for="inputNombre" class="form-label">
-                        <h3 class="m-0p 0 fw-bold">Foto:</h3>
-                      </label>
-                    </div>
-                    <div class="col-7">
-                      <img
-                        src="https://tomesoft1.pythonanywhere.com{{
-                          proveedor_seleccionado?.user_datos?.foto
-                        }}"
-                        alt="no se encontró foto de perfil"
-                        width="50"
-                        height="60"
-                      />
-                      <input
-                        type="file"
-                        formControlName="foto"
-                        accept="image/*"
-                        class="form-control"
-                        [ngClass]="isInvalidForm('foto') ? 'is-invalid' : ''"
-                        (change)="loadImageFromDevice($event)"
-                      />
-                      <div class="invalid-feedback">
-                        {{ getErrorMessage(formEdit, "copiaCedula") }}
-                      </div>
-                    </div>
-                  </div>
-        
-                  <div class="row p-2 align-items-center">
-                    <div class="col-5">
-                      <label for="inputCorreo" class="form-label"><h3 class="m-0 p-0
-                          fw-bold">Correo:</h3></label>
-                    </div>
-                    <div class="col-7">
-                      <input
-                        type="text"
-                        formControlName="correo"
-                        class="form-control"
-                        [ngClass]="isInvalidForm('email') ?
-                        'is-invalid' : ''"
-                        [placeholder]="proveedor_seleccionado?.user_datos?.user?.email"
-                        [value]="proveedor_seleccionado?.user_datos?.user?.email">
-                      <div class="invalid-feedback"> {{getErrorMessage(formEdit,
-                        'nombre')}} </div>
-                    </div>
-                  </div>
-        
-                  <div class="row p-2 align-items-center">
-                    <div class="col-5">
-                      <label for="selectorServicioCrear" class="form-label"><h3
-                          class="m-0 p-0 fw-bold">Genero:</h3></label>
-                    </div>
-                    <div class="col-7">
-                      <select
-                        class="form-select"
-                        [ngClass]="isInvalidForm('genero') ? 'is-invalid' : ''"
-                        formControlName="genero"
-                        [value]="proveedor_seleccionado?.user_datos?.genero"
-                        aria-describedby="selectorServicioCrearFeedback">
-                        <option selected disabled value="">Elija un genero...</option>
-                        <option *ngFor="let c of generos" [id]="c" [value]="c"> 
-                          {{c}}
-                        </option>
-                      </select>
-                      <div id="selectorServicioCrearFeedback"
-                        class="invalid-feedback"> {{getErrorMessage(formEdit,
-                        'genero')}} </div>
-                    </div>
-                  </div>
-        
-        
-                  <div class="row p-2 align-items-center">
-                    <div class="col-5">
-                      <label for="inputNombre" class="form-label">
-                        <h3 class="m-0p-0 fw-bold">Cedula:</h3>
-                      </label>
-                    </div>
-                    <div class="col-7">
-                      <input
-                        type="text"
-                        formControlName="cedula"
-                        class="form-control"
-                        (keypress)="numberOnly($event)"
-                        [ngClass]="isInvalidForm('cedula') ?
-                        'is-invalid' : ''"
-                        [placeholder]="proveedor_seleccionado?.user_datos?.cedula"
-                        [value]="proveedor_seleccionado?.user_datos?.cedula">
-                      <div class="invalid-feedback"> {{getErrorMessage(formEdit,
-                        'cedula')}} </div>
-                    </div>
-                  </div>
-        
-                  <div class="row p-2 align-items-center">
-                    <div class="col-5">
-                      <label for="inputNombre" class="form-label">
-                        <h3 class="m-0 p-0 fw-bold">Copia de Licencia:</h3>
-                      </label>
-                    </div>
-                    <div class="col-7">
-                      <a
-                        href="https://tomesoft1.pythonanywhere.com{{
-                          proveedor_seleccionado?.copiaLicencia
-                        }}"
-                        download="newfilename2.pdf"
-                      >
-                        <p>
-                          {{ copiaLicenciaNombre }}
-                        </p>
-                      </a>
-                      <input
-                        type="file"
-                        accept=".pdf"
-                        formControlName="copiaLicencia"
-                        class="form-control"
-                        [ngClass]="
-                          isInvalidForm('copiaLicencia') ? 'is-invalid' : ''
-                        "
-                        (change)="loadPdf2FromDevice($event)"
-                      />
-                      <div class="invalid-feedback">
-                        {{ getErrorMessage(formEdit, "copiaLicencia") }}
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="row p-2 align-items-center">
-                    <div class="col-5">
-                      <label for="inputNombre" class="form-label">
-                        <h3 class="m-0 p-0 fw-bold">Copia de Cedula:</h3>
-                      </label>
-                    </div>
-                    <div class="col-7">
-                      <a
-                        href="https://tomesoft1.pythonanywhere.com{{
-                          proveedor_seleccionado?.copiaCedula
-                        }}"
-                        download="newfilename.pdf"
-                      >
-                        <p>
-                          {{ copiaCedulaNombre }}
-                        </p>
-                      </a>
-                      <input
-                        type="file"
-                        accept=".pdf"
-                        formControlName="copiaCedula"
-                        class="form-control"
-                        [ngClass]="
-                          isInvalidForm('copiaCedula') ? 'is-invalid' : ''
-                        "
-                        (change)="loadPdfFromDevice($event)"
-                      />
-                      <div class="invalid-feedback">
-                        {{ getErrorMessage(formEdit, "copiaCedula") }}
-                      </div>
-                    </div>
-                  </div>
-        
-                  <div class="row p-2 align-items-center">
-                    <div class="col-5">
-                      <label for="inputNombre" class="form-label"><h3 class="m-0 p-0 fw-bold">Telefono:</h3></label>
-                    </div>
-                    <div class="col-7">
-                      <input
-                        type="text"
-                        formControlName="telefono"
-                        class="form-control"
-                        (keypress)="numberOnlyPluss($event)"
-                        [ngClass]="isInvalidForm('telefono') ?
-                        'is-invalid' : ''"
-                        [placeholder]="proveedor_seleccionado?.user_datos.telefono"
-                        [value]="proveedor_seleccionado?.user_datos.telefono">
-                      <div class="invalid-feedback"> {{getErrorMessage(formEdit,
-                        'telefono')}} </div>
-                    </div>
-                  </div>
-        
-                  <div class="row p-2 align-items-center">
-                    <div class="col-5">
-                      <label for="selectorServicioCrear" class="form-label"><h3
-                          class="m-0 p-0 fw-bold">Ciudad:</h3></label>
-                    </div>
-                    <div class="col-7">
-                      <select
-                        class="form-select"
-                        [ngClass]="isInvalidForm('genero') ?'is-invalid' : ''"
-                        formControlName="ciudad"
-                        id="ge"
-                        [value]="proveedor_seleccionado?.user_datos.ciudad"
-                        aria-describedby="selectorServicioCrearFeedback">
-                        <option selected disabled value="">Elija un genero...</option>
-                        <option *ngFor="let c of ciudades" [id]="c" [value]="c"> {{c}}
-                        </option>
-                      </select>
-                      <div id="selectorServicioCrearFeedback"
-                        class="invalid-feedback"> {{getErrorMessage(formEdit,
-                        'ciudad')}} </div>
-                    </div>
-                  </div>
-                
-                  <div class="row p-2 align-items-center">
-                    <div class="col-5">
-                      <label for="inputNombre" class="form-label"><h3 class="m-0 p-0 fw-bold">Direccion:</h3></label>
-                    </div>
-                    <div class="col-7">
-                      <input
-                        type="text"
-                        formControlName="direccion"
-                        class="form-control"
-                        [ngClass]="isInvalidForm('direccion') ?
-                        'is-invalid' : ''"
-                        [placeholder]="proveedor_seleccionado?.user_datos.direccion"
-                        [value]="proveedor_seleccionado?.direccion">
-                      <div class="invalid-feedback"> {{getErrorMessage(formEdit,
-                        'direccion')}} </div>
-                    </div>
-                  </div>
-        
-                  <div class="row p-2 align-items-center">
-                    <div class="col-5">
-                      <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
-                          fw-bold">Descripcion:</h3></label>
-                    </div>
-                    <div class="col-7">
-                      <input
-                        type="text"
-                        formControlName="descripcion"
-                        class="form-control"
-                        [ngClass]="isInvalidForm('descripcion') ?
-                        'is-invalid' : ''"
-                        [placeholder]="proveedor_seleccionado?.user_datos.descripcion"
-                        [value]="proveedor_seleccionado?.descripcion">
-                      <div class="invalid-feedback"> {{getErrorMessage(formEdit,
-                        'descripcion')}} </div>
-                    </div>
-                  </div>
-
-                  <div class="row p-2 align-items-center">
-                    <div class="col-5">
-                      <label for="inputNombre" class="form-label"
-                        ><h3 class="m-0 p-0 fw-bold">Documentación:</h3></label
-                      >
-                    </div>
-                    <div class="col-7">
-                      <a
-                        href="https://tomesoft1.pythonanywhere.com{{
-                          proveedor_seleccionado?.document[0]?.documento
-                        }}"
-                        download="newfilename3.pdf">
-                        <p>
-                          {{ copiaDocumentosNombre }}
-                        </p>
-                      </a>
-                      <input
-                        type="file"
-                        accept="pdf"
-                        formControlName="documentos"
-                        class="form-control"
-                        [ngClass]="isInvalidForm('copiaLicencia') ? 'is-invalid' : ''"
-                        (change)="loadPdf3FromDevice($event)"
-                      />
-                      <div class="invalid-feedback">
-                        {{ getErrorMessage(formEdit, "documentos") }}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-  
-                
-                <div class="col-4 align-self-center">
-                  <h2> Cuenta Bancaria</h2>
-                  <div class="row  align-items-center">
-                    <div class="col-5">
-                      <label for="inputNombre" class="form-label">
-                        <h3 class="m-0 p-0 fw-bold">
-                          Tipo Cuenta:
-                        </h3>
-                      </label>
-                    </div>
-                    <div class="col-7">
-                      <select
-                      formControlName="tipo_cuenta"
-                      class="form-select"
-                      [ngClass]="isInvalidForm('tipo_cuenta') ? 'is-invalid' : ''"
-                      [value]="proveedor_seleccionado?.tipo_cuenta"
-                      aria-describedby="selectorServicioCrearFeedback"
-                    >
-                      <option selected disabled value="">
-                        Elija un tipo de cuenta...
-                      </option>
-                      <option
-                        *ngFor="let c of tipoCuentas"
-                        [id]="c"
-                        [value]="c"
-                      >
-                        {{ c }}
-                      </option>
-                    </select>
-                    <div
-                      id="selectorServicioCrearFeedback"
-                      class="invalid-feedback"
-                    >
-                      {{ getErrorMessage(formEdit, "profesion") }}
-                    </div>
-                    </div>
-                  </div>
-  
-                  <div class="row p-2 align-items-center">
-                    <div class="col-5">
-                      <label for="inputNombre" class="form-label"><h3 class="m-0 p-0 fw-bold">Numero Cuenta:</h3></label>
-                    </div>
-                    <div class="col-7">
-                      <input
-                        type="text"
-                        formControlName="numeroCuenta"
-                        class="form-control"
-                        (keypress)="numberOnly($event)"
-                        [ngClass]="isInvalidForm('numeroCuenta') ? 'is-invalid' : ''"
-                        [placeholder]="proveedor_seleccionado?.numero_cuenta"
-                        [value]="proveedor_seleccionado?.numero_cuenta">
-                      <div class="invalid-feedback"> {{getErrorMessage(formEdit, 'numeroCuenta')}} </div>
-                    </div>
-                  </div>
-                
-                  <div class="row p-2 align-items-center">
-                    <div class="col-5">
-                      <label for="inputNombre" class="form-label"><h3 class="m-0 p-0 fw-bold">Banco:</h3></label>
-                    </div>
-                    <div class="col-7">
-                      <input
-                        type="text"
-                        formControlName="banco"
-                        class="form-control"
-                        [ngClass]="isInvalidForm('banco') ?
-                        'is-invalid' : ''"
-                        [placeholder]="proveedor_seleccionado?.banco"
-                        [value]="proveedor_seleccionado?.banco">
-                      <div class="invalid-feedback"> {{getErrorMessage(formEdit,
-                        'banco')}} </div>
-                    </div>
-                  </div>
-  
-                  <h2>Profesión</h2>
-                <div>
-                  
-                  <div class="row p-2 align-items-center">
-                    <div class="col-5">
-                      <label for="selectorServicioCrear" class="form-label"><h3
-                          class="m-0 p-0 fw-bold">Licencia:</h3></label>
-                    </div>
-                    <div class="col-7">
-                      <select
-                        class="form-select"
-                        [ngClass]="isInvalidForm('licencia') ?
-                        'is-invalid' : ''"
-                        formControlName="licencia"
-                  
-                        [value]="proveedor_seleccionado?.licencia"
-                        aria-describedby="selectorServicioCrearFeedback">
-                        <option selected disabled value="">¿Posee una licencia?...</option>
-                        <option *ngFor="let c of licencia" [id]="c" [value]="c"> {{c}}
-                        </option>
-                      </select>
-                      <div id="selectorServicioCrearFeedback"
-                        class="invalid-feedback"> {{getErrorMessage(formEdit,
-                        'licencia')}} </div>
-                    </div>
-                  </div>
-
-                  <div class="row p-2 align-items-center">
-                    <div class="col-5">
-                      <label for="inputNombre" class="form-label"
-                        ><h3 class="m-0 p-0 fw-bold">
-                          Años de Experiencia:
-                        </h3></label
-                      >
-                    </div>
-                    <div class="col-7">
-                      <input
-                        type="number"
-                        formControlName="ano_experiencia"
-                        class="form-control"
-                        [ngClass]="
-                          isInvalidForm('ano_experiencia') ? 'is-invalid' : ''
-                        "
-                        [placeholder]="proveedor_seleccionado?.ano_profesion"
-                        [value]="proveedor_seleccionado?.ano_profesion"
-                      />
-                      <div class="invalid-feedback">
-                        {{ getErrorMessage(formEdit, "ano_experiencia") }}
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="row p-2 align-items-center">
-                    <div class="col-5">
-                      <label for="selectorServicioCrear" class="form-label"
-                        ><h3 class="m-0 p-0 fw-bold">Profesion:</h3></label
-                      >
-                    </div>
-                    <div class="col-7">
-                      <p>
-                        <span class="m-0 p-0 fw-bold">profesiones actuales:</span>  {{proveedor_seleccionado?.profesion}}
-                      </p>
-                      <ng-select
-                        [items]="profesiones"
-                        class="form-select"
-                        [ngClass]="
-                          isInvalidForm('profesion') ? 'is-invalid' : ''
-                        "
-                        formControlName="profesion"
-                        id="ge"
-                        
-                        aria-describedby="selectorServicioCrearFeedback"
-                        [multiple]="true">
-                      </ng-select>
-                      <div
-                        id="selectorServicioCrearFeedback"
-                        class="invalid-feedback"
-                      >
-                        {{ getErrorMessage(formEdit, "profesion") }}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                </div>
-              </div>
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button class="btn btn-warning"
-            data-bs-target="#modalInformacionProfesion" 
-            data-bs-toggle="modal"
-            >
-            Regresar
-          </button>
-          <button
-            data-bs-target="#modalConfirmacion"
-            data-bs-toggle="modal"
-            class="btn btn-danger"
-            *ngIf="proveedor_seleccionado?.estado"
-            (click)="establecerMensaje('Está seguro que desea Negar la
-            información?', 'negar')"
-            >
-            Negar
-          </button>
-          <button
-            class="btn btn-info"
-            data-bs-dismiss="modal"
-            *ngIf="!proveedor_seleccionado?.estado"
-            (click)="actualizarCaducidad(1)"
-            >
-            Aceptar
-          </button>
-            <button
-            data-bs-target="#modalConfirmacion"
-            data-bs-toggle="modal"
-            class="btn btn-success"
-            (click)="establecerMensaje('Está seguro que desea actualizar la
-            información?', 'actualizar')">Actualizar</button>
-        </div>
-  
-       <pre>
-          {{actualizarProfesionesForm.value | json}}
-        </pre> -->
-      <!--  </div>
-    </div>
-  </div> -->
 
 
   <div class="modal fade" id="modalConfirmacion" tabindex="-1"
