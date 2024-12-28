@@ -485,8 +485,9 @@ export class NotificacionesMasivasComponent {
 
   enviarNotificacionmasiva(notificacion: any) {
     const id = notificacion.id
+    const titulo = notificacion.titulo
     if (id) {    
-      this.pythonAnywhereService.enviar_noti_masi(id).subscribe(resp => { console.log(resp); })
+      this.pythonAnywhereService.enviar_noti_masi(id, titulo).subscribe(resp => { console.log(resp); })
       this.get_notificaciones();
       this.mostrarToastInfo('Estado de notificacion ', 'Notificacion enviada correctamente', false);
     }

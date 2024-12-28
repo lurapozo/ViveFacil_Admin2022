@@ -1661,8 +1661,10 @@ export class PythonAnywhereService {
     }) as Observable<any>;
   }
 
-  enviar_noti_auto(id: string): Observable<any> {
-    return this.http.post(`${this.API_URL}/notificaciones/${id}/envio/`, {});
+  enviar_noti_auto(id: string, titulo: string): Observable<any> {
+    return this.http.post(`${this.API_URL}/notificaciones-envio/?id=${id}`,{
+      titulo: titulo,
+    }) as Observable<any>;
   } 
 
 
@@ -1703,9 +1705,11 @@ export class PythonAnywhereService {
     return this.http.delete(`${this.API_URL}/notificacion-anuncio/${id}`);
   }
 
-  enviar_noti_masi(id: string): Observable<any> {
-    return this.http.post(`${this.API_URL}/notificacion-anuncio/${id}/envio/`, {});
-  } 
+  enviar_noti_masi(id: string, titulo: string): Observable<any> {
+    return this.http.post(`${this.API_URL}/notificacion-anuncio-envio/?id=${id}`,{
+      titulo: titulo,
+    }) as Observable<any>;
+  }
 
   /**
    * Funcion que agrega una notificacion/anuncio

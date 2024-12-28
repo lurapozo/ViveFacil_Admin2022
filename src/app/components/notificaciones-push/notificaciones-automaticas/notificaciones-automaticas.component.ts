@@ -465,8 +465,9 @@ export class NotificacionesAutomaticasComponent {
 
   enviarNotificacionauto(notificacion: any) {
     const id = notificacion.id
+    const titulo = notificacion.titulo
     if (id) {    
-      this.pythonAnywhereService.enviar_noti_auto(id).subscribe(resp => { console.log(resp); })
+      this.pythonAnywhereService.enviar_noti_auto(id, titulo).subscribe(resp => { console.log(resp); })
       this.get_notificaciones();
       this.mostrarToastInfo('Estado de notificacion ', 'Notificacion enviada correctamente', false);
     }
