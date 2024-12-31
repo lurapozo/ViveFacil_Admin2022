@@ -112,6 +112,7 @@ export class ProveedoresComponent {
   ngOnInit() {
     this.loadGeneros();
     this.loadCiudades();
+    this.get_proveedores_act();
   }
 
   get_proveedores_act(){
@@ -140,7 +141,7 @@ export class ProveedoresComponent {
     this.arr_filtered_proveedor = this.arr_proveedor;
     if (texto && texto.trim() !== '') {
       this.arr_filtered_proveedor = this.arr_filtered_proveedor?.filter((solicitud) => {
-        return solicitud.nombres.toLowerCase().includes(texto.toLowerCase())
+        return solicitud.user_datos.nombres.toLowerCase().includes(texto.toLowerCase()) || solicitud.profesion.toLowerCase().includes(texto.toLowerCase()) || solicitud.user_datos.user.email.toLowerCase().includes(texto.toLowerCase())
       });
     }
   }

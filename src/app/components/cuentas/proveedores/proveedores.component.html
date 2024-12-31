@@ -67,6 +67,7 @@
           <tr>
             <th scope="col">Nombres</th>
             <th scope="col">Cedula</th>
+            <th scope="col">Categoría</th>
             <th scope="col">Correo Electronico</th>
             <th scope="col">Telefono</th>
             <th scope="col">Fecha de actualizacion</th>
@@ -80,12 +81,13 @@
           <tbody>
             <tr
               (click)="
-              edit_prov(a); funcionMostar(); get_proveedores_act();" 
+              get_proveedores_act(); edit_prov(a); funcionMostar(); " 
               *ngFor="let a of arr_filtered_proveedor"
               role="button"
             >
               <td style="color: #40378b; text-transform: uppercase"> <strong> {{a.user_datos.nombres}} {{a.apellidos}}</strong></td>
               <td style="color: #40378b; text-transform: uppercase"> <strong> {{a.user_datos.cedula}} </strong> </td>
+              <td style="color: #40378b; text-transform: uppercase"> <strong> {{a.profesion}} </strong></td>
               <td style="color: #40378b; text-transform: uppercase"> <strong> {{a.user_datos.user.email}} </strong></td>
               <td style="color: #40378b; text-transform: uppercase"> <strong> {{a.user_datos.telefono}} </strong></td>
               <td style="color: #40378b; text-transform: uppercase"> <strong> {{a.user_datos.fecha_creacion  | date : "d/M/Y" }} </strong></td>

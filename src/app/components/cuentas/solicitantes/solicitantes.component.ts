@@ -78,7 +78,7 @@ export class SolicitantesComponent {
     this.arr_filtered_soli = this.arr_soli;
     if (texto && texto.trim() !== '') {
       this.arr_filtered_soli = this.arr_filtered_soli?.filter((solicitud) => {
-        return solicitud.user_datos.nombres.toLowerCase().includes(texto.toLowerCase())
+        return solicitud.user_datos.nombres.toLowerCase().includes(texto.toLowerCase()) || solicitud.user_datos.apellidos.toLowerCase().includes(texto.toLowerCase())
       });
     }}
   cambiarEstado(event: any) {
