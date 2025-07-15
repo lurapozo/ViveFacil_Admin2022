@@ -960,7 +960,7 @@ aria-hidden="true"
 
     <!-- Footer del modal confirmacion -->
     <div class="modal-footer">
-      <button type="button" class="btn btn-success" data-bs-dismiss="modal">
+      <button type="button" class="btn btn-success" data-bs-dismiss="modal" *ngIf="mensajeIncompletoString!=='Cargando...'">
         Aceptar
       </button>
     </div>

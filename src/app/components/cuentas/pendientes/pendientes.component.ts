@@ -1,6 +1,7 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
+import { firstValueFrom } from 'rxjs';
 import { BodyEmail } from 'src/app/interfaces/email';
 import { BodyActualizarProveedorPendiente, BodyCrearProveedorPendiente, BodyResponseCrearProveedorPendiente, SerializerCrearProveedorPendiente } from 'src/app/interfaces/proveedor';
 import { Solicitante2 } from 'src/app/interfaces/solicitante2';
@@ -475,7 +476,7 @@ export class PendientesComponent {
     return { nombreArchivo: 'No hay documento disponible', archivo: null };
   }
 
-  onAceptar() {
+  async onAceptar() {
     let pendiente: BodyCrearProveedorPendiente = {
       nombres: this.pendiente_seleccionada.nombres,
       apellidos: this.pendiente_seleccionada.apellidos,
@@ -500,9 +501,10 @@ export class PendientesComponent {
 
     const email = this.pendiente_seleccionada.email;
     const password = email.substring(0, 3) + (Math.random() + 1).toString(36).substring(7);
-    this.mensajeIncompletoString = 'Campos completos'
+    this.mensajeIncompletoString = 'Cargando...'
     if (email && password) {
-      this.pythonAnywhereService.getSolicitantePythonAny(email).subscribe((arrSolicitante: Array<Solicitante2>) => {
+      try{
+        const arrSolicitante: Array<Solicitante2> = await firstValueFrom(this.pythonAnywhereService.getSolicitantePythonAny(email));    
         if (arrSolicitante.length === 0) {
           var validator = 0;
           const dataRegisto = new FormData();
@@ -671,31 +673,46 @@ export class PendientesComponent {
           console.log("validator " + validator)
           console.log(this.pendiente_seleccionada.profesion)
           if (validator == 0) {
-            // Registro PythonAnywhere
-            this.pythonAnywhereService.postRegistro(dataRegisto).subscribe(async (resp: any) => {
+            try {
+              const resp: any = await firstValueFrom(this.pythonAnywhereService.postRegistro(dataRegisto));
               if (!resp.error) {
                 console.log('Registro pythonanywhere exitoso: ', resp);
-                // Registro Firebase
-                this.userService
-                  .register(email, password)
-                  .then((response) => {
-                    console.log('Registro firebase exitoso: ', response);
-                    this.pythonAnywhereService.eliminar_proveedores_pendientes(this.pendiente_seleccionada.id).subscribe(resp => {
-                      this.cambiarEstado(this.pendiente_seleccionada);
-                      console.log(resp)
-                      this.get_proveedores_pendientes_act();
-                    })
-                  })
-                  .catch((error) => {
-                    console.log('Error al registrar en firebase: ', error);
-                    // this.isRegistered = true;
-                  });
+                try {
+                  const responseFirebase = await this.userService.register(email, password);
+                  console.log('Registro firebase exitoso: ', responseFirebase);
+                  // Eliminar pendiente solo si todo salió bien
+                  try {
+                    const respEliminarPendiente: any = await firstValueFrom(this.pythonAnywhereService.eliminar_proveedores_pendientes(this.pendiente_seleccionada.id));
+                    this.cambiarEstado(this.pendiente_seleccionada);
+                    console.log(resp);
+                    this.mensajeIncompletoString = 'Campos completos'
+                    this.get_proveedores_pendientes_act();
+                  } catch (error) {
+                    console.error('Error al eliminar pendiente:', error);
+                    this.mensajeIncompletoString = 'Error al eliminar pendiente. ' + error;
+                    return;
+                  }
+
+                } catch (firebaseError: any) {
+                  console.log('Error al registrar en firebase: ', firebaseError);
+                  const firebaseMessage = firebaseError?.error?.error?.message;
+                  console.log(firebaseMessage)
+                  if (firebaseMessage === 'EMAIL_EXISTS') {
+                    this.mensajeIncompletoString = 'Error: el correo ya está registrado en Firebase.';
+                  } else {
+                    this.mensajeIncompletoString = 'Error al registrar en Firebase. '+firebaseError;
+                  }
+                  return;
+                }
+
               } else {
-                console.log("error", resp.error);
+                this.mensajeIncompletoString = resp.error;
                 console.log('Hubo un error al registrar en PythonAnywhere', resp.error);
-                // this.presentAlert('Error en el registro :(', 'Vuelva a intentarlo pronto...', false);
               }
-            });
+            } catch (error) {
+              console.error('Error de red o servidor al registrar en PythonAnywhere', error);
+              this.mensajeIncompletoString = 'No se pudo registrar en PythonAnywhere. Intente nuevamente.';
+            }
           } else {
             // TODO: Mostrar mensaje de campos incompletos
             if (this.mensajeIncompleto.length > 0) {
@@ -708,9 +725,14 @@ export class PendientesComponent {
             console.log('ERROR: Faltan datos');
           }
         } else {
+          this.mensajeIncompletoString = "El usuario ya existe, actualize el correo y vuevla a proceder.";
           console.log('Usuario encontrado en PythonAnywhere');
         }
-      });
+      ;
+    } catch (error: any)  {
+        this.mensajeIncompletoString = "Error en obtener solicitante.";
+        console.log('Error en obtener solicitante:', error);
+    }
     }
   }
 

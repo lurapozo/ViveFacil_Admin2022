@@ -29,12 +29,13 @@ import { SolicitudProfesion, SolicitudProfesionPaginacion } from 'src/app/interf
 import { BodyCrearSubCategoria, BodyResponseCrearSubCategoria } from 'src/app/interfaces/sub-categoria';
 import { Sugerencia } from 'src/app/interfaces/sugerencia';
 import { PagosTarjetaUser } from 'src/app/interfaces/tarjeta';
+import { environment } from 'src/environments/environment';
 @Injectable({
   providedIn: 'root',
 })
 export class PythonAnywhereService {
-  API_URL = `https://tomesoft1.pythonanywhere.com`;
-  administradores = 'https://tomesoft1.pythonanywhere.com/administradores';
+  API_URL = environment.apiUrl;
+  administradores = environment.apiAdministradores;
   //API_URL = `http://127.0.0.1:8000`;
   //administradores = 'http://127.0.0.1:8000/administradores';
 
