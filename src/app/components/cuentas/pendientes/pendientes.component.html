@@ -916,6 +916,7 @@ aria-hidden="true"
         class="btn btn-success"
         (click)="onNegar()"
         data-bs-dismiss="modal"
+        [disabled]="!formNegar.value.razon"
       >
         Negar
       </button>

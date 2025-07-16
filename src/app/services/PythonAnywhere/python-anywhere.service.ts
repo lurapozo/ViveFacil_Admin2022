@@ -729,6 +729,7 @@ export class PythonAnywhereService {
     };
     pendiente.append("user_datos", JSON.stringify(userDatos));
     pendiente.append("apellidos", data.user_datos.apellidos);
+    pendiente.append("email", data.email);
     pendiente.append("ciudad", data.user_datos.ciudad);
     pendiente.append("cedula", data.user_datos.cedula);
     pendiente.append("telefono", data.user_datos.telefono);

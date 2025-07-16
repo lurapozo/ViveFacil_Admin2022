@@ -321,7 +321,7 @@
                   class="form-control"
                   formControlName="telefono"
                   [ngClass]="isInvalidForm('telefono') ? 'is-invalid' : ''"
-                  type="number"
+                  type="text"
                   [placeholder]="proveedor_seleccionado?.user_datos.telefono"
                   [value]="proveedor_seleccionado?.user_datos.telefono"
                   [(ngModel)]="proveedor_seleccionado.user_datos.telefono"

@@ -92,6 +92,7 @@ export interface BodyActualizarProveedor {
   ano_profesion: string;
   profesion: string;
   foto: File | null;
+  email: string;
 }
 
 export interface BodyCrearProveedor {

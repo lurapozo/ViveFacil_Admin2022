@@ -331,6 +331,7 @@ export class ProveedoresComponent {
   prepararCaducidad(){
     const ddasda = this.proveedor_seleccionado?.fecha_caducidad
   }
+
   onActualizar() {
     this.get_proveedores_act();
     let proveedor: BodyActualizarProveedor= {
@@ -350,6 +351,7 @@ export class ProveedoresComponent {
           fecha_creacion: this.proveedor_seleccionado.user_datos.estado,
           puntos: this.proveedor_seleccionado.puntos
       },     
+      email: this.formEdit.value.correo,
       direccion: this.formEdit.value.direccion,
       descripcion: this.formEdit.value.descripcion,
       licencia: this.formEdit.value.licencia,
