@@ -261,7 +261,7 @@
               >
             </div>
             <a
-            href="https://tomesoft1.pythonanywhere.com{{
+            href="{{ apiUrl }}{{
               pendiente_seleccionada?.copiaCedula
             }}"
             [download]="getNombreArchivo('copiaCedula', pendiente_seleccionada?.copiaCedula ).nombreArchivo"
@@ -385,7 +385,7 @@
             </div>
             <div class="col-7">
               <a
-                href="https://tomesoft1.pythonanywhere.com{{
+                href="{{ apiUrl }}{{
                   pendiente_seleccionada?.documentsPendientes[0]?.document
                 }}"
                 [download]="getNombreArchivo('documentos', pendiente_seleccionada?.documentsPendientes[0]?.document).nombreArchivo">
@@ -420,7 +420,7 @@
         
               <!-- Imagen previsualización -->
               <img
-                src="https://tomesoft1.pythonanywhere.com{{
+                src="{{ apiUrl }}{{
                   pendiente_seleccionada?.foto
                 }}"
                 alt="no se encontró foto de perfil"
@@ -579,7 +579,7 @@
             </div>
             <div class="col-7">
               <a
-                href="https://tomesoft1.pythonanywhere.com{{
+                href="{{ apiUrl }}{{
                     pendiente_seleccionada?.copiaLicencia
                   }}"
                 [download]="getNombreArchivo('copiaLicencia',  pendiente_seleccionada?.copiaLicencia).nombreArchivo">

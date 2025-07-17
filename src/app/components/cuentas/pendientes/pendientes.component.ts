@@ -7,6 +7,7 @@ import { BodyActualizarProveedorPendiente, BodyCrearProveedorPendiente, BodyResp
 import { Solicitante2 } from 'src/app/interfaces/solicitante2';
 import { PythonAnywhereService } from 'src/app/services/PythonAnywhere/python-anywhere.service';
 import { UserService } from 'src/app/services/user/user.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-pendientes',
@@ -97,6 +98,7 @@ export class PendientesComponent {
   formNegar: FormGroup = new FormGroup({
     razon: new FormControl(''),
   });
+  apiUrl=environment.apiUrl;
   constructor(
     private pythonAnywhereService: PythonAnywhereService,
     private userService: UserService,
@@ -238,7 +240,7 @@ export class PendientesComponent {
       genero: this.formEdit.value.genero,
       telefono: this.formEdit.value.telefono,
       cedula: this.formEdit.value.cedula,
-      copiaCedula: this.filePDF || this.fileImgPerfil,
+      copiaCedula: this.filePDF1 || this.fileImgPerfil1,
       ciudad: this.formEdit.value.ciudad,
       direccion: this.formEdit.value.direccion,
       email: this.formEdit.value.correo,
@@ -477,28 +479,6 @@ export class PendientesComponent {
   }
 
   async onAceptar() {
-    let pendiente: BodyCrearProveedorPendiente = {
-      nombres: this.pendiente_seleccionada.nombres,
-      apellidos: this.pendiente_seleccionada.apellidos,
-      genero: this.pendiente_seleccionada.genero,
-      telefono: this.pendiente_seleccionada.telefono,
-      cedula: this.pendiente_seleccionada.cedula,
-      copiaCedula: this.pendiente_seleccionada.copiaCedula,
-      ciudad: this.pendiente_seleccionada.ciudad,
-      direccion: this.pendiente_seleccionada.direccion,
-      email: this.pendiente_seleccionada.email,
-      descripcion: this.pendiente_seleccionada.descripcion,
-      licencia: this.pendiente_seleccionada.licencia,
-      copiaLicencia: this.pendiente_seleccionada.copiaLicencia,
-      profesion: this.pendiente_seleccionada.profesion,
-      ano_experiencia: this.pendiente_seleccionada.ano_experiencia,
-      banco: this.pendiente_seleccionada.banco,
-      numero_cuenta: this.pendiente_seleccionada.numero_cuenta,
-      tipo_cuenta: this.pendiente_seleccionada.tipo_cuenta,
-      foto: this.pendiente_seleccionada.foto,
-      planilla_servicios: this.pendiente_seleccionada.filesDocuments
-    }
-
     const email = this.pendiente_seleccionada.email;
     const password = email.substring(0, 3) + (Math.random() + 1).toString(36).substring(7);
     this.mensajeIncompletoString = 'Cargando...'
