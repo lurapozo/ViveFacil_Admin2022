@@ -136,7 +136,7 @@
             href="#modalInformacionProfesion" role="button"
           >
             <td style="color: #40378b; text-transform: uppercase"> <strong> {{ a.usuario}} </strong></td>
-            <td style="color: #40378b; text-transform: uppercase"> <strong> {{ a.solicitud?.proveedor.user_datos.nombres}} {{a.solicitud?.proveedor.user_datos.apellidos}} </strong> </td>
+            <td style="color: #40378b; text-transform: uppercase"> <strong> {{ a.solicitud?.proveedor?.user_datos.nombres}} {{a.solicitud?.proveedor?.user_datos.apellidos}} </strong> </td>
             <td style="color: #40378b; text-transform: uppercase"> <strong> {{ a.solicitud?.servicio.nombre}}  </strong></td>
             <td style="color: #40378b; text-transform: uppercase"> <strong> {{ a.fecha_creacion | date : "d/M/Y" }}</strong></td>
             <td style="color: #40378b; text-transform: uppercase"> <strong> {{ a.fecha_creacion | date: 'HH:mm' }}  </strong></td>
