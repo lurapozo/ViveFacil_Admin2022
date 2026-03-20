@@ -37,6 +37,7 @@ export class UserService {
   }
 
   logout() {
+    localStorage.clear();
     return signOut(this.auth);
   }
 

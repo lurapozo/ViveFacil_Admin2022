@@ -7,6 +7,9 @@ export interface Servicio {
 }
 
 export interface BodyActualizarServicio {
+  nombre?: string;
   descripcion?: string;
+  categoria?: string;
   estado?: boolean;
+  foto?: any;
 }

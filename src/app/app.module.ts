@@ -39,6 +39,7 @@ import { NotificacionesMasivasComponent } from './components/notificaciones-push
 import { LoginComponent } from './pages/login/login.component';
 import { SpinnerComponent } from './components/spinner/spinner/spinner.component';
 import { SpinnerInterceptor } from './interceptor/spinner.interceptor';
+import { AuthInterceptor } from './interceptor/auth.interceptor';
 import { UserService } from './services/user/user.service';
 import { provideAuth, getAuth} from '@angular/fire/auth';
 import { provideFirebaseApp} from '@angular/fire/app';
@@ -119,7 +120,9 @@ import { firebaseConfig } from 'src/app/services/Firebase/firebase.config';
     provideFirestore(() => getFirestore()), 
     provideAuth(() => getAuth()), // AuthModule
   ],
-  providers: [ UserService, {provide: HTTP_INTERCEPTORS,useClass:SpinnerInterceptor,multi:true}],
+  providers: [ UserService, {
+    provide: HTTP_INTERCEPTORS,useClass:AuthInterceptor,multi:true},
+    {provide: HTTP_INTERCEPTORS,useClass:SpinnerInterceptor,multi:true}],
   bootstrap: [AppComponent],
 })
 export class AppModule {

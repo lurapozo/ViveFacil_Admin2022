@@ -907,7 +907,7 @@ export class PythonAnywhereService {
     return this.http.delete(`${this.API_URL}/categoria_delete/${id}`) as Observable<any>;
   }
   eliminar_subcategoria(id: number): Observable<any> {
-    return this.http.delete(`${this.API_URL}/servicios_delete/${id}`) as Observable<any>;
+    return this.http.delete(`${this.API_URL}/servicios/${id}`) as Observable<any>;
   }
 
   /**
@@ -977,7 +977,11 @@ export class PythonAnywhereService {
    * @returns Devuelve un Observable con un Array de un objeto Servicio
    */
   obtener_servicios(): Observable<Servicio[]> {
-    return this.http.get(this.API_URL + '/servicios/') as Observable<Servicio[]>;
+    return this.http.get(this.API_URL + '/servicios/', {
+      params: {
+        todas: "True"
+      }
+    }) as Observable<Servicio[]>;
   }
 
   /**
@@ -989,7 +993,20 @@ export class PythonAnywhereService {
    * @returns Devuelve un Observable con un objeto Servicio actualizado.
    */
   actualizar_servicios(bodyActualizar: BodyActualizarServicio, id: string): Observable<Servicio> {
-    return this.http.put(`${this.API_URL}/servicios_update/${id}`, bodyActualizar) as Observable<Servicio>;
+    const dataUpdate = new FormData();
+    bodyActualizar.nombre ? dataUpdate.append('nombre', bodyActualizar.nombre) : null;
+    bodyActualizar.descripcion ? dataUpdate.append('descripcion', bodyActualizar.descripcion) : null;
+    bodyActualizar.categoria ? dataUpdate.append('categoria', bodyActualizar.categoria) : null;
+    bodyActualizar.estado !== undefined ? dataUpdate.append('estado', bodyActualizar.estado.toString()) : null;
+    bodyActualizar.foto ? dataUpdate.append('foto', bodyActualizar.foto) : null;
+    const tokenPythonAny = this.getTokenPythonAnywhere();
+    return this.http.put(`${this.API_URL}/servicios/${id}`, dataUpdate) as Observable<Servicio>;
+  }
+
+  getTokenPythonAnywhere(): string | null {
+    const key = 'tokenPythonAnywhere';
+    const valor = localStorage.getItem(key);
+    return valor;
   }
 
   /**

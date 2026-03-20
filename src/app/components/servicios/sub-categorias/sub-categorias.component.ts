@@ -3,6 +3,7 @@ import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/fo
 import { DomSanitizer } from '@angular/platform-browser';
 import { PythonAnywhereService } from 'src/app/services/PythonAnywhere/python-anywhere.service';
 import { BodyActualizarCategoria, BodyCrearCategoria, Categoria } from '../../../interfaces/categoria';
+import { BodyActualizarServicio } from '../../../interfaces/servicio';
 import { BodyCrearSubCategoria, BodyResponseCrearSubCategoria, SubCategoria } from '../../../interfaces/sub-categoria';
 
 @Component({
@@ -70,10 +71,11 @@ export class SubCategoriasComponent {
     descripcion: new FormControl('', [Validators.required]),
   }, []);
   formEdit = new FormGroup({
-    imagen: new FormControl(this.fileImagenActualizar, [Validators.required]),
+    imagen: new FormControl(this.fileImagenActualizar),
     categoria: new FormControl('', [Validators.required]),
     nombre: new FormControl('', [Validators.required]),
     descripcion: new FormControl('', [Validators.required]),
+    estado: new FormControl(true),
   }, []);
 
   createImageValidator(controlImage: AbstractControl, tipo: string) {
@@ -161,65 +163,6 @@ export class SubCategoriasComponent {
     }
   });
 
-  // createImageValidator2(controlImage: AbstractControl, tipo: string) {
-  //   return () => {
-  //     const file = controlImage.value as File;
-
-  //     if (file && file.name) {
-  //       console.log('Ingresa al validator if');
-  //       console.log(file);
-  //       const tokensImgName: any[] = file.name.split('.');
-  //       console.log(tokensImgName);
-  //       if (tokensImgName.length === 2) {
-  //         const imgExtension = tokensImgName[1];
-  //         if (imgExtension !== 'jpg' && imgExtension !== 'jpeg' && imgExtension !== 'png' && imgExtension !== 'jfif') {
-  //           console.log('Entra en error de imagen');
-  //           if (tipo === 'crear') {
-  //             this.crearCategoria.get('imagen2')?.setValue(null);
-  //             this.existImageCrear2 = false;
-  //           }
-  //           else if (tipo === 'actualizar') {
-  //             this.formEdit.get('imagen2')?.setValue(null);
-  //             this.existImageActualizar2 = false;
-  //           }
-  //           return { image_error: 'Solo imágenes con formato jpg, jpeg, png o jfif.' };
-  //         }
-  //         console.log('Formato de imagen correcto');
-  //         if (tipo === 'crear') {
-  //           this.existImageCrear2 = true;
-  //         }
-  //         else if (tipo === 'actualizar') {
-  //           this.existImageActualizar2 = true;
-  //         }
-  //       }
-  //       return null;
-  //     } else {
-  //       console.log('No hay imagen seleccionada');
-  //       return null;
-  //     }
-  //   };
-  // }
-  // loadImageFromDevice2(event: any, tipo: string) {
-  //   const file: File = event.target.files[0];
-  //   if (file) {
-  //     this.extraerBase64(file)
-  //       .then((imagen: any) => {
-  //         if (tipo === 'crear') {
-  //           this.crearCategoria.get('imagen2')?.setValue(file);
-  //           this.fileImagenCrear2 = file;
-  //           this.imagenCrear2 = imagen.base;
-  //         }
-  //         else if (tipo === 'actualizar') {
-  //           this.formEdit.get('imagen2')?.setValue(file);
-  //           this.fileImagenActualizar2 = file;
-  //           this.imagenActualizar2 = imagen.base;
-  //         }
-  //       })
-  //       .catch(err => console.log(err));
-  //   }
-  // };
-
-
   isInvalidForm(subForm: string, tipo: string) {
     if (tipo === 'crear') {
       return this.crearCategoria.get(subForm)?.invalid && this.crearCategoria.get(subForm)?.touched || this.crearCategoria.get(subForm)?.dirty && this.getErrorMessage(this.crearCategoria, subForm).length !== 0;
@@ -283,6 +226,12 @@ export class SubCategoriasComponent {
         }
         return '';
 
+      case 'categoria':
+        if (itemControl.hasError('required')) {
+          return 'Debe elegir una categoría';
+        }
+        return '';
+
 
 
 
@@ -305,36 +254,28 @@ export class SubCategoriasComponent {
       const nombre = this.categoria_seleccionada?.nombre;
       const descripcion = this.categoria_seleccionada?.descripcion;
       const estado = this.categoria_seleccionada?.estado;
-      const categoria = this.categoria_seleccionada?.categoria;
+      const categoria_id = this.categoria_seleccionada?.categoria;
+      
+      // Encontrar el nombre de la categoría basándose en el ID
+      const categoria_obj = this.listCategorias?.find(c => c.id === categoria_id);
+      const categoria_nombre = categoria_obj ? categoria_obj.nombre : '';
 
       this.existImageActualizar = false;
       this.existImageActualizar2 = false;
       this.formEdit.get('imagen')?.reset();
       this.formEdit.get('imagen2')?.reset();
-      nombre ? this.formEdit.get('nombre')?.setValue(nombre) : this.formEdit.get('nombre')?.reset();
-      descripcion ? this.formEdit.get('descripcion')?.setValue(descripcion) : this.formEdit.get('descripcion')?.reset();
+      
+      this.formEdit.patchValue({
+        nombre: nombre || '',
+        descripcion: descripcion || '',
+        categoria: categoria_nombre,
+        estado: estado !== undefined ? estado : true
+      });
 
 
     }
   }
-  cambiarEstado(event: any) {
-    let estado = console.log(event.srcElement.checked)
-    let categoria: BodyActualizarCategoria = {
-      estado: event.srcElement.checked
-    }
-
-    if(this.categoria_seleccionada?.id){
-      this.pythonAnywhereService.actualizar_categoria_estado(categoria,this.categoria_seleccionada?.id).subscribe(
-        resp=>{
-          this.mostrarToastInfo('Estado de la Categoria ', 'Categoria editada correctamente', false)
-          this.pythonAnywhereService.obtener_servicios().subscribe((resp: any[]) => {
-            this.categoria = resp
-            console.log(resp)
-          })
-        }
-      )
-    }
-  }
+  
 
 
   onCrear() {
@@ -381,47 +322,34 @@ export class SubCategoriasComponent {
 
   }
   onActualizar() {
-    let subCategoria: BodyActualizarCategoria = {
+    let subCategoria: BodyActualizarServicio = {
       estado: false
     }
-    if (this.categoria_seleccionada?.estado) {
-      subCategoria.estado = this.categoria_seleccionada?.estado
-    }
+
     const nombre = this.formEdit.get('nombre')?.value;
     const descripcion = this.formEdit.get('descripcion')?.value;
+    const categoria = this.formEdit.get('categoria')?.value;
     const foto = this.formEdit.get('imagen')?.value;
-    // const categoria = this.formEdit.get('imagen2')?.value;
-    console.log(nombre, descripcion)
+    const estado = this.formEdit.get('estado')?.value;
 
-    if (nombre || descripcion || foto) {
-      if (nombre) {
-        subCategoria.nombre = nombre;
-      }
-      if(descripcion){
-        subCategoria.descripcion = descripcion;
-      }
-      if (foto && this.existImageCrear) {
-        subCategoria.foto = foto;
-      }
-      // if (foto2 && this.existImageCrear2) {
-      //   categoria.foto2 = foto2;
-      // }
-      if(this.categoria_seleccionada?.id){
-        this.pythonAnywhereService.actualizar_servicios(subCategoria,this.categoria_seleccionada?.id.toString()).subscribe(
-          resp=>{
-            this.mostrarToastInfo('Estado de la  Categoria ', 'Categoria Editada correctamente', false)
+    if (nombre || descripcion || foto || categoria || estado !== null) {
+      if (nombre) subCategoria.nombre = nombre;
+      if (descripcion) subCategoria.descripcion = descripcion;
+      if (categoria) subCategoria.categoria = categoria;
+      if (foto && this.existImageActualizar) subCategoria.foto = foto;
+      if (estado !== null) subCategoria.estado = estado;
+
+      if (this.categoria_seleccionada?.id) {
+        this.pythonAnywhereService.actualizar_servicios(subCategoria, this.categoria_seleccionada?.id.toString()).subscribe(
+          resp => {
+            this.mostrarToastInfo('Estado de la Sub-Categoría ', 'Sub-Categoría editada correctamente', false)
             this.pythonAnywhereService.obtener_servicios().subscribe((resp: any[]) => {
               this.categoria = resp
-              console.log(resp)
             })
           }
         )
       }
-  
-
     }
-
-
   }
   onEliminar() {
     console.timeLog("onELiminar")
