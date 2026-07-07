@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
+import { Profesion } from 'src/app/interfaces/profesion';
 import { SolicitudProfesion } from 'src/app/interfaces/solicitud';
 import { PythonAnywhereService } from 'src/app/services/PythonAnywhere/python-anywhere.service';
 import { BodyCrearProfesionProveedor, Proveedor } from '../../interfaces/proveedor';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-solicitudes-profesiones',
@@ -11,6 +13,7 @@ import { BodyCrearProfesionProveedor, Proveedor } from '../../interfaces/proveed
 })
 export class SolicitudesProfesionesComponent {
 
+  apiUrl = environment.apiUrl;
   total = 0
   arr_soli?: SolicitudProfesion[] | undefined;;
   arr_filtered_soli?: SolicitudProfesion[] | undefined;;
@@ -18,6 +21,8 @@ export class SolicitudesProfesionesComponent {
   currentPage = 1
   pageNumber: number[] = [];
   soli_seleccionada?: SolicitudProfesion;
+  arr_profesiones: Profesion[] = [];
+  profesionSeleccionada = '';
   existImageCrear = false; existImageActualizar = false;
   activo = ''
   activoCond = false
@@ -47,6 +52,15 @@ export class SolicitudesProfesionesComponent {
         this.pageNumber.push(index)
       }
     });
+    this.pythonAnywhereService.obtener_profesiones().subscribe(resp => {
+      this.arr_profesiones = resp;
+    });
+  }
+
+  verSolicitud(a: SolicitudProfesion) {
+    this.soli_seleccionada = a;
+    const match = this.arr_profesiones.find(p => p.nombre === a.profesion);
+    this.profesionSeleccionada = match ? match.nombre : '';
   }
 
   search(evento: any) {
@@ -79,9 +93,9 @@ export class SolicitudesProfesionesComponent {
   }
 
   onAceptar(){
-    if(this.soli_seleccionada){
+    if(this.soli_seleccionada && this.profesionSeleccionada){
       const dataCrearProfesionProveedor: BodyCrearProfesionProveedor = {
-        profesion: this.soli_seleccionada.profesion,
+        profesion: this.profesionSeleccionada,
         ano_experiencia: this.soli_seleccionada.anio_experiencia
       };
       this.pythonAnywhereService.crear_profesiones_proveedor(this.soli_seleccionada.proveedor.user_datos.user.username, dataCrearProfesionProveedor).subscribe(respuesta => {

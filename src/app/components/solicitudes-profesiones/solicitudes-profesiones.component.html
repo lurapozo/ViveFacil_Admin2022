@@ -74,11 +74,11 @@
               <table class="table table-striped custom-table">
               <tbody>
                 <tr
-                (click)="soli_seleccionada=a"
-                *ngFor="let a of arr_filtered_soli" 
-                class="row p-2 bg-light fila_info_profesion" 
+                (click)="verSolicitud(a)"
+                *ngFor="let a of arr_filtered_soli"
+                class="fila_info_profesion"
                 data-bs-toggle="modal"
-                href="#modalInformacionProfesion" 
+                href="#modalInformacionProfesion"
                 role="button"
                 >
                   <td style="color: #40378b; text-transform: uppercase"> <strong>  {{a.proveedor.user_datos.nombres}}
@@ -194,12 +194,36 @@
           </div>
         </div>
 
+        <!-- Seccion evidencia -->
+        <div class="row p-2 align-items-center" *ngIf="soli_seleccionada?.documento">
+          <div class="col-5">
+            <h3 class="m-0 p-0 fw-bold">Evidencia:</h3>
+          </div>
+          <div class="col-7">
+            <a [href]="apiUrl + soli_seleccionada?.documento" target="_blank" rel="noopener">Ver documento</a>
+          </div>
+        </div>
+
+        <!-- Seccion profesion a agregar -->
+        <div class="row p-2 align-items-center" *ngIf="!soli_seleccionada?.estado">
+          <div class="col-5">
+            <h3 class="m-0 p-0 fw-bold">Profesión a agregar:</h3>
+          </div>
+          <div class="col-7">
+            <select class="form-select" [(ngModel)]="profesionSeleccionada">
+              <option value="" disabled>Selecciona una profesión</option>
+              <option *ngFor="let p of arr_profesiones" [value]="p.nombre">{{p.nombre}}</option>
+            </select>
+          </div>
+        </div>
+
         <!-- Seccion de botones -->
         <div *ngIf="!soli_seleccionada?.estado" class="modal-footer">
           <button
             class="btn btn-success"
             data-bs-target="#modalConfirmacion"
             data-bs-toggle="modal"
+            [disabled]="!profesionSeleccionada"
             (click)="establecerMensaje('Está seguro que desea aceptar la solicitud?', 'aceptar')"
           >Aceptar</button>
           <button
