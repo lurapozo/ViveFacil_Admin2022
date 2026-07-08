@@ -47,7 +47,7 @@ export class PythonAnywhereService {
   }
 
   obtener_politicas() {
-    return this.http.get(`${this.API_URL}/admin/content/politicas/`)
+    return this.http.get(`${this.API_URL}/administrador/content/politicas/`)
   }
 
   put_politicas(identifier: string, terminos: string): Observable<any> {
@@ -55,7 +55,7 @@ export class PythonAnywhereService {
       identifier: identifier,
       terminos: terminos
     };
-    return this.http.put(`${this.API_URL}/admin/content/politicas/${identifier}/`, body);
+    return this.http.put(`${this.API_URL}/administrador/content/politicas/${identifier}/`, body);
   }
   //------------------------------------------------ SECCIÓN SOLICITANTES -------------------------------------------------
   /**
@@ -67,7 +67,7 @@ export class PythonAnywhereService {
    */
   obtener_solicitantes(page = 1): Observable<SolicitantePaginacion> {
     return this.http.get(
-      `${this.API_URL}/admin/accounts/solicitantes/?page=${page}`
+      `${this.API_URL}/administrador/accounts/solicitantes/?page=${page}`
     ) as Observable<SolicitantePaginacion>;
   }
   /**
@@ -79,7 +79,7 @@ export class PythonAnywhereService {
    */
   obtener_solicitantes_filtro(page = 1, filtro = "todos"): Observable<SolicitantePaginacion> {
     return this.http.get(
-      `${this.API_URL}/admin/accounts/solicitantes/?page=${page}&filtro=${filtro}`
+      `${this.API_URL}/administrador/accounts/solicitantes/?page=${page}&filtro=${filtro}`
     ) as Observable<SolicitantePaginacion>;
   }
 
@@ -106,7 +106,7 @@ export class PythonAnywhereService {
    * @returns Devuelve un Observable con un objeto SolicitantePaginación.
    */
   filtrar_solicitante(fechaInicio: string, fechaFin: string, page = 1): Observable<SolicitantePaginacion> {
-    return this.http.get(`${this.API_URL}/admin/accounts/solicitantes/fechas/?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}&page=${page}`) as Observable<SolicitantePaginacion>;
+    return this.http.get(`${this.API_URL}/administrador/accounts/solicitantes/fechas/?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}&page=${page}`) as Observable<SolicitantePaginacion>;
   }
 
   /**
@@ -118,7 +118,7 @@ export class PythonAnywhereService {
    * @returns Devuelve un Observable con un objeto SolicitantePaginación.
    */
   buscar_solicitante(usuario: string, page = 1): Observable<SolicitantePaginacion> {
-    return this.http.get(`${this.API_URL}/admin/accounts/solicitantes/buscar/${usuario}/?page=${page}`) as Observable<SolicitantePaginacion>;
+    return this.http.get(`${this.API_URL}/administrador/accounts/solicitantes/buscar/${usuario}/?page=${page}`) as Observable<SolicitantePaginacion>;
   }
 
   /**
@@ -130,7 +130,7 @@ export class PythonAnywhereService {
    * @returns Devuelve un Observable con el objeto Solicitante el cuál fue modificado.
    */
   cambio_solicitante_estado(estado: boolean, id: string): Observable<Solicitante> {
-    return this.http.put(`${this.API_URL}/admin/accounts/solicitantes/${id}/estado/`, {
+    return this.http.put(`${this.API_URL}/administrador/accounts/solicitantes/${id}/estado/`, {
       estado: estado,
     }) as Observable<Solicitante>;
   }
@@ -143,7 +143,7 @@ export class PythonAnywhereService {
    * @returns Devuelve un Observable con una respuesta OK(205) or Error(500).
    */
   eliminar_solicitante(id: any) {
-    return this.http.delete(`${this.API_URL}/admin/accounts/solicitantes/${id}/`);
+    return this.http.delete(`${this.API_URL}/administrador/accounts/solicitantes/${id}/`);
   }
   //-----------------------------------------------------------------------------------------------------------------------
 
@@ -155,11 +155,11 @@ export class PythonAnywhereService {
    * @returns Devuelve un observable con un arreglo de objeto Insignias
    */
   obtener_insignias(): Observable<Insignia[]> {
-    return this.http.get(this.API_URL + '/admin/content/insignias/') as Observable<Insignia[]>;
+    return this.http.get(this.API_URL + '/administrador/content/insignias/') as Observable<Insignia[]>;
   }
 
   obtener_medallas(): Observable<Medalla[]> {
-    return this.http.get(this.API_URL + '/admin/content/medallas/') as Observable<Medalla[]>;
+    return this.http.get(this.API_URL + '/administrador/content/medallas/') as Observable<Medalla[]>;
   }
 
   /**
@@ -171,7 +171,7 @@ export class PythonAnywhereService {
    */
   obtener_insignia(id: string): Observable<Insignia> {
     return this.http.get(
-      `${this.API_URL}/admin/content/insignias/detalle/${id}/`
+      `${this.API_URL}/administrador/content/insignias/detalle/${id}/`
     ) as Observable<Insignia>;
   }
 
@@ -184,12 +184,12 @@ export class PythonAnywhereService {
    * @returns Devuelve un Observable con la respuesta OK(200) o Error(500).
    */
   cambio_insignia_estado(id: string, estado: boolean): Observable<any> {
-    return this.http.put(`${this.API_URL}/admin/content/insignias/estado/?id=${id}`, {
+    return this.http.put(`${this.API_URL}/administrador/content/insignias/estado/?id=${id}`, {
       estado: estado,
     }) as Observable<any>;
   }
   cambio_medalla_estado(id: string): Observable<any> {
-    return this.http.put(`${this.API_URL}/admin/content/medallas/estado/?id=${id}`, {
+    return this.http.put(`${this.API_URL}/administrador/content/medallas/estado/?id=${id}`, {
     }) as Observable<any>;
   }
 
@@ -212,7 +212,7 @@ export class PythonAnywhereService {
     bodyActualizar.descripcion ? dataUpdate.append('descripcion', bodyActualizar.descripcion) : null;
     bodyActualizar.tipo ? dataUpdate.append('tipo', bodyActualizar.tipo) : null;
 
-    return this.http.put(`${this.API_URL}/admin/content/insignias/${id}/`, dataUpdate) as Observable<Insignia>;
+    return this.http.put(`${this.API_URL}/administrador/content/insignias/${id}/`, dataUpdate) as Observable<Insignia>;
   }
 
   actualizar_medalla(bodyActualizar: BodyActualizarMedalla, id: any): Observable<Insignia> {
@@ -225,7 +225,7 @@ export class PythonAnywhereService {
     bodyActualizar.tiempo ? dataUpdate.append('tiempo', bodyActualizar.tiempo.toString()) : null;
     bodyActualizar.descripcion ? dataUpdate.append('descripcion', bodyActualizar.descripcion) : null;
 
-    return this.http.put(`${this.API_URL}/admin/content/medallas/${id}/`, dataUpdate) as Observable<Insignia>;
+    return this.http.put(`${this.API_URL}/administrador/content/medallas/${id}/`, dataUpdate) as Observable<Insignia>;
   }
 
   /**
@@ -236,7 +236,7 @@ export class PythonAnywhereService {
    * @returns Devuelve un Observable con una respuesta OK(204) or Error(500).
    */
   eliminar_insignia(id: string): Observable<any> {
-    return this.http.delete(`${this.API_URL}/admin/content/insignias/${id}/`) as Observable<any>;
+    return this.http.delete(`${this.API_URL}/administrador/content/insignias/${id}/`) as Observable<any>;
   }
   //-----------------------------------------------------------------------------------------------------------------------
 
@@ -248,7 +248,7 @@ export class PythonAnywhereService {
    * @returns Devuelve un Observable con un arreglo de objeto Cargo
    */
   obtener_cargos(): Observable<Cargo[]> {
-    return this.http.get(this.API_URL + '/admin/content/cargos/') as Observable<Cargo[]>;
+    return this.http.get(this.API_URL + '/administrador/content/cargos/') as Observable<Cargo[]>;
   }
 
   /**
@@ -259,7 +259,7 @@ export class PythonAnywhereService {
    * @returns Devuelve un Observable del Objeto Cargo solicitado.
    */
   obtener_cargo(id: string): Observable<Cargo> {
-    return this.http.get(`${this.API_URL}/admin/content/cargos/detalle/${id}/`) as Observable<Cargo>
+    return this.http.get(`${this.API_URL}/administrador/content/cargos/detalle/${id}/`) as Observable<Cargo>
 
   }
 
@@ -272,7 +272,7 @@ export class PythonAnywhereService {
    * @returns Devuelve un Observable con un objeto Cargo actualizado.
    */
   actualizar_cargo(bodyActualizar: BodyActualizarCargo, id: any): Observable<Cargo> {
-    return this.http.put(`${this.API_URL}/admin/content/cargos/${id}/`, bodyActualizar) as Observable<Cargo>;
+    return this.http.put(`${this.API_URL}/administrador/content/cargos/${id}/`, bodyActualizar) as Observable<Cargo>;
   }
 
   /**
@@ -283,7 +283,7 @@ export class PythonAnywhereService {
    * @returns Devuelve un Observable con una respuesta OK(204) or Error(500).
    */
   eliminar_cargo(id: any): Observable<any> {
-    return this.http.delete(`${this.API_URL}/admin/content/cargos/${id}/`) as Observable<any>;
+    return this.http.delete(`${this.API_URL}/administrador/content/cargos/${id}/`) as Observable<any>;
   }
   //-----------------------------------------------------------------------------------------------------------------------
 
@@ -296,7 +296,7 @@ export class PythonAnywhereService {
    * @returns Devuelve un Observable con un arreglo de objetos Promocion.
    */
   obtener_promocion(id: string): Observable<Promocion[]> {
-    return this.http.get(`${this.API_URL}/admin/promotions/promociones/detalle/${id}/`) as Observable<Promocion[]>;
+    return this.http.get(`${this.API_URL}/administrador/promotions/promociones/detalle/${id}/`) as Observable<Promocion[]>;
   }
 
   /**
@@ -308,7 +308,7 @@ export class PythonAnywhereService {
    * @returns Devuelve un Observable con la respuesta OK(200) o Error(500).
    */
   cambio_promocion_estado(id: any, estado: boolean): Observable<any> {
-    return this.http.put(`${this.API_URL}/admin/promotions/promociones/estado/?id=${id}`, {
+    return this.http.put(`${this.API_URL}/administrador/promotions/promociones/estado/?id=${id}`, {
       estado: estado,
     });
   }
@@ -334,7 +334,7 @@ export class PythonAnywhereService {
     bodyActualizar.foto ? dataUpdate.append("foto", bodyActualizar.foto) : null;
     dataUpdate.append("tipo_categoria", bodyActualizar.tipo_categoria);
 
-    return this.http.put(`${this.API_URL}/admin/promotions/promociones/${id}/`, dataUpdate) as Observable<BodyResponsePromocionActualizar>;
+    return this.http.put(`${this.API_URL}/administrador/promotions/promociones/${id}/`, dataUpdate) as Observable<BodyResponsePromocionActualizar>;
   }
 
   /**
@@ -345,7 +345,7 @@ export class PythonAnywhereService {
    * @returns Devuelve un Observable con una respuesta OK(204) or Error(500).
    */
   eliminar_promocion(id: any): Observable<any> {
-    return this.http.delete(`${this.API_URL}/admin/promotions/promociones/${id}/`);
+    return this.http.delete(`${this.API_URL}/administrador/promotions/promociones/${id}/`);
   }
   //-----------------------------------------------------------------------------------------------------------------------
 
@@ -370,7 +370,7 @@ export class PythonAnywhereService {
    * @returns Devuelve un Observable con la respuesta OK(200) o Error(500).
    */
   cambio_cupon_estado(id: string, estado: boolean): Observable<any> {
-    return this.http.put(`${this.API_URL}/admin/promotions/cupones/estado/?id=${id}`, { estado: estado });
+    return this.http.put(`${this.API_URL}/administrador/promotions/cupones/estado/?id=${id}`, { estado: estado });
   }
 
   /**
@@ -396,7 +396,7 @@ export class PythonAnywhereService {
     bodyActualizar.foto ? dataUpdate.append("foto", bodyActualizar.foto) : null;
     dataUpdate.append("tipo_categoria", bodyActualizar.tipo_categoria);
 
-    return this.http.put(`${this.API_URL}/admin/promotions/cupones/${id}/`, dataUpdate) as Observable<BodyResponseCuponActualizar>;
+    return this.http.put(`${this.API_URL}/administrador/promotions/cupones/${id}/`, dataUpdate) as Observable<BodyResponseCuponActualizar>;
   }
 
   /**
@@ -407,7 +407,7 @@ export class PythonAnywhereService {
    * @returns Devuelve un Observable con una respuesta OK(204) or Error(500).
    */
   eliminar_cupon(id: string): Observable<any> {
-    return this.http.delete(`${this.API_URL}/admin/promotions/cupones/${id}/`) as Observable<any>;
+    return this.http.delete(`${this.API_URL}/administrador/promotions/cupones/${id}/`) as Observable<any>;
   }
   //-----------------------------------------------------------------------------------------------------------------------
 
@@ -420,7 +420,7 @@ export class PythonAnywhereService {
    * @returns Devuelve un Obsevable del objeto AdministradorPaginacion
    */
   obtener_administradores(page = 1): Observable<AdministradorPaginacion> {
-    return this.http.get(`${this.API_URL}/admin/accounts/administradores/?page=${page}`) as Observable<AdministradorPaginacion>;
+    return this.http.get(`${this.API_URL}/administrador/accounts/administradores/?page=${page}`) as Observable<AdministradorPaginacion>;
   }
 
   /**
@@ -431,7 +431,7 @@ export class PythonAnywhereService {
    * @returns Devuelve un Observable del objeto Administrador
    */
   obtener_administrador(id: string): Observable<Administrador> {
-    return this.http.get(`${this.API_URL}/admin/accounts/administrador/${id}/`) as Observable<Administrador>;
+    return this.http.get(`${this.API_URL}/administrador/accounts/administrador/${id}/`) as Observable<Administrador>;
   }
 
   /**
@@ -443,7 +443,7 @@ export class PythonAnywhereService {
    * @returns Devuelve un Observable para verificar si las respuesta es 200 (OK).
    */
   actualizar_administrador(id: number, body: BodyActualizarAdministrador): Observable<any> {
-    return this.http.put(`${this.API_URL}/admin/accounts/administrador/${id}/`, body);
+    return this.http.put(`${this.API_URL}/administrador/accounts/administrador/${id}/`, body);
   }
 
   /**
@@ -454,7 +454,7 @@ export class PythonAnywhereService {
    * @returns Devuelve un Observable con un objeto BodyResponseCrearAdministrador.
    */
   crear_administrador(user: BodyCrearAdministrador): Observable<BodyResponseCrearAdministrador> {
-    return this.http.post(`${this.API_URL}/admin/accounts/administradores/`, user) as Observable<BodyResponseCrearAdministrador>;
+    return this.http.post(`${this.API_URL}/administrador/accounts/administradores/`, user) as Observable<BodyResponseCrearAdministrador>;
   }
 
   /**
@@ -466,7 +466,7 @@ export class PythonAnywhereService {
    * @returns Devuelve un Observable con un objeto AdministradorPaginacion.
    */
   buscar_administrador(usuario: string, page = 1): Observable<AdministradorPaginacion> {
-    return this.http.get(`${this.API_URL}/admin/accounts/administradores/buscar/${usuario}/?page=${page}`) as Observable<AdministradorPaginacion>;
+    return this.http.get(`${this.API_URL}/administrador/accounts/administradores/buscar/${usuario}/?page=${page}`) as Observable<AdministradorPaginacion>;
   }
 
   /**
@@ -479,7 +479,7 @@ export class PythonAnywhereService {
    * @returns Devuelve un Observable con un objeto AdministradorPaginacion.
    */
   filtrar_administrador(fechaInicio: string, fechaFin: string, page = 1): Observable<AdministradorPaginacion> {
-    return this.http.get(`${this.API_URL}/admin/accounts/administradores/fechas/?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}&page=${page}`) as Observable<AdministradorPaginacion>;
+    return this.http.get(`${this.API_URL}/administrador/accounts/administradores/fechas/?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}&page=${page}`) as Observable<AdministradorPaginacion>;
   }
 
   /**
@@ -490,11 +490,11 @@ export class PythonAnywhereService {
    * @returns Devuelve un Observable con una respuesta OK(204) or Error(500).
    */
   eliminar_administrador(id: string): Observable<any> {
-    return this.http.delete(`${this.API_URL}/admin/accounts/administradores/${id}/`);
+    return this.http.delete(`${this.API_URL}/administrador/accounts/administradores/${id}/`);
   }
 
   cambio_administrador_estado(id: any, estado: any) {
-    return this.http.put(`${this.API_URL}/admin/accounts/administradores/?id=${id}`, { estado: estado, });
+    return this.http.put(`${this.API_URL}/administrador/accounts/administradores/?id=${id}`, { estado: estado, });
   }
 
   /**
@@ -505,7 +505,7 @@ export class PythonAnywhereService {
    * @returns Devuelve un Observable con una respuesta OK(204) or Error(500).
    */
   eliminar_admin(id: string): Observable<any> {
-    return this.http.delete(`${this.API_URL}/admin/accounts/administrador/${id}/`);
+    return this.http.delete(`${this.API_URL}/administrador/accounts/administrador/${id}/`);
   }
   //-----------------------------------------------------------------------------------------------------------------------
 
@@ -520,7 +520,7 @@ export class PythonAnywhereService {
    * @returns Devuelve un Observable con un objeto PaymentPaginacion de todas las respuestas filtradas.
    */
   filtrar_efectivo(fechaInicio: string, fechaFin: string, page = 1): Observable<PaymentPaginacion> {
-    return this.http.get(`${this.API_URL}/admin/payments/pagos-efectivo/fechas/?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}&page=${page}`) as Observable<PaymentPaginacion>;
+    return this.http.get(`${this.API_URL}/administrador/payments/pagos-efectivo/fechas/?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}&page=${page}`) as Observable<PaymentPaginacion>;
   }
 
   /**
@@ -533,7 +533,7 @@ export class PythonAnywhereService {
    * @returns Devuelve un Observable con un objeto PaymentPaginacion de todas las respuestas filtradas.
    */
   filtrar_tarjeta(fechaInicio: string, fechaFin: string, page = 1) {
-    return this.http.get(`${this.API_URL}/admin/payments/pagos-tarjeta/fechas/?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}&page=${page}`);
+    return this.http.get(`${this.API_URL}/administrador/payments/pagos-tarjeta/fechas/?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}&page=${page}`);
   }
 
   /**
@@ -545,7 +545,7 @@ export class PythonAnywhereService {
    * @returns Devuelve un Observable con la respuesta OK(200) o Error(500).
    */
   cambio_pago_proveedor_estado(id: any, estado: boolean) {
-    return this.http.put(`${this.API_URL}/admin/payments/pagos-tarjeta/?id=${id}`, { estado: estado, });
+    return this.http.put(`${this.API_URL}/administrador/payments/pagos-tarjeta/?id=${id}`, { estado: estado, });
   }
   //-----------------------------------------------------------------------------------------------------------------------
 
@@ -559,7 +559,7 @@ export class PythonAnywhereService {
    * @returns Devuelve un Observable con el objeto Proveedor el cual fue modificado.
    */
   cambio_proveedor_estado(estado: boolean, id: string): Observable<Proveedor> {
-    return this.http.put(`${this.API_URL}/admin/accounts/proveedores/${id}/`, { estado: estado, }) as Observable<Proveedor>;
+    return this.http.put(`${this.API_URL}/administrador/accounts/proveedores/${id}/`, { estado: estado, }) as Observable<Proveedor>;
   }
 
   /**
@@ -570,7 +570,7 @@ export class PythonAnywhereService {
    * @returns Devuelve un Obsevable del objeto ProveedorPaginacion
    */
   obtener_proveedores(page = 1): Observable<ProveedorPaginacion> {
-    return this.http.get(`${this.API_URL}/admin/accounts/proveedores/?page=${page}`) as Observable<ProveedorPaginacion>;
+    return this.http.get(`${this.API_URL}/administrador/accounts/proveedores/?page=${page}`) as Observable<ProveedorPaginacion>;
   }
 
   /**
@@ -581,15 +581,15 @@ export class PythonAnywhereService {
    * @returns Devuelve un Obsevable del objeto ProveedorPaginacion
    */
   obtener_proveedores_pendientes(page = 1): Observable<ProveedorPaginacion> {
-    return this.http.get(`${this.API_URL}/admin/accounts/proveedores-pendientes/?page=${page}`) as Observable<ProveedorPaginacion>;
+    return this.http.get(`${this.API_URL}/administrador/accounts/proveedores-pendientes/?page=${page}`) as Observable<ProveedorPaginacion>;
   }
 
   obtener_proveedores_rechazados(page = 1): Observable<ProveedorPaginacion> {
-    return this.http.get(`${this.API_URL}/admin/accounts/proveedores-rechazados/?page=${page}`) as Observable<ProveedorPaginacion>;
+    return this.http.get(`${this.API_URL}/administrador/accounts/proveedores-rechazados/?page=${page}`) as Observable<ProveedorPaginacion>;
   }
 
   obtener_proveedores_proveedores(page = 1): Observable<ProveedorPaginacion> {
-    return this.http.get(`${this.API_URL}/admin/accounts/proveedores-proveedores/?page=${page}`) as Observable<ProveedorPaginacion>;
+    return this.http.get(`${this.API_URL}/administrador/accounts/proveedores-proveedores/?page=${page}`) as Observable<ProveedorPaginacion>;
   }
 
   /**
@@ -600,7 +600,7 @@ export class PythonAnywhereService {
    * @returns Devuelve un observable con objeto ProveedorPendiente
    */
   obtener_proveedor_pendiente(id: string): Observable<ProveedorPendiente> {
-    return this.http.get(`${this.API_URL}/admin/accounts/proveedores-pendientes/${id}/`) as Observable<ProveedorPendiente>;
+    return this.http.get(`${this.API_URL}/administrador/accounts/proveedores-pendientes/${id}/`) as Observable<ProveedorPendiente>;
   }
 
   /**
@@ -611,7 +611,7 @@ export class PythonAnywhereService {
    * @returns Devuelve un Observable con una respuesta OK(204) or Error(500).
   */
   eliminar_proveedor_pendiente(id: string): Observable<any> {
-    return this.http.delete(`${this.API_URL}/admin/accounts/proveedores-pendientes/${id}/`);
+    return this.http.delete(`${this.API_URL}/administrador/accounts/proveedores-pendientes/${id}/`);
   }
 
   /**
@@ -623,7 +623,7 @@ export class PythonAnywhereService {
    * @returns Devuelve un Observable con un objeto ProveedorPaginacion.
    */
   buscar_proveedores_pendientes(user: string, page = 1): Observable<ProveedorPaginacion> {
-    return this.http.get(`${this.API_URL}/admin/accounts/proveedores-pendientes/buscar/${user}/?page=${page}`) as Observable<ProveedorPaginacion>;
+    return this.http.get(`${this.API_URL}/administrador/accounts/proveedores-pendientes/buscar/${user}/?page=${page}`) as Observable<ProveedorPaginacion>;
   }
 
   /**
@@ -636,7 +636,7 @@ export class PythonAnywhereService {
    * @returns Devuelve un Observable con un objeto ProveedorPaginacion de todas las respuestas filtradas.
    */
   filtrar_fecha_proveedores_pendientes(fechaInicio: string, fechaFin: string, page = 1) {
-    return this.http.get(`${this.API_URL}/admin/accounts/proveedores-pendientes/fechas/?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}&page=${page}`);
+    return this.http.get(`${this.API_URL}/administrador/accounts/proveedores-pendientes/fechas/?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}&page=${page}`);
   }
 
   /**
@@ -647,19 +647,19 @@ export class PythonAnywhereService {
    * @returns Devuelve Observable con un objeto BodyResponseCrearProveedorPendiente
    */
   crear_proveedor_pendiente(data: BodyCrearProveedorPendiente): Observable<BodyResponseCrearProveedorPendiente> {
-    return this.http.post(`${this.API_URL}/admin/accounts/proveedores-pendientes/crear/`, data) as Observable<BodyResponseCrearProveedorPendiente>;
+    return this.http.post(`${this.API_URL}/administrador/accounts/proveedores-pendientes/crear/`, data) as Observable<BodyResponseCrearProveedorPendiente>;
   }
 
   crear_proveedor_proveedor(data: BodyCrearProveedorPendiente): Observable<BodyResponseCrearProveedorPendiente> {
-    return this.http.post(`${this.API_URL}/admin/accounts/proveedor-proveedor/`, data) as Observable<BodyResponseCrearProveedorPendiente>;
+    return this.http.post(`${this.API_URL}/administrador/accounts/proveedor-proveedor/`, data) as Observable<BodyResponseCrearProveedorPendiente>;
   }
 
   getSolicitantePythonAny(user: string): Observable<Array<Solicitante>> {
-    return this.http.get(`${this.API_URL}/admin/accounts/solicitante-por-usuario/${user}`) as Observable<Array<Solicitante>>;
+    return this.http.get(`${this.API_URL}/administrador/accounts/solicitante-por-usuario/${user}`) as Observable<Array<Solicitante>>;
   }
 
   postRegistro(body: any) {
-    return this.http.post(`${this.API_URL}/admin/accounts/registro/`, body);
+    return this.http.post(`${this.API_URL}/administrador/accounts/registro/`, body);
   }
   /**
    * Función que edita la información de un objeto ProveedorPendiente
@@ -706,7 +706,7 @@ export class PythonAnywhereService {
     console.log("LA COSAS ESAS LASMASD")
     console.log(pendiente)
     console.log(pendiente.get("foto"))
-    return this.http.put(`${this.API_URL}/admin/accounts/proveedores-pendientes/${id}/`, pendiente) as Observable<ProveedorPendiente>;
+    return this.http.put(`${this.API_URL}/administrador/accounts/proveedores-pendientes/${id}/`, pendiente) as Observable<ProveedorPendiente>;
   }
 
   editar_proveedor_proveedor(id: string, data: BodyActualizarProveedor): Observable<Proveedor> {
@@ -764,7 +764,7 @@ export class PythonAnywhereService {
     //planilla_servicios: data.planilla_servicios
     console.log(pendiente)
     console.log(pendiente.get("foto"))
-    return this.http.put(`${this.API_URL}/admin/accounts/proveedores-proveedores/${id}/`, pendiente) as Observable<Proveedor>;
+    return this.http.put(`${this.API_URL}/administrador/accounts/proveedores-proveedores/${id}/`, pendiente) as Observable<Proveedor>;
   }
 
   /**
@@ -775,7 +775,7 @@ export class PythonAnywhereService {
    * @returns Devuelve un Observable con un objeto {"sucess": "Exito"} en caso de exito.
    */
   editar_proveedor(data: BodyActualizarProveedor): Observable<any> {
-    return this.http.put(`${this.API_URL}/admin/accounts/edicion-proveedor/`, data);
+    return this.http.put(`${this.API_URL}/administrador/accounts/edicion-proveedor/`, data);
   }
 
   /**
@@ -786,11 +786,11 @@ export class PythonAnywhereService {
    * @returns Devuelve un Observable con una respuesta OK(204) or Error(500).
   */
   eliminar_proveedor(id: string): Observable<any> {
-    return this.http.delete(`${this.API_URL}/admin/accounts/proveedores/${id}/`);
+    return this.http.delete(`${this.API_URL}/administrador/accounts/proveedores/${id}/`);
   }
 
   eliminar_proveedor1(id: number) {
-    return this.http.delete(`${this.API_URL}/admin/accounts/proveedores-proveedores/${id}/eliminar/}`);
+    return this.http.delete(`${this.API_URL}/administrador/accounts/proveedores-proveedores/${id}/eliminar/}`);
   }
 
   //-----------------------------------------------------------------------------------------------------------------------
@@ -805,7 +805,7 @@ export class PythonAnywhereService {
    * @returns Devuelve un Observable con un arreglo de objetos DocumentoPendiente
    */
   obtener_documentos_pendientes(): Observable<DocumentoPendiente[]> {
-    return this.http.get(`${this.API_URL}/admin/accounts/documentos-pendientes/`) as Observable<DocumentoPendiente[]>;
+    return this.http.get(`${this.API_URL}/administrador/accounts/documentos-pendientes/`) as Observable<DocumentoPendiente[]>;
   }
 
   /**
@@ -816,7 +816,7 @@ export class PythonAnywhereService {
    * @returns Devuelve un Observable con una respuesta OK(204) or Error(500).
   */
   eliminar_documento_pendiente(id: string) {
-    return this.http.delete(`${this.API_URL}/admin/accounts/documentos-pendientes/?id=${id}`);
+    return this.http.delete(`${this.API_URL}/administrador/accounts/documentos-pendientes/?id=${id}`);
   }
 
   /**
@@ -826,7 +826,7 @@ export class PythonAnywhereService {
    * @returns Devuelve un Observable con un arreglo de objetos Documento
    */
   obtener_documentos(): Observable<Documento[]> {
-    return this.http.get(`${this.API_URL}/admin/accounts/documentos-proveedores/`) as Observable<Documento[]>;
+    return this.http.get(`${this.API_URL}/administrador/accounts/documentos-proveedores/`) as Observable<Documento[]>;
   }
 
   /**
@@ -837,7 +837,7 @@ export class PythonAnywhereService {
    * @returns Devuelve un Observable con una respuesta OK(204) or Error(500).
    */
   eliminar_documento(id: string): Observable<any> {
-    return this.http.delete(`${this.API_URL}/admin/accounts/documentos-proveedores/?id=${id}`);
+    return this.http.delete(`${this.API_URL}/administrador/accounts/documentos-proveedores/?id=${id}`);
   }
   //-----------------------------------------------------------------------------------------------------------------------
 
@@ -852,7 +852,7 @@ export class PythonAnywhereService {
    * @returns Devuelve un Observable con un objeto BodyResponseEmail
    */
   enviar_email(data: BodyEmail): Observable<BodyResponseEmail> {
-    return this.http.post(this.API_URL + '/admin/notifications/email-bienvenida/', data) as Observable<BodyResponseEmail>;
+    return this.http.post(this.API_URL + '/administrador/notifications/email-bienvenida/', data) as Observable<BodyResponseEmail>;
   }
   //-----------------------------------------------------------------------------------------------------------------------
 
@@ -866,7 +866,7 @@ export class PythonAnywhereService {
    * @returns Devuelve un Observable con un Arreglo de un Objeto Categoria
    */
   obtener_categorias(): Observable<Categoria[]> {
-    return this.http.get(this.API_URL + '/admin/catalog/categorias/') as Observable<Categoria[]>;
+    return this.http.get(this.API_URL + '/administrador/catalog/categorias/') as Observable<Categoria[]>;
   }
 
   /**
@@ -884,7 +884,7 @@ export class PythonAnywhereService {
     bodyActualizar.foto ? dataUpdate.append('foto', bodyActualizar.foto) : null;
     bodyActualizar.foto2 ? dataUpdate.append('foto2', bodyActualizar.foto2) : null;
 
-    return this.http.put(`${this.API_URL}/admin/catalog/categorias/${id}/`, dataUpdate) as Observable<Categoria>;
+    return this.http.put(`${this.API_URL}/administrador/catalog/categorias/${id}/`, dataUpdate) as Observable<Categoria>;
   }
 
   actualizar_categoria_estado(bodyActualizar: BodyActualizarCategoria, id: number): Observable<Categoria> {
@@ -893,7 +893,7 @@ export class PythonAnywhereService {
     dataUpdate.append('estado', bodyActualizar.estado.toString())
 
 
-    return this.http.put(`${this.API_URL}/admin/catalog/categorias/${id}/`, dataUpdate) as Observable<Categoria>;
+    return this.http.put(`${this.API_URL}/administrador/catalog/categorias/${id}/`, dataUpdate) as Observable<Categoria>;
   }
 
   /**
@@ -904,10 +904,10 @@ export class PythonAnywhereService {
    * @returns Devuelve un Observable con una respuesta OK(204) or Error(500).
    */
   eliminar_categoria(id: number): Observable<any> {
-    return this.http.delete(`${this.API_URL}/admin/catalog/categorias/${id}/`) as Observable<any>;
+    return this.http.delete(`${this.API_URL}/administrador/catalog/categorias/${id}/`) as Observable<any>;
   }
   eliminar_subcategoria(id: number): Observable<any> {
-    return this.http.delete(`${this.API_URL}/admin/catalog/servicios/${id}/`) as Observable<any>;
+    return this.http.delete(`${this.API_URL}/administrador/catalog/servicios/${id}/`) as Observable<any>;
   }
 
   /**
@@ -923,7 +923,7 @@ export class PythonAnywhereService {
     dataCrear.append("descripcion", bodyCrear.descripcion);;
     bodyCrear.foto ? dataCrear.append("foto", bodyCrear.foto) : null;
     bodyCrear.foto2 ? dataCrear.append("foto2", bodyCrear.foto2) : null;
-    return this.http.post(`${this.API_URL}/admin/catalog/categorias/`, dataCrear) as Observable<BodyResponseCrearCategoria>;
+    return this.http.post(`${this.API_URL}/administrador/catalog/categorias/`, dataCrear) as Observable<BodyResponseCrearCategoria>;
   }
   //-----------------------------------------------------------------------------------------------------------------------
 
@@ -936,7 +936,7 @@ export class PythonAnywhereService {
    * @returns Devuelve un Observable con un objeto Arreglo Profesion.
    */
   obtener_profesiones(): Observable<Profesion[]> {
-    return this.http.get(`${this.API_URL}/admin/catalog/profesiones/`) as Observable<Profesion[]>;
+    return this.http.get(`${this.API_URL}/administrador/catalog/profesiones/`) as Observable<Profesion[]>;
   }
   /**
    * Función que agrega en la base de datos una promocion segun los datos pasados por parametros.
@@ -953,7 +953,7 @@ export class PythonAnywhereService {
       dataCrear.append("servicio", bodyCrear.servicio);
       bodyCrear.foto ? dataCrear.append("foto", bodyCrear.foto) : null;
     }
-    return this.http.post(this.API_URL + '/admin/catalog/profesiones/', dataCrear) as Observable<BodyResponseCrearProfesion>;
+    return this.http.post(this.API_URL + '/administrador/catalog/profesiones/', dataCrear) as Observable<BodyResponseCrearProfesion>;
   }
 
   /**
@@ -964,7 +964,7 @@ export class PythonAnywhereService {
    * @returns Devuelve un Observable con una respuesta OK(204) or Error(500).
    */
   delete_profesion(id: string): Observable<any> {
-    return this.http.delete(`${this.API_URL}/admin/catalog/profesiones/${id}/`) as Observable<any>;
+    return this.http.delete(`${this.API_URL}/administrador/catalog/profesiones/${id}/`) as Observable<any>;
   }
   //-----------------------------------------------------------------------------------------------------------------------
 
@@ -977,7 +977,7 @@ export class PythonAnywhereService {
    * @returns Devuelve un Observable con un Array de un objeto Servicio
    */
   obtener_servicios(): Observable<Servicio[]> {
-    return this.http.get(this.API_URL + '/admin/catalog/servicios/', {
+    return this.http.get(this.API_URL + '/administrador/catalog/servicios/', {
       params: {
         todas: "True"
       }
@@ -1000,7 +1000,7 @@ export class PythonAnywhereService {
     bodyActualizar.estado !== undefined ? dataUpdate.append('estado', bodyActualizar.estado.toString()) : null;
     bodyActualizar.foto ? dataUpdate.append('foto', bodyActualizar.foto) : null;
     const tokenPythonAny = this.getTokenPythonAnywhere();
-    return this.http.put(`${this.API_URL}/admin/catalog/servicios/${id}/`, dataUpdate) as Observable<Servicio>;
+    return this.http.put(`${this.API_URL}/administrador/catalog/servicios/${id}/`, dataUpdate) as Observable<Servicio>;
   }
 
   getTokenPythonAnywhere(): string | null {
@@ -1017,7 +1017,7 @@ export class PythonAnywhereService {
    * @returns Devuelve un Observable con una respuesta OK(204) or Error(500).
    */
   eliminar_servicio(id: string): Observable<any> {
-    return this.http.delete(`${this.API_URL}/admin/catalog/servicios/${id}/`) as Observable<any>;
+    return this.http.delete(`${this.API_URL}/administrador/catalog/servicios/${id}/`) as Observable<any>;
   }
   //-----------------------------------------------------------------------------------------------------------------------
 
@@ -1038,7 +1038,7 @@ export class PythonAnywhereService {
     dataCrear.append("tipoUsuario", bodyCrear.tipoUsuario);
     dataCrear.append("pedidos", bodyCrear.pedidos);
     dataCrear.append("descripcion", bodyCrear.descripcion);
-    return this.http.post(`${this.API_URL}/admin/content/insignias/`, dataCrear) as Observable<BodyResponseCrearInsignia>;
+    return this.http.post(`${this.API_URL}/administrador/content/insignias/`, dataCrear) as Observable<BodyResponseCrearInsignia>;
   }
 
   crear_medalla(bodyCrear: BodyCrearMedalla): Observable<BodyResponseCrearInsignia> {
@@ -1050,7 +1050,7 @@ export class PythonAnywhereService {
     dataCrear.append("valor", bodyCrear.valor);
     dataCrear.append("cantidad", bodyCrear.cantidad);
 
-    return this.http.post(`${this.API_URL}/admin/content/medallas/`, dataCrear) as Observable<BodyResponseCrearInsignia>;
+    return this.http.post(`${this.API_URL}/administrador/content/medallas/`, dataCrear) as Observable<BodyResponseCrearInsignia>;
   }
 
   /**
@@ -1065,7 +1065,7 @@ export class PythonAnywhereService {
     dataCrear.append("nombre", bodyCrear.nombre);
     dataCrear.append("porcentaje", bodyCrear.porcentaje.toString());
     dataCrear.append("titulo", bodyCrear.titulo);
-    return this.http.post(`${this.API_URL}/admin/content/cargos/`, dataCrear) as Observable<BodyResponseCrearCargo>;
+    return this.http.post(`${this.API_URL}/administrador/content/cargos/`, dataCrear) as Observable<BodyResponseCrearCargo>;
   }
 
   /**
@@ -1081,7 +1081,7 @@ export class PythonAnywhereService {
     dataCrear.append("nombre", bodyCrear.nombre);
     dataCrear.append("categoria", bodyCrear.categoria);
     dataCrear.append("descripcion", bodyCrear.descripcion);
-    return this.http.post(`${this.API_URL}/admin/catalog/servicios/`, dataCrear) as Observable<BodyResponseCrearSubCategoria>;
+    return this.http.post(`${this.API_URL}/administrador/catalog/servicios/`, dataCrear) as Observable<BodyResponseCrearSubCategoria>;
   }
 
   /**
@@ -1093,25 +1093,25 @@ export class PythonAnywhereService {
    * @returns Devuelve status un Observable con un objeto BodyResponseCrearProfesionProveedor
    */
   crear_profesiones_proveedor(user: string, data: BodyCrearProfesionProveedor): Observable<BodyResponseCrearProfesionProveedor> {
-    return this.http.post(`${this.API_URL}/admin/catalog/profesion-proveedor/crear/${user}/`, data) as Observable<BodyResponseCrearProfesionProveedor>;
+    return this.http.post(`${this.API_URL}/administrador/catalog/profesion-proveedor/crear/${user}/`, data) as Observable<BodyResponseCrearProfesionProveedor>;
   }
 
 
   //https://tomesoft1.pythonanywhere.com/proveedor_profesiones/melquinto20@gmail.com/128&Jardinero,Pintor|true
   eliminar_proveedores_pendientes(id: any) {//FALTA
     return this.http.delete(
-      `${this.API_URL}/admin/accounts/proveedores-pendientes/${id}/`
+      `${this.API_URL}/administrador/accounts/proveedores-pendientes/${id}/`
     );
   }
 
   cambio_pendiente_estado(id: string, estado: boolean): Observable<any> {
-    return this.http.put(`${this.API_URL}/admin/accounts/proveedores-pendientes-estado/?id=${id}`, {
+    return this.http.put(`${this.API_URL}/administrador/accounts/proveedores-pendientes-estado/?id=${id}`, {
       estado: estado,
     }) as Observable<any>;
   }
   eliminar_proveedores(id: any) {//FALTA
     return this.http.delete(
-      `${this.API_URL}/admin/accounts/proveedores/${id}/`
+      `${this.API_URL}/administrador/accounts/proveedores/${id}/`
     );
   }
   eliminar_proveedores_pendientes2(id: any, data: any) {//FALTA
@@ -1119,16 +1119,16 @@ export class PythonAnywhereService {
     razon.append("razon", data);
     console.log("la raozn es esta", razon)
     console.log("la raozn es ewwwwsta", data)
-    return this.http.put(`${this.API_URL}/admin/accounts/proveedores-pendientes/${id}/rechazo/`, razon);
+    return this.http.put(`${this.API_URL}/administrador/accounts/proveedores-pendientes/${id}/rechazo/`, razon);
   }
   eliminar_proveedores_rechazados(id: any) {//FALTA
     return this.http.delete(
-      `${this.API_URL}/admin/accounts/proveedores-rechazados/${id}/`
+      `${this.API_URL}/administrador/accounts/proveedores-rechazados/${id}/`
     );
   }
 
   update_pendiente_documento(data: any) {
-    return this.http.put(`${this.API_URL}/admin/accounts/proveedores-pendientes/`, data);
+    return this.http.put(`${this.API_URL}/administrador/accounts/proveedores-pendientes/`, data);
   }
 
 
@@ -1139,7 +1139,7 @@ export class PythonAnywhereService {
    * @returns Devuelve un Observable con un objeto Promociones
      */
   obtener_promociones() {
-    return this.http.get(this.API_URL + '/admin/promotions/promociones/');
+    return this.http.get(this.API_URL + '/administrador/promotions/promociones/');
   }
 
   /**
@@ -1150,7 +1150,7 @@ export class PythonAnywhereService {
    */
   obtener_cupones() {
     //return this.http.get(this.API_URL + '/all_cupcategorias/');
-    return this.http.get(this.API_URL + '/admin/promotions/cupones/');
+    return this.http.get(this.API_URL + '/administrador/promotions/cupones/');
   }
 
   /**
@@ -1160,7 +1160,7 @@ export class PythonAnywhereService {
 * @returns Devuelve un Observable con un objeto Grupos
  */
   obtener_grupos() {
-    return this.http.get(this.API_URL + '/admin/accounts/grupos/');
+    return this.http.get(this.API_URL + '/administrador/accounts/grupos/');
   }
 
   /**
@@ -1195,7 +1195,7 @@ export class PythonAnywhereService {
     dataCrear.append("fecha_expiracion", bodyCrear.fecha_expiracion);
     dataCrear.append("descripcion", bodyCrear.descripcion);
     dataCrear.append("participantes", bodyCrear.participantes);
-    return this.http.post(this.API_URL + '/admin/promotions/promociones/', dataCrear);
+    return this.http.post(this.API_URL + '/administrador/promotions/promociones/', dataCrear);
   }
 
   /**
@@ -1232,7 +1232,7 @@ export class PythonAnywhereService {
     dataCrear.append("fecha_expiracion", bodyCrear.fecha_expiracion);
     dataCrear.append("descripcion", bodyCrear.descripcion);
     dataCrear.append("participantes", bodyCrear.participantes);
-    return this.http.post(this.API_URL + '/admin/promotions/cupones/', dataCrear);
+    return this.http.post(this.API_URL + '/administrador/promotions/cupones/', dataCrear);
   }
 
 
@@ -1248,7 +1248,7 @@ export class PythonAnywhereService {
    * @returns Devuelve un Observable con un arreglo de objetos PaymentEfectivo
    */
   obtener_pagos_efectivo(): Observable<Array<PaymentEfectivo>> {
-    return this.http.get(this.API_URL + '/admin/payments/pagos-efectivo/') as Observable<Array<PaymentEfectivo>>;
+    return this.http.get(this.API_URL + '/administrador/payments/pagos-efectivo/') as Observable<Array<PaymentEfectivo>>;
   }
 
   /**
@@ -1258,7 +1258,7 @@ export class PythonAnywhereService {
    * @returns Devuelve un Observable con un objeto ProveedorPaginacion
    */
   obtener_pagos_efectivoP(page = 1): Observable<any> {
-    return this.http.get(`${this.API_URL}/admin/payments/pagos-efectivo/paginado/?page=${page}`) as Observable<any>;
+    return this.http.get(`${this.API_URL}/administrador/payments/pagos-efectivo/paginado/?page=${page}`) as Observable<any>;
   }
 
   /**
@@ -1268,7 +1268,7 @@ export class PythonAnywhereService {
  * @returns Devuelve un Observable con un objeto ProveedorPaginacion
  */
   obtener_pagos_tarjetaP(page = 1): Observable<any> {
-    return this.http.get(`${this.API_URL}/admin/payments/pagos-tarjeta/paginado/?page=${page}`) as Observable<any>;
+    return this.http.get(`${this.API_URL}/administrador/payments/pagos-tarjeta/paginado/?page=${page}`) as Observable<any>;
 
   }
 
@@ -1279,7 +1279,7 @@ export class PythonAnywhereService {
 * @returns Devuelve un Observable con un objeto Valor Total Efectivo
 */
   valor_total_efectivo() {
-    return this.http.get(`${this.API_URL}/admin/payments/valor-total/efectivo/`);
+    return this.http.get(`${this.API_URL}/administrador/payments/valor-total/efectivo/`);
   }
 
   /**
@@ -1289,7 +1289,7 @@ export class PythonAnywhereService {
 * @returns Devuelve un Observable con un objeto Valor Total Tarjeta
 */
   valor_total_tarjeta() {
-    return this.http.get(`${this.API_URL}/admin/payments/valor-total/tarjeta/`);
+    return this.http.get(`${this.API_URL}/administrador/payments/valor-total/tarjeta/`);
   }
 
   /**
@@ -1299,7 +1299,7 @@ export class PythonAnywhereService {
 * @returns Devuelve un Observable con un objeto Valor Total Pay Tarjeta
 */
   valor_total_pay_tarjeta() {
-    return this.http.get(`${this.API_URL}/admin/payments/valor-total/pay-tarjeta/`);
+    return this.http.get(`${this.API_URL}/administrador/payments/valor-total/pay-tarjeta/`);
   }
 
   /**
@@ -1309,7 +1309,7 @@ export class PythonAnywhereService {
 * @returns Devuelve un Observable con un objeto Valor Total Banc Tarjeta
 */
   valor_total_banc_tarjeta(): Observable<any> {
-    return this.http.get(`${this.API_URL}/admin/payments/valor-total/banc-tarjeta/`);
+    return this.http.get(`${this.API_URL}/administrador/payments/valor-total/banc-tarjeta/`);
   }
 
   /**
@@ -1319,7 +1319,7 @@ export class PythonAnywhereService {
 * @returns Devuelve un Observable con un objeto Valor Total Sis Tarjeta
 */
   valor_total_sis_tarjeta() {
-    return this.http.get(`${this.API_URL}/admin/payments/valor-total/sis-tarjeta/`);
+    return this.http.get(`${this.API_URL}/administrador/payments/valor-total/sis-tarjeta/`);
   }
 
   /**
@@ -1329,7 +1329,7 @@ export class PythonAnywhereService {
 * @returns 4972.63
 */
   valor_total() {
-    return this.http.get(`${this.API_URL}/admin/payments/valor-total/`);
+    return this.http.get(`${this.API_URL}/administrador/payments/valor-total/`);
   }
 
 
@@ -1340,13 +1340,13 @@ export class PythonAnywhereService {
  * @returns Devuelve un Observable con un arreglo de objetos PaymentTarjeta
  */
   obtener_pagos_tarjeta(): Observable<Array<PaymentTarjeta>> {
-    return this.http.get(this.API_URL + '/admin/payments/pagos-tarjeta/') as Observable<Array<PaymentTarjeta>>;
+    return this.http.get(this.API_URL + '/administrador/payments/pagos-tarjeta/') as Observable<Array<PaymentTarjeta>>;
   }
 
   //NO SE LO USABA EN LA ANTERIOR APP
   //NO reconoce el id sacado de obtener_pagos_efectivo()
   obtener_pago_solE(pago_ID: any) {
-    return this.http.get(`${this.API_URL}/admin/payments/pagos-solicitud/efectivo/${pago_ID}/`);
+    return this.http.get(`${this.API_URL}/administrador/payments/pagos-solicitud/efectivo/${pago_ID}/`);
   }
   /**
    *
@@ -1355,12 +1355,12 @@ export class PythonAnywhereService {
    * @returns Devuelve un Observable con un objeto PagosTarjetaUser
    */
   obtener_pago_solT(pago_ID: any): Observable<PagosTarjetaUser> {
-    return this.http.get(`${this.API_URL}/admin/payments/pagos-solicitud/tarjeta/${pago_ID}/`) as Observable<PagosTarjetaUser>;
+    return this.http.get(`${this.API_URL}/administrador/payments/pagos-solicitud/tarjeta/${pago_ID}/`) as Observable<PagosTarjetaUser>;
   }
   //FALTA
   enviar_correo_alerta(correo: any, asunto: any, texto: any) {
     return this.http.get(
-      `${this.API_URL}/admin/notifications/enviar-alerta/${correo}/${asunto}/${texto}`
+      `${this.API_URL}/administrador/notifications/enviar-alerta/${correo}/${asunto}/${texto}`
     );
   }
   /**
@@ -1373,7 +1373,7 @@ export class PythonAnywhereService {
    */
 
   editar_sugerencia_estado(sugerencia: boolean, id: any) {
-    return this.http.put(`${this.API_URL}/admin/content/suggestions/estado/?id=${id}`, {estado: sugerencia,});
+    return this.http.put(`${this.API_URL}/administrador/content/suggestions/estado/?id=${id}`, {estado: sugerencia,});
   }
 
   /**
@@ -1384,7 +1384,7 @@ export class PythonAnywhereService {
    * @returns Retorna un objeto Sugerencia
    */
   obtener_sugerencia(id: any): Observable<Sugerencia> {
-    return this.http.get(`${this.API_URL}/admin/content/suggestions/${id}/`) as Observable<Sugerencia>;
+    return this.http.get(`${this.API_URL}/administrador/content/suggestions/${id}/`) as Observable<Sugerencia>;
   }
 
   /**
@@ -1395,7 +1395,7 @@ export class PythonAnywhereService {
   * @returns Retorna objetos de ProveedorPaginacion
   */
   obtener_sugerenciasLeidas(page = 1): Observable<ProveedorPaginacion> {
-    return this.http.get(`${this.API_URL}/admin/content/suggestions/read/?page=${page}`) as Observable<ProveedorPaginacion>;
+    return this.http.get(`${this.API_URL}/administrador/content/suggestions/read/?page=${page}`) as Observable<ProveedorPaginacion>;
   }
 
   /**
@@ -1406,7 +1406,7 @@ export class PythonAnywhereService {
   * @returns Retorna objetos de ProveedorPaginacion
   */
   obtener_sugerenciasNoLeidas(page = 1): Observable<ProveedorPaginacion> {
-    return this.http.get(`${this.API_URL}/admin/content/suggestions/unread/?page=${page}`) as Observable<ProveedorPaginacion>;
+    return this.http.get(`${this.API_URL}/administrador/content/suggestions/unread/?page=${page}`) as Observable<ProveedorPaginacion>;
   }
 
   /**
@@ -1432,7 +1432,7 @@ export class PythonAnywhereService {
   * @returns Retorna arreglo de objetos  Plan
   */
   obtener_planes(): Observable<Array<Plan>> {
-    return this.http.get(this.API_URL + '/admin/payments/planes/') as Observable<Array<Plan>>;
+    return this.http.get(this.API_URL + '/administrador/payments/planes/') as Observable<Array<Plan>>;
   }
 
 
@@ -1451,7 +1451,7 @@ export class PythonAnywhereService {
     bodyCrear.imagen ? dataCrear.append("imagen", bodyCrear.imagen) : null;
     dataCrear.append("precio", bodyCrear.precio.toString());
     dataCrear.append("duracion", bodyCrear.duracion.toString());
-    return this.http.post(this.API_URL + '/admin/payments/planes/', dataCrear) as Observable<BodyResponseCrearPlan>;
+    return this.http.post(this.API_URL + '/administrador/payments/planes/', dataCrear) as Observable<BodyResponseCrearPlan>;
   }
 
   /**
@@ -1472,7 +1472,7 @@ export class PythonAnywhereService {
     bodyActualizar.precio ? dataUpdate.append('precio', bodyActualizar.precio) : null;
     bodyActualizar.estado ? dataUpdate.append('estado', bodyActualizar.estado.toString()) : null;
 
-    return this.http.put(this.API_URL + '/admin/payments/planes/', dataUpdate) as Observable<Plan>;
+    return this.http.put(this.API_URL + '/administrador/payments/planes/', dataUpdate) as Observable<Plan>;
   }
   actualizar_plan_estado(bodyActualizar: BodyActualizarPlan): Observable<Plan> {
 
@@ -1480,7 +1480,7 @@ export class PythonAnywhereService {
     bodyActualizar.id ? dataUpdate.append('id', bodyActualizar.id) : null
     bodyActualizar.estado ? dataUpdate.append('estado', bodyActualizar.estado.toString()) : null;
 
-    return this.http.put(this.API_URL + '/admin/payments/planes/', dataUpdate) as Observable<Plan>;
+    return this.http.put(this.API_URL + '/administrador/payments/planes/', dataUpdate) as Observable<Plan>;
   }
 
   /**
@@ -1491,7 +1491,7 @@ export class PythonAnywhereService {
    * @returns Retorna un objeto Plan
    */
   borrar_plan(id: any): Observable<Plan> {
-    return this.http.delete(`${this.API_URL}/admin/payments/planes/${id}/`) as Observable<Plan>;
+    return this.http.delete(`${this.API_URL}/administrador/payments/planes/${id}/`) as Observable<Plan>;
   }
 
 
@@ -1503,7 +1503,7 @@ export class PythonAnywhereService {
    * @returns Retorna un objeto ProveedorPaginacion
    */
   obtener_publicidades(page = 1): any {
-    return this.http.get(`${this.API_URL}/admin/content/publicidades/?page=${page}`)
+    return this.http.get(`${this.API_URL}/administrador/content/publicidades/?page=${page}`)
   }
 
   /**
@@ -1517,7 +1517,7 @@ export class PythonAnywhereService {
    */
   filtrar_publicidadName(buscar: string, page: string): Observable<ProveedorPaginacion> {
     return this.http.get(
-      `${this.API_URL}/admin/content/publicidades/buscar/?page=${page}&buscar=${buscar}`
+      `${this.API_URL}/administrador/content/publicidades/buscar/?page=${page}&buscar=${buscar}`
     ) as Observable<ProveedorPaginacion>;
   }
 
@@ -1548,7 +1548,7 @@ export class PythonAnywhereService {
     dataCrear.append("fecha_expiracion", bodyCrear.fecha_expiracion);
     bodyCrear.imagen ? dataCrear.append("imagen", bodyCrear.imagen) : null;
     dataCrear.append("url", bodyCrear.url);
-    return this.http.post(this.API_URL + '/admin/content/publicidades/', dataCrear) as Observable<BodyResponseCrearPublicidad>;
+    return this.http.post(this.API_URL + '/administrador/content/publicidades/', dataCrear) as Observable<BodyResponseCrearPublicidad>;
   }
 
 
@@ -1569,7 +1569,7 @@ export class PythonAnywhereService {
     bodyActualizar.url ? dataUpdate.append('url', bodyActualizar.url) : null;
 
 
-    return this.http.put(this.API_URL + '/admin/content/publicidades/', dataUpdate) as any;
+    return this.http.put(this.API_URL + '/administrador/content/publicidades/', dataUpdate) as any;
   }
 
   /**
@@ -1580,7 +1580,7 @@ export class PythonAnywhereService {
    * @returns Retorna el objeto Publicidad
    */
   borrar_publicidad(id: any) {
-    return this.http.delete(`${this.API_URL}/admin/content/publicidades/${id}/`);
+    return this.http.delete(`${this.API_URL}/administrador/content/publicidades/${id}/`);
   }
 
   /**
@@ -1634,11 +1634,11 @@ export class PythonAnywhereService {
    * @returns Retorna un objeto Notificacion
    */
   get_notificacion(): Observable<NotificacionAnuncio> {
-    return this.http.get(`${this.API_URL}/admin/notifications/notificaciones/`) as Observable<NotificacionAnuncio>;
+    return this.http.get(`${this.API_URL}/administrador/notifications/notificaciones/`) as Observable<NotificacionAnuncio>;
   }
 
   delete_notificacion(id: any) {
-    return this.http.delete(`${this.API_URL}/admin/notifications/notificaciones/${id}/`);
+    return this.http.delete(`${this.API_URL}/administrador/notifications/notificaciones/${id}/`);
   }
 
   crear_notificacion(bodyCrear: BodyCrearNotificacionAutomatica): Observable<any> {
@@ -1653,7 +1653,7 @@ export class PythonAnywhereService {
     dataCrear.append("hora", bodyCrear.hora);
     dataCrear.append("ruta", bodyCrear.ruta);
     bodyCrear.imagen ? dataCrear.append("imagen", bodyCrear.imagen) : null;
-    return this.http.post(`${this.API_URL}/admin/notifications/notificaciones/`, dataCrear) as Observable<any>;
+    return this.http.post(`${this.API_URL}/administrador/notifications/notificaciones/`, dataCrear) as Observable<any>;
   }
 
   put_notificacion_auto(bodyActualizar: BodyActualizarNotificacionAutomatica, id: any): Observable<NotificacionAnuncio> {
@@ -1671,17 +1671,17 @@ export class PythonAnywhereService {
       dataActualizar.append("imagen", bodyActualizar.imagen);
     }
 
-    return this.http.put(`${this.API_URL}/admin/notifications/notificaciones/${id}/`, dataActualizar) as Observable<NotificacionAnuncio>;
+    return this.http.put(`${this.API_URL}/administrador/notifications/notificaciones/${id}/`, dataActualizar) as Observable<NotificacionAnuncio>;
   }
 
   cambio_notificacion_estado(id: string, estado: boolean): Observable<any> {
-    return this.http.put(`${this.API_URL}/admin/notifications/notificaciones/estado/?id=${id}`, {
+    return this.http.put(`${this.API_URL}/administrador/notifications/notificaciones/estado/?id=${id}`, {
       estado: estado,
     }) as Observable<any>;
   }
 
   enviar_noti_auto(id: string, titulo: string): Observable<any> {
-    return this.http.post(`${this.API_URL}/admin/notifications/notificaciones/envio/?id=${id}`,{
+    return this.http.post(`${this.API_URL}/administrador/notifications/notificaciones/envio/?id=${id}`,{
       titulo: titulo,
     }) as Observable<any>;
   } 
@@ -1693,7 +1693,7 @@ export class PythonAnywhereService {
    * @returns Retorna un objeto NotificacionAnuncio
    */
   get_notificacion_masiva(): Observable<NotificacionAnuncio> {
-    return this.http.get(`${this.API_URL}/admin/notifications/notificacion-anuncio/`) as Observable<NotificacionAnuncio>;
+    return this.http.get(`${this.API_URL}/administrador/notifications/notificacion-anuncio/`) as Observable<NotificacionAnuncio>;
   }
 
   put_notificacion_masiva(bodyActualizar: BodyActualizarNotificacionAnuncio, id: any): Observable<NotificacionAnuncio> {
@@ -1711,21 +1711,21 @@ export class PythonAnywhereService {
       dataActualizar.append("imagen", bodyActualizar.imagen);
     }
 
-    return this.http.put(`${this.API_URL}/admin/notifications/notificacion-anuncio/${id}/`, dataActualizar) as Observable<NotificacionAnuncio>;
+    return this.http.put(`${this.API_URL}/administrador/notifications/notificacion-anuncio/${id}/`, dataActualizar) as Observable<NotificacionAnuncio>;
   }
 
   cambio_notificacion_masiva_estado(id: string, estado: boolean): Observable<any> {
-    return this.http.put(`${this.API_URL}/admin/notifications/notificacion-anuncio/estado/?id=${id}`, {
+    return this.http.put(`${this.API_URL}/administrador/notifications/notificacion-anuncio/estado/?id=${id}`, {
       estado: estado,
     }) as Observable<any>;
   }
 
   delete_notificacion_masiva(id: any) {
-    return this.http.delete(`${this.API_URL}/admin/notifications/notificacion-anuncio/${id}/`);
+    return this.http.delete(`${this.API_URL}/administrador/notifications/notificacion-anuncio/${id}/`);
   }
 
   enviar_noti_masi(id: string, titulo: string): Observable<any> {
-    return this.http.post(`${this.API_URL}/admin/notifications/notificacion-anuncio/envio/?id=${id}`,{
+    return this.http.post(`${this.API_URL}/administrador/notifications/notificacion-anuncio/envio/?id=${id}`,{
       titulo: titulo,
     }) as Observable<any>;
   }
@@ -1749,12 +1749,12 @@ export class PythonAnywhereService {
     dataCrear.append("hora", bodyCrear.hora);
     dataCrear.append("ruta", bodyCrear.ruta);
     bodyCrear.imagen ? dataCrear.append("imagen", bodyCrear.imagen) : null;
-    return this.http.post(`${this.API_URL}/admin/notifications/notificacion-anuncio/`, dataCrear) as Observable<any>;
+    return this.http.post(`${this.API_URL}/administrador/notifications/notificacion-anuncio/`, dataCrear) as Observable<any>;
   }
 
   //REPETIDO, LO MISMO QUE  obtener_planes()
   obtener_plan_proveedor() {
-    return this.http.get(this.API_URL + '/admin/payments/plan-proveedor/');
+    return this.http.get(this.API_URL + '/administrador/payments/plan-proveedor/');
   }
 
 
@@ -1774,7 +1774,7 @@ export class PythonAnywhereService {
     dataCrear.append("proveedor", bodyCrear.proveedor.toString());
     dataCrear.append("fecha_inicio", bodyCrear.fecha_inicio);
     dataCrear.append("fecha_expiracion", bodyCrear.fecha_expiracion);
-    return this.http.post(this.API_URL + '/admin/payments/plan-proveedor/', dataCrear) as Observable<PlanProveedor>;
+    return this.http.post(this.API_URL + '/administrador/payments/plan-proveedor/', dataCrear) as Observable<PlanProveedor>;
   }
 
 
@@ -1793,12 +1793,12 @@ export class PythonAnywhereService {
     dataCrear.append("planProveedor", bodyCrear.planProveedor.toString());
     dataCrear.append("fecha_inicio", bodyCrear.fecha_inicio);
     dataCrear.append("fecha_expiracion", bodyCrear.fecha_expiracion);
-    return this.http.put(this.API_URL + '/admin/payments/plan-proveedor/', dataCrear) as Observable<PlanProveedor>;
+    return this.http.put(this.API_URL + '/administrador/payments/plan-proveedor/', dataCrear) as Observable<PlanProveedor>;
   }
 
   // No reconoce ningun ID, parece endopoint muerto, en la anterior app no se usa
   borrar_plan_proveedor(id: any) {
-    return this.http.delete(`${this.API_URL}/admin/payments/plan-proveedor/${id}/`);
+    return this.http.delete(`${this.API_URL}/administrador/payments/plan-proveedor/${id}/`);
   }
   /**
    *
@@ -1806,12 +1806,12 @@ export class PythonAnywhereService {
    * @returns Devuelve un Observable arreglo s con un objetos Plan
    */
   obtener_planes_estado(): Observable<Plan> {
-    return this.http.get(this.API_URL + '/admin/payments/planes-estado/') as Observable<Plan>;
+    return this.http.get(this.API_URL + '/administrador/payments/planes-estado/') as Observable<Plan>;
   }
 
   //Funcion que trae lo mismo que  obtener_grupos
   obtener_roles() {
-    return this.http.get(this.API_URL + '/admin/accounts/grupos/');
+    return this.http.get(this.API_URL + '/administrador/accounts/grupos/');
   }
 
 
@@ -1835,7 +1835,7 @@ export class PythonAnywhereService {
     dataCrear.append("id", bodyCrear.id.toString());
     dataCrear.append("nombre", bodyCrear.nombre);
     dataCrear.append("permisos", bodyCrear.permisos.toString());
-    return this.http.put(this.API_URL + '/admin/accounts/roles-permisos/', dataCrear) as Observable<Group>;
+    return this.http.put(this.API_URL + '/administrador/accounts/roles-permisos/', dataCrear) as Observable<Group>;
   };
 
 
@@ -1847,7 +1847,7 @@ export class PythonAnywhereService {
    * @returns Devuelve un observable con el objeto SolicitudProfesionPaginacion
    */
   obtener_solicitudes(page = 1): Observable<SolicitudProfesionPaginacion> {
-    return this.http.get(`${this.API_URL}/admin/catalog/solicitudes-profesion/?page=${page}`) as Observable<SolicitudProfesionPaginacion>;
+    return this.http.get(`${this.API_URL}/administrador/catalog/solicitudes-profesion/?page=${page}`) as Observable<SolicitudProfesionPaginacion>;
   }
 
   /**
@@ -1859,7 +1859,7 @@ export class PythonAnywhereService {
    * @returns Devuelve un Observable con un objeto SolicitudProfesionPaginacion.
    */
   solicitudesByUser(usuario: string, page = 1): Observable<SolicitudProfesionPaginacion> {
-    return this.http.get(`${this.API_URL}/admin/catalog/solicitudes-profesion/buscar/${usuario}/?page=${page}`) as Observable<SolicitudProfesionPaginacion>;
+    return this.http.get(`${this.API_URL}/administrador/catalog/solicitudes-profesion/buscar/${usuario}/?page=${page}`) as Observable<SolicitudProfesionPaginacion>;
   }
 
   /**
@@ -1872,7 +1872,7 @@ export class PythonAnywhereService {
    * @returns Devuelve un Observable con un objeto ProveedorPaginacion de todas las respuestas filtradas.
    */
   solicitudesByDate(fechaInicio: string, fechaFin: string, page = 1) {
-    return this.http.get(`${this.API_URL}/admin/catalog/solicitudes-profesion/fecha/?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}&page=${page}`);
+    return this.http.get(`${this.API_URL}/administrador/catalog/solicitudes-profesion/fecha/?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}&page=${page}`);
   }
 
 
@@ -1885,7 +1885,7 @@ export class PythonAnywhereService {
    * @returns Retorna un Observable SolicitudProfesion
    */
   solicitudDetail(id: any): Observable<SolicitudProfesion> {
-    return this.http.get(`${this.API_URL}/admin/catalog/solicitudes-profesion/${id}/`) as Observable<SolicitudProfesion>;
+    return this.http.get(`${this.API_URL}/administrador/catalog/solicitudes-profesion/${id}/`) as Observable<SolicitudProfesion>;
   }
 
 
@@ -1897,11 +1897,11 @@ export class PythonAnywhereService {
    * @returns Devuelve un Observable SolicitudProfesion
    */
   solicitudChange(id: any, data: any): Observable<SolicitudProfesion> {
-    return this.http.put(`${this.API_URL}/admin/catalog/solicitudes-profesion/gestion/${id}/`, data) as Observable<SolicitudProfesion>;
+    return this.http.put(`${this.API_URL}/administrador/catalog/solicitudes-profesion/gestion/${id}/`, data) as Observable<SolicitudProfesion>;
   }
   //no se usa en la otra app
   solicitudDelet(id: any) {
-    return this.http.delete(`${this.API_URL}/admin/catalog/solicitudes-profesion/gestion/${id}/`);
+    return this.http.delete(`${this.API_URL}/administrador/catalog/solicitudes-profesion/gestion/${id}/`);
   }
   //FALTA
   editarProfesionProveedor(id: any, data: any) {
@@ -1910,7 +1910,7 @@ export class PythonAnywhereService {
 
   //no se usa en la app
   correoSolicitud(data: any) {
-    return this.http.post(`${this.API_URL}/admin/notifications/correo-solicitud/`, data);
+    return this.http.post(`${this.API_URL}/administrador/notifications/correo-solicitud/`, data);
   }
 
 
@@ -1922,12 +1922,12 @@ export class PythonAnywhereService {
    * @returns Retorna un status HTTP_204_NO_CONTENT en caso de exito
    */
   borrar_rol = (id: any) => {
-    return this.http.delete(`${this.API_URL}/admin/accounts/roles-permisos/${id}/`);
+    return this.http.delete(`${this.API_URL}/administrador/accounts/roles-permisos/${id}/`);
   };
 
   //no se usa en la anterior app
   obtener_rol(name: any) {
-    return this.http.get(`${this.API_URL}/admin/accounts/roles-permisos/${name}/`);
+    return this.http.get(`${this.API_URL}/administrador/accounts/roles-permisos/${name}/`);
   }
 
   /**
@@ -1936,7 +1936,7 @@ export class PythonAnywhereService {
    * @returns Retorna un arreglo de Objeto Permission
    */
   obtener_permisos(): Observable<Array<Permission>> {
-    return this.http.get(`${this.API_URL}/admin/accounts/permisos/`) as Observable<Array<Permission>>;
+    return this.http.get(`${this.API_URL}/administrador/accounts/permisos/`) as Observable<Array<Permission>>;
   }
 
 
@@ -1946,12 +1946,12 @@ export class PythonAnywhereService {
    * @returns //{ "totalPendientes": 29, "totalProveedores": 115}
    */
   valor_total_proveedo() {
-    return this.http.get(`${this.API_URL}/admin/payments/valor-total/proveedores/`);
+    return this.http.get(`${this.API_URL}/administrador/payments/valor-total/proveedores/`);
   }
 
   //FALTA
   getProfesionProveedor(id: any) {
-    return this.http.get(`${this.API_URL}/admin/catalog/profesion-proveedor/${id}/`);
+    return this.http.get(`${this.API_URL}/administrador/catalog/profesion-proveedor/${id}/`);
   }
   /**
    * Funcion que actualiza una profesion en la base de datos según el parametro pasado.
@@ -1971,7 +1971,7 @@ export class PythonAnywhereService {
     bodyCrear.descripcion ? dataCrear.append("descripcion", bodyCrear.descripcion) : null;
     dataCrear.append("servicio", bodyCrear.servicio);
     bodyCrear.estado ? dataCrear.append("estado", bodyCrear.estado.toString()) : null;
-    return this.http.put(this.API_URL + '/admin/catalog/profesiones/', dataCrear) as Observable<BodyResponseActualizarProfesion>;
+    return this.http.put(this.API_URL + '/administrador/catalog/profesiones/', dataCrear) as Observable<BodyResponseActualizarProfesion>;
   }
 
   //----------------------------------------------
@@ -1991,7 +1991,7 @@ export class PythonAnywhereService {
     dataCrear.append("pedidos", bodyCrear.nombre);
     dataCrear.append("imagen", bodyCrear.pedidos.toString());
     dataCrear.append("descripcion", bodyCrear.descripcion);
-    return this.http.post(`${this.API_URL}/admin/content/insignias/`, dataCrear) as Observable<BodyResponseCrearInsignia>;
+    return this.http.post(`${this.API_URL}/administrador/content/insignias/`, dataCrear) as Observable<BodyResponseCrearInsignia>;
   }
   //----------------------------------------------
 
@@ -2004,7 +2004,7 @@ export class PythonAnywhereService {
    * @returns Retorna Objeto Profesion
    */
   profesionDetails(id: string): Observable<Profesion> {
-    return this.http.get(`${this.API_URL}/admin/catalog/profesion/${id}/`) as Observable<Profesion>;
+    return this.http.get(`${this.API_URL}/administrador/catalog/profesion/${id}/`) as Observable<Profesion>;
   }
 
 
@@ -2018,12 +2018,12 @@ export class PythonAnywhereService {
    */
   // Cambia años de experiencia por id (id obtener de /proveedor_profesiones/)
   actualizar_profesion_proveedor(id: number, data: any): Observable<ProveedorProfesion> {
-    return this.http.put(`${this.API_URL}/admin/catalog/profesion-proveedor/detalle/${id}/`, data) as Observable<ProveedorProfesion>;
+    return this.http.put(`${this.API_URL}/administrador/catalog/profesion-proveedor/detalle/${id}/`, data) as Observable<ProveedorProfesion>;
   }
 
   //no se usa en la app anterior
   delete_profesion_proveedo(id: any) {
-    return this.http.delete(`${this.API_URL}/admin/catalog/profesion-proveedor/detalle/${id}/`);
+    return this.http.delete(`${this.API_URL}/administrador/catalog/profesion-proveedor/detalle/${id}/`);
   }
 
   cambioContrasenia(correo: string, contrasenia: string) {
@@ -2034,17 +2034,17 @@ export class PythonAnywhereService {
     return this.http.post(this.API_URL + '/login/', bodyLogin) as Observable<BodyLoginResponse>;
   }
   loginAdminPythonAnywhere(bodyLogin: BodyLogin): Observable<BodyLoginResponse> {
-    return this.http.post(this.API_URL + '/admin/accounts/login/', bodyLogin) as Observable<BodyLoginResponse>;
+    return this.http.post(this.API_URL + '/administrador/accounts/login/', bodyLogin) as Observable<BodyLoginResponse>;
   }
 
   getAdminByCorreo(correo: string) {
     // ponytail: URL absoluta hardcodeada preexistente (bypassa API_URL, apunta
     // siempre a prod incluso en local) — no se corrige acá, requiere decisión
     // de producto, ver docs/refactor/CHECKLIST-inventario-endpoints.md fila 135.
-    return this.http.get("https://tomesoft1.pythonanywhere.com/admin/accounts/datos-admin/" + correo);
+    return this.http.get("https://tomesoft1.pythonanywhere.com/administrador/accounts/datos-admin/" + correo);
   }
   actualizarCaducidad(id: number, numero: any) {
-    return this.http.put(`${this.API_URL}/admin/accounts/actualizar-caducidad/${id}`, numero);
+    return this.http.put(`${this.API_URL}/administrador/accounts/actualizar-caducidad/${id}`, numero);
   }
 }
 
