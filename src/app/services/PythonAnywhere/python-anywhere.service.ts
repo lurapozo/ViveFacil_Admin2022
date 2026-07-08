@@ -1065,6 +1065,9 @@ export class PythonAnywhereService {
     dataCrear.append("nombre", bodyCrear.nombre);
     dataCrear.append("porcentaje", bodyCrear.porcentaje.toString());
     dataCrear.append("titulo", bodyCrear.titulo);
+    if (bodyCrear.tipo) {
+      dataCrear.append("tipo", bodyCrear.tipo);
+    }
     return this.http.post(`${this.API_URL}/administrador/content/cargos/`, dataCrear) as Observable<BodyResponseCrearCargo>;
   }
 

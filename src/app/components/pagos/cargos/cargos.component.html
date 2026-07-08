@@ -71,7 +71,8 @@
             <th scope="col">ID</th>
             <th scope="col">TITULO</th>
             <th scope="col">PORCENTAJE</th>
-           
+            <th scope="col">TIPO</th>
+
           </tr>
         </thead>
       </table>
@@ -90,6 +91,7 @@
       
             </td>
             <td style="color: #40378b; text-transform: uppercase"> <strong> {{ a.porcentaje }} </strong> </td>
+            <td style="color: #40378b; text-transform: capitalize"> {{ a.tipo || '-' }} </td>
             <td>
               <mat-icon>settings</mat-icon>
           </td>
@@ -111,86 +113,46 @@
     <div class="form-container">
       <h2>CREAR CARGO</h2>
       <form [formGroup]="cargoCrear" id="formCrearCate">
-      
-        <div class="form-field">
-          <div class="col-5">
-            <label for="inputNombre" class="form-label"
-              ><h3 class="m-0 p-0 fw-bold">TÍTULO:</h3></label
-            >
-          </div>
-
-          <div class="col-5">
-            <input
-              type="text"
-              formControlName="nombre"
-              class="form-control"
-              [ngClass]="
-                isInvalidForm('nombre', 'crear')
-                  ? 'is-invalid'
-                  : cargoCrear.get('nombre')?.touched ||
-                    (cargoCrear.get('nombre')?.dirty &&
-                      !cargoCrear.get('nombre')?.invalid)
-                  ? 'is-valid'
-                  : ''
-              "
-              id="inputNombre"
-              placeholder="Ingresa nombre"
-            />
-            <div class="invalid-feedback">
-              {{ getErrorMessage(cargoCrear, "nombre") }}
-            </div>
-          </div>
-        </div>
 
         <div class="form-field">
           <div class="col-5">
-            <label for="inputtitulo" class="form-label"
-              ><h3 class="m-0 p-0 fw-bold">Título:</h3></label
-            >
-          </div>
-          <div class="col-5">
-            <textarea
-              type="text"
-              formControlName="titulo"
-              class="form-control"
-              [ngClass]="
-                isInvalidForm('titulo', 'crear')
-                  ? 'is-invalid'
-                  : cargoCrear.get('titulo')?.touched ||
-                    (cargoCrear.get('titulo')?.dirty &&
-                      !cargoCrear.get('titulo')?.invalid)
-                  ? 'is-valid'
-                  : ''
-              "
-              id="inputtitulo"
-              placeholder="Ingrese titulo"
-            ></textarea>
-            <div class="invalid-feedback">
-              {{ getErrorMessage(cargoCrear, "titulo") }}
-            </div>
-          </div>
-        </div>
-
-        <div class="form-field">
-          <div class="col-5">
-            <label for="inputNombre" class="form-label"
-              ><h3 class="m-0 p-0 fw-bold">Porcentaje:</h3></label
+            <label for="inputTipo" class="form-label"
+              ><h3 class="m-0 p-0 fw-bold">Tipo:</h3></label
             >
           </div>
           <div class="col-5">
             <select
-                class="form-select"
-                [ngClass]="isInvalidForm('porcentaje','crear') ? 'is-invalid' : ''"
-                formControlName="porcentaje"
-                id="ge"
-                [value]="cargo_seleccionada?.porcentaje"
-                aria-describedby="selectorServicioCrearFeedback"
-                placeholder="Elija un porcentaje"
-              >
-                <option *ngFor="let c of  arr_filtered_cargo" [id]="c" [value]="c">
-                  {{ c.porcentaje }}
-                </option>
-              </select>
+              class="form-select"
+              [ngClass]="isInvalidForm('tipo','crear') ? 'is-invalid' : ''"
+              formControlName="tipo"
+              id="inputTipo"
+            >
+              <option value="" disabled>Elija un tipo</option>
+              <option *ngFor="let t of tiposCargo" [value]="t.value">{{ t.label }}</option>
+            </select>
+            <div class="invalid-feedback">
+              {{ getErrorMessage(cargoCrear, "tipo") }}
+            </div>
+          </div>
+        </div>
+
+        <div class="form-field">
+          <div class="col-5">
+            <label for="inputPorcentaje" class="form-label"
+              ><h3 class="m-0 p-0 fw-bold">Porcentaje:</h3></label
+            >
+          </div>
+          <div class="col-5">
+            <input
+              type="number"
+              step="0.01"
+              min="0"
+              formControlName="porcentaje"
+              class="form-control"
+              [ngClass]="isInvalidForm('porcentaje','crear') ? 'is-invalid' : ''"
+              id="inputPorcentaje"
+              placeholder="Ej: 1.5"
+            />
             <div class="invalid-feedback">
               {{ getErrorMessage(cargoCrear, "porcentaje") }}
             </div>
@@ -263,10 +225,19 @@ aria-labelledby="modalInformacionProfesionLabel" tabindex="-1">
 
     <div class="row p-2 align-items-center">
       <div class="col-5">
-        <h3 class="m-0 p-0 fw-bold">Nombre:</h3>
+        <h3 class="m-0 p-0 fw-bold">Porcentaje:</h3>
       </div>
       <div class="col-7">
         {{cargo_seleccionada?.porcentaje}}
+      </div>
+    </div>
+
+    <div class="row p-2 align-items-center">
+      <div class="col-5">
+        <h3 class="m-0 p-0 fw-bold">Tipo:</h3>
+      </div>
+      <div class="col-7">
+        {{cargo_seleccionada?.tipo || 'Sin tipo'}}
       </div>
     </div>
 
@@ -304,71 +275,39 @@ aria-labelledby="modalInformacionEdicionProfesionLabel" tabindex="-1">
   </div>
   <div class="modal-body mb-0">
     <form [formGroup]="formEdit" class="">
-  
 
       <div class="row p-2 align-items-center">
         <div class="col-5">
-          <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
-              fw-bold">Titulo:</h3></label>
+          <label for="inputTipoEdit" class="form-label"><h3 class="m-0 p-0
+              fw-bold">Tipo:</h3></label>
         </div>
         <div class="col-7">
-          <input
-            type="text"
-            formControlName="titulo"
-            class="form-control"
-            [ngClass]="isInvalidForm('titulo', 'actualizar') ? 'is-invalid'
-            : ''"
-
-            value="Mark"
-            [placeholder]="cargo_seleccionada
-?.titulo"
-            [value]="cargo_seleccionada
-?.titulo">
+          <select class="form-select"
+            [ngClass]="isInvalidForm('tipo', 'actualizar') ? 'is-invalid' : ''"
+            formControlName="tipo" id="inputTipoEdit">
+            <option value="" disabled>Elija un tipo</option>
+            <option *ngFor="let t of tiposCargo" [value]="t.value">{{ t.label }}</option>
+          </select>
           <div class="invalid-feedback"> {{getErrorMessage(formEdit,
-            'titulo')}} </div>
+            'tipo')}} </div>
         </div>
       </div>
 
       <div class="row p-2 align-items-center">
         <div class="col-5">
-          <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
-              fw-bold">Nombre:</h3></label>
-        </div>
-        <div class="col-7">
-          <input
-            type="number"
-            formControlName="porcentaje"
-            class="form-control"
-            [ngClass]="isInvalidForm('porcentaje', 'actualizar') ?
-            'is-invalid' : ''"
-
-            value="Mark"
-
-            [value]="cargo_seleccionada
-?.nombre">
-          <div class="invalid-feedback"> {{getErrorMessage(formEdit,
-            'porcentaje')}} </div>
-        </div>
-      </div>
-
-
-      <div class="row p-2 align-items-center">
-        <div class="col-5">
-          <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
+          <label for="inputPorcentajeEdit" class="form-label"><h3 class="m-0 p-0
               fw-bold">Porcentaje:</h3></label>
         </div>
         <div class="col-7">
           <input
             type="number"
+            step="0.01"
+            min="0"
             formControlName="porcentaje"
             class="form-control"
+            id="inputPorcentajeEdit"
             [ngClass]="isInvalidForm('porcentaje', 'actualizar') ?
-            'is-invalid' : ''"
-
-            value="Mark"
-
-            [value]="cargo_seleccionada
-?.porcentaje">
+            'is-invalid' : ''">
           <div class="invalid-feedback"> {{getErrorMessage(formEdit,
             'porcentaje')}} </div>
         </div>
@@ -393,106 +332,6 @@ aria-labelledby="modalInformacionEdicionProfesionLabel" tabindex="-1">
 </div>
 </div>
 </div>
-<!-- Modal crear admi -->
-<div class="modal fade" id="modalCrearProfesion" aria-hidden="true"
-aria-labelledby="modalCrearProfesionLabel" tabindex="-1">
-<div class="modal-dialog modal-dialog-centered">
-<div class="modal-content">
-  <div class="modal-header align-items-center">
-    <h1 class="modal-title fs-5 m-0 p-0 fw-bold"
-      id="modalCrearProfesionLabel">Crear Cargo</h1>
-    <!-- (click)="limpiarForm('crear')" -->
-    <button
-      type="button"
-      class="btn-close"
-      data-bs-dismiss="modal"
-      aria-label="Close"></button>
-  </div>
-  <div class="modal-body mb-0">
-    <form [formGroup]="cargoCrear" class="">
-      <!-- Seccion de imagen -->
- 
-
-
-      <div class="row p-2 align-items-center">
-        <div class="col-5">
-          <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
-              fw-bold">Titulo:</h3></label>
-        </div>
-        <div class="col-7">
-          <input
-            type="text"
-            formControlName="titulo"
-            class="form-control"
-            [ngClass]="isInvalidForm('titulo', 'crear') ? 'is-invalid' :
-            cargoCrear.get('titulo')?.touched ||
-            cargoCrear.get('titulo')?.dirty &&
-            !cargoCrear.get('titulo')?.invalid ? 'is-valid' : ''"
-            placeholder="Paymentest">
-          <div class="invalid-feedback"> {{getErrorMessage(cargoCrear,
-            'titulo')}} </div>
-        </div>
-      </div>
-
-
-      <div class="row p-2 align-items-center">
-        <div class="col-5">
-          <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
-              fw-bold">Nombre:</h3></label>
-        </div>
-        <div class="col-7">
-          <textarea
-            type="text"
-            formControlName="nombre"
-            class="form-control"
-            [ngClass]="isInvalidForm('nombre', 'crear') ? 'is-invalid'
-            :
-            cargoCrear.get('nombre')?.touched ||
-            cargoCrear.get('nombre')?.dirty &&
-            !cargoCrear.get('nombre')?.invalid ? 'is-valid' : ''"
-            placeholder="Banco"></textarea>
-          <div class="invalid-feedback"> {{getErrorMessage(cargoCrear,
-            'nombre')}} </div>
-        </div>
-      </div>
-
-      <div class="row p-2 align-items-center">
-          <div class="col-5">
-            <label for="inputNombre" class="form-label"><h3 class="m-0 p-0
-                fw-bold">Porcentaje:</h3></label>
-          </div>
-          <div class="col-7">
-            <input
-              type="number"
-              formControlName="porcentaje"
-              class="form-control"
-              [ngClass]="isInvalidForm('porcentaje', 'crear') ? 'is-invalid'
-              :
-              cargoCrear.get('porcentaje')?.touched ||
-              cargoCrear.get('porcentaje')?.dirty &&
-              !cargoCrear.get('porcentaje')?.invalid ? 'is-valid' : ''"
-              placeholder="1%">
-            <div class="invalid-feedback"> {{getErrorMessage(cargoCrear,
-              'porcentaje')}} </div>
-          </div>
-        </div>
-
-  
-    </form>
-  </div>
-  <div class="modal-footer">
-    <button
-    [disabled]="cargoCrear.invalid? true : false"
-      data-bs-target="#modalConfirmacion"
-      data-bs-toggle="modal"
-      class="btn btn-success" 
-      (click)="establecerMensaje('Está seguro que desea crear la  cargo?', 'crear')">Crear</button>
-  </div>
-
-</div>
-</div>
-</div>
-
 <!-- Modal de confirmacion (Alerta) -->
 <div class="modal fade" id="modalConfirmacion" tabindex="-1"
 aria-labelledby="modalConfirmacionLabel" aria-hidden="true">

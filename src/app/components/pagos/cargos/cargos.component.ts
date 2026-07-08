@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
-import { BodyActualizarCargo, BodyCrearCargo, Cargo } from 'src/app/interfaces/cargo';
+import { BodyActualizarCargo, BodyCrearCargo, Cargo, TIPOS_CARGO } from 'src/app/interfaces/cargo';
 import { Publicidad } from 'src/app/interfaces/publicidad';
 import { PythonAnywhereService } from 'src/app/services/PythonAnywhere/python-anywhere.service';
 
@@ -27,6 +27,7 @@ export class CargosComponent {
   isErrorToast = false;
   mensajeToast = "";
   tituloToast = "";
+  tiposCargo = TIPOS_CARGO;
   constructor(private pythonAnywhereService: PythonAnywhereService, private sanitizer: DomSanitizer) {
     this.pythonAnywhereService.obtener_cargos().subscribe((resp:any )=> {
     this.arr_cargo = resp
@@ -40,16 +41,14 @@ export class CargosComponent {
 cargoCrear
 : FormGroup = new FormGroup({
   porcentaje: new FormControl('', [Validators.required]),
-  titulo: new FormControl('', [Validators.required]),
-  nombre: new FormControl('', [Validators.required]),
+  tipo: new FormControl('', [Validators.required]),
 
 });
 
 formEdit
 : FormGroup = new FormGroup({
   porcentaje: new FormControl('', [Validators.required]),
-  titulo: new FormControl('', [Validators.required]),
-  nombre: new FormControl('', [Validators.required]),
+  tipo: new FormControl('', [Validators.required]),
 
 });
 
@@ -59,45 +58,32 @@ ver(cargo:any){
 
 limpiarForm(tipo: string) {
   if(tipo === 'crear') {
- 
-    this.cargoCrear
-    .get('titulo')?.reset();
-    this.cargoCrear
-    .get('porcentaje')?.reset();
-    this.cargoCrear.get('nombre')?.reset();
 
+    this.cargoCrear.get('porcentaje')?.reset();
+    this.cargoCrear.get('tipo')?.reset();
 
   } else if(tipo === 'actualizar') {
 
-    const titulo = this.cargo_seleccionada?.titulo;
     const porcentaje = this.cargo_seleccionada?.porcentaje;
-    const nombre = this.cargo_seleccionada?.nombre;
-    titulo? this.formEdit.get('titulo')?.setValue(titulo) : this.formEdit.get('nombre')?.reset();
+    const cargoTipo = this.cargo_seleccionada?.tipo;
     porcentaje? this.formEdit.get('porcentaje')?.setValue(porcentaje) : this.formEdit.get('porcentaje')?.reset();
-    nombre? this.formEdit.get('nombre')?.setValue(nombre) : this.formEdit.get('nombre')?.reset();
- 
- 
+    this.formEdit.get('tipo')?.setValue(cargoTipo || '');
+
 }}
 
 
 getErrorMessage(formGroup: FormGroup, item: string): string {
   const itemControl: FormControl = formGroup.get(item) as FormControl;
   switch (item) {
-    case 'titulo':
-      if (itemControl.hasError('required')) {
-        return 'Debe llenar este campo';
-      }
-      return '';
-
     case 'porcentaje':
       if (itemControl.hasError('required')) {
         return 'Debe llenar este campo';
       }
       return '';
 
-      case 'nombre':
+    case 'tipo':
       if (itemControl.hasError('required')) {
-        return 'Debe llenar este campo';
+        return 'Debe elegir un tipo';
       }
       return '';
 
@@ -141,29 +127,13 @@ isInvalidForm(subForm: string, tipo: string) {
   }
 }
 onCrear(){
-  let cupon : BodyCrearCargo={
-    titulo: '',
-    nombre: '',
-    porcentaje: 0,
-    
-  }
+  const tipo = this.cargoCrear.get('tipo')?.value;
+  const porcentaje = this.cargoCrear.get('porcentaje')?.value;
 
+  if (tipo && porcentaje) {
+    const label = this.tiposCargo.find(t => t.value === tipo)?.label || tipo;
+    const cupon: BodyCrearCargo = { nombre: tipo, titulo: label, porcentaje, tipo };
 
-  const titulo = this.cargoCrear
-  .get('titulo')?.value;
-  const nombre = this.cargoCrear
-  .get('nombre')?.value;
-  const porcentaje = this.cargoCrear
-  .get('porcentaje')?.value;
-
-
- 
-  if( titulo && nombre && porcentaje){
-
-    cupon.nombre = nombre
-    cupon.titulo = titulo
-    cupon.porcentaje = porcentaje
-  
     this.pythonAnywhereService.crear_cargo(cupon).subscribe(resp => {
       this.mostrarToastInfo('Estado de la solicitud profesion', 'El cargo ha sido creado con exito', false);
       this.pythonAnywhereService.obtener_cargos().subscribe((resp:any )=> {
@@ -178,30 +148,13 @@ onCrear(){
 }
 
 onActualizar(){
-  let cupon : BodyActualizarCargo={
-    titulo: '',
-    nombre: '',
-    porcentaje: 0,
-    
-  }
+  const tipo = this.formEdit.get('tipo')?.value;
+  const porcentaje = this.formEdit.get('porcentaje')?.value;
 
+  if (tipo && porcentaje) {
+    const label = this.tiposCargo.find(t => t.value === tipo)?.label || tipo;
+    const cupon: BodyActualizarCargo = { nombre: tipo, titulo: label, porcentaje, tipo };
 
-  const titulo = this.formEdit
-  .get('titulo')?.value;
-  const nombre = this.formEdit
-  .get('nombre')?.value;
-  const porcentaje = this.formEdit
-  .get('porcentaje')?.value;
-
-
- 
-  if( titulo && nombre && porcentaje){
-
-    cupon.nombre = nombre
-    cupon.titulo = titulo
-    cupon.porcentaje = porcentaje
-  
-    
   if(this.cargo_seleccionada){
     this.pythonAnywhereService.actualizar_cargo(cupon, this.cargo_seleccionada.id).subscribe(resp => {
       this.mostrarToastInfo('Estado de la solicitud profesion', 'El cargo ha sido actualizada con exito', false);
