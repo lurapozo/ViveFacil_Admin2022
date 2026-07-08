@@ -21,15 +21,8 @@ export const environment = {
   production: false,
 };
 
-export const paymentez = {
-
-  app_code_client : "NUVEISTG-EC-CLIENT",
-  app_key_client:"rvpKAv2tc49x6YL38fvtv5jJxRRiPs",
-  app_code_server : "NUVEISTG-EC-SERVER",
-  app_key_server:"Kn9v6ICvoRXQozQG2rK92WtjG6l08a"
-}
-
-export const key = "V!v3Fac!l";
+// El panel Admin no cobra ni habla con Paymentez; las credenciales que había
+// aquí eran código muerto (nadie las importaba) y una fuga innecesaria. Eliminadas.
 
 // const firebase = firebase.database();
 
