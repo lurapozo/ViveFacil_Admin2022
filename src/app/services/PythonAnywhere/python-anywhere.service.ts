@@ -27,6 +27,7 @@ import {
 } from 'src/app/interfaces/solicitante';
 import { SolicitudProfesion, SolicitudProfesionPaginacion } from 'src/app/interfaces/solicitud';
 import { BodyCrearSubCategoria, BodyResponseCrearSubCategoria } from 'src/app/interfaces/sub-categoria';
+import { SolicitudAdminFiltros, SolicitudAdminPaginacion } from 'src/app/interfaces/solicitud-admin';
 import { Sugerencia } from 'src/app/interfaces/sugerencia';
 import { PagosTarjetaUser } from 'src/app/interfaces/tarjeta';
 import { environment } from 'src/environments/environment';
@@ -2048,6 +2049,17 @@ export class PythonAnywhereService {
   }
   actualizarCaducidad(id: number, numero: any) {
     return this.http.put(`${this.API_URL}/administrador/accounts/actualizar-caducidad/${id}`, numero);
+  }
+
+  obtener_solicitudes_admin(filtros: SolicitudAdminFiltros = {}, page = 1): Observable<SolicitudAdminPaginacion> {
+    const params: Record<string, string> = { page: String(page) };
+    if (filtros.estado) { params['estado'] = filtros.estado; }
+    if (filtros.tipoPago) { params['tipoPago'] = filtros.tipoPago; }
+    if (filtros.servicio) { params['servicio'] = String(filtros.servicio); }
+    if (filtros.texto) { params['texto'] = filtros.texto; }
+    if (filtros.fechaInicio) { params['fechaInicio'] = filtros.fechaInicio; }
+    if (filtros.fechaFin) { params['fechaFin'] = filtros.fechaFin; }
+    return this.http.get(`${this.API_URL}/administrador/solicitudes/`, { params }) as Observable<SolicitudAdminPaginacion>;
   }
 }
 

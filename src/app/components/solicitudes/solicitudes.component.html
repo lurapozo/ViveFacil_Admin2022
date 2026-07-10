@@ -1,0 +1,225 @@
+<!-- Titulo principal-->
+<div class="header-admi1">
+  <div class="header-text">
+    <div class="containerstart">
+      <p>Solicitudes</p>
+    </div>
+  </div>
+  <svg preserveAspectRatio="xMidYMid">
+    <path d="M0,60 L0,0 L1290,0 L1290,60" fill="#333539" />
+    <path d="M320,60 Q448,85 550,60" fill="#333539" />
+  </svg>
+</div>
+
+<!-- FILTROS -->
+<div class="container-fluid">
+  <div class="d-flex flex-wrap header-solicitud align-items-center gap-3">
+    <div class="containerstart1">
+      <label class="calendar-label">Desde:</label>
+      <div class="date-container">
+        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+        <mat-datepicker #picker1></mat-datepicker>
+        <input matInput [matDatepicker]="picker1" placeholder="SELECCIONA DIA"
+          [(ngModel)]="fechaInicio" (dateChange)="buscar()">
+      </div>
+    </div>
+
+    <div class="containerstart2">
+      <label class="calendar-label">Hasta:</label>
+      <div class="date-container">
+        <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+        <mat-datepicker #picker2></mat-datepicker>
+        <input matInput [matDatepicker]="picker2" placeholder="SELECCIONA DIA"
+          [(ngModel)]="fechaFin" (dateChange)="buscar()">
+      </div>
+    </div>
+
+    <div class="containerstart3">
+      <button class="search-button" id="basic-addon1">
+        <i class="bi bi-search"></i>
+      </button>
+      <div class="date-container">
+        <div class="input-group search-group">
+          <input type="text" class="form-control search-input" placeholder="Solicitante o proveedor"
+            aria-label="Buscar" [(ngModel)]="filtroTexto" (input)="buscar()">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="d-flex flex-wrap header-solicitud align-items-center gap-3">
+    <div class="containerstart1">
+      <label class="calendar-label">Estado:</label>
+      <select class="form-control search-input" [(ngModel)]="filtroEstado" (change)="buscar()">
+        <option *ngFor="let e of estados" [value]="e.valor">{{ e.etiqueta }}</option>
+      </select>
+    </div>
+
+    <div class="containerstart2">
+      <label class="calendar-label">Tipo de pago:</label>
+      <select class="form-control search-input" [(ngModel)]="filtroTipoPago" (change)="buscar()">
+        <option value="">Todos</option>
+        <option value="Efectivo">Efectivo</option>
+        <option value="Tarjeta">Tarjeta</option>
+      </select>
+    </div>
+
+    <div class="containerstart3">
+      <label class="calendar-label">Servicio:</label>
+      <select class="form-control search-input" [(ngModel)]="filtroServicio" (change)="buscar()">
+        <option value="">Todos</option>
+        <option *ngFor="let s of servicios" [value]="s.id">{{ s.nombre }}</option>
+      </select>
+    </div>
+
+    <div class="containerstart4">
+      <button class="admin-button" type="button" (click)="exportCSV()">
+        <span class="material-icons">add_circle</span>
+        EXPORTAR CSV
+      </button>
+    </div>
+  </div>
+
+  <!-- Contenedor de admi -->
+  <div class="row justify-content-center align-items-center p-0">
+    <div class="col-10 text-center containeradmin">
+      <div class="table-responsive">
+        <table class="table table-striped custom-table">
+          <thead>
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col">SOLICITANTE</th>
+              <th scope="col">PROVEEDOR</th>
+              <th scope="col">SERVICIO</th>
+              <th scope="col">PAGO</th>
+              <th scope="col">VALOR</th>
+              <th scope="col">ESTADO</th>
+              <th scope="col">CREADA</th>
+              <th scope="col">EXPIRA</th>
+            </tr>
+          </thead>
+        </table>
+        <div class="table-body">
+          <table class="table table-striped custom-table">
+            <tbody>
+              <tr *ngFor="let s of solicitudes" (click)="seleccionar(s)" data-bs-toggle="modal"
+                href="#modalInformacionSolicitud" role="button">
+                <td>{{ s.id }}</td>
+                <td style="color: #40378b; text-transform: uppercase">
+                  <strong>{{ s.solicitante?.user_datos?.nombres }} {{ s.solicitante?.user_datos?.apellidos }}</strong>
+                </td>
+                <td style="color: #40378b; text-transform: uppercase">
+                  <strong>{{ s.proveedor ? (s.proveedor.user_datos?.nombres + ' ' + s.proveedor.user_datos?.apellidos) : 'Sin asignar' }}</strong>
+                </td>
+                <td style="color: #40378b; text-transform: uppercase"><strong>{{ s.servicio?.nombre }}</strong></td>
+                <td style="color: #40378b; text-transform: uppercase"><strong>{{ s.tipo_pago?.nombre }}</strong></td>
+                <td style="color: #40378b; text-transform: uppercase">
+                  <strong>{{ s.valor != null ? ('$' + (s.valor | number:'1.2-2')) : '—' }}</strong>
+                </td>
+                <td>
+                  <span class="badge-estado" [ngClass]="'badge-' + s.estado_proceso.toLowerCase().replace(' ', '-')">
+                    {{ s.estado_proceso }}
+                  </span>
+                </td>
+                <td style="color: #40378b; text-transform: uppercase"><strong>{{ s.fecha_creacion | date:'d/M/Y' }}</strong></td>
+                <td style="color: #40378b; text-transform: uppercase"><strong>{{ s.fecha_expiracion | date:'d/M/Y' }}</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Seccion paginacion -->
+      <div class="container-fluid">
+        <div class="row p-2 justify-content-end align-items-center">
+          <nav aria-label="Page navigation example">
+            <ul class="pagination">
+              <li class="page-item">
+                <a class="page-link" (click)="previous()">
+                  <i class="bi bi-chevron-left"></i>
+                </a>
+              </li>
+              <div *ngFor="let n of pageNumbers" class="d-inline-block">
+                <li class="page-item">
+                  <button class="page-link azul" (click)="buscar(n)" [class.active]="n === currentPage">
+                    {{ n }}
+                  </button>
+                </li>
+              </div>
+              <li class="page-item">
+                <a class="page-link" (click)="next()">
+                  <i class="bi bi-chevron-right"></i>
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modalInformacionSolicitud" aria-hidden="true"
+  aria-labelledby="modalInformacionSolicitudLabel" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header align-items-center">
+        <h1 class="modal-title fs-5 m-0 p-0 fw-bold" id="modalInformacionSolicitudLabel">
+          Solicitud #{{ solicitudSeleccionada?.id }}
+        </h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body mb-0">
+        <h4>Descripción</h4>
+        <p>{{ solicitudSeleccionada?.descripcion }}</p>
+
+        <h4>Cliente</h4>
+        <div class="row p-2 align-items-center">
+          <div class="col-5"><h3 class="m-0 p-0 fw-bold">Nombre:</h3></div>
+          <div class="col-7">{{ solicitudSeleccionada?.solicitante?.user_datos?.nombres }} {{ solicitudSeleccionada?.solicitante?.user_datos?.apellidos }}</div>
+        </div>
+        <div class="row p-2 align-items-center">
+          <div class="col-5"><h3 class="m-0 p-0 fw-bold">Teléfono:</h3></div>
+          <div class="col-7">{{ solicitudSeleccionada?.solicitante?.user_datos?.telefono }}</div>
+        </div>
+        <div class="row p-2 align-items-center">
+          <div class="col-5"><h3 class="m-0 p-0 fw-bold">Correo:</h3></div>
+          <div class="col-7">{{ solicitudSeleccionada?.solicitante?.user_datos?.user?.username }}</div>
+        </div>
+
+        <h4>Proveedor</h4>
+        <div class="row p-2 align-items-center" *ngIf="solicitudSeleccionada?.proveedor; else sinProveedor">
+          <div class="col-5"><h3 class="m-0 p-0 fw-bold">Nombre:</h3></div>
+          <div class="col-7">{{ solicitudSeleccionada?.proveedor?.user_datos?.nombres }} {{ solicitudSeleccionada?.proveedor?.user_datos?.apellidos }}</div>
+        </div>
+        <ng-template #sinProveedor><p>Sin proveedor asignado.</p></ng-template>
+        <div class="row p-2 align-items-center" *ngIf="solicitudSeleccionada?.proveedor">
+          <div class="col-5"><h3 class="m-0 p-0 fw-bold">Teléfono:</h3></div>
+          <div class="col-7">{{ solicitudSeleccionada?.proveedor?.user_datos?.telefono }}</div>
+        </div>
+        <div class="row p-2 align-items-center" *ngIf="solicitudSeleccionada?.proveedor">
+          <div class="col-5"><h3 class="m-0 p-0 fw-bold">Correo:</h3></div>
+          <div class="col-7">{{ solicitudSeleccionada?.proveedor?.user_datos?.user?.username }}</div>
+        </div>
+
+        <h4>Detalle</h4>
+        <div class="row p-2 align-items-center">
+          <div class="col-5"><h3 class="m-0 p-0 fw-bold">Ubicación:</h3></div>
+          <div class="col-7">{{ solicitudSeleccionada?.ubicacion?.direccion }}</div>
+        </div>
+        <div class="row p-2 align-items-center">
+          <div class="col-5"><h3 class="m-0 p-0 fw-bold">Tipo de pago:</h3></div>
+          <div class="col-7">{{ solicitudSeleccionada?.tipo_pago?.nombre }}</div>
+        </div>
+        <div class="row p-2 align-items-center">
+          <div class="col-5"><h3 class="m-0 p-0 fw-bold">Valor:</h3></div>
+          <div class="col-7">{{ solicitudSeleccionada?.valor != null ? ('$' + solicitudSeleccionada?.valor) : 'Sin registrar' }}</div>
+        </div>
+        <div class="row p-2 align-items-center">
+          <div class="col-5"><h3 class="m-0 p-0 fw-bold">Rating:</h3></div>
+          <div class="col-7">{{ solicitudSeleccionada?.rating }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -141,10 +141,10 @@
         <div class="accordion-item">
           <h2 class="accordion-header m-0" id="panelsStayOpen-headingThree">
             <button class="accordion-button pt-2 pb-2 collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree"
-              [ngClass]="{'selected': selection === 'pagos' || selection === 'cargo' || selection==='efectivo' || selection==='tarjeta'}"
+              [ngClass]="{'selected': selection === 'pagos' || selection === 'cargo' || selection === 'solicitudes'}"
               (click)="setSelection('pagos')"
             >
-            <img src="assets/imagenes/06.png" alt="Icono Pagos" 
+            <img src="assets/imagenes/06.png" alt="Icono Pagos"
             width="25" height="20" class="me-3 ms-3" />  Pagos
               <i [ngClass]="{'bi-chevron-down': !isOpenPa, 'bi-chevron-up': isOpenPa}" class="ms-auto transition-icon"></i>
             </button>
@@ -153,8 +153,7 @@
             <div class="accordion-body p-0">
               <div class="list-group rounded-0">
                 <a (click)="setSelection('cargo')" [ngClass]="{'active':selection==='cargo'}" class="list-group-item list-group-item-action ps-4 text-white bg-secondary" style="cursor: pointer;">Cargos</a>
-                <a (click)="setSelection('efectivo')" [ngClass]="{'active':selection==='efectivo'}" class="list-group-item list-group-item-action ps-4 text-white bg-secondary" style="cursor: pointer;">Efectivo</a>
-                <a (click)="setSelection('tarjeta')" [ngClass]="{'active':selection==='tarjeta'}" class="list-group-item list-group-item-action ps-4 text-white bg-secondary" style="cursor: pointer;">Tarjeta</a>
+                <a (click)="setSelection('solicitudes')" [ngClass]="{'active':selection==='solicitudes'}" class="list-group-item list-group-item-action ps-4 text-white bg-secondary" style="cursor: pointer;">Solicitudes</a>
               </div>
             </div>
           </div>
@@ -372,10 +371,9 @@
       <!-- Seccion PAGOS -->
         <!-- Inyeccion Vista CARGOS -->
         <app-cargos *ngIf="selection === 'cargo'" ></app-cargos>
-        <!-- Inyeccion Vista EFECTIVO -->
-        <app-efectivo *ngIf="selection === 'efectivo'" ></app-efectivo>
-        <!-- Inyeccion Vista TARJETA -->
-        <app-tarjeta *ngIf="selection === 'tarjeta'" ></app-tarjeta>
+
+      <!-- Inyeccion Vista SOLICITUDES -->
+      <app-solicitudes *ngIf="selection === 'solicitudes'"></app-solicitudes>
 
       <!-- Seccion PLANES -->
         <!-- Inyeccion Vista PLANES GENERALES -->
