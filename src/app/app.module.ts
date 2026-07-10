@@ -36,6 +36,7 @@ import { SugerenciasNoLeidasComponent } from './components/sugerencias/sugerenci
 import { NotificacionesAutomaticasComponent } from './components/notificaciones-push/notificaciones-automaticas/notificaciones-automaticas.component';
 import { NotificacionesMasivasComponent } from './components/notificaciones-push/notificaciones-masivas/notificaciones-masivas.component';
 import { LoginComponent } from './pages/login/login.component';
+import { HomeComponent } from './pages/home/home.component';
 import { SpinnerComponent } from './components/spinner/spinner/spinner.component';
 import { SpinnerInterceptor } from './interceptor/spinner.interceptor';
 import { AuthInterceptor } from './interceptor/auth.interceptor';
@@ -91,6 +92,7 @@ import { firebaseConfig } from 'src/app/services/Firebase/firebase.config';
     NotificacionesAutomaticasComponent,
     NotificacionesMasivasComponent,
     LoginComponent,
+    HomeComponent,
     SpinnerComponent,
     MedallaComponent,
   ],

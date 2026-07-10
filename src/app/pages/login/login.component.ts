@@ -146,7 +146,7 @@ export class LoginComponent {
               //   }
               // });
               // localStorage.setItem('admin', admin);
-              this.router.navigate(['/main']);
+              this.router.navigate(['/']);
             }
           }, (error) => {
             // En caso de error en la petición HTTP, manejar aquí

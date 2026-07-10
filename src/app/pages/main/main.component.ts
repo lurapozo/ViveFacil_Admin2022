@@ -9,13 +9,6 @@ import { Router } from '@angular/router';
   styleUrls: ['./main.component.css']
 })
 export class MainComponent {
-  selection: string = "";
-  isOpenP = false;
-  isOpenC = false;
-  isOpenS = false;
-  isOpenPa = false;
-  isOpenSu = false;
-  isOpenN = false;
   arr_admi: any[] = [];
   datos!: any[];
   correoUsuario: string | null = '';
@@ -23,26 +16,17 @@ export class MainComponent {
 
   constructor(private userService: UserService, private pythonAnywhereService: PythonAnywhereService, private router: Router) {
     this.pythonAnywhereService.obtener_administradores().subscribe(resp => {
-      this.arr_admi = resp.results || []; 
-      console.log('resp', this.arr_admi); 
+      this.arr_admi = resp.results || [];
+      console.log('resp', this.arr_admi);
   });
 
   }
 
   ngOnInit() {
     this.correoUsuario = this.userService.correoUsuario;
-    console.log("Usuario: ", this.correoUsuario)
-    this.checkUserAuthentication();
-  }
-
-  checkUserAuthentication() {
-    const savedUser = localStorage.getItem('user'); 
-
+    const savedUser = localStorage.getItem('user');
     if (savedUser) {
-      this.user = JSON.parse(savedUser); 
-      console.log('Nombre del usuario:', savedUser); 
-    } else {
-      this.router.navigate(['/login']);
+      this.user = JSON.parse(savedUser);
     }
   }
 
@@ -63,23 +47,6 @@ export class MainComponent {
       }
     }
     return { nombre: '', apellido: '' };
-  }
-
-  setSelection(texto: string) {
-    this.selection = texto;
-    if (this.selection === 'solicitud_profesion') {
-      this.isOpenP = !this.isOpenP;
-    } else if (this.selection === 'cuentas') {
-      this.isOpenC = !this.isOpenC;
-    } else if (this.selection === 'servicios') {
-      this.isOpenS = !this.isOpenS;
-    } else if (this.selection === 'pagos') {
-      this.isOpenPa = !this.isOpenPa;
-    } else if (this.selection === 'sugerencia') {
-      this.isOpenSu = !this.isOpenSu;
-    } else if (this.selection === 'notificacion_push') {
-      this.isOpenN = !this.isOpenN;
-    }
   }
 
   logout() {

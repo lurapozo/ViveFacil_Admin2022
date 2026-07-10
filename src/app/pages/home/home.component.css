@@ -1,0 +1,67 @@
+.bienvenido {
+  background-image: url('/static/assets/imagenes/banner01.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 200px;
+  margin-top: 10px;
+  padding-top: 0;
+  text-align: center;
+}
+
+.bienvenido-container {
+  padding-left: 40px;
+  padding-right: 40px;
+  padding-top: 20px;
+}
+
+.image-container {
+  padding-top: 40px;
+  text-align: center;
+}
+
+.image-container img {
+  object-fit: cover;
+  height: auto;
+}
+
+.custom-border {
+  border-radius: 50%;
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+}
+
+.name {
+  color: var(--vivefacil-morado-principal);
+  text-align: center;
+  font-size: 20px;
+  text-transform: uppercase;
+  font-weight: 20px;
+}
+
+.b-container {
+  background-color: #ffffff;
+  height: 300px;
+}
+
+.b-container p {
+  color: black;
+  text-align: center;
+  font-size: 15px;
+  text-transform: uppercase;
+}
+
+.bienvenido-footer-container {
+  padding: 10px;
+  background-color: var(--vivefacil-morado-principal);
+  text-align: center;
+  height: 60px;
+  width: 100%;
+}
+
+.bienvenido-footer-container h1 {
+  color: var(--vivefacil-amarillo);
+  font-size: 20px;
+  text-transform: uppercase;
+}
