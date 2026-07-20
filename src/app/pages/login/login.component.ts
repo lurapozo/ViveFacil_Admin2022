@@ -74,41 +74,6 @@ export class LoginComponent {
       }
       this.userService.login(email, pass)
         .then((respuesta) => {
-          // this.pythonAnywhereService.cambioContrasenia(email,pass).subscribe((res: any)=>
-          // {
-          //   console.log("respuesta");
-          //   console.log(res);
-          //   if(res.success){
-          //     this.pythonAnywhereService.loginPythonAnywhere(bodyLogin).subscribe((resp) => {
-          //       console.log("respuesta 2");
-          //       console.log(resp);
-          //       if(resp.error){
-          //         console.log(resp.error);
-          //         this.isRegistered = false;
-          //       }
-          //       else {
-          //         let tokenPythonAny = resp.token;
-          //         if (!tokenPythonAny){
-          //           tokenPythonAny=""
-          //         }
-          //         console.log('Se obtiene token de python anywhere auth y se lo guarda en el local storage: ', tokenPythonAny);
-          //         localStorage.setItem('tokenPythonAnywhere', tokenPythonAny);
-          //         this.pythonAnywhereService.getAdminByCorreo(email).subscribe((admin: any) => {
-          //           if(admin){
-          //             console.log('Respuesta de admin: ', admin);
-          //             localStorage.setItem('admin', admin);
-          //             // console.log('Proveedor en el Local Storage: ', this.pythonAnywhereService.getProveedor());
-          //             this.router.navigate(['/main']);
-          //           }
-          //           else {
-          //             console.log('Proveedor no encontrado en la base de datos');
-          //             this.isRegistered = false;
-          //           }
-          //         });
-          //       }
-          //     });
-          //   }
-          // });
           console.log('Veamos si entra aca');
           const bodyLogin: BodyLogin = {
             username: email,
@@ -133,19 +98,6 @@ export class LoginComponent {
               localStorage.setItem('tokenPythonAnywhere', tokenPythonAny);
               console.log(email)
               this.userService.establecerCorreo(email);
-              // this.pythonAnywhereService.getAdminByCorreo(email).subscribe((admin: any) => {
-              //   if(admin){
-              //     console.log('Respuesta de proveedor: ', admin);
-              //     localStorage.setItem('admin', admin);
-              //     // console.log('Proveedor en el Local Storage: ', this.pythonAnywhereService.getProveedor());
-              //     this.router.navigate(['/main']);
-              //   }
-              //   else {
-              //     console.log('Proveedor no encontrado en la base de datos');
-              //     this.isRegistered = false;
-              //   }
-              // });
-              // localStorage.setItem('admin', admin);
               this.router.navigate(['/']);
             }
           }, (error) => {

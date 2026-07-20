@@ -28,6 +28,23 @@ export class PendientesComponent {
   condicionNext = false
   currentPage = 1
   pageNumber: number[] = [];
+
+  // ponytail: window de +-2 páginas alrededor de la actual + primera/última,
+  // evita renderizar todos los botones de pageNumber de una vez.
+  get paginasVisibles(): (number | string)[] {
+    const total = this.pageNumber.length;
+    const actual = this.currentPage;
+    const delta = 2;
+    const paginas: (number | string)[] = [];
+    for (let i = 1; i <= total; i++) {
+      if (i === 1 || i === total || (i >= actual - delta && i <= actual + delta)) {
+        paginas.push(i);
+      } else if (paginas[paginas.length - 1] !== '...') {
+        paginas.push('...');
+      }
+    }
+    return paginas;
+  }
   pendiente_seleccionada: any
   existImageCrear = false; existImageActualizar = false;
   activo = ''

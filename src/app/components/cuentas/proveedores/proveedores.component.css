@@ -294,6 +294,12 @@
     color: #620880;
     font-weight: bold;
   }
+
+  .page-link.dots {
+    cursor: default;
+    background: none;
+    border: none;
+  }
   
   .active {
     background-color: #620880;
@@ -310,6 +316,33 @@
 
  
   /*C ADMI*/
+  .detalle-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 10px;
+  }
+
+  .btn-back {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    border-radius: 50%;
+    border: none;
+    background-color: #3F3185;
+    color: white;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  .btn-back:hover {
+    background-color: #6b60a8;
+  }
+
   h2{
     text-transform: uppercase;
     color:  #0ea3b7; 

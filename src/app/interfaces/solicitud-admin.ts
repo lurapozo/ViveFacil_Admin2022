@@ -12,6 +12,14 @@ export interface TipoPago {
 
 export type EstadoProceso = 'ABIERTA' | 'POR PAGAR' | 'POR FINALIZAR' | 'FINALIZADO' | 'CANCELADO' | 'EXPIRADA' | 'OTRO';
 
+export interface CandidatoSolicitud {
+  id: number;
+  proveedor: Proveedor;
+  interesado: boolean;
+  oferta: number | null;
+  fecha_creacion: string;
+}
+
 export interface SolicitudAdmin {
   id: number;
   descripcion: string;
@@ -32,6 +40,7 @@ export interface SolicitudAdmin {
   descuento: number;
   estado_proceso: EstadoProceso;
   valor: number | null;
+  candidatos: CandidatoSolicitud[];
 }
 
 export interface SolicitudAdminPaginacion {

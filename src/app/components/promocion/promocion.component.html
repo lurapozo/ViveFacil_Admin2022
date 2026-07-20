@@ -108,7 +108,7 @@
       role="button"
         >
     <div class="item-imagen">
-      <img [src]="item.foto ? 'https://tomesoft1.pythonanywhere.com' + item.foto : '../../../assets/imagenes/ProfesionDefault.png'" class="imagen" alt="Imagen" />
+      <img [src]="item.foto ? item.foto : '../../../assets/imagenes/ProfesionDefault.png'" class="imagen" alt="Imagen" />
     </div>
     <div class="item-nombre">{{ item?.codigo | uppercase }}</div>
     <div class="item-descripcion">{{ item?. titulo}}</div>
@@ -151,7 +151,7 @@
         <img
           [src]="
             a.foto
-              ? 'https://tomesoft1.pythonanywhere.com' + a.foto
+              ? a.foto
               : '../../../assets/imagenes/ProfesionDefault.png'
           "
           class="rounded mx-auto d-block img-fluid img_profesion"
@@ -217,7 +217,7 @@ tabindex="-1"
           <img
             [src]="
               promocion_seleccionada?.foto
-                ? 'https://tomesoft1.pythonanywhere.com' + promocion_seleccionada?.foto
+                ? promocion_seleccionada?.foto
                 : 'assets/imagenes/ProfesionDefault.png'
             "
             class="rounded mx-auto d-block img-fluid custom-width image_modal"
@@ -385,7 +385,7 @@ tabindex="-1"
             <img
               *ngIf="!existImageActualizar && promocion_seleccionada?.foto"
               class="image_modal rounded mx-auto d-block img-fluid custom-width"
-              [src]="'https://tomesoft1.pythonanywhere.com' + promocion_seleccionada?.foto"
+              [src]="promocion_seleccionada?.foto"
               alt="Archivo incorrecto"
             />
             <i

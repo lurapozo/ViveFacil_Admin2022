@@ -125,9 +125,10 @@
             </li>
     
             <!-- Números de Página -->
-            <div *ngFor="let n of pageNumber; let i = index" class="d-inline-block">
+            <div *ngFor="let n of paginasVisibles" class="d-inline-block">
               <li class="page-item">
                 <button
+                  *ngIf="n !== '...'"
                   class="page-link azul"
                   value="{{ n }}"
                   (click)="iteracion($event)"
@@ -135,6 +136,7 @@
                 >
                   {{ n }}
                 </button>
+                <span *ngIf="n === '...'" class="page-link azul dots">...</span>
               </li>
             </div>
     
@@ -186,7 +188,7 @@ tabindex="-1"
           <img
             [src]="
               sugerencia_seleccionada?.foto
-                ? 'https://tomesoft1.pythonanywhere.com' + sugerencia_seleccionada?.foto
+                ? sugerencia_seleccionada?.foto
                 : 'assets/imagenes/ProfesionDefault.png'
             "
             class="rounded mx-auto d-block img-fluid w-50 image_modal"

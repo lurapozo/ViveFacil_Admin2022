@@ -1,0 +1,72 @@
+.detalle-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.btn-back {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  border-radius: 50%;
+  border: none;
+  background-color: #3F3185;
+  color: white;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-back:hover {
+  background-color: #6b60a8;
+}
+
+h3 {
+  text-transform: uppercase;
+  color: rgba(33, 149, 181, 0.79);
+  font-weight: bold;
+}
+
+h4 {
+  text-transform: uppercase;
+  color: rgba(98, 24, 128, 0.6);
+  font-weight: bold;
+  margin-top: 20px;
+}
+
+.badge-estado {
+  display: inline-block;
+  padding: 0.35em 0.65em;
+  border-radius: 0.375rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #fff;
+  white-space: nowrap;
+}
+
+.badge-abierta { background-color: #0d6efd; }
+.badge-por-pagar { background-color: #fd7e14; }
+.badge-por-finalizar { background-color: #6f42c1; }
+.badge-finalizado { background-color: #198754; }
+.badge-cancelado { background-color: #dc3545; }
+.badge-expirada { background-color: #6c757d; }
+.badge-otro { background-color: #6c757d; }
+
+.estado-indicador {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 6px;
+}
+
+.foto-descripcion {
+  max-width: 300px;
+  max-height: 300px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}

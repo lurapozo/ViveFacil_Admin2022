@@ -101,9 +101,10 @@
             </li>
     
             <!-- Números de Página -->
-            <div *ngFor="let n of pageNumber; let i = index" class="d-inline-block">
+            <div *ngFor="let n of paginasVisibles" class="d-inline-block">
               <li class="page-item">
                 <button
+                  *ngIf="n !== '...'"
                   class="page-link azul"
                   value="{{ n }}"
                   (click)="iteracion($event)"
@@ -111,6 +112,7 @@
                 >
                   {{ n }}
                 </button>
+                <span *ngIf="n === '...'" class="page-link azul dots">...</span>
               </li>
             </div>
     
@@ -262,7 +264,7 @@
                 >
               </div>
               <a
-              href="https://tomesoft1.pythonanywhere.com{{
+              href="{{
                 rechazados_seleccionada?.copiaCedula
               }}"
               [download]="getNombreArchivo('copiaCedula', rechazados_seleccionada?.copiaCedula ).nombreArchivo"
@@ -389,7 +391,7 @@
               </div>
               <div class="col-7">
                 <a
-                  href="https://tomesoft1.pythonanywhere.com{{
+                  href="{{
                     rechazados_seleccionada?.documentsPendientes[0]?.document
                   }}"
                   [download]="getNombreArchivo('documentos', rechazados_seleccionada?.documentsPendientes[0]?.document).nombreArchivo">
@@ -423,7 +425,7 @@
           
                 <!-- Imagen previsualización -->
                 <img
-                  src="https://tomesoft1.pythonanywhere.com{{
+                  src="{{
                     rechazados_seleccionada?.foto
                   }}"
                   alt="no se encontró foto de perfil"

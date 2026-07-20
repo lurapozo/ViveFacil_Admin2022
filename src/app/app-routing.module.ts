@@ -14,6 +14,7 @@ import { CategoriasComponent } from './components/servicios/categorias/categoria
 import { SubCategoriasComponent } from './components/servicios/sub-categorias/sub-categorias.component';
 import { CargosComponent } from './components/pagos/cargos/cargos.component';
 import { SolicitudesComponent } from './components/solicitudes/solicitudes.component';
+import { SolicitudDetalleComponent } from './components/solicitudes/solicitud-detalle/solicitud-detalle.component';
 import { SugerenciasLeidasComponent } from './components/sugerencias/sugerencias-leidas/sugerencias-leidas.component';
 import { SugerenciasNoLeidasComponent } from './components/sugerencias/sugerencias-no-leidas/sugerencias-no-leidas.component';
 import { NotificacionesAutomaticasComponent } from './components/notificaciones-push/notificaciones-automaticas/notificaciones-automaticas.component';
@@ -39,6 +40,7 @@ const routes: Routes = [
           { path: 'administrador', component: AdministradoresComponent },
           { path: 'pendientes', component: PendientesComponent },
           { path: 'proveedores', component: ProveedoresComponent },
+          { path: 'proveedores/:pk', component: ProveedoresComponent },
           { path: 'rechazados', component: RechazadosComponent },
           { path: 'solicitantes', component: SolicitantesComponent },
         ],
@@ -57,6 +59,7 @@ const routes: Routes = [
           { path: '', redirectTo: 'solicitudes', pathMatch: 'full' },
           { path: 'cargos', component: CargosComponent },
           { path: 'solicitudes', component: SolicitudesComponent },
+          { path: 'solicitudes/:pk', component: SolicitudDetalleComponent },
         ],
       },
       {

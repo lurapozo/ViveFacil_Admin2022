@@ -26,6 +26,7 @@ import { CategoriasComponent } from './components/servicios/categorias/categoria
 import { SubCategoriasComponent } from './components/servicios/sub-categorias/sub-categorias.component';
 import { CargosComponent } from './components/pagos/cargos/cargos.component';
 import { SolicitudesComponent } from './components/solicitudes/solicitudes.component';
+import { SolicitudDetalleComponent } from './components/solicitudes/solicitud-detalle/solicitud-detalle.component';
 import { PendientesComponent } from './components/cuentas/pendientes/pendientes.component';
 import { RechazadosComponent } from './components/cuentas/rechazados/rechazados.component';
 import { ProveedoresComponent } from './components/cuentas/proveedores/proveedores.component';
@@ -82,6 +83,7 @@ import { firebaseConfig } from 'src/app/services/Firebase/firebase.config';
     SubCategoriasComponent,
     CargosComponent,
     SolicitudesComponent,
+    SolicitudDetalleComponent,
     PendientesComponent,
     ProveedoresComponent,
     RechazadosComponent,

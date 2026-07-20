@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { saveAs } from 'file-saver';
 import * as Papa from 'papaparse';
 import { Servicio } from 'src/app/interfaces/servicio';
@@ -33,9 +34,8 @@ export class SolicitudesComponent implements OnInit {
 
   currentPage = 1;
   pageNumbers: number[] = [];
-  solicitudSeleccionada: SolicitudAdmin | null = null;
 
-  constructor(private pythonAnywhereService: PythonAnywhereService) {}
+  constructor(private pythonAnywhereService: PythonAnywhereService, private router: Router) {}
 
   ngOnInit(): void {
     this.pythonAnywhereService.obtener_servicios().subscribe((resp) => (this.servicios = resp));
@@ -62,6 +62,29 @@ export class SolicitudesComponent implements OnInit {
       });
   }
 
+  // ponytail: window de +-2 páginas alrededor de la actual + primera/última,
+  // evita renderizar todos los botones de pageNumbers de una vez.
+  get paginasVisibles(): (number | string)[] {
+    const total = this.pageNumbers.length;
+    const actual = this.currentPage;
+    const delta = 2;
+    const paginas: (number | string)[] = [];
+    for (let i = 1; i <= total; i++) {
+      if (i === 1 || i === total || (i >= actual - delta && i <= actual + delta)) {
+        paginas.push(i);
+      } else if (paginas[paginas.length - 1] !== '...') {
+        paginas.push('...');
+      }
+    }
+    return paginas;
+  }
+
+  irAPagina(n: number | string): void {
+    if (typeof n === 'number') {
+      this.buscar(n);
+    }
+  }
+
   previous(): void {
     if (this.currentPage > 1) {
       this.buscar(this.currentPage - 1);
@@ -74,8 +97,8 @@ export class SolicitudesComponent implements OnInit {
     }
   }
 
-  seleccionar(s: SolicitudAdmin): void {
-    this.solicitudSeleccionada = s;
+  verDetalle(s: SolicitudAdmin): void {
+    this.router.navigate(['/pagos/solicitudes', s.id]);
   }
 
   formatDate(date: Date): string {

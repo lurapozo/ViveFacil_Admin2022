@@ -72,7 +72,7 @@
 <div class="contenedor-categorias" *ngIf="showHeader">
   <div class="categoria" *ngFor="let item of categoria" (click)="categoria_seleccionada = item" data-bs-toggle="modal" data-bs-target="#modalInformacionProfesion">
     <div class="item-imagen">
-      <img [src]="item.foto ? 'https://tomesoft1.pythonanywhere.com' + item.foto : '../../../assets/imagenes/ProfesionDefault.png'" class="imagen" alt="Imagen" />
+      <img [src]="item.foto ? item.foto : '../../../assets/imagenes/ProfesionDefault.png'" class="imagen" alt="Imagen" />
     </div>
     <div class="item-nombre">{{ item.nombre | uppercase }}</div>
     <div class="item-descripcion">{{ item.descripcion | uppercase }}</div>
@@ -283,7 +283,7 @@ tabindex="-1"
         <img
           [src]="
             categoria_seleccionada?.foto
-              ? 'https://tomesoft1.pythonanywhere.com' + categoria_seleccionada?.foto
+              ? categoria_seleccionada?.foto
               : 'assets/imagenes/ProfesionDefault.png'
           "
           class="rounded mx-auto d-block img-fluid w-50 image_modal"
@@ -396,7 +396,7 @@ tabindex="-1"
               *ngIf="!existImageActualizar && categoria_seleccionada?.foto"
               class="image_modal rounded mx-auto d-block img-fluid w-50"
               style="width: 50% !important; height: auto !important;"
-              [src]="'https://tomesoft1.pythonanywhere.com' + categoria_seleccionada?.foto"
+              [src]="categoria_seleccionada?.foto"
               alt="Archivo incorrecto"
             />
             <i

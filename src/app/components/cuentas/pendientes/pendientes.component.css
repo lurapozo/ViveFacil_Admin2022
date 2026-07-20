@@ -191,6 +191,12 @@
     color: #620880;
     font-weight: bold;
   }
+
+  .page-link.dots {
+    cursor: default;
+    background: none;
+    border: none;
+  }
   
   .active {
     background-color: #620880;

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
+import { ActivatedRoute, Router } from '@angular/router';
 import { BodyEmail } from 'src/app/interfaces/email';
 import { BodyActualizarProveedor, BodyActualizarProveedorPendiente, BodyCrearProveedorPendiente, BodyResponseCrearProveedorPendiente, SerializerCrearProveedorPendiente } from 'src/app/interfaces/proveedor';
 import { PythonAnywhereService } from 'src/app/services/PythonAnywhere/python-anywhere.service';
@@ -83,7 +84,12 @@ export class ProveedoresComponent {
     filesDocuments: new FormControl([this.filePDF3 || this.fileImgPerfil3 || '']),
   });
 
-  constructor(private pythonAnywhereService: PythonAnywhereService, private sanitizer: DomSanitizer) {
+  constructor(
+    private pythonAnywhereService: PythonAnywhereService,
+    private sanitizer: DomSanitizer,
+    private route: ActivatedRoute,
+    private router: Router,
+  ) {
 
     this.pythonAnywhereService.obtener_proveedores_proveedores().subscribe(resp => {
       this.total = Object(resp).total_objects
@@ -122,8 +128,49 @@ export class ProveedoresComponent {
       console.log(resp, "resp")
       this.arr_filtered_proveedor = this.arr_proveedor;
       console.log(this.arr_filtered_proveedor)
-      this.currentPage = 1;  
+      this.currentPage = 1;
+      this.abrirDetalleDesdeRuta();
     });
+  }
+
+  // ponytail: no hay endpoint para traer un solo proveedor "proveedores-proveedores"
+  // por id, así que el detalle por /:pk se resuelve buscando en la lista ya cargada.
+  // Si el proveedor pedido está en otra página de paginación no se encuentra.
+  abrirDetalleDesdeRuta() {
+    const pk = this.route.snapshot.paramMap.get('pk');
+    if (!pk) return;
+    const encontrado = this.arr_proveedor?.find(p => String(p.id) === pk);
+    if (encontrado) {
+      this.edit_prov(encontrado);
+    }
+  }
+
+  verDetalle(a: any) {
+    this.router.navigate(['/cuentas/proveedores', a.id]);
+  }
+
+  // ponytail: window de +-2 páginas alrededor de la actual + primera/última,
+  // evita renderizar los 20+ botones de pageNumber de una vez.
+  get paginasVisibles(): (number | string)[] {
+    const total = this.pageNumber.length;
+    const actual = this.currentPage;
+    const delta = 2;
+    const paginas: (number | string)[] = [];
+    for (let i = 1; i <= total; i++) {
+      if (i === 1 || i === total || (i >= actual - delta && i <= actual + delta)) {
+        paginas.push(i);
+      } else if (paginas[paginas.length - 1] !== '...') {
+        paginas.push('...');
+      }
+    }
+    return paginas;
+  }
+
+  volverALista() {
+    this.showHeader = true;
+    this.showHeaderC = false;
+    this.showadmi = false;
+    this.router.navigate(['/cuentas/proveedores']);
   }
 
   

@@ -1,0 +1,144 @@
+<!-- Titulo principal-->
+<div class="header-admi1">
+  <div class="header-text">
+    <div class="containerstart detalle-header">
+      <button type="button" class="btn-back" (click)="volver()" title="Volver" aria-label="Volver">
+        <i class="bi bi-arrow-left"></i>
+      </button>
+      <p>Solicitud #{{ solicitud?.id }}</p>
+    </div>
+  </div>
+  <svg preserveAspectRatio="xMidYMid">
+    <path d="M0,60 L0,0 L1290,0 L1290,60" fill="#333539" />
+    <path d="M320,60 Q448,85 550,60" fill="#333539" />
+  </svg>
+</div>
+
+<div class="container-fluid" *ngIf="cargando">
+  <p class="p-4">Cargando...</p>
+</div>
+
+<div class="container-fluid" *ngIf="noEncontrada">
+  <p class="p-4">No se encontró la solicitud.</p>
+</div>
+
+<div class="container-fluid" *ngIf="solicitud">
+  <div class="row justify-content-center p-0">
+    <div class="col-10 containeradmin p-4">
+
+      <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+        <span class="badge-estado" [ngClass]="'badge-' + solicitud.estado_proceso.toLowerCase().replace(' ', '-')">
+          {{ solicitud.estado_proceso }}
+        </span>
+        <div class="text-end">
+          <div><strong>Creada:</strong> {{ solicitud.fecha_creacion | date:'d/M/Y HH:mm' }}</div>
+          <div><strong>Expira:</strong> {{ solicitud.fecha_expiracion | date:'d/M/Y HH:mm' }}</div>
+        </div>
+      </div>
+
+      <h4>Descripción</h4>
+      <p>{{ solicitud.descripcion }}</p>
+      <img *ngIf="solicitud.foto_descripcion" [src]="solicitud.foto_descripcion" class="foto-descripcion" alt="Foto de la solicitud">
+
+      <h4>Cliente (solicitante)</h4>
+      <div class="row p-2 align-items-center">
+        <div class="col-3"><h3 class="m-0 p-0 fw-bold">Nombre:</h3></div>
+        <div class="col-9">{{ solicitud.solicitante?.user_datos?.nombres }} {{ solicitud.solicitante?.user_datos?.apellidos }}</div>
+      </div>
+      <div class="row p-2 align-items-center">
+        <div class="col-3"><h3 class="m-0 p-0 fw-bold">Teléfono:</h3></div>
+        <div class="col-9">{{ solicitud.solicitante?.user_datos?.telefono }}</div>
+      </div>
+      <div class="row p-2 align-items-center">
+        <div class="col-3"><h3 class="m-0 p-0 fw-bold">Correo:</h3></div>
+        <div class="col-9">{{ solicitud.solicitante?.user_datos?.user?.username }}</div>
+      </div>
+
+      <h4>Ubicación y pago</h4>
+      <div class="row p-2 align-items-center">
+        <div class="col-3"><h3 class="m-0 p-0 fw-bold">Dirección:</h3></div>
+        <div class="col-9">{{ solicitud.ubicacion?.direccion }}</div>
+      </div>
+      <div class="row p-2 align-items-center" *ngIf="solicitud.ubicacion?.referencia">
+        <div class="col-3"><h3 class="m-0 p-0 fw-bold">Referencia:</h3></div>
+        <div class="col-9">{{ solicitud.ubicacion?.referencia }}</div>
+      </div>
+      <div class="row p-2 align-items-center">
+        <div class="col-3"><h3 class="m-0 p-0 fw-bold">Servicio:</h3></div>
+        <div class="col-9">{{ solicitud.servicio?.nombre }}</div>
+      </div>
+      <div class="row p-2 align-items-center">
+        <div class="col-3"><h3 class="m-0 p-0 fw-bold">Tipo de pago:</h3></div>
+        <div class="col-9">{{ solicitud.tipo_pago?.nombre }}</div>
+      </div>
+      <div class="row p-2 align-items-center">
+        <div class="col-3"><h3 class="m-0 p-0 fw-bold">Valor cobrado:</h3></div>
+        <div class="col-9">{{ solicitud.valor != null ? ('$' + (solicitud.valor | number:'1.2-2')) : 'Sin registrar' }}</div>
+      </div>
+      <div class="row p-2 align-items-center" *ngIf="solicitud.descuento">
+        <div class="col-3"><h3 class="m-0 p-0 fw-bold">Descuento:</h3></div>
+        <div class="col-9">{{ solicitud.descuento }}</div>
+      </div>
+      <div class="row p-2 align-items-center">
+        <div class="col-3"><h3 class="m-0 p-0 fw-bold">Pagada:</h3></div>
+        <div class="col-9">{{ solicitud.pagada ? 'Sí' : 'No' }}</div>
+      </div>
+      <div class="row p-2 align-items-center" *ngIf="solicitud.rating">
+        <div class="col-3"><h3 class="m-0 p-0 fw-bold">Rating:</h3></div>
+        <div class="col-9">{{ solicitud.rating }} — {{ solicitud.descripcion_rating }}</div>
+      </div>
+
+      <h4>Proveedor adjudicado (aceptó y quedó en cobro/pago)</h4>
+      <div *ngIf="solicitud.proveedor; else sinAdjudicar">
+        <div class="row p-2 align-items-center">
+          <div class="col-3"><h3 class="m-0 p-0 fw-bold">Nombre:</h3></div>
+          <div class="col-9">{{ solicitud.proveedor.user_datos?.nombres }} {{ solicitud.proveedor.user_datos?.apellidos }}</div>
+        </div>
+        <div class="row p-2 align-items-center">
+          <div class="col-3"><h3 class="m-0 p-0 fw-bold">Teléfono:</h3></div>
+          <div class="col-9">{{ solicitud.proveedor.user_datos?.telefono }}</div>
+        </div>
+        <div class="row p-2 align-items-center">
+          <div class="col-3"><h3 class="m-0 p-0 fw-bold">Correo:</h3></div>
+          <div class="col-9">{{ solicitud.proveedor.user_datos?.user?.username }}</div>
+        </div>
+      </div>
+      <ng-template #sinAdjudicar><p>Todavía no se le adjudicó un proveedor.</p></ng-template>
+
+      <h4>Proveedores a los que se les envió la solicitud ({{ solicitud.candidatos?.length || 0 }})</h4>
+      <div class="table-responsive" *ngIf="solicitud.candidatos?.length; else sinCandidatos">
+        <table class="table table-striped custom-table">
+          <thead>
+            <tr>
+              <th scope="col">Proveedor</th>
+              <th scope="col">Correo</th>
+              <th scope="col">Interesado</th>
+              <th scope="col">Oferta</th>
+              <th scope="col">Fecha</th>
+              <th scope="col">Adjudicado</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let c of solicitud.candidatos">
+              <td style="color: #40378b; text-transform: uppercase">
+                <strong>{{ c.proveedor?.user_datos?.nombres }} {{ c.proveedor?.user_datos?.apellidos }}</strong>
+              </td>
+              <td>{{ c.proveedor?.user_datos?.user?.username }}</td>
+              <td>
+                <span class="estado-indicador" [class.bg-success]="c.interesado" [class.bg-secondary]="!c.interesado"></span>
+                {{ c.interesado ? 'Sí' : 'No' }}
+              </td>
+              <td>{{ c.oferta != null ? ('$' + (c.oferta | number:'1.2-2')) : '—' }}</td>
+              <td>{{ c.fecha_creacion | date:'d/M/Y HH:mm' }}</td>
+              <td>
+                <span *ngIf="solicitud.proveedor && c.proveedor?.id === solicitud.proveedor?.id" class="badge-estado badge-finalizado">Sí</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <ng-template #sinCandidatos><p>No se le envió la solicitud a ningún proveedor.</p></ng-template>
+
+    </div>
+  </div>
+</div>

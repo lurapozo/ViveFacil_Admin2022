@@ -27,7 +27,7 @@ import {
 } from 'src/app/interfaces/solicitante';
 import { SolicitudProfesion, SolicitudProfesionPaginacion } from 'src/app/interfaces/solicitud';
 import { BodyCrearSubCategoria, BodyResponseCrearSubCategoria } from 'src/app/interfaces/sub-categoria';
-import { SolicitudAdminFiltros, SolicitudAdminPaginacion } from 'src/app/interfaces/solicitud-admin';
+import { SolicitudAdmin, SolicitudAdminFiltros, SolicitudAdminPaginacion } from 'src/app/interfaces/solicitud-admin';
 import { Sugerencia } from 'src/app/interfaces/sugerencia';
 import { PagosTarjetaUser } from 'src/app/interfaces/tarjeta';
 import { environment } from 'src/environments/environment';
@@ -1830,7 +1830,7 @@ export class PythonAnywhereService {
     const dataCrear = new FormData();
     dataCrear.append("nombre", bodyCrear.nombre);
     dataCrear.append("permisos", bodyCrear.permisos);
-    return this.http.post(this.API_URL + 'https://tomesoft1.pythonanywhere.com/planesEstado/', dataCrear) as Observable<Group>;
+    return this.http.post(this.API_URL + '/administrador/accounts/roles-permisos/', dataCrear) as Observable<Group>;
   };
 
 
@@ -2042,10 +2042,7 @@ export class PythonAnywhereService {
   }
 
   getAdminByCorreo(correo: string) {
-    // ponytail: URL absoluta hardcodeada preexistente (bypassa API_URL, apunta
-    // siempre a prod incluso en local) — no se corrige acá, requiere decisión
-    // de producto, ver docs/refactor/CHECKLIST-inventario-endpoints.md fila 135.
-    return this.http.get("https://tomesoft1.pythonanywhere.com/administrador/accounts/datos-admin/" + correo);
+    return this.http.get(this.API_URL + '/administrador/accounts/datos-admin/' + correo);
   }
   actualizarCaducidad(id: number, numero: any) {
     return this.http.put(`${this.API_URL}/administrador/accounts/actualizar-caducidad/${id}`, numero);
@@ -2060,6 +2057,10 @@ export class PythonAnywhereService {
     if (filtros.fechaInicio) { params['fechaInicio'] = filtros.fechaInicio; }
     if (filtros.fechaFin) { params['fechaFin'] = filtros.fechaFin; }
     return this.http.get(`${this.API_URL}/administrador/solicitudes/`, { params }) as Observable<SolicitudAdminPaginacion>;
+  }
+
+  obtener_solicitud_admin(id: number): Observable<SolicitudAdmin> {
+    return this.http.get(`${this.API_URL}/administrador/solicitudes/${id}/`) as Observable<SolicitudAdmin>;
   }
 }
 
