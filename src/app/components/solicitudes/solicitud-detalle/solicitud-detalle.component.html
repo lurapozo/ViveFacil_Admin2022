@@ -30,17 +30,37 @@
         <span class="badge-estado" [ngClass]="'badge-' + solicitud.estado_proceso.toLowerCase().replace(' ', '-')">
           {{ solicitud.estado_proceso }}
         </span>
-        <div class="text-end">
-          <div><strong>Creada:</strong> {{ solicitud.fecha_creacion | date:'d/M/Y HH:mm' }}</div>
-          <div><strong>Expira:</strong> {{ solicitud.fecha_expiracion | date:'d/M/Y HH:mm' }}</div>
-        </div>
+      </div>
+      <div class="row p-2 align-items-center">
+        <div class="col-3"><h3 class="m-0 p-0 fw-bold">Creada:</h3></div>
+        <div class="col-9">{{ solicitud.fecha_creacion | date:'d/M/Y HH:mm' }}</div>
+      </div>
+      <div class="row p-2 align-items-center">
+        <div class="col-3"><h3 class="m-0 p-0 fw-bold">Expira:</h3></div>
+        <div class="col-9">{{ solicitud.fecha_expiracion | date:'d/M/Y HH:mm' }}</div>
       </div>
 
       <h4>Descripción</h4>
       <p>{{ solicitud.descripcion }}</p>
       <img *ngIf="solicitud.foto_descripcion" [src]="solicitud.foto_descripcion" class="foto-descripcion" alt="Foto de la solicitud">
 
-      <h4>Cliente (solicitante)</h4>
+      <h4 class="d-flex align-items-center gap-2">
+        Cliente (solicitante)
+        <a *ngIf="solicitud.solicitante?.id" [routerLink]="['/cuentas/solicitantes', solicitud.solicitante.id]" title="Ver detalle del cliente" class="link-icon">
+          <i class="bi bi-box-arrow-up-right"></i>
+        </a>
+      </h4>
+      <div class="row p-2 align-items-center">
+        <div class="col-3"><h3 class="m-0 p-0 fw-bold">Foto:</h3></div>
+        <div class="col-9">
+          <img
+            [src]="solicitud.solicitante?.user_datos?.foto || 'assets/imagenes/avatar.png'"
+            onerror="this.onerror=null; this.src='assets/imagenes/avatar.png';"
+            alt="Foto de perfil del cliente"
+            class="foto-cliente"
+          >
+        </div>
+      </div>
       <div class="row p-2 align-items-center">
         <div class="col-3"><h3 class="m-0 p-0 fw-bold">Nombre:</h3></div>
         <div class="col-9">{{ solicitud.solicitante?.user_datos?.nombres }} {{ solicitud.solicitante?.user_datos?.apellidos }}</div>
@@ -63,13 +83,38 @@
         <div class="col-3"><h3 class="m-0 p-0 fw-bold">Referencia:</h3></div>
         <div class="col-9">{{ solicitud.ubicacion?.referencia }}</div>
       </div>
+      <div class="row p-2 align-items-center" *ngIf="mapaUrl">
+        <div class="col-3"><h3 class="m-0 p-0 fw-bold">Ubicación:</h3></div>
+        <div class="col-9">
+          <iframe [src]="mapaUrl" class="mapa-ubicacion" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          <div>
+            <button type="button" class="btn btn-sm btn-outline-secondary me-2" data-bs-toggle="modal" data-bs-target="#modalMapaAmpliado">
+              <i class="bi bi-arrows-fullscreen"></i> Ampliar mapa
+            </button>
+            <a [href]="'https://www.google.com/maps?q=' + solicitud.ubicacion.latitud + ',' + solicitud.ubicacion.altitud" target="_blank" rel="noopener">
+              Abrir en Google Maps <i class="bi bi-box-arrow-up-right"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="row p-2 align-items-center">
+        <div class="col-3"><h3 class="m-0 p-0 fw-bold">Foto de referencia:</h3></div>
+        <div class="col-9">
+          <img *ngIf="solicitud.ubicacion?.foto_ubicacion" [src]="solicitud.ubicacion.foto_ubicacion" class="foto-descripcion" alt="Foto de la ubicación">
+          <span *ngIf="!solicitud.ubicacion?.foto_ubicacion" class="text-muted">No hay foto de referencia.</span>
+        </div>
+      </div>
       <div class="row p-2 align-items-center">
         <div class="col-3"><h3 class="m-0 p-0 fw-bold">Servicio:</h3></div>
         <div class="col-9">{{ solicitud.servicio?.nombre }}</div>
       </div>
       <div class="row p-2 align-items-center">
         <div class="col-3"><h3 class="m-0 p-0 fw-bold">Tipo de pago:</h3></div>
-        <div class="col-9">{{ solicitud.tipo_pago?.nombre }}</div>
+        <div class="col-9">
+          <span class="badge-pago" [ngClass]="solicitud.tipo_pago?.nombre?.toLowerCase() === 'efectivo' ? 'badge-efectivo' : 'badge-tarjeta'">
+            {{ solicitud.tipo_pago?.nombre }}
+          </span>
+        </div>
       </div>
       <div class="row p-2 align-items-center">
         <div class="col-3"><h3 class="m-0 p-0 fw-bold">Valor cobrado:</h3></div>
@@ -84,8 +129,13 @@
         <div class="col-9">{{ solicitud.pagada ? 'Sí' : 'No' }}</div>
       </div>
       <div class="row p-2 align-items-center" *ngIf="solicitud.rating">
-        <div class="col-3"><h3 class="m-0 p-0 fw-bold">Rating:</h3></div>
-        <div class="col-9">{{ solicitud.rating }} — {{ solicitud.descripcion_rating }}</div>
+        <div class="col-3"><h3 class="m-0 p-0 fw-bold">Review:</h3></div>
+        <div class="col-9">
+          <span class="estrellas">
+            <i class="bi" [ngClass]="n <= solicitud.rating ? 'bi-star-fill' : 'bi-star'" *ngFor="let n of [1,2,3,4,5]"></i>
+          </span>
+          <span *ngIf="solicitud.descripcion_rating?.trim()"> — {{ solicitud.descripcion_rating }}</span>
+        </div>
       </div>
 
       <h4>Proveedor adjudicado (aceptó y quedó en cobro/pago)</h4>
@@ -110,6 +160,7 @@
         <table class="table table-striped custom-table">
           <thead>
             <tr>
+              <th scope="col">Foto</th>
               <th scope="col">Proveedor</th>
               <th scope="col">Correo</th>
               <th scope="col">Interesado</th>
@@ -120,6 +171,10 @@
           </thead>
           <tbody>
             <tr *ngFor="let c of solicitud.candidatos">
+              <td>
+                <img *ngIf="c.proveedor?.user_datos?.foto" [src]="c.proveedor.user_datos.foto" alt="Foto de perfil" class="foto-candidato">
+                <span *ngIf="!c.proveedor?.user_datos?.foto" class="text-muted">—</span>
+              </td>
               <td style="color: #40378b; text-transform: uppercase">
                 <strong>{{ c.proveedor?.user_datos?.nombres }} {{ c.proveedor?.user_datos?.apellidos }}</strong>
               </td>
@@ -139,6 +194,20 @@
       </div>
       <ng-template #sinCandidatos><p>No se le envió la solicitud a ningún proveedor.</p></ng-template>
 
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modalMapaAmpliado" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-fullscreen">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Ubicación de la solicitud</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body p-0">
+        <iframe *ngIf="mapaUrl" [src]="mapaUrl" class="mapa-ampliado" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
     </div>
   </div>
 </div>

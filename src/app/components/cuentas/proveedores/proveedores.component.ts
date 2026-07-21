@@ -753,14 +753,27 @@ export class ProveedoresComponent {
     this.proveedor_seleccionado = a;    
   }
 
-  eliminarProveedor(proveedor: any) {
-    const id = proveedor.id;
-    if (id) {
-        this.pythonAnywhereService.eliminar_proveedor1(id).subscribe(resp => {
-            console.log("Proveedor eliminado exitosamente:", resp);
-        }, error => {
-            console.error("Error al eliminar el proveedor:", error);
-        });
-    }
+  proveedorAEliminar: any = null;
+
+  // ponytail: confirmación vía el modal #modalEliminarProveedor (bootstrap ya
+  // cargado globalmente), en vez de confirm() nativo — prohibido usar alerts/
+  // confirms del navegador en este proyecto.
+  prepararEliminarProveedor(proveedor: any, event: Event) {
+    event.stopPropagation();
+    this.proveedorAEliminar = proveedor;
+    this.mensajeAlerta = `¿Eliminar al proveedor ${proveedor.user_datos.nombres} ${proveedor.user_datos.apellidos}? Se eliminarán también sus solicitudes. Esta acción no se puede deshacer.`;
+  }
+
+  confirmarEliminarProveedor() {
+    const id = this.proveedorAEliminar?.id;
+    if (!id) { return; }
+    this.pythonAnywhereService.eliminar_proveedor1(id).subscribe(() => {
+      this.arr_proveedor = this.arr_proveedor.filter(p => p.id !== id);
+      this.arr_filtered_proveedor = this.arr_filtered_proveedor.filter(p => p.id !== id);
+      this.total--;
+      this.proveedorAEliminar = null;
+    }, error => {
+      console.error("Error al eliminar el proveedor:", error);
+    });
   }
 }

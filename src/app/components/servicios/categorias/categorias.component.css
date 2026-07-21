@@ -246,7 +246,9 @@ mat-datepicker-toggle {
 
 .item-nombre,
 .item-descripcion,
-.item-estado {
+.item-estado,
+.item-subcategorias,
+.item-acciones {
     flex: 1;
     text-align: left;
 }
@@ -363,6 +365,32 @@ h2 {
     margin: 0 auto;
     padding: 20px;
     background-color: #f9f9f900;
+}
+
+.detalle-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.btn-back {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    border-radius: 50%;
+    border: none;
+    background-color: #3F3185;
+    color: white;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-back:hover {
+    background-color: #6b60a8;
 }
 
 form {

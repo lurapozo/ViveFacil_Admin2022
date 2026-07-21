@@ -1,6 +1,7 @@
 import { Component,} from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ignoreElements } from 'rxjs';
 import { PythonAnywhereService } from 'src/app/services/PythonAnywhere/python-anywhere.service';
 
@@ -60,7 +61,12 @@ export class SolicitantesComponent {
 
   fechasFiltradas: any[] = [];
 
-  constructor(private pythonAnywhereService: PythonAnywhereService, private sanitizer: DomSanitizer) {
+  constructor(
+    private pythonAnywhereService: PythonAnywhereService,
+    private sanitizer: DomSanitizer,
+    private route: ActivatedRoute,
+    private router: Router,
+  ) {
 
     this.pythonAnywhereService.obtener_solicitantes_filtro().subscribe(resp => {
       this.total = resp.total_objects
@@ -73,7 +79,20 @@ export class SolicitantesComponent {
       for (let index = 1; index <= resp.total_pages; index++) {
         this.pageNumber.push(index)
       }
+      this.abrirDetalleDesdeRuta();
     });
+  }
+
+  // ponytail: no hay endpoint para traer un solo solicitante por id, así que
+  // el detalle por /:pk se resuelve buscando en la lista ya cargada. Si el
+  // solicitante pedido está en otra página de paginación no se encuentra.
+  abrirDetalleDesdeRuta() {
+    const pk = this.route.snapshot.paramMap.get('pk');
+    if (!pk) return;
+    const encontrado = this.arr_soli?.find(s => String(s.id) === pk);
+    if (encontrado) {
+      this.ver(encontrado);
+    }
   }
 
   ngOnInit() {
@@ -125,7 +144,41 @@ export class SolicitantesComponent {
       this.activo = 'Inactivo'
     }
 
+    this.showHeader = false;
+    this.showHeaderC = true;
+  }
 
+  verDetalle(a: any) {
+    this.router.navigate(['/cuentas/solicitantes', a.id]);
+  }
+
+  volverALista() {
+    this.showHeader = true;
+    this.showHeaderC = false;
+    this.showadmi = false;
+    this.router.navigate(['/cuentas/solicitantes']);
+  }
+
+  soliAEliminar: any = null;
+
+  // ponytail: confirmación vía el modal #modalEliminarSolicitante (bootstrap ya
+  // cargado globalmente), en vez de confirm() nativo — prohibido usar alerts/
+  // confirms del navegador en este proyecto.
+  prepararEliminar(a: any, event: Event) {
+    event.stopPropagation();
+    this.soliAEliminar = a;
+    this.mensajeAlerta = `¿Eliminar al solicitante ${a.user_datos.nombres} ${a.user_datos.apellidos}? Esta acción no se puede deshacer.`;
+  }
+
+  confirmarEliminarSolicitante() {
+    if (!this.soliAEliminar) return;
+    const id = this.soliAEliminar.id;
+    this.pythonAnywhereService.eliminar_solicitante(id).subscribe(() => {
+      this.arr_soli = this.arr_soli.filter(s => s.id !== id);
+      this.arr_filtered_soli = this.arr_filtered_soli.filter(s => s.id !== id);
+      this.total--;
+      this.soliAEliminar = null;
+    });
   }
 
   next(event: any) {

@@ -5,6 +5,7 @@ export interface Categoria {
   foto?: File;
   foto2?: File;
   estado: boolean;
+  total_subcategorias?: number;
 }
 
 export interface BodyActualizarCategoria {

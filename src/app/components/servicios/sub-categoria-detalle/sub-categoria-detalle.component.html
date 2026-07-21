@@ -1,0 +1,214 @@
+<!-- Titulo principal-->
+<div class="header-admi1">
+  <div class="header-text">
+    <div class="containerstart detalle-header">
+      <button type="button" class="btn-back" (click)="volver()" title="Volver" aria-label="Volver">
+        <i class="bi bi-arrow-left"></i>
+      </button>
+      <p>Sub-categoría: {{ servicio?.nombre }}</p>
+    </div>
+  </div>
+  <svg preserveAspectRatio="xMidYMid">
+    <path d="M0,60 L0,0 L1290,0 L1290,60" fill="#333539" />
+    <path d="M320,60 Q448,85 550,60" fill="#333539" />
+  </svg>
+</div>
+
+<div class="container-fluid" *ngIf="cargando">
+  <p class="p-4">Cargando...</p>
+</div>
+
+<div class="container-fluid" *ngIf="noEncontrada">
+  <p class="p-4">No se encontró la sub-categoría.</p>
+</div>
+
+<div class="container-fluid" *ngIf="servicio">
+  <div class="row justify-content-center p-0">
+    <div class="col-10 containeradmin p-4">
+
+      <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+        <span class="badge-estado" [ngClass]="servicio.estado ? 'badge-activo' : 'badge-inactivo'">
+          {{ servicio.estado ? 'ACTIVO' : 'INACTIVO' }}
+        </span>
+        <div>
+          <button type="button" class="btn btn-sm btn-outline-primary me-2" (click)="editando = !editando">
+            <i class="bi bi-pencil"></i> {{ editando ? 'Cancelar edición' : 'Editar' }}
+          </button>
+          <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modalEliminarServicio">
+            <i class="bi bi-trash"></i> Eliminar
+          </button>
+        </div>
+      </div>
+
+      <img *ngIf="servicio.foto" [src]="servicio.foto" class="foto-servicio mb-3" alt="Imagen de la sub-categoría">
+
+      <!-- Vista de solo lectura -->
+      <div *ngIf="!editando">
+        <div class="row p-2 align-items-center">
+          <div class="col-3"><h3 class="m-0 p-0 fw-bold">Nombre:</h3></div>
+          <div class="col-9">{{ servicio.nombre }}</div>
+        </div>
+        <div class="row p-2 align-items-center">
+          <div class="col-3"><h3 class="m-0 p-0 fw-bold">Descripción:</h3></div>
+          <div class="col-9">{{ servicio.descripcion }}</div>
+        </div>
+        <div class="row p-2 align-items-center">
+          <div class="col-3"><h3 class="m-0 p-0 fw-bold">Categoría:</h3></div>
+          <div class="col-9">{{ formEdit.get('categoria')?.value }}</div>
+        </div>
+      </div>
+
+      <!-- Formulario de edición -->
+      <form *ngIf="editando" [formGroup]="formEdit" (ngSubmit)="onActualizar()">
+        <div class="row p-2 align-items-center">
+          <div class="col-3">
+            <label for="inputNombre" class="form-label"><h3 class="m-0 p-0 fw-bold">Nombre:</h3></label>
+          </div>
+          <div class="col-9">
+            <input type="text" formControlName="nombre" class="form-control"
+                   [ngClass]="isInvalidForm('nombre') ? 'is-invalid' : ''" id="inputNombre">
+            <div class="invalid-feedback">{{ getErrorMessage('nombre') }}</div>
+          </div>
+        </div>
+
+        <div class="row p-2 align-items-center">
+          <div class="col-3">
+            <label for="textareaDescripcion" class="form-label"><h3 class="m-0 p-0 fw-bold">Descripción:</h3></label>
+          </div>
+          <div class="col-9">
+            <textarea class="form-control" formControlName="descripcion"
+                      [ngClass]="isInvalidForm('descripcion') ? 'is-invalid' : ''" id="textareaDescripcion"></textarea>
+            <div class="invalid-feedback">{{ getErrorMessage('descripcion') }}</div>
+          </div>
+        </div>
+
+        <div class="row p-2 align-items-center">
+          <div class="col-3">
+            <label for="inputCategoria" class="form-label"><h3 class="m-0 p-0 fw-bold">Categoría:</h3></label>
+          </div>
+          <div class="col-9">
+            <select class="form-select" formControlName="categoria" id="inputCategoria">
+              <option *ngFor="let c of listCategorias" [value]="c.nombre">{{ c.nombre }}</option>
+            </select>
+            <div class="invalid-feedback">{{ getErrorMessage('categoria') }}</div>
+          </div>
+        </div>
+
+        <div class="row p-2 align-items-center">
+          <div class="col-3">
+            <label for="switchEstado" class="form-check-label"><h3 class="m-0 p-0 fw-bold">Estado:</h3></label>
+          </div>
+          <div class="col-9 form-check form-switch">
+            <input formControlName="estado" class="form-check-input" id="switchEstado" type="checkbox" role="switch">
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-success" [disabled]="formEdit.invalid">Guardar cambios</button>
+      </form>
+
+      <h4>Proveedores que ofrecen este servicio ({{ totalProveedores }})</h4>
+      <div class="table-responsive" *ngIf="arrProveedores.length; else sinProveedores">
+        <table class="table table-striped custom-table">
+          <thead>
+            <tr>
+              <th scope="col">Foto</th>
+              <th scope="col">Proveedor</th>
+              <th scope="col">Correo</th>
+              <th scope="col">Años de experiencia</th>
+              <th scope="col">Estado</th>
+              <th scope="col">Perfil</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let p of arrProveedores">
+              <td>
+                <img *ngIf="p.proveedor?.user_datos?.foto" [src]="p.proveedor.user_datos.foto" alt="Foto de perfil" class="foto-candidato">
+                <span *ngIf="!p.proveedor?.user_datos?.foto" class="text-muted">—</span>
+              </td>
+              <td style="color: #40378b; text-transform: uppercase">
+                <strong>{{ p.proveedor?.user_datos?.nombres }} {{ p.proveedor?.user_datos?.apellidos }}</strong>
+              </td>
+              <td>{{ p.proveedor?.user_datos?.user?.username }}</td>
+              <td>{{ p.ano_experiencia }}</td>
+              <td class="d-flex align-items-center">
+                <span class="estado-indicador" [class.bg-success]="p.proveedor?.estado" [class.bg-secondary]="!p.proveedor?.estado"></span>
+                {{ p.proveedor?.estado ? 'Activo' : 'Inactivo' }}
+              </td>
+              <td>
+                <a *ngIf="p.proveedor?.id" [routerLink]="['/cuentas/proveedores', p.proveedor.id]" title="Ver perfil del proveedor" class="link-icon">
+                  <i class="bi bi-box-arrow-up-right"></i>
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="row p-2 justify-content-end align-items-center">
+          <nav aria-label="Page navigation example">
+            <ul class="pagination">
+              <li class="page-item">
+                <a class="page-link" (click)="previous($event)">
+                  <i class="bi bi-chevron-left"></i>
+                </a>
+              </li>
+              <div *ngFor="let n of paginasVisibles" class="d-inline-block">
+                <li class="page-item">
+                  <button
+                    *ngIf="n !== '...'"
+                    class="page-link azul"
+                    value="{{ n }}"
+                    (click)="iteracion($event)"
+                    [class.active]="n === currentPage"
+                  >
+                    {{ n }}
+                  </button>
+                  <span *ngIf="n === '...'" class="page-link azul dots">...</span>
+                </li>
+              </div>
+              <li class="page-item">
+                <a class="page-link" (click)="next($event)">
+                  <i class="bi bi-chevron-right"></i>
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+      <ng-template #sinProveedores><p>Ningún proveedor ofrece este servicio todavía.</p></ng-template>
+
+    </div>
+  </div>
+</div>
+
+<!-- Modal confirmar eliminar sub-categoría -->
+<div class="modal fade" id="modalEliminarServicio" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Confirmar eliminación</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        ¿Eliminar la sub-categoría "{{ servicio?.nombre }}"? Esta acción no se puede deshacer.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" (click)="eliminarServicio()">Eliminar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast de Información -->
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+  <div #liveToast id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header" [ngClass]="isErrorToast ? ' bg-danger' : ' bg-success'">
+      <strong class="me-auto text-light">{{ tituloToast }}</strong>
+      <small class="text-light">Ahora</small>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body bg-opacity-25" [ngClass]="isErrorToast ? ' bg-danger' : ' bg-success'">
+      {{ mensajeToast }}
+    </div>
+  </div>
+</div>

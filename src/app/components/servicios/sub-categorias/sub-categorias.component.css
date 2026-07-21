@@ -43,6 +43,8 @@
     margin-left: 20px;
     margin-bottom: -10px;
     margin-top: -10px;
+    position: relative;
+    z-index: 2;
 }
 
 .containerstart1,
@@ -93,7 +95,8 @@ mat-datepicker-toggle {
 
 .containerstart1 input,
 .containerstart2 input,
-.containerstart3 input {
+.containerstart3 input,
+.containerstart1 select {
     border: none;
     color: rgb(44, 44, 44);
     background-color: rgba(75, 72, 75, 0);
@@ -228,7 +231,9 @@ mat-datepicker-toggle {
 
 .item-nombre,
 .item-descripcion,
-.item-estado {
+.item-estado,
+.item-proveedores,
+.item-acciones {
     flex: 1;
     text-align: left;
 }

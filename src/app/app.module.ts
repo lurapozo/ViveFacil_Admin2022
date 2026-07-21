@@ -24,6 +24,7 @@ import { SolicitudesProfesionesComponent } from './components/solicitudes-profes
 import { PoliticasComponent } from './components/politicas/politicas.component';
 import { CategoriasComponent } from './components/servicios/categorias/categorias.component';
 import { SubCategoriasComponent } from './components/servicios/sub-categorias/sub-categorias.component';
+import { SubCategoriaDetalleComponent } from './components/servicios/sub-categoria-detalle/sub-categoria-detalle.component';
 import { CargosComponent } from './components/pagos/cargos/cargos.component';
 import { SolicitudesComponent } from './components/solicitudes/solicitudes.component';
 import { SolicitudDetalleComponent } from './components/solicitudes/solicitud-detalle/solicitud-detalle.component';
@@ -81,6 +82,7 @@ import { firebaseConfig } from 'src/app/services/Firebase/firebase.config';
     SolicitudesProfesionesComponent,
     CategoriasComponent,
     SubCategoriasComponent,
+    SubCategoriaDetalleComponent,
     CargosComponent,
     SolicitudesComponent,
     SolicitudDetalleComponent,

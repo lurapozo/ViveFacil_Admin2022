@@ -5,6 +5,7 @@ export interface SubCategoria {
     categoria: number,
     estado: boolean
     foto: any;
+    total_proveedores?: number;
 }
 
 export interface BodyCrearSubCategoria {

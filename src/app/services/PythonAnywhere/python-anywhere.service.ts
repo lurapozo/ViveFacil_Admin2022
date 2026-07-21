@@ -791,7 +791,7 @@ export class PythonAnywhereService {
   }
 
   eliminar_proveedor1(id: number) {
-    return this.http.delete(`${this.API_URL}/administrador/accounts/proveedores-proveedores/${id}/eliminar/}`);
+    return this.http.delete(`${this.API_URL}/administrador/accounts/proveedores-proveedores/${id}/eliminar/`);
   }
 
   //-----------------------------------------------------------------------------------------------------------------------
@@ -1019,6 +1019,31 @@ export class PythonAnywhereService {
    */
   eliminar_servicio(id: string): Observable<any> {
     return this.http.delete(`${this.API_URL}/administrador/catalog/servicios/${id}/`) as Observable<any>;
+  }
+
+  /**
+   * Función que elimina DEFINITIVAMENTE (hard delete) un Servicio. Distinto
+   * de eliminar_servicio/eliminar_subcategoria (soft-toggle de estado): el
+   * backend bloquea con 409 si hay Solicitudes o Proveedores asociados.
+   *
+   * @param id Recibe un number perteneciente al ID del Servicio a eliminar.
+   * @returns Devuelve un Observable; en caso de bloqueo, el error trae
+   * { error, solicitudes, proveedores_asociados } con status 409.
+   */
+  eliminar_subcategoria_definitivo(id: number): Observable<any> {
+    return this.http.delete(`${this.API_URL}/administrador/catalog/servicios/${id}/eliminar/`) as Observable<any>;
+  }
+
+  /**
+   * Función que obtiene, paginados, los Profesion_Proveedor asociados a un
+   * Servicio (emparejado por nombre con su Profesion homónima).
+   *
+   * @param servicioId Recibe un number perteneciente al ID del Servicio.
+   * @param page Recibe el número de página a consultar (por defecto 1).
+   * @returns Devuelve un Observable con el payload paginado (results, total_objects, total_pages, next, current_page_number).
+   */
+  obtener_proveedores_por_servicio(servicioId: number, page = 1): Observable<any> {
+    return this.http.get(`${this.API_URL}/administrador/catalog/servicios/${servicioId}/proveedores/?page=${page}`) as Observable<any>;
   }
   //-----------------------------------------------------------------------------------------------------------------------
 

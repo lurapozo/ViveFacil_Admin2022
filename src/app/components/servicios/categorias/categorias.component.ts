@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
+import { ActivatedRoute, Router } from '@angular/router';
 import { PythonAnywhereService } from 'src/app/services/PythonAnywhere/python-anywhere.service';
 import { BodyActualizarCategoria, BodyCrearCategoria, Categoria } from '../../../interfaces/categoria';
 
@@ -12,6 +13,8 @@ import { BodyActualizarCategoria, BodyCrearCategoria, Categoria } from '../../..
 export class CategoriasComponent {
   showHeader: boolean = true;
   showHeaderC: boolean = false;
+  showDetalle: boolean = false;
+  editando: boolean = false;
   isCrear = false; isActualizar = false; isEliminar = false;
   existImageCrear = false; existImageActualizar = false;
   existImageCrear2 = false; existImageActualizar2 = false;
@@ -29,10 +32,16 @@ export class CategoriasComponent {
   isErrorToast = false;
   mensajeToast = "";
   tituloToast = "";
-  constructor(private pythonAnywhereService: PythonAnywhereService, private sanitizer: DomSanitizer) {
+  constructor(
+    private pythonAnywhereService: PythonAnywhereService,
+    private sanitizer: DomSanitizer,
+    private route: ActivatedRoute,
+    private router: Router,
+  ) {
     this.pythonAnywhereService.obtener_categorias().subscribe((resp: any[]) => {
       this.categoria = resp
       console.log(resp)
+      this.abrirDetalleDesdeRuta();
     })
 
     const imagenCrearControl = this.crearCategoria.get('imagen') as FormControl;
@@ -385,8 +394,14 @@ export class CategoriasComponent {
         this.pythonAnywhereService.actualizar_categoria(categoria,this.categoria_seleccionada?.id).subscribe(
           resp=>{
             this.mostrarToastInfo('Estado de la  Categoria ', 'Categoria Editada correctamente', false)
+            this.editando = false;
             this.pythonAnywhereService.obtener_categorias().subscribe((resp: any[]) => {
               this.categoria = resp
+              const actualizada = resp.find(c => c.id === this.categoria_seleccionada?.id);
+              if (actualizada) {
+                this.categoria_seleccionada = actualizada;
+                this.limpiarForm('actualizar');
+              }
               console.log(resp)
             })
           }
@@ -433,5 +448,73 @@ export class CategoriasComponent {
   btncrearCategoria() {
     this.showHeader = false;
     this.showHeaderC = true;
+  }
+
+  // ponytail: no hay endpoint para traer una sola categoría por id, así que
+  // el detalle por /:pk se resuelve buscando en la lista ya cargada — la
+  // lista de categorías siempre viene completa (sin paginación), así que el
+  // scan es 100% confiable acá.
+  abrirDetalleDesdeRuta() {
+    const pk = this.route.snapshot.paramMap.get('pk');
+    if (!pk) return;
+    const encontrado = this.categoria?.find(c => String(c.id) === pk);
+    if (encontrado) {
+      this.verDetalleInterno(encontrado);
+    }
+  }
+
+  verDetalle(item: any) {
+    this.router.navigate(['/servicios/categorias', item.id]);
+  }
+
+  verDetalleInterno(item: any) {
+    this.categoria_seleccionada = item;
+    this.limpiarForm('actualizar');
+    this.showHeader = false;
+    this.showHeaderC = false;
+    this.showDetalle = true;
+    this.editando = false;
+  }
+
+  volverALista() {
+    this.showHeader = true;
+    this.showHeaderC = false;
+    this.showDetalle = false;
+    this.editando = false;
+    this.router.navigate(['/servicios/categorias']);
+  }
+
+  categoriaAEliminar: any = null;
+
+  // ponytail: confirmación vía el modal #modalEliminarCategoria (bootstrap ya
+  // cargado globalmente), en vez de confirm() nativo — prohibido usar alerts/
+  // confirms del navegador en este proyecto.
+  prepararEliminarCategoria(categoria: any, event: Event) {
+    event.stopPropagation();
+    this.categoriaAEliminar = categoria;
+    this.mensajeAlerta = `¿Eliminar la categoría "${categoria.nombre}"? Esta acción no se puede deshacer.`;
+  }
+
+  confirmarEliminarCategoria() {
+    const id = this.categoriaAEliminar?.id;
+    if (!id) return;
+    this.pythonAnywhereService.eliminar_categoria(id).subscribe({
+      next: () => {
+        this.mostrarToastInfo('Categoría eliminada', 'Se eliminó correctamente', false);
+        this.categoria = this.categoria?.filter(c => c.id !== id);
+        this.categoriaAEliminar = null;
+        if (this.showDetalle) {
+          this.volverALista();
+        }
+      },
+      error: (err) => {
+        const data = err.error;
+        const mensaje = data?.sub_categorias !== undefined
+          ? `No se puede eliminar: tiene ${data.sub_categorias} sub-categoría(s) asociada(s).`
+          : 'No se pudo eliminar la categoría.';
+        this.mostrarToastInfo('No se pudo eliminar', mensaje, true);
+        this.categoriaAEliminar = null;
+      }
+    });
   }
 }

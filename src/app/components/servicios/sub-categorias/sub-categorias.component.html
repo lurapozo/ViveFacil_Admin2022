@@ -5,6 +5,9 @@
       <p *ngIf="showHeader">  SUB - CATEGORÍA</p>
       <p *ngIf="showHeaderC"> AGREGAR SUB CATEGORÍA</p>
     </div>
+    <div class="containerend">
+      <p *ngIf="showHeader">Total: {{ categoria?.length || 0 }}</p>
+    </div>
   </div>
   <svg preserveAspectRatio="xMidYMid">
     <path d="M0,60 L0,0 L1290,0 L1290,60" fill="#333539"  />
@@ -14,22 +17,15 @@
 
 <!-- FILTROS-->
 <div class="container-fluid" *ngIf="showHeader">
-<div class="d-flex flex-wrap header-solicitud align-items-center gap-3">   
+<div class="d-flex flex-wrap header-solicitud align-items-center gap-3">
   <div class="containerstart1" >
-    <label class="calendar-label">Desde:</label>
-    <div class="date-container" >
-      <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-      <mat-datepicker #picker1></mat-datepicker>
-      <input matInput [matDatepicker]="picker1" placeholder="SELECCIONA DIA" >
-    </div>
-  </div>
-  
-  <div class="containerstart2" >
-    <label class="calendar-label">Hasta:</label>
-    <div class="date-container" >
-      <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-      <mat-datepicker #picker2></mat-datepicker>
-      <input matInput [matDatepicker]="picker2" placeholder="SELECCIONA DIA">
+    <label class="calendar-label">Estado:</label>
+    <div class="date-container">
+      <select class="form-select" (change)="onChangeFiltroEstado($event)">
+        <option value="activos" selected>Activos</option>
+        <option value="inactivos">Inactivos</option>
+        <option value="todos">Todos</option>
+      </select>
     </div>
   </div>
 
@@ -66,11 +62,13 @@
     <span class="tabla-title">NOMBRE</span>
     <span class="tabla-title">DESCRIPCIÓN</span>
     <span class="tabla-title">ESTADO</span>
+    <span class="tabla-title">PROVEEDORES</span>
+    <span class="tabla-title">ACCIONES</span>
   </div>
 </div>
 
 <div class="contenedor-categorias" *ngIf="showHeader">
-  <div class="categoria" *ngFor="let item of categoria" (click)="categoria_seleccionada = item" data-bs-toggle="modal" data-bs-target="#modalInformacionProfesion">
+  <div class="categoria" *ngFor="let item of categoria" (click)="verDetalle(item)" role="button">
     <div class="item-imagen">
       <img [src]="item.foto ? item.foto : '../../../assets/imagenes/ProfesionDefault.png'" class="imagen" alt="Imagen" />
     </div>
@@ -84,9 +82,21 @@
       <span *ngIf="item.estado" class="text-success">ACTIVO</span>
       <span
             *ngIf="!item.estado"
-            class="estado-indicador bg-secondary me-2" 
+            class="estado-indicador bg-secondary me-2"
           ></span>
           <span *ngIf="!item.estado" class="text-muted">INACTIVO</span>
+    </div>
+    <div class="item-proveedores">{{ item.total_proveedores }}</div>
+    <div class="item-acciones">
+      <button
+        type="button"
+        class="btn btn-sm btn-outline-danger"
+        data-bs-toggle="modal"
+        data-bs-target="#modalEliminarServicio"
+        (click)="prepararEliminarServicio(item, $event)"
+      >
+        <i class="bi bi-trash"></i> Eliminar
+      </button>
     </div>
   </div>
 </div>
@@ -821,6 +831,23 @@ aria-hidden="true"
     </div>
   </div>
 </div>
+</div>
+
+<!-- Modal confirmar eliminar sub-categoría -->
+<div class="modal fade" id="modalEliminarServicio" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Confirmar eliminación</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">{{ mensajeAlerta }}</div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" (click)="confirmarEliminarServicio()">Eliminar</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- Toast de Información -->

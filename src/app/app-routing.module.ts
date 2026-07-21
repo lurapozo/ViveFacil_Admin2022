@@ -12,6 +12,7 @@ import { RechazadosComponent } from './components/cuentas/rechazados/rechazados.
 import { SolicitantesComponent } from './components/cuentas/solicitantes/solicitantes.component';
 import { CategoriasComponent } from './components/servicios/categorias/categorias.component';
 import { SubCategoriasComponent } from './components/servicios/sub-categorias/sub-categorias.component';
+import { SubCategoriaDetalleComponent } from './components/servicios/sub-categoria-detalle/sub-categoria-detalle.component';
 import { CargosComponent } from './components/pagos/cargos/cargos.component';
 import { SolicitudesComponent } from './components/solicitudes/solicitudes.component';
 import { SolicitudDetalleComponent } from './components/solicitudes/solicitud-detalle/solicitud-detalle.component';
@@ -43,6 +44,7 @@ const routes: Routes = [
           { path: 'proveedores/:pk', component: ProveedoresComponent },
           { path: 'rechazados', component: RechazadosComponent },
           { path: 'solicitantes', component: SolicitantesComponent },
+          { path: 'solicitantes/:pk', component: SolicitantesComponent },
         ],
       },
       {
@@ -50,7 +52,9 @@ const routes: Routes = [
         children: [
           { path: '', redirectTo: 'categorias', pathMatch: 'full' },
           { path: 'categorias', component: CategoriasComponent },
+          { path: 'categorias/:pk', component: CategoriasComponent },
           { path: 'sub-categorias', component: SubCategoriasComponent },
+          { path: 'sub-categorias/:pk', component: SubCategoriaDetalleComponent },
         ],
       },
       {

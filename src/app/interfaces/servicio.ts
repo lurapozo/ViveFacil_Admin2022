@@ -4,6 +4,7 @@ export interface Servicio {
   descripcion: string;
   categoria: number;
   estado: boolean;
+  total_proveedores?: number;
 }
 
 export interface BodyActualizarServicio {

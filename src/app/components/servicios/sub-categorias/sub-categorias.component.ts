@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
+import { Router } from '@angular/router';
 import { PythonAnywhereService } from 'src/app/services/PythonAnywhere/python-anywhere.service';
 import { BodyActualizarCategoria, BodyCrearCategoria, Categoria } from '../../../interfaces/categoria';
 import { BodyActualizarServicio } from '../../../interfaces/servicio';
@@ -28,17 +29,17 @@ export class SubCategoriasComponent {
   fileImagenCrear2: File = {} as File;
   imagenCrear2: string | undefined;
   categoria?: SubCategoria[];
+  arrServicios: SubCategoria[] = [];
+  filtroEstado: 'activos' | 'inactivos' | 'todos' = 'activos';
+  textoBusqueda = '';
   listCategorias?: Categoria[];
   primeraCat?: string;
   categoria_seleccionada?: SubCategoria
   isErrorToast = false;
   mensajeToast = "";
   tituloToast = "";
-  constructor(private pythonAnywhereService: PythonAnywhereService, private sanitizer: DomSanitizer) {
-    this.pythonAnywhereService.obtener_servicios().subscribe((resp: any[]) => {
-      this.categoria = resp
-      console.log(resp)
-    })
+  constructor(private pythonAnywhereService: PythonAnywhereService, private sanitizer: DomSanitizer, private router: Router) {
+    this.refrescarLista();
 
     this.pythonAnywhereService.obtener_categorias().subscribe((resp: any[]) => {
       this.listCategorias = resp
@@ -171,14 +172,37 @@ export class SubCategoriasComponent {
     }
   }
   search(evento: any) {
-    const texto = evento.target.value;
-    console.log('Escribe en el buscador: ', texto)
-    this.categoria = this.categoria;
-    if (texto && texto.trim() !== '') {
-      this.categoria = this.categoria?.filter((solicitud) => {
-        return solicitud.nombre.toLowerCase().includes(texto.toLowerCase())
-      });
+    this.textoBusqueda = evento.target.value;
+    this.aplicarFiltros();
+  }
+
+  onChangeFiltroEstado(evento: any) {
+    this.filtroEstado = evento.target.value;
+    this.aplicarFiltros();
+  }
+
+  // ponytail: filtro de estado + búsqueda por texto se aplican juntos sobre
+  // arrServicios (la lista cruda ya cargada), no hay endpoint de filtro por
+  // estado en el backend para Servicio — se hace en el cliente, igual que ya
+  // hacía el buscador antes de este cambio.
+  aplicarFiltros() {
+    let resultado = this.arrServicios;
+    if (this.filtroEstado === 'activos') {
+      resultado = resultado.filter(s => s.estado);
+    } else if (this.filtroEstado === 'inactivos') {
+      resultado = resultado.filter(s => !s.estado);
     }
+    if (this.textoBusqueda.trim() !== '') {
+      resultado = resultado.filter(s => s.nombre.toLowerCase().includes(this.textoBusqueda.toLowerCase()));
+    }
+    this.categoria = resultado;
+  }
+
+  refrescarLista() {
+    this.pythonAnywhereService.obtener_servicios().subscribe((resp: any[]) => {
+      this.arrServicios = resp;
+      this.aplicarFiltros();
+    });
   }
   establecerMensaje(mensaje: string, tipo: string) {
     if (tipo === 'actualizar') {
@@ -312,10 +336,7 @@ export class SubCategoriasComponent {
       console.log(subcategoria)
       this.pythonAnywhereService.crear_servicios(subcategoria).subscribe(resp => {
         this.mostrarToastInfo('Estado de la Categoria ', 'Categoria Creada  correctamente', false)
-        this.pythonAnywhereService.obtener_servicios().subscribe((resp: any[]) => {
-          this.categoria = resp
-          console.log(resp)
-        })
+        this.refrescarLista();
       })
 
     }
@@ -343,9 +364,7 @@ export class SubCategoriasComponent {
         this.pythonAnywhereService.actualizar_servicios(subCategoria, this.categoria_seleccionada?.id.toString()).subscribe(
           resp => {
             this.mostrarToastInfo('Estado de la Sub-Categoría ', 'Sub-Categoría editada correctamente', false)
-            this.pythonAnywhereService.obtener_servicios().subscribe((resp: any[]) => {
-              this.categoria = resp
-            })
+            this.refrescarLista();
           }
         )
       }
@@ -356,10 +375,7 @@ export class SubCategoriasComponent {
     if (this.categoria_seleccionada?.id) {
       this.pythonAnywhereService.eliminar_subcategoria(this.categoria_seleccionada?.id).subscribe(resp => {
         this.mostrarToastInfo('Estado de la Categoria ', 'Categoria Eliminada correctamente', false)
-        this.pythonAnywhereService.obtener_servicios().subscribe((resp: any[]) => {
-          this.categoria = resp
-          console.log(resp)
-        })
+        this.refrescarLista();
       }
 
       )
@@ -387,5 +403,40 @@ export class SubCategoriasComponent {
   btncrearSubCategoria() {
     this.showHeader = false;
     this.showHeaderC = true;
+  }
+
+  verDetalle(a: any) {
+    this.router.navigate(['/servicios/sub-categorias', a.id]);
+  }
+
+  servicioAEliminar: any = null;
+
+  // ponytail: confirmación vía el modal #modalEliminarServicio (bootstrap ya
+  // cargado globalmente), en vez de confirm() nativo — prohibido usar alerts/
+  // confirms del navegador en este proyecto.
+  prepararEliminarServicio(servicio: any, event: Event) {
+    event.stopPropagation();
+    this.servicioAEliminar = servicio;
+    this.mensajeAlerta = `¿Eliminar la sub-categoría "${servicio.nombre}"? Esta acción no se puede deshacer.`;
+  }
+
+  confirmarEliminarServicio() {
+    const id = this.servicioAEliminar?.id;
+    if (!id) return;
+    this.pythonAnywhereService.eliminar_subcategoria_definitivo(id).subscribe({
+      next: () => {
+        this.mostrarToastInfo('Sub-categoría eliminada', 'Se eliminó correctamente', false);
+        this.refrescarLista();
+        this.servicioAEliminar = null;
+      },
+      error: (err) => {
+        const data = err.error;
+        const mensaje = data?.solicitudes !== undefined
+          ? `No se puede eliminar: ${data.solicitudes} solicitud(es) y ${data.proveedores_asociados} proveedor(es) asociado(s).`
+          : 'No se pudo eliminar la sub-categoría.';
+        this.mostrarToastInfo('No se pudo eliminar', mensaje, true);
+        this.servicioAEliminar = null;
+      }
+    });
   }
 }
