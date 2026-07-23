@@ -20,6 +20,20 @@ export interface CandidatoSolicitud {
   fecha_creacion: string;
 }
 
+export interface TransaccionPaymentez {
+  id: string;
+  estado: string;
+  estado_display: string;
+  estado_paymentez: string | null;
+  status_detail: number | null;
+  monto: string | number;
+  tipo_tarjeta: string | null;
+  bin: string | null;
+  codigo_autorizacion: string | null;
+  referencia: string | null;
+  fecha_creacion: string;
+}
+
 export interface SolicitudAdmin {
   id: number;
   descripcion: string;
@@ -41,6 +55,7 @@ export interface SolicitudAdmin {
   estado_proceso: EstadoProceso;
   valor: number | null;
   candidatos: CandidatoSolicitud[];
+  transacciones_paymentez: TransaccionPaymentez[];
 }
 
 export interface SolicitudAdminPaginacion {

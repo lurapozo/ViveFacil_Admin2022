@@ -138,6 +138,51 @@
         </div>
       </div>
 
+      <h4 *ngIf="solicitud.tipo_pago?.nombre?.toLowerCase() === 'tarjeta' || solicitud.transacciones_paymentez?.length">
+        Transacción Paymentez
+      </h4>
+      <div class="table-responsive" *ngIf="solicitud.transacciones_paymentez?.length; else sinTransacciones">
+        <table class="table table-striped custom-table">
+          <thead>
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col">Estado</th>
+              <th scope="col">Estado Paymentez</th>
+              <th scope="col">Monto</th>
+              <th scope="col">Tarjeta</th>
+              <th scope="col">Cód. Autorización</th>
+              <th scope="col">Referencia</th>
+              <th scope="col">Fecha</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let t of solicitud.transacciones_paymentez">
+              <td>{{ t.id }}</td>
+              <td>
+                <span class="badge-estado"
+                  [ngClass]="{
+                    'badge-finalizado': t.estado === 'aprobada',
+                    'badge-cancelado': t.estado === 'rechazada' || t.estado === 'cancelada',
+                    'badge-abierta': t.estado === 'pendiente'
+                  }">{{ t.estado_display }}</span>
+              </td>
+              <td>
+                {{ t.estado_paymentez || '—' }}
+                <span *ngIf="t.status_detail != null" class="text-muted">({{ t.status_detail }})</span>
+              </td>
+              <td>${{ t.monto | number:'1.2-2' }}</td>
+              <td>{{ (t.tipo_tarjeta || '') | uppercase }} {{ t.bin ? ('•••• ' + t.bin) : '' }}<span *ngIf="!t.tipo_tarjeta && !t.bin">—</span></td>
+              <td>{{ t.codigo_autorizacion || '—' }}</td>
+              <td>{{ t.referencia || '—' }}</td>
+              <td>{{ t.fecha_creacion | date:'d/M/Y HH:mm' }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <ng-template #sinTransacciones>
+        <p *ngIf="solicitud.tipo_pago?.nombre?.toLowerCase() === 'tarjeta'">Sin transacciones Paymentez registradas.</p>
+      </ng-template>
+
       <h4>Proveedor adjudicado (aceptó y quedó en cobro/pago)</h4>
       <div *ngIf="solicitud.proveedor; else sinAdjudicar">
         <div class="row p-2 align-items-center">
