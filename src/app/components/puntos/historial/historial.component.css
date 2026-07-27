@@ -1,0 +1,147 @@
+.containerhistorial {
+  width: 95%;
+  border-radius: 30px;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+  background-color: white;
+  margin: 20px auto;
+  padding: 25px;
+}
+
+.header-hist {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+}
+
+h2 {
+  text-transform: uppercase;
+  color: #0ea3b7;
+  text-align: left;
+  margin: 0;
+}
+
+.reglas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.badge-regla {
+  font-size: 12px;
+  font-weight: bold;
+  padding: 6px 12px;
+  border-radius: 20px;
+  color: #fff;
+}
+
+.badge-regla.gana {
+  background-color: rgb(6, 84, 34);
+}
+
+.badge-regla.gasta {
+  background-color: rgb(191, 1, 1);
+}
+
+.nota-hist {
+  color: #666;
+  font-size: 12px;
+  margin: 12px 0;
+}
+
+.buscador {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.buscador input {
+  flex: 1;
+  max-width: 350px;
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.buscador .total {
+  color: #40378b;
+  font-weight: bold;
+}
+
+.table-responsive {
+  overflow-x: auto;
+}
+
+.custom-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.custom-table th {
+  border-bottom: 1.5px solid #40378b;
+  color: #0ea3b7;
+  padding: 12px;
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 13px;
+}
+
+.custom-table td {
+  padding: 14px 12px;
+  font-size: 13.5px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.custom-table tbody tr {
+  border-bottom: 1px solid #ddd;
+}
+
+.custom-table tbody tr:nth-child(odd) {
+  background-color: #59bfc60c;
+}
+
+.custom-table tbody tr:hover {
+  background-color: #95959530;
+}
+
+.monto-positivo {
+  color: rgb(6, 84, 34);
+  font-weight: bold;
+}
+
+.monto-negativo {
+  color: rgb(191, 1, 1);
+  font-weight: bold;
+}
+
+.vacio {
+  color: #888;
+  font-style: italic;
+}
+
+.pagination {
+  justify-content: flex-end;
+  margin-top: 15px;
+}
+
+.page-link {
+  color: #620880;
+  font-weight: bold;
+}
+
+.page-link.dots {
+  cursor: default;
+  background: none;
+  border: none;
+}
+
+.page-link.active {
+  background-color: #620880;
+  border: none;
+  color: white;
+  border-radius: 50%;
+}

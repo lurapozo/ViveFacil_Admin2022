@@ -655,18 +655,15 @@
                 >
               </div>
               <div class="col-5">
-                <p style="color: black; font-size:12px">
-                  <span class="m-0 p-0 fw-bold">profesiones actuales:</span>  {{proveedor_seleccionado?.profesion}}
-                </p>
                 <ng-select
                   [items]="profesiones"
-                  class="form-select"
+                  class="custom-ng-select form-select"
                   [ngClass]="
                     isInvalidForm('profesion') ? 'is-invalid' : ''
                   "
                   formControlName="profesion"
                   id="ge"
-                  
+
                   aria-describedby="selectorServicioCrearFeedback"
                   [multiple]="true">
                 </ng-select>

@@ -1,0 +1,58 @@
+<div class="containerhistorial">
+  <div class="header-hist">
+    <h2>Historial de puntos</h2>
+    <div class="reglas">
+      <span class="badge-regla gana">Ganan puntos: medallas · invitación (invitado +10 / invitador +2)</span>
+      <span class="badge-regla gasta">Gastan puntos: canje de cupones</span>
+    </div>
+  </div>
+
+  <p class="nota-hist">
+    El historial es prospectivo: registra cada movimiento desde que se activó.
+    Los saldos anteriores a esa fecha no aparecen desglosados.
+  </p>
+
+  <div class="buscador">
+    <input type="text" placeholder="Buscar por correo o nombre..." (input)="buscar($event)" />
+    <span class="total">Total: {{ total }}</span>
+  </div>
+
+  <div class="table-responsive">
+    <table class="custom-table">
+      <thead>
+        <tr>
+          <th>Usuario</th>
+          <th>Correo</th>
+          <th>Motivo</th>
+          <th>Monto</th>
+          <th>Saldo</th>
+          <th>Referencia</th>
+          <th>Fecha</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let m of movimientos">
+          <td>{{ m.usuario_nombre || '-' }}</td>
+          <td>{{ m.usuario_email || '-' }}</td>
+          <td>{{ m.motivo_display }}</td>
+          <td [ngClass]="claseMonto(m.monto)">{{ m.monto > 0 ? '+' : '' }}{{ m.monto }}</td>
+          <td>{{ m.saldo_resultante }}</td>
+          <td>{{ m.referencia || '-' }}</td>
+          <td>{{ m.fecha | date:'dd/MM/yyyy HH:mm' }}</td>
+        </tr>
+        <tr *ngIf="movimientos.length === 0">
+          <td colspan="7" class="vacio">Sin movimientos.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <nav *ngIf="pageNumber.length > 1">
+    <ul class="pagination">
+      <li class="page-item" *ngFor="let p of paginasVisibles">
+        <a class="page-link" [class.dots]="p === '...'" [class.active]="p === currentPage"
+           (click)="irPagina(p)" style="cursor: pointer;">{{ p }}</a>
+      </li>
+    </ul>
+  </nav>
+</div>

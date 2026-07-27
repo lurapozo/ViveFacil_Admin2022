@@ -383,3 +383,66 @@
       grid-template-columns: 1fr;
     }
   }
+
+  /* ng-select de Profesión, mismo estilo que /eresprofesional en ViveFacilWeb */
+  .custom-ng-select {
+    background-color: #e4fcff;
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 16px;
+    color: #333;
+    width: 100%;
+    transition: all 0.3s ease;
+  }
+  ::ng-deep span.ng-value-icon.left {
+    color: red;
+    margin-right: 0.5rem;
+  }
+  ::ng-deep div.ng-value-container {
+    flex-direction: column;
+  }
+  ::ng-deep .custom-ng-select ng-dropdown-panel {
+    background-color: white;
+  }
+  ::ng-deep .custom-ng-select ng-dropdown-panel div.ng-option {
+    padding: 5px 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.035);
+  }
+  ::ng-deep .custom-ng-select ng-dropdown-panel div.ng-option-selected {
+    padding: 0 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.035);
+    color: #4422db;
+  }
+  ::ng-deep .custom-ng-select ng-dropdown-panel div.ng-option:hover {
+    background-color: #f0f0f0;
+    color: #4422db;
+  }
+  ::ng-deep .custom-ng-select ng-dropdown-panel .ng-option-label {
+    text-wrap: initial;
+  }
+  .custom-ng-select:hover {
+    border-color: #4422db;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  .custom-ng-select:focus-within {
+    outline: none;
+    border-color: #4422db;
+    background-color: #fff;
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+  }
+  .custom-ng-select.is-invalid {
+    border-color: #dc3545;
+    box-shadow: 0 0 6px rgba(220, 53, 69, 0.5);
+  }
+  .custom-ng-select[multiple] {
+    background-color: #f9f9f9;
+  }
+  .custom-ng-select[multiple] .ng-option {
+    padding: 8px;
+    background-color: #fff;
+    border-bottom: 1px solid #e0e0e0;
+  }
+  .custom-ng-select[multiple] .ng-option:hover {
+    background-color: #f0f0f0;
+    color: #4422db;
+  }

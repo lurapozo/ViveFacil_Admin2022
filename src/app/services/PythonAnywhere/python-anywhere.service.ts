@@ -589,6 +589,11 @@ export class PythonAnywhereService {
     return this.http.get(`${this.API_URL}/administrador/accounts/proveedores-rechazados/?page=${page}`) as Observable<ProveedorPaginacion>;
   }
 
+  obtener_movimientos_puntos(page = 1, user = ''): Observable<any> {
+    const q = user ? `&user=${encodeURIComponent(user)}` : '';
+    return this.http.get(`${this.API_URL}/administrador/accounts/movimientos-puntos/?page=${page}${q}`);
+  }
+
   obtener_proveedores_proveedores(page = 1): Observable<ProveedorPaginacion> {
     return this.http.get(`${this.API_URL}/administrador/accounts/proveedores-proveedores/?page=${page}`) as Observable<ProveedorPaginacion>;
   }

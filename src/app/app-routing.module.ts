@@ -24,6 +24,7 @@ import { MedallaComponent } from './components/medalla/medalla.component';
 import { PromocionComponent } from './components/promocion/promocion.component';
 import { PoliticasComponent } from './components/politicas/politicas.component';
 import { CuponesComponent } from './components/cupones/cupones.component';
+import { HistorialPuntosComponent } from './components/puntos/historial/historial.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent, canActivate: [loginGuard] },
@@ -83,6 +84,7 @@ const routes: Routes = [
         ],
       },
       { path: 'medallas', component: MedallaComponent },
+      { path: 'historial-puntos', component: HistorialPuntosComponent },
       { path: 'promocion', component: PromocionComponent },
       { path: 'politicas', component: PoliticasComponent },
       { path: 'cupones', component: CuponesComponent },

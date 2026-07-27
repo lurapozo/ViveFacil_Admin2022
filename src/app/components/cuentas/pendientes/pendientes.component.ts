@@ -862,16 +862,12 @@ export class PendientesComponent {
     const ciudad = this.pendiente_seleccionada?.ciudad;
     const direccion = this.pendiente_seleccionada?.direccion;
     const licencia = this.pendiente_seleccionada?.licencia;
-    const copiaCedula = this.pendiente_seleccionada?.copiaCedula;
     const profesion = this.pendiente_seleccionada?.profesion;
     const ano_experiencia = this.pendiente_seleccionada?.ano_experiencia;
     const banco = this.pendiente_seleccionada?.banco;
     const numero_cuenta = this.pendiente_seleccionada?.numero_cuenta;
-    const copiaLicencia = this.pendiente_seleccionada?.copiaLicencia;
     const tipo_cuenta = this.pendiente_seleccionada?.tipo_cuenta;
-    const documentos: any[] = this.pendiente_seleccionada?.documentsPendientes;
     const descripcion = this.pendiente_seleccionada?.descripcion;
-    const foto = this.pendiente_seleccionada?.foto;
 
     nombre ? this.formEdit.get('nombre')?.setValue(nombre) : this.formEdit.get('nombre')?.reset();
     apellidos ? this.formEdit.get('apellidos')?.setValue(apellidos) : this.formEdit.get('apellidos')?.reset();
@@ -882,16 +878,19 @@ export class PendientesComponent {
     ciudad ? this.formEdit.get('ciudad')?.setValue(ciudad) : this.formEdit.get('ciudad')?.reset();
     direccion ? this.formEdit.get('direccion')?.setValue(direccion) : this.formEdit.get('direccion')?.reset();
     licencia ? this.formEdit.get('licencia')?.setValue(licencia) : this.formEdit.get('licencia')?.reset();
-    copiaCedula ? this.formEdit.get('copiaCedula')?.setValue(copiaCedula) : this.formEdit.get('copiaCedula')?.reset();
-    profesion ? this.formEdit.get('profesion')?.setValue(profesion) : this.formEdit.get('profesion')?.reset();
+    // copiaCedula/copiaLicencia/documentos/foto son <input type="file">: el
+    // navegador solo permite setear su .value a "" (nunca a una URL), así que
+    // se resetean siempre — el archivo/foto actual ya se muestra aparte (link/img).
+    this.formEdit.get('copiaCedula')?.reset();
+    profesion ? this.formEdit.get('profesion')?.setValue(profesion.split(',')) : this.formEdit.get('profesion')?.reset();
     ano_experiencia ? this.formEdit.get('ano_experiencia')?.setValue(ano_experiencia) : this.formEdit.get('ano_experiencia')?.reset();
     banco ? this.formEdit.get('banco')?.setValue(banco) : this.formEdit.get('banco')?.reset();
     numero_cuenta ? this.formEdit.get('numero_cuenta')?.setValue(numero_cuenta) : this.formEdit.get('numero_cuenta')?.reset();
-    copiaLicencia ? this.formEdit.get('copiaLicencia')?.setValue(copiaLicencia) : this.formEdit.get('copiaLicencia')?.reset();
+    this.formEdit.get('copiaLicencia')?.reset();
     tipo_cuenta ? this.formEdit.get('tipo_cuenta')?.setValue(tipo_cuenta) : this.formEdit.get('tipo_cuenta')?.reset();
-    documentos ? this.formEdit.get('documentos')?.setValue(documentos) : this.formEdit.get('documentos')?.reset();
+    this.formEdit.get('documentos')?.reset();
     descripcion ? this.formEdit.get('descripcion')?.setValue(descripcion) : this.formEdit.get('descripcion')?.reset();
-    foto ? this.formEdit.get('foto')?.setValue(foto) : this.formEdit.get('foto')?.reset();
+    this.formEdit.get('foto')?.reset();
   }
 
 
@@ -914,6 +913,7 @@ export class PendientesComponent {
     this.showHeaderC = true;
     this.showadmi = true;
     this.pendiente_seleccionada = a;
+    this.limpiarForm();
   }
 
   next(event: any) {

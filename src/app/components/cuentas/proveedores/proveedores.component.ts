@@ -343,16 +343,12 @@ export class ProveedoresComponent {
     const ciudad = this.proveedor_seleccionado?.user_datos.ciudad;
     const direccion = this.proveedor_seleccionado?.user_datos.direccion;
     const licencia = this.proveedor_seleccionado?.licencia;
-    const copiaCedula = this.proveedor_seleccionado?.copiaCedula;
     const profesion = this.proveedor_seleccionado?.profesion;
     const ano_profesion = this.proveedor_seleccionado?.user_datos.ano_profesion;
     const banco = this.proveedor_seleccionado?.user_datos.banco;
     const numero_cuenta = this.proveedor_seleccionado?.user_datos.numero_cuenta;
-    const copiaLicencia = this.proveedor_seleccionado?.copiaLicencia;
     const tipo_cuenta = this.proveedor_seleccionado?.tipo_cuenta;
-    const documentos: any[] = this.proveedor_seleccionado?.user_datos.documentsPendientes;
     const descripcion = this.proveedor_seleccionado?.user_datos.descripcion;
-    const foto = this.proveedor_seleccionado?.foto;
 
     nombre ? this.formEdit.get('nombre')?.setValue(nombre) : this.formEdit.get('nombre')?.reset();
     apellidos ? this.formEdit.get('apellidos')?.setValue(apellidos) : this.formEdit.get('apellidos')?.reset();
@@ -363,16 +359,19 @@ export class ProveedoresComponent {
     ciudad ? this.formEdit.get('ciudad')?.setValue(ciudad) : this.formEdit.get('ciudad')?.reset();
     direccion ? this.formEdit.get('direccion')?.setValue(direccion) : this.formEdit.get('direccion')?.reset();
     licencia ? this.formEdit.get('licencia')?.setValue(licencia) : this.formEdit.get('licencia')?.reset();
-    copiaCedula ? this.formEdit.get('copiaCedula')?.setValue(copiaCedula) : this.formEdit.get('copiaCedula')?.reset();
-    profesion ? this.formEdit.get('profesion')?.setValue(profesion) : this.formEdit.get('profesion')?.reset();
+    // copiaCedula/copiaLicencia/documentos/foto son <input type="file">: el
+    // navegador solo permite setear su .value a "" (nunca a una URL), así que
+    // se resetean siempre — el archivo/foto actual ya se muestra aparte (link/img).
+    this.formEdit.get('copiaCedula')?.reset();
+    profesion ? this.formEdit.get('profesion')?.setValue(profesion.split(',')) : this.formEdit.get('profesion')?.reset();
     ano_profesion ? this.formEdit.get('ano_profesion')?.setValue(ano_profesion) : this.formEdit.get('ano_profesion')?.reset();
     banco ? this.formEdit.get('banco')?.setValue(banco) : this.formEdit.get('banco')?.reset();
     numero_cuenta ? this.formEdit.get('numero_cuenta')?.setValue(numero_cuenta) : this.formEdit.get('numero_Cuenta')?.reset();
-    copiaLicencia ? this.formEdit.get('copiaLicencia')?.setValue(copiaLicencia) : this.formEdit.get('copiaLicencia')?.reset();
+    this.formEdit.get('copiaLicencia')?.reset();
     tipo_cuenta ? this.formEdit.get('tipo_cuenta')?.setValue(tipo_cuenta) : this.formEdit.get('tipo_cuenta')?.reset();
-    documentos ? this.formEdit.get('documentos')?.setValue(documentos) : this.formEdit.get('documentos')?.reset();
+    this.formEdit.get('documentos')?.reset();
     descripcion ? this.formEdit.get('descripcion')?.setValue(descripcion) : this.formEdit.get('descripcion')?.reset();
-    foto ? this.formEdit.get('foto')?.setValue(foto) : this.formEdit.get('foto')?.reset();
+    this.formEdit.get('foto')?.reset();
   }
 
   prepararCaducidad(){
@@ -750,7 +749,8 @@ export class ProveedoresComponent {
   edit_prov(a: any) {
     this.showHeader = false;
     this.showHeaderC = true;
-    this.proveedor_seleccionado = a;    
+    this.proveedor_seleccionado = a;
+    this.limpiarForm();
   }
 
   proveedorAEliminar: any = null;

@@ -31,6 +31,7 @@ import { SolicitudDetalleComponent } from './components/solicitudes/solicitud-de
 import { PendientesComponent } from './components/cuentas/pendientes/pendientes.component';
 import { RechazadosComponent } from './components/cuentas/rechazados/rechazados.component';
 import { ProveedoresComponent } from './components/cuentas/proveedores/proveedores.component';
+import { HistorialPuntosComponent } from './components/puntos/historial/historial.component';
 import { SolicitantesComponent } from './components/cuentas/solicitantes/solicitantes.component';
 import { AdministradoresComponent } from './components/cuentas/administradores/administradores.component';
 import { SugerenciasLeidasComponent } from './components/sugerencias/sugerencias-leidas/sugerencias-leidas.component';
@@ -89,6 +90,7 @@ import { firebaseConfig } from 'src/app/services/Firebase/firebase.config';
     PendientesComponent,
     ProveedoresComponent,
     RechazadosComponent,
+    HistorialPuntosComponent,
     SolicitantesComponent,
     AdministradoresComponent,
     SugerenciasLeidasComponent,
