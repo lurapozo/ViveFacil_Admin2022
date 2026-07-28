@@ -3,8 +3,8 @@
     "id_solicitante": {
       ".indexOn": "chats",
       "$solicitanteID": {
-        ".read": "auth != null && (!data.exists() || data.child('uid').val() == auth.uid)",
-        ".write": "auth != null && (!data.exists() || data.child('uid').val() == auth.uid)",
+        ".read": "auth != null && (!data.child('uid').exists() || data.child('uid').val() == auth.uid)",
+        ".write": "auth != null && (!data.child('uid').exists() || data.child('uid').val() == auth.uid)",
         "uid": {
           ".validate": "newData.val() == auth.uid"
         },
@@ -22,8 +22,8 @@
     },
     "id_proveedor": {
       "$proveedorID": {
-        ".read": "auth != null && (!data.exists() || data.child('uid').val() == auth.uid)",
-        ".write": "auth != null && (!data.exists() || data.child('uid').val() == auth.uid)",
+        ".read": "auth != null && (!data.child('uid').exists() || data.child('uid').val() == auth.uid)",
+        ".write": "auth != null && (!data.child('uid').exists() || data.child('uid').val() == auth.uid)",
         "uid": {
           ".validate": "newData.val() == auth.uid"
         },
