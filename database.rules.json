@@ -29,7 +29,7 @@
         },
         "chats": {
           "$solicitanteID": {
-            ".write": "auth != null && (root.child('id_proveedor').child($proveedorID).child('uid').val() == auth.uid || !data.exists())",
+            ".write": "auth != null && (root.child('id_proveedor').child($proveedorID).child('uid').val() == auth.uid || !data.exists() || newData.val() == data.val())",
             ".validate": "newData.isBoolean() == true"
           }
         }
