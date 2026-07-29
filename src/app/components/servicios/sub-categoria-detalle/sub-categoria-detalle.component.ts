@@ -28,6 +28,12 @@ export class SubCategoriaDetalleComponent implements OnInit {
   mensajeToast = '';
   tituloToast = '';
 
+  // ponytail: la foto no va en el FormGroup, es un File suelto + preview con
+  // createObjectURL — el accept="image/*" del input ya filtra el formato, no
+  // hace falta el validator de extensiones que arrastra sub-categorias.
+  fotoFile: File | null = null;
+  fotoPreview: string | null = null;
+
   formEdit = new FormGroup({
     categoria: new FormControl('', [Validators.required]),
     nombre: new FormControl('', [Validators.required]),
@@ -77,6 +83,20 @@ export class SubCategoriaDetalleComponent implements OnInit {
     });
   }
 
+  onFotoSeleccionada(event: any) {
+    const file: File = event.target.files?.[0];
+    if (!file) return;
+    if (this.fotoPreview) URL.revokeObjectURL(this.fotoPreview);
+    this.fotoFile = file;
+    this.fotoPreview = URL.createObjectURL(file);
+  }
+
+  quitarFotoSeleccionada() {
+    if (this.fotoPreview) URL.revokeObjectURL(this.fotoPreview);
+    this.fotoFile = null;
+    this.fotoPreview = null;
+  }
+
   isInvalidForm(subForm: string): boolean {
     const control = this.formEdit.get(subForm);
     return !!(control?.invalid && control?.touched) || !!(control?.dirty && this.getErrorMessage(subForm).length !== 0);
@@ -108,10 +128,12 @@ export class SubCategoriaDetalleComponent implements OnInit {
     if (descripcion) subCategoria.descripcion = descripcion;
     if (categoria) subCategoria.categoria = categoria;
     if (estado !== null) subCategoria.estado = estado;
+    if (this.fotoFile) subCategoria.foto = this.fotoFile;
 
     this.pythonAnywhereService.actualizar_servicios(subCategoria, this.servicio.id.toString()).subscribe(() => {
       this.mostrarToastInfo('Sub-Categoría actualizada', 'Se guardaron los cambios correctamente', false);
       this.editando = false;
+      this.quitarFotoSeleccionada();
       this.pythonAnywhereService.obtener_servicios().subscribe((resp: any[]) => {
         const actualizado = resp.find(s => s.id === this.servicio?.id);
         if (actualizado) {

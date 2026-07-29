@@ -31,7 +31,7 @@
           {{ servicio.estado ? 'ACTIVO' : 'INACTIVO' }}
         </span>
         <div>
-          <button type="button" class="btn btn-sm btn-outline-primary me-2" (click)="editando = !editando">
+          <button type="button" class="btn btn-sm btn-outline-primary me-2" (click)="editando = !editando; quitarFotoSeleccionada()">
             <i class="bi bi-pencil"></i> {{ editando ? 'Cancelar edición' : 'Editar' }}
           </button>
           <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modalEliminarServicio">
@@ -40,7 +40,7 @@
         </div>
       </div>
 
-      <img *ngIf="servicio.foto" [src]="servicio.foto" class="foto-servicio mb-3" alt="Imagen de la sub-categoría">
+      <img *ngIf="fotoPreview || servicio.foto" [src]="fotoPreview || servicio.foto" class="foto-servicio mb-3" alt="Imagen de la sub-categoría">
 
       <!-- Vista de solo lectura -->
       <div *ngIf="!editando">
@@ -60,6 +60,18 @@
 
       <!-- Formulario de edición -->
       <form *ngIf="editando" [formGroup]="formEdit" (ngSubmit)="onActualizar()">
+        <div class="row p-2 align-items-center">
+          <div class="col-3">
+            <label for="inputFoto" class="form-label"><h3 class="m-0 p-0 fw-bold">Imagen:</h3></label>
+          </div>
+          <div class="col-9 d-flex align-items-center gap-2">
+            <input #fotoInput type="file" class="form-control" id="inputFoto" accept="image/*" (change)="onFotoSeleccionada($event)">
+            <button *ngIf="fotoFile" type="button" class="btn btn-sm btn-outline-secondary" (click)="quitarFotoSeleccionada(); fotoInput.value = ''">
+              Quitar
+            </button>
+          </div>
+        </div>
+
         <div class="row p-2 align-items-center">
           <div class="col-3">
             <label for="inputNombre" class="form-label"><h3 class="m-0 p-0 fw-bold">Nombre:</h3></label>
