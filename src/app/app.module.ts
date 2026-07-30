@@ -15,7 +15,6 @@ import { ProfesionesComponent } from './components/profesiones/profesiones.compo
 import { PlanesProveedoresComponent } from './components/planes-proveedores/planes-proveedores.component';
 import { RolesComponent } from './components/roles/roles.component';
 import { PublicidadComponent } from './components/publicidad/publicidad.component';
-import { PromocionComponent } from './components/promocion/promocion.component';
 import { PlanesComponent } from './components/planes/planes.component';
 import { InsigniasComponent } from './components/insignias/insignias.component';
 import { CuponesComponent } from './components/cupones/cupones.component';
@@ -25,6 +24,7 @@ import { PoliticasComponent } from './components/politicas/politicas.component';
 import { CategoriasComponent } from './components/servicios/categorias/categorias.component';
 import { SubCategoriasComponent } from './components/servicios/sub-categorias/sub-categorias.component';
 import { SubCategoriaDetalleComponent } from './components/servicios/sub-categoria-detalle/sub-categoria-detalle.component';
+import { CuponDetalleComponent } from './components/cupones/cupon-detalle/cupon-detalle.component';
 import { CargosComponent } from './components/pagos/cargos/cargos.component';
 import { SolicitudesComponent } from './components/solicitudes/solicitudes.component';
 import { SolicitudDetalleComponent } from './components/solicitudes/solicitud-detalle/solicitud-detalle.component';
@@ -75,7 +75,6 @@ import { firebaseConfig } from 'src/app/services/Firebase/firebase.config';
     PlanesProveedoresComponent,
     RolesComponent,
     PublicidadComponent,
-    PromocionComponent,
     PlanesComponent,
     InsigniasComponent,
     CuponesComponent,
@@ -84,6 +83,7 @@ import { firebaseConfig } from 'src/app/services/Firebase/firebase.config';
     CategoriasComponent,
     SubCategoriasComponent,
     SubCategoriaDetalleComponent,
+    CuponDetalleComponent,
     CargosComponent,
     SolicitudesComponent,
     SolicitudDetalleComponent,

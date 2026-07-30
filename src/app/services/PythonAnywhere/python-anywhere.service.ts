@@ -17,7 +17,6 @@ import { BodyActualizarNotificacionAnuncio, BodyActualizarNotificacionAutomatica
 import { PaymentEfectivo, PaymentPaginacion, PaymentTarjeta } from 'src/app/interfaces/payment';
 import { BodyActualizarPlan, BodyActualizarPlanProveedor, BodyCrearPlan, BodyCrearPlanProveedor, BodyResponseCrearPlan, Plan, PlanProveedor } from 'src/app/interfaces/plan';
 import { BodyActualizarProfesion, BodyCrearProfesion, BodyResponseActualizarProfesion, BodyResponseCrearProfesion, Profesion } from 'src/app/interfaces/profesion';
-import { BodyPromocionActualizar, BodyResponsePromocionActualizar, Promocion, PromocionCrear } from 'src/app/interfaces/promocion';
 import { BodyActualizarProveedor, BodyActualizarProveedorPendiente, BodyCrearProfesionProveedor, BodyCrearProveedor, BodyCrearProveedorPendiente, BodyResponseCrearProfesionProveedor, BodyResponseCrearProveedorPendiente, Proveedor, ProveedorPaginacion, ProveedorPendiente, ProveedorProfesion } from 'src/app/interfaces/proveedor';
 import { BodyActualizarPublicidad, BodyCrearPublicidad, BodyResponseCrearPublicidad, Publicidad } from 'src/app/interfaces/publicidad';
 import { BodyActualizarServicio, Servicio } from 'src/app/interfaces/servicio';
@@ -288,66 +287,6 @@ export class PythonAnywhereService {
   }
   //-----------------------------------------------------------------------------------------------------------------------
 
-  //---------------------------------------------------- SECCIÓN PROMOCIÓN ------------------------------------------------
-  /**
-   * Obtiene las promociones registradas en la base de datos segun el ID pasado como parametro.
-   *
-   * @author Kevin Chévez
-   * @param id Recibe como parametro el un string ID de la promocion.
-   * @returns Devuelve un Observable con un arreglo de objetos Promocion.
-   */
-  obtener_promocion(id: string): Observable<Promocion[]> {
-    return this.http.get(`${this.API_URL}/administrador/promotions/promociones/detalle/${id}/`) as Observable<Promocion[]>;
-  }
-
-  /**
-   * Función que cambia el estado de la promocion que se encuentra registrada en la base de datos.
-   *
-   * @author Kevin Chévez
-   * @param id Recibe un string indicando el ID de la promocion.
-   * @param estado Recibe un boolean indicando el estado de la promocion. (true - false).
-   * @returns Devuelve un Observable con la respuesta OK(200) o Error(500).
-   */
-  cambio_promocion_estado(id: any, estado: boolean): Observable<any> {
-    return this.http.put(`${this.API_URL}/administrador/promotions/promociones/estado/?id=${id}`, {
-      estado: estado,
-    });
-  }
-
-  /**
-   * Función que actualiza el contenido de una Promocion registrada en la base de datos, segun los parametros pasados.
-   *
-   * @author Kevin Chévez
-   * @param bodyActualizar Recibe un objeto BodyPromocionActualizar con los parametros necesarios para actualizar la promocion.
-   * @param id Recibe un string perteneciente al ID de la promocion la cual sera modificada.
-   * @returns Devuelve un Observable con un objeto BodyResponsePromocionActualizar.
-   */
-  actualizar_promocion(bodyActualizar: BodyPromocionActualizar, id: any): Observable<BodyResponsePromocionActualizar> {
-    const dataUpdate = new FormData();
-    dataUpdate.append("codigo", bodyActualizar.codigo);
-    dataUpdate.append("titulo", bodyActualizar.titulo);
-    dataUpdate.append("descripcion", bodyActualizar.descripcion);
-    bodyActualizar.fecha_iniciacion ? dataUpdate.append("fecha_iniciacion", bodyActualizar.fecha_iniciacion) : null;
-    dataUpdate.append("fecha_expiracion", bodyActualizar.fecha_expiracion);
-    dataUpdate.append("porcentaje", bodyActualizar.porcentaje.toString());
-    dataUpdate.append("cantidad", bodyActualizar.cantidad.toString());
-    dataUpdate.append("participantes", bodyActualizar.participantes);
-    bodyActualizar.foto ? dataUpdate.append("foto", bodyActualizar.foto) : null;
-    dataUpdate.append("tipo_categoria", bodyActualizar.tipo_categoria);
-
-    return this.http.put(`${this.API_URL}/administrador/promotions/promociones/${id}/`, dataUpdate) as Observable<BodyResponsePromocionActualizar>;
-  }
-
-  /**
-   * Función que elimina una promocion registrada en la base de datos según el parametro pasado.
-   *
-   * @author Kevin Chévez
-   * @param id Recibe un string perteneciente al ID de la Promocion la cual sera eliminada.
-   * @returns Devuelve un Observable con una respuesta OK(204) or Error(500).
-   */
-  eliminar_promocion(id: any): Observable<any> {
-    return this.http.delete(`${this.API_URL}/administrador/promotions/promociones/${id}/`);
-  }
   //-----------------------------------------------------------------------------------------------------------------------
 
   //------------------------------------------------------ SECCIÓN CUPON --------------------------------------------------
@@ -391,7 +330,9 @@ export class PythonAnywhereService {
     bodyActualizar.fecha_iniciacion ? dataUpdate.append("fecha_iniciacion", bodyActualizar.fecha_iniciacion) : null;
     dataUpdate.append("fecha_expiracion", bodyActualizar.fecha_expiracion);
     dataUpdate.append("porcentaje", bodyActualizar.porcentaje.toString());
-    dataUpdate.append("participantes", bodyActualizar.porcentaje.toString());
+    // Iba `bodyActualizar.porcentaje` por un copy-paste: cada edición pisaba
+    // `participantes` con el porcentaje.
+    dataUpdate.append("participantes", bodyActualizar.participantes ?? "");
     dataUpdate.append("cantidad", bodyActualizar.cantidad.toString());
     dataUpdate.append("puntos", bodyActualizar.puntos.toString());
     bodyActualizar.foto ? dataUpdate.append("foto", bodyActualizar.foto) : null;
@@ -409,6 +350,20 @@ export class PythonAnywhereService {
    */
   eliminar_cupon(id: string): Observable<any> {
     return this.http.delete(`${this.API_URL}/administrador/promotions/cupones/${id}/`) as Observable<any>;
+  }
+
+  /**
+   * Cupón con su estado efectivo y el resumen de usos, para la pantalla de
+   * detalle. A diferencia de `obtener_cupon`, que pega al endpoint web
+   * compartido con la app del solicitante, este es el del admin.
+   */
+  obtener_cupon_detalle(id: string): Observable<Cupon> {
+    return this.http.get(`${this.API_URL}/administrador/promotions/cupones/${id}/detalle/`) as Observable<Cupon>;
+  }
+
+  /** Lista paginada de quién canjeó el cupón y si ya lo usó en un pago. */
+  obtener_usos_cupon(id: string, page = 1): Observable<any> {
+    return this.http.get(`${this.API_URL}/administrador/promotions/cupones/${id}/usos/?page=${page}`) as Observable<any>;
   }
   //-----------------------------------------------------------------------------------------------------------------------
 
@@ -945,7 +900,7 @@ export class PythonAnywhereService {
     return this.http.get(`${this.API_URL}/administrador/catalog/profesiones/`) as Observable<Profesion[]>;
   }
   /**
-   * Función que agrega en la base de datos una promocion segun los datos pasados por parametros.
+   * Función que agrega en la base de datos una profesion segun los datos pasados por parametros.
    *
    * @author Kevin Chévez
    * @param bodyCrear Recibe un Objeto BodyCrearProfesion la cual se encarga de crear una profesion con los campos necesarios.
@@ -1166,15 +1121,6 @@ export class PythonAnywhereService {
   }
 
 
-  /**
-   * Funcion que traer todas las promociones
-   *
-   * @author Margarita Mawyin
-   * @returns Devuelve un Observable con un objeto Promociones
-     */
-  obtener_promociones() {
-    return this.http.get(this.API_URL + '/administrador/promotions/promociones/');
-  }
 
   /**
  * Funcion que traer todos los cupones
@@ -1198,45 +1144,10 @@ export class PythonAnywhereService {
   }
 
   /**
-   * Funcion que agrega las promociones
-   * @author Margarita Mawyin
-   * @param data
-   * @returns  Devuelve un Observable con succes: boolean, msg : string, promocion: Obejct<Promocion>
-   */
-  /*
-  data = {
-    "codigo": "Margarita",
-    "titulo": "Codigo Margarita",
-    "descripcion": "Sin valor",
-    "porcentaje": 0,
-    "fecha_iniciacion": "2023-01-13T23:42:06-05:00",
-    "fecha_expiracion": "2023-01-31T23:42:06-05:00",
-    "participantes": "Solicitante",
-    "foto": null,
-    "tipo_categoria": "Plomería",
-    "cantidad": 1
-      }
-  */
-  crear_promocion(bodyCrear: PromocionCrear) {
-    const dataCrear = new FormData();
-    dataCrear.append("codigo", bodyCrear.codigo);
-    bodyCrear.foto ? dataCrear.append("foto", bodyCrear.foto) : null;
-    dataCrear.append("titulo", bodyCrear.titulo);
-    dataCrear.append("tipo_categoria", bodyCrear.tipo_categoria);
-    dataCrear.append("cantidad", bodyCrear.cantidad.toString());
-    dataCrear.append("porcentaje", bodyCrear.porcentaje.toString());
-    dataCrear.append("fecha_iniciacion", bodyCrear.fecha_iniciacion);
-    dataCrear.append("fecha_expiracion", bodyCrear.fecha_expiracion);
-    dataCrear.append("descripcion", bodyCrear.descripcion);
-    dataCrear.append("participantes", bodyCrear.participantes);
-    return this.http.post(this.API_URL + '/administrador/promotions/promociones/', dataCrear);
-  }
-
-  /**
    *  Funcion que agrega los cupones
    * @author Margarita Mawyin
    * @param data
-   * @returns Devuelve un Observable con succes: boolean, msg : string, promocion: Obejct<Cupon>
+   * @returns Devuelve un Observable con success: boolean, msg: string, cupon: Object<Cupon>
    */
   /*
   {

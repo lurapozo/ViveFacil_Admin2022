@@ -27,19 +27,46 @@ export class CuponesComponent {
   isErrorToast = false;
   mensajeToast = "";
   tituloToast = "";
-  fileImagenActualizar: File = {} as File;
-  imagenActualizar: string | undefined;
   fileImagenCrear: File = {} as File;
   imagenCrear: string | undefined;
-  existImageCrear = false; existImageActualizar = false;
-  activo = ''
-  activoCond = false
+  existImageCrear = false;
   mensajeAlerta: string = '';
-  isCrear = false; isActualizar = false; isEliminar = false;
+  isCrear = false; isEliminar = false;
   dropdownOpen: boolean = false;
   categoria?: SubCategoria[];
   listCategorias?: Categoria[];
   primeraCat?: string;
+
+  /**
+   * Vigencia: si el cupón sirve HOY por sus fechas y sus cupos. Va en su propia
+   * columna, separada de `estado` (el interruptor manual del admin), porque son
+   * cosas independientes: un cupón puede estar habilitado y aun así estar
+   * expirado o agotado. Lo calcula el backend en
+   * promotions.services.vigencia_cupon.
+   */
+  private static readonly ETIQUETAS: Record<string, { texto: string; punto: string; texto_clase: string }> = {
+    vigente:    { texto: 'Vigente',    punto: 'bg-success',   texto_clase: 'text-success' },
+    programado: { texto: 'Programado', punto: 'bg-primary',   texto_clase: 'text-primary' },
+    expirado:   { texto: 'Expirado',   punto: 'bg-secondary', texto_clase: 'text-muted' },
+    agotado:    { texto: 'Agotado',    punto: 'bg-warning',   texto_clase: 'text-warning' },
+  };
+
+  private info(cupon: Cupon) {
+    return CuponesComponent.ETIQUETAS[cupon?.vigencia || 'vigente']
+      || CuponesComponent.ETIQUETAS['vigente'];
+  }
+
+  etiquetaEstado(cupon: Cupon): string {
+    return this.info(cupon).texto;
+  }
+
+  claseEstado(cupon: Cupon): string {
+    return this.info(cupon).punto;
+  }
+
+  claseTextoEstado(cupon: Cupon): string {
+    return this.info(cupon).texto_clase;
+  }
 
   constructor(private pythonAnywhereService: PythonAnywhereService, private sanitizer: DomSanitizer) {
     this.pythonAnywhereService.obtener_cupones().subscribe(resp => {
@@ -72,8 +99,6 @@ export class CuponesComponent {
 
     const imagenCrearControl = this.cuponCrear.get('imagen') as FormControl;
     imagenCrearControl.addValidators(this.createImageValidator(this.cuponCrear.get('imagen') as AbstractControl, 'crear'));
-    const imagenActualizarControl = this.formEdit.get('imagen') as FormControl;
-    imagenActualizarControl.addValidators(this.createImageValidator(this.formEdit.get('imagen') as AbstractControl, 'actualizar'));
   }
 
 
@@ -89,47 +114,12 @@ export class CuponesComponent {
     fin: new FormControl('', [Validators.required]),
     punto: new FormControl('10', [Validators.required, Validators.minLength(1),
     Validators.maxLength(2), Validators.pattern(/^[0-9]+$/)]),
-    imagen: new FormControl(this.fileImagenActualizar),
+    imagen: new FormControl(this.fileImagenCrear),
     categoria: new FormControl('', [Validators.required]),
     participantes: new FormControl('', [Validators.required]),
 
 
   });
-
-  formEdit: FormGroup = new FormGroup({
-    titulo: new FormControl('', [Validators.required]),
-    descripcion: new FormControl('', [Validators.required]),
-    descuento: new FormControl('', [Validators.required, Validators.minLength(1),
-    Validators.maxLength(2), Validators.pattern(/^[0-9]+$/)]),
-    cantidad: new FormControl('', [Validators.required, Validators.minLength(1),
-    Validators.maxLength(2), Validators.pattern(/^[0-9]+$/)]),
-    inicio: new FormControl('', [Validators.required]),
-    fin: new FormControl('', [Validators.required]),
-    punto: new FormControl('10', [Validators.required, Validators.minLength(1),
-    Validators.maxLength(2), Validators.pattern(/^[0-9]+$/)]),
-    imagen: new FormControl(this.fileImagenActualizar),
-    categoria: new FormControl('Automotriz'),
-    participantes: new FormControl('', [Validators.required]),
-
-  });
-
-  cambiarEstado(event: any) {
-    let estado = event.srcElement.checked
-    const id = this.cupon_seleccionada.id
-    console.log("cambiar estado")
-    if (this.cupon_seleccionada) {
-      this.pythonAnywhereService.cambio_cupon_estado(id, estado).subscribe({
-        next: (resp) => {
-          this.mostrarToastInfo('Estado de la Insignia', 'Insignia editada correctamente', false);
-          this.actualizarCup();
-        },
-        error: (err) => {
-          console.error("Error al cambiar el estado:", err);
-          this.mostrarToastInfo('Error', 'No se pudo cambiar el estado', true);
-        }
-      });
-    }
-  }
 
   actualizarCup() {
     this.pythonAnywhereService.obtener_cupones().subscribe(resp => {
@@ -141,18 +131,6 @@ export class CuponesComponent {
   abrirSelectorArchivo(event: Event, fileInput: HTMLInputElement): void {
     event.stopPropagation();
     fileInput.click();
-  }
-
-  ver(cupon: any) {
-    this.cupon_seleccionada = cupon
-    if (this.activoCond) {
-      this.activo = 'Activo'
-
-    } else {
-      this.activo = 'Inactivo'
-    }
-
-
   }
 
   limpiarForm(tipo: string) {
@@ -170,31 +148,6 @@ export class CuponesComponent {
       this.cuponCrear.get('categoria')?.reset()
       this.cuponCrear.get('imagen')?.reset()
       this.cuponCrear.get('codigo')?.reset()
-
-
-
-    } else if (tipo === 'actualizar') {
-
-      const titulo = this.cupon_seleccionada?.titulo;
-      const descripcion = this.cupon_seleccionada?.descripcion;
-      const descuento = this.cupon_seleccionada?.porcentaje;
-      const cantidad = this.cupon_seleccionada?.cantidad;
-      const punto = this.cupon_seleccionada?.puntos;
-      const categoria = 'Automotriz';
-      const inicio = this.cupon_seleccionada?.fecha_iniciacion;
-      const fin = this.cupon_seleccionada?.fecha_expiracion;
-
-
-      this.existImageActualizar = false;
-      this.formEdit.get('imagen')?.reset();
-      titulo ? this.formEdit.get('titulo')?.setValue(titulo) : this.formEdit.get('nombre')?.reset();
-      descripcion ? this.formEdit.get('descripcion')?.setValue(descripcion) : this.formEdit.get('descripcion')?.reset();
-      descuento ? this.formEdit.get('descuento')?.setValue(descuento) : this.formEdit.get('descuento')?.reset();
-      cantidad ? this.formEdit.get('cantidad')?.setValue(cantidad) : this.formEdit.get('cantidad')?.reset();
-      punto ? this.formEdit.get('punto')?.setValue(punto) : this.formEdit.get('punto')?.reset();
-      categoria ? this.formEdit.get('categoria')?.setValue(categoria) : this.formEdit.get('categoria')?.reset();
-      inicio ? this.formEdit.get('inicio')?.setValue(inicio) : this.formEdit.get('inicio')?.reset();
-      fin ? this.formEdit.get('fin')?.setValue(inicio) : this.formEdit.get('fin')?.reset();
 
 
 
@@ -290,32 +243,19 @@ export class CuponesComponent {
 
   establecerMensaje(mensaje: string, tipo: string) {
 
-    if (tipo === 'actualizar') {
-      this.isActualizar = true;
-      this.isEliminar = false;
-      this.isCrear = false;
-    }
-    else if (tipo === 'eliminar') {
+    if (tipo === 'eliminar') {
       this.isEliminar = true;
-      this.isActualizar = false;
       this.isCrear = false;
-    }
-    else if (tipo === 'crear') {
+    } else if (tipo === 'crear') {
       this.isCrear = true;
       this.isEliminar = false;
-      this.isActualizar = false;
     }
     this.mensajeAlerta = mensaje;
   }
 
-  isInvalidForm(subForm: string, tipo: string) {
-    if (tipo === 'crear') {
-
-      return this.cuponCrear.get(subForm)?.invalid && this.cuponCrear.get(subForm)?.touched || this.cuponCrear.get(subForm)?.dirty && this.getErrorMessage(this.cuponCrear, subForm).length !== 0;
-    } else {
-
-      return this.formEdit.get(subForm)?.invalid && this.formEdit.get(subForm)?.touched || this.formEdit.get(subForm)?.dirty && this.getErrorMessage(this.formEdit, subForm).length !== 0;
-    }
+  isInvalidForm(subForm: string, _tipo: string) {
+    return this.cuponCrear.get(subForm)?.invalid && this.cuponCrear.get(subForm)?.touched
+      || this.cuponCrear.get(subForm)?.dirty && this.getErrorMessage(this.cuponCrear, subForm).length !== 0;
   }
 
 
@@ -336,19 +276,11 @@ export class CuponesComponent {
               this.cuponCrear.get('imagen')?.setValue(null);
               this.existImageCrear = false;
             }
-            else if (tipo === 'actualizar') {
-              this.cuponCrear.get('imagen')?.setValue(null);
-              this.existImageActualizar = false;
-            }
             return { image_error: 'Solo imágenes con formato jpg, jpeg, png o jfif.' };
           }
           console.log('Formato de imagen correcto');
           if (tipo === 'crear') {
             this.existImageCrear = true;
-          }
-          else if (tipo === 'actualizar') {
-            console.log("imagen actualizando")
-            this.existImageActualizar = true;
           }
         }
         return null;
@@ -368,12 +300,6 @@ export class CuponesComponent {
             this.fileImagenCrear = file;
             this.imagenCrear = imagen.base;
 
-          }
-          else if (tipo === 'actualizar') {
-
-            this.formEdit.get('imagen')?.setValue(file);
-            this.fileImagenActualizar = file;
-            this.imagenActualizar = imagen.base;
           }
         })
         .catch(err => console.log(err));
@@ -471,69 +397,6 @@ export class CuponesComponent {
     }
 
   }
-  onActualizar() {
-    let cupon: BodyCuponActualizar = {
-      codigo: '',
-      titulo: '',
-      descripcion: '',
-      fecha_iniciacion: '',
-      fecha_expiracion: '',
-      porcentaje: 0,
-      cantidad: 0,
-      puntos: 0,
-      tipo_categoria: 'Automotriz'
-    }
-
-    const titulo = this.formEdit.get('titulo')?.value;
-    const descripcion = this.formEdit.get('descripcion')?.value;
-    const inicio = this.formEdit.get('inicio')?.value;
-    const fin = this.formEdit.get('fin')?.value;
-    const cantidad = this.formEdit.get('cantidad')?.value;
-    const puntos = this.formEdit.get('punto')?.value;
-    const categoria = 'Automotriz';
-    const descuento = this.formEdit.get('descuento')?.value;
-    const foto = this.formEdit.get('imagen')?.value as File
-    if (this.cupon_seleccionada.cupon) {
-      cupon.codigo = this.cupon_seleccionada?.cupon.codigo
-    }
-
-    if (titulo && descripcion && inicio && fin && cantidad && puntos && categoria && descuento) {
-      cupon.titulo = titulo
-      cupon.descripcion = descripcion
-      cupon.fecha_iniciacion = inicio
-      cupon.fecha_expiracion = fin
-      cupon.porcentaje = descuento
-      cupon.cantidad = cantidad
-      cupon.puntos = puntos
-      cupon.tipo_categoria = categoria
-
-    }
-
-    console.log(foto, this.existImageActualizar)
-    if (foto && this.existImageActualizar) {
-      console.log('entre')
-      cupon.foto = foto; // Si hay foto se le agrega al body.
-      console.log(cupon.foto)
-    }
-    console.log(this.formEdit)
-    if (this.cupon_seleccionada.cupon) {
-      const id = this.cupon_seleccionada.cupon.id
-      console.log(id)
-      this.pythonAnywhereService.actualizar_cupon(cupon, id).subscribe(resp => {
-
-        this.limpiarForm('actualizar');
-        this.mostrarToastInfo('Estado del Cupon ', 'Cupon editada correctamente', false);
-        this.pythonAnywhereService.obtener_cupones().subscribe(resp => {
-          this.arr_cupon = Object(resp)
-          this.arr_filtered_cupon = this.arr_cupon
-          console.log(this.arr_filtered_cupon)
-
-        });
-      })
-
-    }
-  }
-
   getCurrentDate(): string {
     return moment().format('YYYY-MM-DD');
   }
@@ -559,20 +422,34 @@ export class CuponesComponent {
     }
   }
 
+  /** Marca cuál se va a eliminar y prepara el modal de confirmación. */
+  pedirEliminar(cupon: Cupon) {
+    this.cupon_seleccionada = cupon;
+    this.establecerMensaje(
+      `¿Está seguro que desea eliminar el cupón "${cupon.titulo}"? Esta acción no se puede deshacer.`,
+      'eliminar',
+    );
+  }
+
   onDelete() {
-    if (this.cupon_seleccionada) {
-      this.pythonAnywhereService.eliminar_cupon(this.cupon_seleccionada.id).subscribe(resp => {
-        this.mostrarToastInfo('Estado del Cupon ', 'Cupon Eliminado correctamente', false)
-        this.pythonAnywhereService.obtener_cupones().subscribe(resp => {
-          this.arr_cupon = Object(resp)
-          this.arr_filtered_cupon = this.arr_cupon
-          console.log(this.arr_filtered_cupon)
-
-        });
-      }
-      )
+    if (!this.cupon_seleccionada) {
+      return;
     }
-
+    this.pythonAnywhereService.eliminar_cupon(this.cupon_seleccionada.id).subscribe({
+      next: () => {
+        this.mostrarToastInfo('Cupón eliminado', 'Se eliminó correctamente', false);
+        this.actualizarCup();
+      },
+      // El backend devuelve 409 cuando el cupón ya tiene canjes: no se borra,
+      // se desactiva, para no perder el rastro de quién lo usó.
+      error: (err) => {
+        const data = err.error;
+        const mensaje = data?.canjes !== undefined
+          ? `${data.error} (${data.canjes} canje(s) y ${data.pagos} pago(s) asociados).`
+          : 'No se pudo eliminar el cupón.';
+        this.mostrarToastInfo('No se pudo eliminar', mensaje, true);
+      },
+    });
   }
 
   mostrarToastInfo(titulo: string, mensaje: string, isErrorToast: boolean) {

@@ -1,0 +1,264 @@
+<!-- Titulo principal-->
+<div class="header-admi1">
+  <div class="header-text">
+    <div class="containerstart detalle-header">
+      <button type="button" class="btn-back" (click)="volver()" title="Volver" aria-label="Volver">
+        <i class="bi bi-arrow-left"></i>
+      </button>
+      <p>Cupón: {{ cupon?.titulo }}</p>
+    </div>
+  </div>
+  <svg preserveAspectRatio="xMidYMid">
+    <path d="M0,60 L0,0 L1290,0 L1290,60" fill="#333539" />
+    <path d="M320,60 Q448,85 550,60" fill="#333539" />
+  </svg>
+</div>
+
+<div class="container-fluid" *ngIf="cargando">
+  <p class="p-4">Cargando...</p>
+</div>
+
+<div class="container-fluid" *ngIf="noEncontrado">
+  <p class="p-4">No se encontró el cupón.</p>
+</div>
+
+<div class="container-fluid" *ngIf="cupon">
+  <div class="row justify-content-center p-0">
+    <div class="col-10 containeradmin p-4">
+
+      <!-- Dos cosas independientes, por eso van separadas: el interruptor que
+           controla el admin y la vigencia que sale de fechas y cupos. -->
+      <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-2">
+        <div class="d-flex flex-wrap gap-4">
+          <div>
+            <p class="etiqueta-bloque">Habilitado</p>
+            <span class="badge-estado" [ngClass]="cupon.estado ? 'badge-activo' : 'badge-inactivo'">
+              {{ cupon.estado ? 'Sí' : 'No' }}
+            </span>
+            <button *ngIf="cupon.estado" type="button" class="btn btn-sm btn-outline-secondary ms-2" (click)="cambiarEstado(false)">
+              <i class="bi bi-pause-circle"></i> Deshabilitar
+            </button>
+            <button *ngIf="!cupon.estado" type="button" class="btn btn-sm btn-outline-success ms-2" (click)="cambiarEstado(true)">
+              <i class="bi bi-play-circle"></i> Habilitar
+            </button>
+          </div>
+          <div>
+            <p class="etiqueta-bloque">Estado</p>
+            <span class="badge-estado" [ngClass]="vigenciaInfo.clase">{{ vigenciaInfo.etiqueta }}</span>
+            <span class="ms-2 text-muted small">{{ vigenciaInfo.ayuda }}</span>
+          </div>
+        </div>
+        <div>
+          <button type="button" class="btn btn-sm btn-outline-primary me-2"
+                  (click)="editando = !editando; quitarFotoSeleccionada(); limpiarForm()">
+            <i class="bi bi-pencil"></i> {{ editando ? 'Cancelar edición' : 'Editar' }}
+          </button>
+          <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modalEliminarCupon">
+            <i class="bi bi-trash"></i> Eliminar
+          </button>
+        </div>
+      </div>
+
+      <!-- Resumen de usos: la pregunta "cuántos quedan" -->
+      <div class="row g-2 mb-3" *ngIf="cupon.usos">
+        <div class="col-6 col-md-3">
+          <div class="tarjeta-uso">
+            <span class="tarjeta-uso-valor">{{ cupon.usos.restantes }}</span>
+            <span class="tarjeta-uso-label">Cupos restantes</span>
+            <span class="tarjeta-uso-ayuda">Se descuenta al canjear, no al pagar</span>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="tarjeta-uso">
+            <span class="tarjeta-uso-valor">{{ cupon.usos.canjeados }}</span>
+            <span class="tarjeta-uso-label">Canjeados</span>
+            <span class="tarjeta-uso-ayuda">Usuarios que lo tomaron</span>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="tarjeta-uso">
+            <span class="tarjeta-uso-valor">{{ cupon.usos.usados }}</span>
+            <span class="tarjeta-uso-label">Usados</span>
+            <span class="tarjeta-uso-ayuda">Aplicados a un pago</span>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="tarjeta-uso">
+            <span class="tarjeta-uso-valor">{{ cupon.usos.pendientes }}</span>
+            <span class="tarjeta-uso-label">Pendientes</span>
+            <span class="tarjeta-uso-ayuda">Canjeados sin usar todavía</span>
+          </div>
+        </div>
+      </div>
+
+      <img *ngIf="fotoPreview || cupon.foto" [src]="fotoPreview || cupon.foto" class="foto-cupon mb-3" alt="Imagen del cupón">
+
+      <!-- Vista de solo lectura -->
+      <div *ngIf="!editando">
+        <div class="row p-2"><div class="col-3"><h3 class="m-0 fw-bold">Código:</h3></div><div class="col-9">{{ cupon.codigo }}</div></div>
+        <div class="row p-2"><div class="col-3"><h3 class="m-0 fw-bold">Título:</h3></div><div class="col-9">{{ cupon.titulo }}</div></div>
+        <div class="row p-2"><div class="col-3"><h3 class="m-0 fw-bold">Descripción:</h3></div><div class="col-9">{{ cupon.descripcion }}</div></div>
+        <div class="row p-2"><div class="col-3"><h3 class="m-0 fw-bold">Descuento:</h3></div><div class="col-9">{{ cupon.porcentaje }}%</div></div>
+        <div class="row p-2"><div class="col-3"><h3 class="m-0 fw-bold">Costo en puntos:</h3></div><div class="col-9">{{ cupon.puntos }}</div></div>
+        <div class="row p-2"><div class="col-3"><h3 class="m-0 fw-bold">Cantidad:</h3></div><div class="col-9">{{ cupon.cantidad }}</div></div>
+        <div class="row p-2"><div class="col-3"><h3 class="m-0 fw-bold">Inicia:</h3></div><div class="col-9">{{ cupon.fecha_iniciacion | date:'dd/MM/yyyy HH:mm' }}</div></div>
+        <div class="row p-2"><div class="col-3"><h3 class="m-0 fw-bold">Expira:</h3></div><div class="col-9">{{ cupon.fecha_expiracion | date:'dd/MM/yyyy HH:mm' }}</div></div>
+        <div class="row p-2"><div class="col-3"><h3 class="m-0 fw-bold">Categoría:</h3></div><div class="col-9">{{ cupon.tipo_categoria || '—' }}</div></div>
+      </div>
+
+      <!-- Formulario de edición -->
+      <form *ngIf="editando" [formGroup]="formEdit" (ngSubmit)="onActualizar()">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label" for="codigo">Código</label>
+            <input id="codigo" class="form-control" formControlName="codigo" [class.is-invalid]="isInvalidForm('codigo')">
+            <div class="invalid-feedback">El código es obligatorio.</div>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label" for="titulo">Título</label>
+            <input id="titulo" class="form-control" formControlName="titulo" [class.is-invalid]="isInvalidForm('titulo')">
+            <div class="invalid-feedback">El título es obligatorio.</div>
+          </div>
+          <div class="col-12">
+            <label class="form-label" for="descripcion">Descripción</label>
+            <textarea id="descripcion" rows="2" class="form-control" formControlName="descripcion" [class.is-invalid]="isInvalidForm('descripcion')"></textarea>
+            <div class="invalid-feedback">La descripción es obligatoria.</div>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label" for="porcentaje">Descuento (%)</label>
+            <input id="porcentaje" type="number" min="1" max="100" class="form-control" formControlName="porcentaje" [class.is-invalid]="isInvalidForm('porcentaje')">
+            <div class="invalid-feedback">Debe estar entre 1 y 100.</div>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label" for="puntos">Costo en puntos</label>
+            <input id="puntos" type="number" min="0" class="form-control" formControlName="puntos" [class.is-invalid]="isInvalidForm('puntos')">
+            <div class="invalid-feedback">No puede ser negativo.</div>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label" for="cantidad">Cantidad (cupos)</label>
+            <input id="cantidad" type="number" min="0" class="form-control" formControlName="cantidad" [class.is-invalid]="isInvalidForm('cantidad')">
+            <div class="form-text">Cupos disponibles para canjear.</div>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label" for="fecha_iniciacion">Inicia</label>
+            <input id="fecha_iniciacion" type="datetime-local" class="form-control" formControlName="fecha_iniciacion" [class.is-invalid]="isInvalidForm('fecha_iniciacion')">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label" for="fecha_expiracion">Expira</label>
+            <input id="fecha_expiracion" type="datetime-local" class="form-control" formControlName="fecha_expiracion" [class.is-invalid]="isInvalidForm('fecha_expiracion')">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label" for="tipo_categoria">Categoría</label>
+            <select id="tipo_categoria" class="form-select" formControlName="tipo_categoria">
+              <option value="">Sin categoría</option>
+              <option *ngFor="let c of listCategorias" [value]="c.nombre">{{ c.nombre }}</option>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label" for="foto">Imagen</label>
+            <input id="foto" type="file" accept="image/*" class="form-control" (change)="onFotoSeleccionada($event)">
+          </div>
+        </div>
+
+        <div class="mt-3">
+          <button type="submit" class="btn btn-primary me-2" [disabled]="formEdit.invalid">Guardar cambios</button>
+          <button type="button" class="btn btn-secondary" (click)="editando = false; quitarFotoSeleccionada(); limpiarForm()">Cancelar</button>
+        </div>
+      </form>
+
+      <!-- Quién usó el cupón -->
+      <h4>Usuarios que canjearon este cupón ({{ totalUsos }})</h4>
+      <div class="table-responsive" *ngIf="arrUsos.length; else sinUsos">
+        <table class="table table-striped custom-table">
+          <thead>
+            <tr>
+              <th scope="col">Foto</th>
+              <th scope="col">Usuario</th>
+              <th scope="col">Correo</th>
+              <th scope="col">Canjeado</th>
+              <th scope="col">Usado</th>
+              <th scope="col">Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let u of arrUsos">
+              <td>
+                <img *ngIf="u.usuario?.foto" [src]="u.usuario?.foto" alt="Foto de perfil" class="foto-candidato">
+                <span *ngIf="!u.usuario?.foto" class="text-muted">—</span>
+              </td>
+              <td style="color: #40378b; text-transform: uppercase">
+                <strong *ngIf="u.usuario">{{ u.usuario.nombres }} {{ u.usuario.apellidos }}</strong>
+                <span *ngIf="!u.usuario" class="text-muted text-lowercase">Usuario eliminado</span>
+              </td>
+              <td>{{ u.usuario?.correo || u.user }}</td>
+              <td>{{ u.fecha_canje ? (u.fecha_canje | date:'dd/MM/yyyy HH:mm') : '—' }}</td>
+              <td>{{ u.fecha_uso ? (u.fecha_uso | date:'dd/MM/yyyy HH:mm') : '—' }}</td>
+              <td class="d-flex align-items-center">
+                <span class="estado-indicador" [class.bg-success]="u.usado" [class.bg-warning]="!u.usado"></span>
+                {{ u.usado ? 'Usado' : 'Pendiente' }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="row p-2 justify-content-end align-items-center">
+          <nav aria-label="Paginación de usos">
+            <ul class="pagination">
+              <li class="page-item">
+                <a class="page-link" (click)="previous($event)"><i class="bi bi-chevron-left"></i></a>
+              </li>
+              <div *ngFor="let n of paginasVisibles" class="d-inline-block">
+                <li class="page-item">
+                  <button *ngIf="n !== '...'" class="page-link azul" value="{{ n }}" (click)="iteracion($event)" [class.active]="n === currentPage">
+                    {{ n }}
+                  </button>
+                  <span *ngIf="n === '...'" class="page-link azul dots">...</span>
+                </li>
+              </div>
+              <li class="page-item">
+                <a class="page-link" (click)="next($event)"><i class="bi bi-chevron-right"></i></a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+      <ng-template #sinUsos><p>Nadie ha canjeado este cupón todavía.</p></ng-template>
+
+    </div>
+  </div>
+</div>
+
+<!-- Modal confirmar eliminar cupón -->
+<div class="modal fade" id="modalEliminarCupon" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Confirmar eliminación</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        <p>¿Eliminar el cupón "{{ cupon?.titulo }}"? Esta acción no se puede deshacer.</p>
+        <p class="text-muted small mb-0">
+          Si el cupón ya fue canjeado o usado no se podrá eliminar: en ese caso deshabilítalo,
+          así se conserva el historial de quién lo usó.
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" (click)="eliminarCupon()">Eliminar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast de Información -->
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+  <div #liveToast id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header" [ngClass]="isErrorToast ? ' bg-danger' : ' bg-success'">
+      <strong class="me-auto text-light">{{ tituloToast }}</strong>
+      <small class="text-light">Ahora</small>
+      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body">{{ mensajeToast }}</div>
+  </div>
+</div>

@@ -1,13 +1,4 @@
-.header-cat {
-    background-color: rgb(51, 53, 57);
-    margin-top: 10px;
-    padding: 12px;
-}
 
-.imaCup{
-    width: 250px;
-    height: 250px;
-}
 
 p {
     color: white;
@@ -65,30 +56,12 @@ p {
     z-index: 1;
 }
 
-.containerend {
-    justify-content: flex-end;
-    margin-right: 60px;
-    z-index: 1;
-}
-
 .containeradmin {
     width: 95%;
     border-radius: 30px;
     box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
     color: black;
     background-color: white;
-}
-
-.containerCrearadmin {
-    border-radius: 30px;
-    box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
-    background-color: white;
-    margin-right: 50px;
-    margin-left: 50px;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    min-height: 100vh;
-    padding: 20px;
 }
 
 .header-solicitud {
@@ -265,8 +238,14 @@ mat-datepicker-toggle {
     border-radius: 15px;
     font-weight: bold;
     margin-bottom: 15px;
-    padding: 40px;
+    /* Eran 40px, pero ahora la fila tiene 10 columnas y no entraban. */
+    padding: 18px 12px;
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+}
+
+.categoria:hover {
+    background-color: #faf9ff;
 }
 
 .item-imagen {
@@ -294,17 +273,6 @@ mat-datepicker-toggle {
     width: 140px;
     height: 120px;
 }
-
-.activo {
-    color: green;
-    /* Color para el estado activo */
-}
-
-.inactivo {
-    color: red;
-    /* Color para el estado inactivo */
-}
-
 
 .admin-button1 {
     display: flex;
@@ -350,7 +318,6 @@ mat-datepicker-toggle {
     background-color: #2e2e2e;
 }
 
-
 .containerstart1 p {
     color: black;
 }
@@ -359,12 +326,6 @@ h3 {
     text-transform: uppercase;
     color: rgba(33, 149, 181, 0.79);
     font-weight: bold;
-}
-
-.linea {
-    background-color: rgba(98, 24, 128, 0.6);
-    height: 3px;
-    border-radius: 1px;
 }
 
 h4 {
@@ -395,13 +356,6 @@ h2 {
     color: #0ea3b7;
     justify-content: start;
     text-align: left;
-}
-
-.form-container {
-    max-width: 100%;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #f9f9f900;
 }
 
 form {
@@ -458,12 +412,6 @@ form button {
     width: 100%;
 }
 
-.form-field1 {
-    display: flex;
-    flex-direction: column;
-    height: 30px;
-}
-
 .form-field label {
     margin-bottom: 5px;
     font-weight: bold;
@@ -474,13 +422,6 @@ form button {
 .form-field textarea {
     padding: 8px;
     border-radius: 4px;
-}
-
-.button-container {
-    grid-column: span 2;
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
 }
 
 .custom-button {
@@ -498,23 +439,6 @@ form button {
     margin-bottom: 20px;
     margin-right: 20px;
 }
-
-.custom-button1 {
-    background-color: white;
-    color: #3F3185;
-    border: 1px solid #3F3185;
-    border-radius: 8px;
-    padding: 12px 24px;
-    width: 150px;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    margin-top: 20px;
-    margin-bottom: 20px;
-    margin-right: 20px;
-}
-
 
 .custom-button3 {
     background-color: #3F3185;
@@ -543,9 +467,6 @@ form button {
     padding-left: 10px;
     padding-right: 10px;
 }
-.float-right {
-    float: right;
-}
 
 /*MODAL CREAR*/
 .modal-title {
@@ -555,12 +476,6 @@ form button {
 .modal-content {
     width: auto;
 }
-
-.modal-content1{
-    background-color: white;
-    border-radius: 10px;
-}
-
 
 .modal-body {
     position: relative;
@@ -594,10 +509,6 @@ form button {
     
     width: 300px;
   
-  }
-  
-  .filtro-container{
-    margin-right: 30px;
   }
 
   .dropdown-container {
@@ -658,11 +569,60 @@ form button {
         padding: 10px;
     }
 
-    .column-container {
-        flex-direction: column;
-    }
-
     form {
         grid-template-columns: 1fr;
     }
+}
+/* Enlace a la pantalla de detalle del cupón. */
+.link-icon {
+  color: rgba(98, 24, 128, 0.8);
+  font-size: 0.95rem;
+}
+
+/* Línea de ayuda sobre la tabla: aclara que los cupos bajan al canjear. */
+.ayuda-tabla {
+    margin: 12px 15px 4px;
+    color: #6c757d;
+    font-size: 0.8rem;
+    line-height: 1.4;
+}
+
+.ayuda-tabla strong {
+    color: #40378b;
+}
+
+/* Columna de acciones */
+.item-acciones {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.accion-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border: 1px solid #d9d9e3;
+    border-radius: 8px;
+    background: #fff;
+    color: rgba(98, 24, 128, 0.8);
+    font-size: 0.9rem;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.accion-btn:hover {
+    background: #f3f0f8;
+}
+
+.accion-eliminar {
+    color: #dc3545;
+}
+
+.accion-eliminar:hover {
+    background: #fdeaec;
 }

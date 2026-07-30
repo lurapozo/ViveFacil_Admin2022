@@ -1,4 +1,3 @@
-import { Promocion } from './promocion';
 import { Tarjeta } from './tarjeta';
 import { User } from './User';
 
@@ -6,7 +5,6 @@ export interface PaymentTarjeta {
   id: number;
   user: User | null;
   tarjeta: Tarjeta | null;
-  promocion: Promocion | null;
   valor: number;
   descripcion: string;
   impuesto: number;
@@ -32,7 +30,6 @@ export interface PaymentEfectivo {
   id: number;
   user: User | null;
   concepto: string;
-  promocion: Promocion | null;
   valor: number;
   descripcion: string;
   referencia: string;

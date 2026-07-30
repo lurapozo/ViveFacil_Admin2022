@@ -13,6 +13,7 @@ import { SolicitantesComponent } from './components/cuentas/solicitantes/solicit
 import { CategoriasComponent } from './components/servicios/categorias/categorias.component';
 import { SubCategoriasComponent } from './components/servicios/sub-categorias/sub-categorias.component';
 import { SubCategoriaDetalleComponent } from './components/servicios/sub-categoria-detalle/sub-categoria-detalle.component';
+import { CuponDetalleComponent } from './components/cupones/cupon-detalle/cupon-detalle.component';
 import { CargosComponent } from './components/pagos/cargos/cargos.component';
 import { SolicitudesComponent } from './components/solicitudes/solicitudes.component';
 import { SolicitudDetalleComponent } from './components/solicitudes/solicitud-detalle/solicitud-detalle.component';
@@ -21,7 +22,6 @@ import { SugerenciasNoLeidasComponent } from './components/sugerencias/sugerenci
 import { NotificacionesAutomaticasComponent } from './components/notificaciones-push/notificaciones-automaticas/notificaciones-automaticas.component';
 import { NotificacionesMasivasComponent } from './components/notificaciones-push/notificaciones-masivas/notificaciones-masivas.component';
 import { MedallaComponent } from './components/medalla/medalla.component';
-import { PromocionComponent } from './components/promocion/promocion.component';
 import { PoliticasComponent } from './components/politicas/politicas.component';
 import { CuponesComponent } from './components/cupones/cupones.component';
 import { HistorialPuntosComponent } from './components/puntos/historial/historial.component';
@@ -85,9 +85,9 @@ const routes: Routes = [
       },
       { path: 'medallas', component: MedallaComponent },
       { path: 'historial-puntos', component: HistorialPuntosComponent },
-      { path: 'promocion', component: PromocionComponent },
       { path: 'politicas', component: PoliticasComponent },
       { path: 'cupones', component: CuponesComponent },
+      { path: 'cupones/:pk', component: CuponDetalleComponent },
     ],
   },
   { path: '**', redirectTo: 'login' },
