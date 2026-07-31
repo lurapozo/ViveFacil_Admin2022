@@ -121,8 +121,7 @@
           </div>
           <div class="col-12">
             <label class="form-label" for="descripcion">Descripción</label>
-            <textarea id="descripcion" rows="2" class="form-control" formControlName="descripcion" [class.is-invalid]="isInvalidForm('descripcion')"></textarea>
-            <div class="invalid-feedback">La descripción es obligatoria.</div>
+            <textarea id="descripcion" rows="2" class="form-control" formControlName="descripcion"></textarea>
           </div>
           <div class="col-md-4">
             <label class="form-label" for="porcentaje">Descuento (%)</label>
@@ -161,7 +160,10 @@
         </div>
 
         <div class="mt-3">
-          <button type="submit" class="btn btn-primary me-2" [disabled]="formEdit.invalid">Guardar cambios</button>
+          <!-- Sin [disabled]: si el form es inválido, onActualizar() marca los
+               campos y se ven los mensajes en rojo. Deshabilitado era un botón
+               muerto sin explicación. -->
+          <button type="submit" class="btn btn-primary me-2">Guardar cambios</button>
           <button type="button" class="btn btn-secondary" (click)="editando = false; quitarFotoSeleccionada(); limpiarForm()">Cancelar</button>
         </div>
       </form>

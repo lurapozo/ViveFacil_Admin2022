@@ -63,7 +63,9 @@ export class CuponDetalleComponent implements OnInit {
   formEdit = new FormGroup({
     codigo: new FormControl('', [Validators.required]),
     titulo: new FormControl('', [Validators.required]),
-    descripcion: new FormControl('', [Validators.required]),
+    // Opcional: el modelo la tiene null=True y hay cupones viejos sin
+    // descripción. Con required, esos cupones quedaban imposibles de editar.
+    descripcion: new FormControl(''),
     porcentaje: new FormControl(0, [Validators.required, Validators.min(1), Validators.max(100)]),
     puntos: new FormControl(0, [Validators.required, Validators.min(0)]),
     cantidad: new FormControl(0, [Validators.required, Validators.min(0)]),
