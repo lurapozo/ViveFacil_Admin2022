@@ -1,7 +1,11 @@
 import { Component } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
+
+// ponytail: bootstrap.bundle.min.js se carga como script global (angular.json),
+// no como módulo — así se referencia sin reimportarlo.
+declare const bootstrap: any;
 import { BodyEmail } from 'src/app/interfaces/email';
 import { BodyActualizarProveedor, BodyActualizarProveedorPendiente, BodyCrearProveedorPendiente, BodyResponseCrearProveedorPendiente, SerializerCrearProveedorPendiente } from 'src/app/interfaces/proveedor';
 import { PythonAnywhereService } from 'src/app/services/PythonAnywhere/python-anywhere.service';
@@ -341,14 +345,14 @@ export class ProveedoresComponent {
     const correo = this.proveedor_seleccionado?.user_datos.user.email;
     const genero = this.proveedor_seleccionado?.user_datos.genero;
     const ciudad = this.proveedor_seleccionado?.user_datos.ciudad;
-    const direccion = this.proveedor_seleccionado?.user_datos.direccion;
+    const direccion = this.proveedor_seleccionado?.direccion;
     const licencia = this.proveedor_seleccionado?.licencia;
     const profesion = this.proveedor_seleccionado?.profesion;
-    const ano_profesion = this.proveedor_seleccionado?.user_datos.ano_profesion;
-    const banco = this.proveedor_seleccionado?.user_datos.banco;
-    const numero_cuenta = this.proveedor_seleccionado?.user_datos.numero_cuenta;
+    const ano_profesion = this.proveedor_seleccionado?.ano_profesion;
+    const banco = this.proveedor_seleccionado?.banco;
+    const numero_cuenta = this.proveedor_seleccionado?.numero_cuenta;
     const tipo_cuenta = this.proveedor_seleccionado?.tipo_cuenta;
-    const descripcion = this.proveedor_seleccionado?.user_datos.descripcion;
+    const descripcion = this.proveedor_seleccionado?.descripcion;
 
     nombre ? this.formEdit.get('nombre')?.setValue(nombre) : this.formEdit.get('nombre')?.reset();
     apellidos ? this.formEdit.get('apellidos')?.setValue(apellidos) : this.formEdit.get('apellidos')?.reset();
@@ -366,7 +370,7 @@ export class ProveedoresComponent {
     profesion ? this.formEdit.get('profesion')?.setValue(profesion.split(',')) : this.formEdit.get('profesion')?.reset();
     ano_profesion ? this.formEdit.get('ano_profesion')?.setValue(ano_profesion) : this.formEdit.get('ano_profesion')?.reset();
     banco ? this.formEdit.get('banco')?.setValue(banco) : this.formEdit.get('banco')?.reset();
-    numero_cuenta ? this.formEdit.get('numero_cuenta')?.setValue(numero_cuenta) : this.formEdit.get('numero_Cuenta')?.reset();
+    numero_cuenta ? this.formEdit.get('numero_cuenta')?.setValue(numero_cuenta) : this.formEdit.get('numero_cuenta')?.reset();
     this.formEdit.get('copiaLicencia')?.reset();
     tipo_cuenta ? this.formEdit.get('tipo_cuenta')?.setValue(tipo_cuenta) : this.formEdit.get('tipo_cuenta')?.reset();
     this.formEdit.get('documentos')?.reset();
@@ -719,9 +723,16 @@ export class ProveedoresComponent {
     }
   } 
 
+  // ponytail: nombres/apellidos guardados aparte (no leídos en vivo de
+  // proveedor_seleccionado) porque el input de nombre usa [(ngModel)] sobre
+  // ese mismo objeto — leerlo en vivo hacía que el nombre de descarga
+  // cambiara letra a letra mientras se edita el formulario, sin haber guardado nada.
+  nombreOriginal = '';
+  apellidoOriginal = '';
+
   getNombreArchivo(tipo: string, archivo: File): { nombreArchivo: string, archivo: File| null } {
-    let nombres = this.proveedor_seleccionado?.user_datos?.nombres;
-    let apellidos = this.proveedor_seleccionado?.user_datos?.apellidos;
+    let nombres = this.nombreOriginal;
+    let apellidos = this.apellidoOriginal;
     let archivoUrl = "";
 
     if(tipo=="document"){
@@ -750,6 +761,8 @@ export class ProveedoresComponent {
     this.showHeader = false;
     this.showHeaderC = true;
     this.proveedor_seleccionado = a;
+    this.nombreOriginal = a?.user_datos?.nombres;
+    this.apellidoOriginal = a?.user_datos?.apellidos;
     this.limpiarForm();
   }
 
@@ -758,10 +771,18 @@ export class ProveedoresComponent {
   // ponytail: confirmación vía el modal #modalEliminarProveedor (bootstrap ya
   // cargado globalmente), en vez de confirm() nativo — prohibido usar alerts/
   // confirms del navegador en este proyecto.
+  // stopPropagation() evita que el click dispare verDetalle() de la fila, pero
+  // eso también le impide al listener global de Bootstrap (delegado en
+  // document) detectar el data-bs-toggle del botón, así que el modal se abre
+  // a mano en vez de depender del atributo.
   prepararEliminarProveedor(proveedor: any, event: Event) {
     event.stopPropagation();
     this.proveedorAEliminar = proveedor;
     this.mensajeAlerta = `¿Eliminar al proveedor ${proveedor.user_datos.nombres} ${proveedor.user_datos.apellidos}? Se eliminarán también sus solicitudes. Esta acción no se puede deshacer.`;
+    const modalEl = document.getElementById('modalEliminarProveedor');
+    if (modalEl) {
+      bootstrap.Modal.getOrCreateInstance(modalEl).show();
+    }
   }
 
   confirmarEliminarProveedor() {
@@ -774,6 +795,52 @@ export class ProveedoresComponent {
       this.proveedorAEliminar = null;
     }, error => {
       console.error("Error al eliminar el proveedor:", error);
+    });
+  }
+
+  usuarioCambiarPassword: any = null;
+  cambiarPasswordErrorMsg = '';
+
+  private passwordsCoincidenValidator(group: AbstractControl): ValidationErrors | null {
+    const password = group.get('password')?.value;
+    const confirmarPassword = group.get('confirmarPassword')?.value;
+    return password && confirmarPassword && password !== confirmarPassword ? { noCoincide: true } : null;
+  }
+
+  cambiarPasswordForm = new FormGroup({
+    password: new FormControl('', [Validators.required, Validators.minLength(6)]),
+    confirmarPassword: new FormControl('', [Validators.required, Validators.minLength(6)]),
+  }, { validators: this.passwordsCoincidenValidator });
+
+  // ponytail: mismo patrón que prepararEliminarProveedor — stopPropagation()
+  // (no navegar a la fila) + apertura manual del modal vía bootstrap.Modal.
+  prepararCambiarPassword(proveedor: any, event: Event) {
+    event.stopPropagation();
+    this.usuarioCambiarPassword = proveedor;
+    this.cambiarPasswordErrorMsg = '';
+    this.cambiarPasswordForm.reset();
+    this.mensajeAlerta = `Nueva contraseña para ${proveedor.user_datos.nombres} ${proveedor.user_datos.apellidos}`;
+    const modalEl = document.getElementById('modalCambiarPassword');
+    if (modalEl) {
+      bootstrap.Modal.getOrCreateInstance(modalEl).show();
+    }
+  }
+
+  confirmarCambiarPassword() {
+    if (this.cambiarPasswordForm.invalid) { return; }
+    const userId = this.usuarioCambiarPassword?.user_datos?.user?.id;
+    if (!userId) { return; }
+    const password = this.cambiarPasswordForm.value.password as string;
+    this.pythonAnywhereService.cambiarPasswordUsuario(userId, password).subscribe({
+      next: () => {
+        const modalEl = document.getElementById('modalCambiarPassword');
+        if (modalEl) { bootstrap.Modal.getOrCreateInstance(modalEl).hide(); }
+        this.usuarioCambiarPassword = null;
+      },
+      error: (err) => {
+        this.cambiarPasswordErrorMsg = err?.error?.message || 'Error al cambiar la contraseña.';
+        console.error('Error al cambiar contraseña:', err);
+      },
     });
   }
 }

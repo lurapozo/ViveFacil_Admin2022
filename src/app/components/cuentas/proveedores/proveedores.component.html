@@ -1,7 +1,10 @@
 <!-- Titulo principal-->
 <div class="header-admi1 ">
   <div class="header-text">
-    <div class="containerstart">
+    <div class="containerstart" [class.detalle-header]="showHeaderC">
+      <button *ngIf="showHeaderC" type="button" class="btn-back" title="Volver" aria-label="Volver" (click)="volverALista()">
+        <i class="bi bi-arrow-left"></i>
+      </button>
       <p *ngIf="showHeader"> PROVEEDOR</p>
         <p *ngIf="showHeaderC">EDITAR PROVEEDOR</p>
     </div>
@@ -92,29 +95,40 @@
               <td style="color: #40378b; text-transform: uppercase"> <strong> {{a.user_datos.telefono}} </strong></td>
               <td style="color: #40378b; text-transform: uppercase"> <strong> {{a.user_datos.fecha_creacion  | date : "d/M/Y" }} </strong></td>
               <td style="color: #40378b; text-transform: uppercase"> <strong> {{a.fecha_caducidad  | date : "d/M/Y" }}</strong></td>
-              <td class="d-flex align-items-center">
-                <span
-                  *ngIf="a.user_datos.estado"
-                  class="estado-indicador bg-success me-2"
-                ></span>
-                <span *ngIf="a.user_datos.estado" class="text-success">Activo</span>
-        
-                <span
-                  *ngIf="!a.user_datos.estado"
-                  class="estado-indicador bg-secondary me-2" 
-                ></span>
-                <span *ngIf="!a.user_datos.estado" class="text-muted">Inactivo</span>
+              <td>
+                <div class="d-flex align-items-center">
+                  <span
+                    *ngIf="a.user_datos.estado"
+                    class="estado-indicador bg-success me-2"
+                  ></span>
+                  <span *ngIf="a.user_datos.estado" class="text-success">Activo</span>
+
+                  <span
+                    *ngIf="!a.user_datos.estado"
+                    class="estado-indicador bg-secondary me-2"
+                  ></span>
+                  <span *ngIf="!a.user_datos.estado" class="text-muted">Inactivo</span>
+                </div>
               </td>
               <td>
-                <button
-                  type="button"
-                  class="btn btn-sm btn-outline-danger"
-                  data-bs-toggle="modal"
-                  data-bs-target="#modalEliminarProveedor"
-                  (click)="prepararEliminarProveedor(a, $event)"
-                >
-                  <i class="bi bi-trash"></i> Eliminar
-                </button>
+                <div class="d-flex gap-1">
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-outline-secondary"
+                    title="Cambiar contraseña"
+                    (click)="prepararCambiarPassword(a, $event)"
+                  >
+                    <i class="bi bi-key"></i>
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-outline-danger"
+                    title="Eliminar"
+                    (click)="prepararEliminarProveedor(a, $event)"
+                  >
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </div>
               </td>
             </tr>
           </tbody>
@@ -173,12 +187,6 @@
   <div class="row justify-content-center align-items-center p-0">
     <div class="col-10 text-center containerCrearadmin">
       <div class="form-container">
-        <div class="detalle-header">
-          <button type="button" class="btn-back" (click)="volverALista()" title="Volver" aria-label="Volver">
-            <i class="bi bi-arrow-left"></i>
-          </button>
-          <h2>EDITAR PROVEEDOR</h2>
-        </div>
         <form [formGroup]="formEdit">
           
           <div class="col-md-6">
@@ -468,15 +476,18 @@
           
                 <!-- Imagen previsualización -->
                 <img
+                  *ngIf="proveedor_seleccionado?.user_datos?.foto"
                   src="{{
                     proveedor_seleccionado?.user_datos?.foto
                   }}"
-                  alt="no se encontró foto de perfil"
+                  alt="Foto de perfil"
                   width="100"
                   height="100"
                 />
-                         
-                <!-- Input file oculto -->
+                <p *ngIf="!proveedor_seleccionado?.user_datos?.foto" style="color: black; font-size: 12px;">
+                  No hay foto de perfil
+                </p>
+
                 <input
                   type="file"
                   #fileInput
@@ -485,9 +496,8 @@
                   class="form-control"
                   [ngClass]="isInvalidForm('foto') ? 'is-invalid' : ''"
                   (change)="loadImageFromDevice($event)"
-                  style="display: none;" 
                 />
-              
+
                 <!-- Mensaje de error -->
                 <div class="invalid-feedback">
                   {{ getErrorMessage(formEdit, 'imagen') }}
@@ -688,7 +698,7 @@
             data-bs-toggle="modal"
              class="custom-button float-right"
             (click)="establecerMensaje('Está seguro que desea actualizar la
-            información?', 'editar'); volverALista();">Actualizar</button>
+            información?', 'editar');">Actualizar</button>
 
             <button
               (click)="prepararCaducidad()"
@@ -990,20 +1000,54 @@
 
   </div>
 </div>
+</div>
 
 <!-- Modal confirmar eliminar proveedor -->
 <div class="modal fade" id="modalEliminarProveedor" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Confirmar eliminación</h5>
+        <h1 class="modal-title fs-5 m-0 p-0 fw-bold">Confirmar eliminación</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
       </div>
       <div class="modal-body">{{ mensajeAlerta }}</div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" (click)="confirmarEliminarProveedor()">Eliminar</button>
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-success" data-bs-dismiss="modal" (click)="confirmarEliminarProveedor()">Eliminar</button>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal cambiar contraseña -->
+<div class="modal fade" id="modalCambiarPassword" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form [formGroup]="cambiarPasswordForm" (ngSubmit)="confirmarCambiarPassword()">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 m-0 p-0 fw-bold">Cambiar contraseña</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-2">{{ mensajeAlerta }}</div>
+          <div class="mb-2">
+            <label class="form-label">Nueva contraseña</label>
+            <input type="password" class="form-control" formControlName="password" minlength="6" />
+          </div>
+          <div class="mb-2">
+            <label class="form-label">Confirmar contraseña</label>
+            <input type="password" class="form-control" formControlName="confirmarPassword" minlength="6" />
+          </div>
+          <div class="text-danger" *ngIf="cambiarPasswordForm.errors?.['noCoincide'] && cambiarPasswordForm.get('confirmarPassword')?.touched">
+            Las contraseñas no coinciden.
+          </div>
+          <div class="text-danger" *ngIf="cambiarPasswordErrorMsg">{{ cambiarPasswordErrorMsg }}</div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-success" [disabled]="cambiarPasswordForm.invalid">Guardar</button>
+        </div>
+      </form>
     </div>
   </div>
 </div>

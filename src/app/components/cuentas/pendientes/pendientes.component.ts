@@ -1,6 +1,7 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
+import { ActivatedRoute, Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { BodyEmail } from 'src/app/interfaces/email';
 import { BodyActualizarProveedorPendiente, BodyCrearProveedorPendiente, BodyResponseCrearProveedorPendiente, SerializerCrearProveedorPendiente } from 'src/app/interfaces/proveedor';
@@ -119,7 +120,9 @@ export class PendientesComponent {
   constructor(
     private pythonAnywhereService: PythonAnywhereService,
     private userService: UserService,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private route: ActivatedRoute,
+    private router: Router,
   ) {
     this.generos = ['Masculino', 'Femenino', 'Otro'];
     this.ciudades = ['Guayaquil', 'Quito', 'Cuenca', 'Sto. Domingo', 'Ibarra'];
@@ -164,7 +167,32 @@ export class PendientesComponent {
       console.log(resp, "resp");
       console.log(this.arr_filtered_pendiente)
       this.currentPage = 1;
+      this.abrirDetalleDesdeRuta();
     });
+  }
+
+  // ponytail: no hay endpoint para traer un solo pendiente por id, así que el
+  // detalle por /:pk se resuelve buscando en la lista ya cargada (mismo
+  // patrón que ProveedoresComponent). Si el pendiente pedido está en otra
+  // página de paginación no se encuentra.
+  abrirDetalleDesdeRuta() {
+    const pk = this.route.snapshot.paramMap.get('pk');
+    if (!pk) return;
+    const encontrado = this.arr_pendiente?.find(p => String(p.id) === pk);
+    if (encontrado) {
+      this.edit_pend(encontrado);
+    }
+  }
+
+  verDetalle(a: any) {
+    this.router.navigate(['/cuentas/pendientes', a.id]);
+  }
+
+  volverALista() {
+    this.showHeader = true;
+    this.showHeaderC = false;
+    this.showadmi = false;
+    this.router.navigate(['/cuentas/pendientes']);
   }
 
   get_servicios() {

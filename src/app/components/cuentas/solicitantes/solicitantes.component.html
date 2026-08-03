@@ -1,9 +1,12 @@
 <!-- Titulo principal-->
 <div class="header-admi1 ">
   <div class="header-text">
-    <div class="containerstart">
+    <div class="containerstart" [class.detalle-header]="showHeaderC">
+      <button *ngIf="showHeaderC" type="button" class="btn-back" title="Volver" aria-label="Volver" (click)="volverALista()">
+        <i class="bi bi-arrow-left"></i>
+      </button>
       <p *ngIf="showHeader">Usuarios Solicitantes</p>
-      <p *ngIf="showHeaderC">Ver Solicitantes</p>
+      <p *ngIf="showHeaderC">Editar Solicitante</p>
     </div>
     <div class="containerend">
       <p *ngIf="showHeader" >Total de Usuarios Solicitantes: {{total}}</p>
@@ -101,30 +104,41 @@
                 {{ a.user_datos.fecha_creacion  | date : "d/M/Y" }}
               
                 </strong></td>
-              <td class="d-flex align-items-center">
-                <span
-                  *ngIf="a.user_datos.estado"
-                  class="estado-indicador bg-success me-2"
+              <td>
+                <div class="d-flex align-items-center">
+                  <span
+                    *ngIf="a.user_datos.estado"
+                    class="estado-indicador bg-success me-2"
                   ></span>
                   <span *ngIf="a.user_datos.estado" class="text-success">Activo</span>
-          
+
                   <span
                     *ngIf="!a.user_datos.estado"
-                    class="estado-indicador bg-secondary me-2" 
+                    class="estado-indicador bg-secondary me-2"
                   ></span>
                   <span *ngIf="!a.user_datos.estado" class="text-muted">Inactivo</span>
-                </td>
-                <td>
+                </div>
+              </td>
+              <td>
+                <div class="d-flex gap-1">
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-outline-secondary"
+                    title="Cambiar contraseña"
+                    (click)="prepararCambiarPassword(a, $event)"
+                  >
+                    <i class="bi bi-key"></i>
+                  </button>
                   <button
                     type="button"
                     class="btn btn-sm btn-outline-danger"
-                    data-bs-toggle="modal"
-                    data-bs-target="#modalEliminarSolicitante"
+                    title="Eliminar"
                     (click)="prepararEliminar(a, $event)"
                   >
-                    <i class="bi bi-trash"></i> Eliminar
+                    <i class="bi bi-trash"></i>
                   </button>
-                </td>
+                </div>
+              </td>
               </tr>
             </tbody>
           </table>
@@ -178,7 +192,6 @@
       <div class="row justify-content-center align-items-center p-0">
         <div class="col-10 text-center containerCrearadmin">
           <div class="form-container">
-            <h2>Ver Solicitante</h2>
 
             <div class="d-flex flex-column align-items-center mb-3">
               <img
@@ -530,14 +543,47 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Confirmar eliminación</h5>
+        <h1 class="modal-title fs-5 m-0 p-0 fw-bold">Confirmar eliminación</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
       </div>
       <div class="modal-body">{{ mensajeAlerta }}</div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" (click)="confirmarEliminarSolicitante()">Eliminar</button>
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-success" data-bs-dismiss="modal" (click)="confirmarEliminarSolicitante()">Eliminar</button>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal cambiar contraseña -->
+<div class="modal fade" id="modalCambiarPasswordSolicitante" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form [formGroup]="cambiarPasswordForm" (ngSubmit)="confirmarCambiarPassword()">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 m-0 p-0 fw-bold">Cambiar contraseña</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-2">{{ mensajeAlerta }}</div>
+          <div class="mb-2">
+            <label class="form-label">Nueva contraseña</label>
+            <input type="password" class="form-control" formControlName="password" minlength="6" />
+          </div>
+          <div class="mb-2">
+            <label class="form-label">Confirmar contraseña</label>
+            <input type="password" class="form-control" formControlName="confirmarPassword" minlength="6" />
+          </div>
+          <div class="text-danger" *ngIf="cambiarPasswordForm.errors?.['noCoincide'] && cambiarPasswordForm.get('confirmarPassword')?.touched">
+            Las contraseñas no coinciden.
+          </div>
+          <div class="text-danger" *ngIf="cambiarPasswordErrorMsg">{{ cambiarPasswordErrorMsg }}</div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-success" [disabled]="cambiarPasswordForm.invalid">Guardar</button>
+        </div>
+      </form>
     </div>
   </div>
 </div>

@@ -4,6 +4,32 @@
   padding: 12px;
 }
 
+.detalle-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.btn-back {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  border-radius: 50%;
+  border: none;
+  background-color: #3F3185;
+  color: white;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-back:hover {
+  background-color: #6b60a8;
+}
+
 
 .header-admi1 {
   margin-top: 10px;
@@ -253,10 +279,10 @@ h2{
   background-color: #f9f9f900; 
 }
 
-form {
-  display: grid; 
-  grid-template-columns: repeat(2, 1fr); 
-  gap: 20px; 
+.form-container form {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
   padding-bottom: 10px;
 }
 

@@ -76,8 +76,7 @@
         <table class="table table-striped custom-table">
           <tbody>
             <tr
-              (click)="get_proveedores_pendientes_act();
-                edit_pend(a);"
+              (click)="verDetalle(a)"
               *ngFor="let a of arr_filtered_pendiente"
               role="button"
             >
@@ -418,26 +417,26 @@
         
               <!-- Imagen previsualización -->
               <img
+                *ngIf="pendiente_seleccionada?.foto"
                 src="{{ pendiente_seleccionada?.foto }}"
-                alt="no se encontró foto de perfil"
+                alt="Foto de perfil"
                 width="100"
                 height="100"
               />
-                       
-              <!-- Input file oculto -->
+              <p *ngIf="!pendiente_seleccionada?.foto" style="color: black; font-size: 12px;">
+                No hay foto de perfil
+              </p>
+
               <input
                 type="file"
-                #fileInput
-          
                 #fileInput1
                 formControlName="foto"
                 accept="image/*"
                 class="form-control"
                 [ngClass]="isInvalidForm('foto') ? 'is-invalid' : ''"
                 (change)="loadImageFromDevice($event)"
-                style="display: none;" 
               />
-            
+
               <!-- Mensaje de error -->
               <div class="invalid-feedback">
                 {{ getErrorMessage(formEdit, 'imagen') }}
@@ -663,8 +662,8 @@
           establecerMensaje(
               'Está seguro que desea actualizar la información?',
               'aceptar'
-            );get_proveedores_pendientes_act();showHeader = true; showHeaderC= false ; showadmi = false;
-          
+            );get_proveedores_pendientes_act();
+
         "
       >
         Aprobar
@@ -677,7 +676,7 @@
             establecerMensaje(
               'Está seguro que desea actualizar la información?',
               'actualizar'
-            );showHeader = true; showHeaderC= false ; showadmi = false;
+            );
           "
         >
           Actualizar
@@ -691,7 +690,7 @@
         establecerMensaje(
           'Está seguro que desea Negar la información?',
           'negar'
-        ); showHeader = true; showHeaderC= false ; showadmi = false;
+        );
       "
     >
       Negar
@@ -699,7 +698,7 @@
 
       <button
         class="custom-button1 float-right"
-        (click)="showHeader = true; showHeaderC= false ; showadmi = false;">
+        (click)="volverALista()">
       Cancelar
       </button>
       

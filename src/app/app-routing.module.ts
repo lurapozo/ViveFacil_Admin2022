@@ -41,6 +41,7 @@ const routes: Routes = [
           { path: '', redirectTo: 'administrador', pathMatch: 'full' },
           { path: 'administrador', component: AdministradoresComponent },
           { path: 'pendientes', component: PendientesComponent },
+          { path: 'pendientes/:pk', component: PendientesComponent },
           { path: 'proveedores', component: ProveedoresComponent },
           { path: 'proveedores/:pk', component: ProveedoresComponent },
           { path: 'rechazados', component: RechazadosComponent },

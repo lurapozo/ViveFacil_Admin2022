@@ -358,10 +358,10 @@
     margin-bottom: 20px;
   }
   
-  form {
-    display: grid; 
-    grid-template-columns: repeat(2, 1fr); 
-    gap: 20px; 
+  .form-container form {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
     padding-bottom: 10px;
   }
   
@@ -494,7 +494,7 @@
     .column-container {
       flex-direction: column; 
     }
-    form {
+    .form-container form {
       grid-template-columns: 1fr;
     }
   }

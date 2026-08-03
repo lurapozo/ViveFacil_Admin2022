@@ -754,6 +754,10 @@ export class PythonAnywhereService {
     return this.http.delete(`${this.API_URL}/administrador/accounts/proveedores-proveedores/${id}/eliminar/`);
   }
 
+  cambiarPasswordUsuario(userId: number, password: string): Observable<any> {
+    return this.http.put(`${this.API_URL}/administrador/accounts/usuarios/${userId}/password/`, { password });
+  }
+
   //-----------------------------------------------------------------------------------------------------------------------
 
 

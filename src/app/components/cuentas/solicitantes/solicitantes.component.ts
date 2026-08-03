@@ -1,9 +1,13 @@
 import { Component,} from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ignoreElements } from 'rxjs';
 import { PythonAnywhereService } from 'src/app/services/PythonAnywhere/python-anywhere.service';
+
+// ponytail: bootstrap.bundle.min.js se carga como script global (angular.json),
+// no como módulo — así se referencia sin reimportarlo.
+declare const bootstrap: any;
 
 @Component({
   selector: 'app-solicitantes',
@@ -164,10 +168,18 @@ export class SolicitantesComponent {
   // ponytail: confirmación vía el modal #modalEliminarSolicitante (bootstrap ya
   // cargado globalmente), en vez de confirm() nativo — prohibido usar alerts/
   // confirms del navegador en este proyecto.
+  // stopPropagation() evita que el click dispare la navegación de la fila,
+  // pero eso también le impide al listener global de Bootstrap (delegado en
+  // document) detectar el data-bs-toggle del botón, así que el modal se abre
+  // a mano en vez de depender del atributo.
   prepararEliminar(a: any, event: Event) {
     event.stopPropagation();
     this.soliAEliminar = a;
     this.mensajeAlerta = `¿Eliminar al solicitante ${a.user_datos.nombres} ${a.user_datos.apellidos}? Esta acción no se puede deshacer.`;
+    const modalEl = document.getElementById('modalEliminarSolicitante');
+    if (modalEl) {
+      bootstrap.Modal.getOrCreateInstance(modalEl).show();
+    }
   }
 
   confirmarEliminarSolicitante() {
@@ -178,6 +190,52 @@ export class SolicitantesComponent {
       this.arr_filtered_soli = this.arr_filtered_soli.filter(s => s.id !== id);
       this.total--;
       this.soliAEliminar = null;
+    });
+  }
+
+  usuarioCambiarPassword: any = null;
+  cambiarPasswordErrorMsg = '';
+
+  private passwordsCoincidenValidator(group: AbstractControl): ValidationErrors | null {
+    const password = group.get('password')?.value;
+    const confirmarPassword = group.get('confirmarPassword')?.value;
+    return password && confirmarPassword && password !== confirmarPassword ? { noCoincide: true } : null;
+  }
+
+  cambiarPasswordForm = new FormGroup({
+    password: new FormControl('', [Validators.required, Validators.minLength(6)]),
+    confirmarPassword: new FormControl('', [Validators.required, Validators.minLength(6)]),
+  }, { validators: this.passwordsCoincidenValidator });
+
+  // ponytail: mismo patrón que prepararEliminar — stopPropagation() + apertura
+  // manual del modal vía bootstrap.Modal.
+  prepararCambiarPassword(a: any, event: Event) {
+    event.stopPropagation();
+    this.usuarioCambiarPassword = a;
+    this.cambiarPasswordErrorMsg = '';
+    this.cambiarPasswordForm.reset();
+    this.mensajeAlerta = `Nueva contraseña para ${a.user_datos.nombres} ${a.user_datos.apellidos}`;
+    const modalEl = document.getElementById('modalCambiarPasswordSolicitante');
+    if (modalEl) {
+      bootstrap.Modal.getOrCreateInstance(modalEl).show();
+    }
+  }
+
+  confirmarCambiarPassword() {
+    if (this.cambiarPasswordForm.invalid) { return; }
+    const userId = this.usuarioCambiarPassword?.user_datos?.user?.id;
+    if (!userId) { return; }
+    const password = this.cambiarPasswordForm.value.password as string;
+    this.pythonAnywhereService.cambiarPasswordUsuario(userId, password).subscribe({
+      next: () => {
+        const modalEl = document.getElementById('modalCambiarPasswordSolicitante');
+        if (modalEl) { bootstrap.Modal.getOrCreateInstance(modalEl).hide(); }
+        this.usuarioCambiarPassword = null;
+      },
+      error: (err) => {
+        this.cambiarPasswordErrorMsg = err?.error?.message || 'Error al cambiar la contraseña.';
+        console.error('Error al cambiar contraseña:', err);
+      },
     });
   }
 
