@@ -18,6 +18,10 @@ export interface CandidatoSolicitud {
   interesado: boolean;
   oferta: number | null;
   fecha_creacion: string;
+  /** El proveedor descartó la solicitud (no se borra la fila, se marca). */
+  rechazada: boolean;
+  fecha_rechazo: string | null;
+  motivo_rechazo: string | null;
 }
 
 export interface TransaccionPaymentez {

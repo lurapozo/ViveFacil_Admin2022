@@ -21,6 +21,7 @@ import { SugerenciasLeidasComponent } from './components/sugerencias/sugerencias
 import { SugerenciasNoLeidasComponent } from './components/sugerencias/sugerencias-no-leidas/sugerencias-no-leidas.component';
 import { NotificacionesAutomaticasComponent } from './components/notificaciones-push/notificaciones-automaticas/notificaciones-automaticas.component';
 import { NotificacionesMasivasComponent } from './components/notificaciones-push/notificaciones-masivas/notificaciones-masivas.component';
+import { InsigniasComponent } from './components/insignias/insignias.component';
 import { MedallaComponent } from './components/medalla/medalla.component';
 import { PoliticasComponent } from './components/politicas/politicas.component';
 import { CuponesComponent } from './components/cupones/cupones.component';
@@ -85,6 +86,9 @@ const routes: Routes = [
         ],
       },
       { path: 'medallas', component: MedallaComponent },
+      // El menú ya enlazaba a /insignias, pero sin esta ruta el comodín de
+      // abajo mandaba al login.
+      { path: 'insignias', component: InsigniasComponent },
       { path: 'historial-puntos', component: HistorialPuntosComponent },
       { path: 'politicas', component: PoliticasComponent },
       { path: 'cupones', component: CuponesComponent },

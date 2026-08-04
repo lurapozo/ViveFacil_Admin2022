@@ -1,113 +1,87 @@
+<!-- Titulo principal -->
+<div class="header-admi1">
+  <div class="header-text">
+    <div class="containerstart">
+      <p>Lista de insignias</p>
+    </div>
+  </div>
+  <svg preserveAspectRatio="xMidYMid">
+    <path d="M0,60 L0,0 L1290,0 L1290,60" fill="#333539" />
+    <path d="M320,60 Q448,85 550,60" fill="#333539" />
+  </svg>
+</div>
+
 <div class="container-fluid">
-  <!-- Titulo principal -->
-  <div class="row p-2 justify-content-center align-items-center">
-    <div class="col text-center">
-      <h2 class="p-0 m-0">Insignias Pendientes</h2>
-    </div>
-  </div>
-
-  <!-- Buscar y agregar admi -->
-  <div class="row p-2 justify-content-center align-items-center">
-    <div class="col-xl-7 col-lg-5"></div>
-    <div class="col-xl-3 col-lg-4">
-      <div class="input-group">
-        <input
-          type="text"
-          class="form-control"
-          placeholder="Buscar"
-          aria-label="Buscar"
-          aria-describedby="basic-addon1"
-          (input)="search($event)"
-        />
-        <button class="input-group-text" id="basic-addon1">
-          <i class="bi bi-search"></i>
-        </button>
-      </div>
-    </div>
-    <div class="col-xl-2 col-lg-3">
-      <button
-        type="button"
-        class="btn btn-primary"
-        data-bs-toggle="modal"
-        href="#modalCrearProfesion"
-        (click)="limpiarForm('crear')"
-      >
-        Agregar Insignia
+  <!-- Buscador (la pantalla de medallas lleva además dos calendarios, pero acá
+       no hay ningún filtro por fecha que aplicar) -->
+  <div class="d-flex flex-wrap header-solicitud align-items-center gap-3">
+    <div class="containerstart3">
+      <button class="search-button" id="basic-addon1">
+        <i class="bi bi-search"></i>
       </button>
-    </div>
-  </div>
-
-  <!-- Contenedor de admi -->
-  <div class="row justify-content-center align-items-center p-0">
-    <div class="col-10 text-center">
-      <!-- Titulo -->
-      <div class="row p-2 bg-primary text-white">
-        <div class="col-2 align-self-center">
-          <h3 class="p-0 m-0">Imagen</h3>
-        </div>
-
-        <div class="col-2 align-self-center">
-          <h3 class="p-0 m-0">Nombre</h3>
-        </div>
-
-        <div class="col-2 align-self-center">
-          <h3 class="p-0 m-0">Usuario</h3>
-        </div>
-
-        <div class="col-2 align-self-center">
-          <h3 class="p-0 m-0">Tipo</h3>
-        </div>
-
-        <div class="col-2 align-self-center">
-          <h3 class="p-0 m-0">Cantidad</h3>
-        </div>
-
-        <div class="col-2 align-self-center">
-          <h3 class="p-0 m-0">Estado</h3>
-        </div>
-      </div>
-
-      <!-- Profesion -->
-      <div
-        (click)="ver(a)"
-        *ngFor="let a of arr_filtered_insignia"
-        class="row p-2 bg-light fila_info_profesion"
-        data-bs-toggle="modal"
-        href="#modalInformacionProfesion"
-        role="button"
-      >
-        <div class="col-2 align-self-center">
-          <img
-            [src]="
-              a.imagen
-                ? a.imagen
-                : 'assets/imagenes/ProfesionDefault.png'
-            "
-            class="rounded mx-auto d-block img-fluid img_profesion"
-            alt="..."
+      <div class="date-container">
+        <div class="input-group search-group">
+          <input
+            type="text"
+            class="form-control search-input"
+            placeholder="BUSCAR"
+            aria-label="Buscar"
+            aria-describedby="basic-addon1"
+            (input)="search($event)"
           />
         </div>
+      </div>
+    </div>
+  </div>
 
-        <div class="col-2 align-self-center">
-          <h4 class="p-0 m-0">{{ a.nombre }}</h4>
-        </div>
+  <div class="d-flex flex-wrap header-admin">
+    <button
+      class="admin-button"
+      type="button"
+      data-bs-toggle="modal"
+      href="#modalCrearProfesion"
+      (click)="limpiarForm('crear')"
+    >
+      <span class="material-icons">add_circle</span>
+      AGREGAR INSIGNIA
+    </button>
+  </div>
 
-        <div class="col-2 align-self-center">
-          <h4 class="p-0 m-0">{{ a.tipo_usuario }}</h4>
-        </div>
+  <!-- Tabla -->
+  <div class="header-contenedor">
+    <div class="header">
+      <span class="tabla-title">Imagen</span>
+      <span class="tabla-title">Nombre</span>
+      <span class="tabla-title">Usuario</span>
+      <span class="tabla-title">Tipo</span>
+      <span class="tabla-title">Cantidad</span>
+      <span class="tabla-title">Estado</span>
+    </div>
+  </div>
 
-        <div class="col-2 align-self-center">
-          <h4 class="p-0 m-0">{{ a.servicio }}</h4>
-        </div>
-
-        <div class="col-2 align-self-center">
-          <h4 class="p-0 m-0">{{ a.pedidos }}</h4>
-        </div>
-
-        <div class="col-2 align-self-center">
-          <span *ngIf="!a.estado" class="badge text-bg-danger">Inactivo</span>
-          <span *ngIf="a.estado" class="badge text-bg-success">Activo</span>
-        </div>
+  <div class="contenedor-categorias">
+    <div
+      class="categoria"
+      (click)="ver(a)"
+      *ngFor="let a of arr_filtered_insignia"
+      data-bs-toggle="modal"
+      href="#modalInformacionProfesion"
+      role="button"
+    >
+      <div class="item-imagen">
+        <img
+          [src]="a.imagen ? a.imagen : 'assets/imagenes/ProfesionDefault.png'"
+          class="imagen"
+          alt="Imagen"
+        />
+      </div>
+      <div class="item-nombre">{{ a.nombre | uppercase }}</div>
+      <div class="item-descripcion">{{ a.tipo_usuario }}</div>
+      <div class="item-descripcion">{{ a.servicio }}</div>
+      <div class="item-descripcion">{{ a.pedidos }}</div>
+      <div class="item-estado">
+        <span *ngIf="!a.estado" class="badge text-bg-danger">Inactivo</span>
+        <span *ngIf="a.estado" class="badge text-bg-success">Activo</span>
       </div>
     </div>
   </div>

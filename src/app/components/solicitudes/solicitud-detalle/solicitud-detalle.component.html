@@ -208,7 +208,7 @@
               <th scope="col">Foto</th>
               <th scope="col">Proveedor</th>
               <th scope="col">Correo</th>
-              <th scope="col">Interesado</th>
+              <th scope="col">Respuesta</th>
               <th scope="col">Oferta</th>
               <th scope="col">Fecha</th>
               <th scope="col">Adjudicado</th>
@@ -224,9 +224,20 @@
                 <strong>{{ c.proveedor?.user_datos?.nombres }} {{ c.proveedor?.user_datos?.apellidos }}</strong>
               </td>
               <td>{{ c.proveedor?.user_datos?.user?.username }}</td>
+              <!-- Tres estados: ofertó, rechazó (con motivo si lo dejó) o
+                   todavía no respondió. -->
               <td>
-                <span class="estado-indicador" [class.bg-success]="c.interesado" [class.bg-secondary]="!c.interesado"></span>
-                {{ c.interesado ? 'Sí' : 'No' }}
+                <ng-container *ngIf="c.interesado">
+                  <span class="estado-indicador bg-success"></span> Ofertó
+                </ng-container>
+                <ng-container *ngIf="!c.interesado && c.rechazada">
+                  <span class="estado-indicador bg-danger"></span> Rechazó
+                  <div class="text-muted small">{{ c.fecha_rechazo | date:'d/M/Y HH:mm' }}</div>
+                  <div class="text-muted small fst-italic" *ngIf="c.motivo_rechazo">"{{ c.motivo_rechazo }}"</div>
+                </ng-container>
+                <ng-container *ngIf="!c.interesado && !c.rechazada">
+                  <span class="estado-indicador bg-secondary"></span> Sin responder
+                </ng-container>
               </td>
               <td>{{ c.oferta != null ? ('$' + (c.oferta | number:'1.2-2')) : '—' }}</td>
               <td>{{ c.fecha_creacion | date:'d/M/Y HH:mm' }}</td>
