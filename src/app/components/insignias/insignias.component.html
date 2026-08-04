@@ -50,9 +50,9 @@
   <!-- Tabla -->
   <div class="header-contenedor">
     <div class="header">
+      <!-- Sin columna de usuario: todas las insignias son del proveedor. -->
       <span class="tabla-title">Imagen</span>
       <span class="tabla-title">Nombre</span>
-      <span class="tabla-title">Usuario</span>
       <span class="tabla-title">Tipo</span>
       <span class="tabla-title">Cantidad</span>
       <span class="tabla-title">Estado</span>
@@ -76,7 +76,6 @@
         />
       </div>
       <div class="item-nombre">{{ a.nombre | uppercase }}</div>
-      <div class="item-descripcion">{{ a.tipo_usuario }}</div>
       <div class="item-descripcion">{{ a.servicio }}</div>
       <div class="item-descripcion">{{ a.pedidos }}</div>
       <div class="item-estado">
@@ -165,15 +164,6 @@
           </div>
           <div class="col-7">
             {{ insignia_seleccionada?.tipo }}
-          </div>
-        </div>
-
-        <div class="row p-2 align-items-center">
-          <div class="col-5">
-            <h3 class="m-0 p-0 fw-bold">Tipo de usuario</h3>
-          </div>
-          <div class="col-7">
-            {{ insignia_seleccionada?.tipo_usuario }}
           </div>
         </div>
 
@@ -390,32 +380,7 @@
               </div>
             </div>
           </div>
-          <div class="row p-2 align-items-center">
-            <div class="col-5">
-              <label for="selectorServicioCrear" class="form-label"
-                ><h3 class="m-0 p-0 fw-bold">Usuario:</h3></label
-              >
-            </div>
-            <div class="col-7">
-              <select
-                class="form-select"
-                [ngClass]="
-                  isInvalidForm('servicio', 'actualizar') ? 'is-invalid' : ''
-                "
-                formControlName="usuario"
-                [value]="insignia_seleccionada?.tipo_usuario"
-                aria-describedby="selectorServicioCrearFeedback"
-              >
-                <option selected disabled>Elija un tipo de usuario...</option>
-                <option *ngFor="let ti of arr_tipo" value="{{ ti }}">
-                  {{ ti }}
-                </option>
-              </select>
-              <div id="selectorServicioCrearFeedback" class="invalid-feedback">
-                {{ getErrorMessage(editarInsignias, "servicio") }}
-              </div>
-            </div>
-          </div>
+          <!-- Sin selector de usuario: ver el modal de crear. -->
 
           <div class="row p-2 align-items-center">
             <div class="col-5">
@@ -491,7 +456,7 @@
           class="modal-title fs-5 m-0 p-0 fw-bold"
           id="modalCrearProfesionLabel"
         >
-          Crear Insinia
+          Crear insignia
         </h1>
         <!-- (click)="limpiarForm('crear')" -->
         <button
@@ -561,7 +526,7 @@
                     : ''
                 "
                 id="inputNombre"
-                placeholder="Nombre de la profesión"
+                placeholder="Nombre de la insignia"
               />
               <div class="invalid-feedback">
                 {{ getErrorMessage(crearInsignias, "nombre") }}
@@ -584,7 +549,7 @@
                   isInvalidForm('descripcion', 'crear') ? 'is-invalid' : ''
                 "
                 id="textareaDescripcion"
-                placeholder="Descripción de la profesión"
+                placeholder="Descripción de la insignia"
               ></textarea>
               <div class="invalid-feedback">
                 {{ getErrorMessage(crearInsignias, "descripcion") }}
@@ -644,31 +609,9 @@
             </div>
           </div>
 
-          <div class="row p-2 align-items-center">
-            <div class="col-5">
-              <label for="selectorServicioCrear" class="form-label"
-                ><h3 class="m-0 p-0 fw-bold">Usuario:</h3></label
-              >
-            </div>
-            <div class="col-7">
-              <select
-                class="form-select"
-                [ngClass]="
-                  isInvalidForm('usuario', 'crear') ? 'is-invalid' : ''
-                "
-                formControlName="usuario"
-                aria-describedby="selectorServicioCrearFeedback"
-              >
-                <option selected disabled value="">Elija un Usuario...</option>
-                <option *ngFor="let ti of arr_tipo" value="{{ ti }}">
-                  {{ ti }}
-                </option>
-              </select>
-              <div id="selectorServicioCrearFeedback" class="invalid-feedback">
-                {{ getErrorMessage(crearInsignias, "usuario") }}
-              </div>
-            </div>
-          </div>
+          <!-- Sin selector de usuario: las insignias son solo del proveedor
+               (las del solicitante son las medallas). Se crean siempre con
+               tipo_usuario = "Proveedor". -->
 
           <div class="row p-2 align-items-center">
             <div class="col-5">
@@ -709,7 +652,7 @@
           class="btn btn-success"
           (click)="
             establecerMensaje(
-              'Está seguro que desea crear la profesión?',
+              'Está seguro que desea crear la insignia?',
               'crear'
             )
           "

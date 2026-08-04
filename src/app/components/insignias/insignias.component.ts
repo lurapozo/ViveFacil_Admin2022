@@ -33,7 +33,6 @@ export class InsigniasComponent {
   fileImagenCrear: File = {} as File;
   imagenCrear: string | undefined;
   profesion = ['Automotriz', 'Hogar', 'Oficina', 'Promociones']
-  arr_tipo = ['Solicitante', 'Proveedor']
   arr_servicios: Servicio[] | undefined;
   arr_categoria?: Categoria[] | undefined;
 
@@ -68,7 +67,6 @@ export class InsigniasComponent {
     Validators.maxLength(2), Validators.pattern(/^[0-9]+$/)]),
     servicio: new FormControl('', [Validators.required]),
     cat: new FormControl('', [Validators.required]),
-    usuario: new FormControl('', [Validators.required]),
     descripcion: new FormControl('', [Validators.required]),
   }, []);
 
@@ -79,7 +77,6 @@ export class InsigniasComponent {
     Validators.maxLength(2), Validators.pattern(/^[0-9]+$/)]),
     servicio: new FormControl('', [Validators.required]),
     cat: new FormControl('', [Validators.required]),
-    usuario: new FormControl('', [Validators.required]),
     descripcion: new FormControl('', [Validators.required]),
   }, []);
   search(evento: any) {
@@ -254,12 +251,6 @@ export class InsigniasComponent {
           return 'Debe seleccionar un estado';
         }
         return '';
-      case 'usuario':
-        if (itemControl.hasError('required')) {
-
-          return 'Debe seleccionar un estado';
-        }
-        return '';
         case 'pedidos':
           if (itemControl.hasError('required')) {
             return 'El campo cantidad es requerido';
@@ -283,7 +274,6 @@ export class InsigniasComponent {
       this.crearInsignias.get('cat')?.setValue('');
       this.crearInsignias.get('pedidos')?.setValue('');
       this.crearInsignias.get('servicio')?.setValue('');
-      this.crearInsignias.get('usuario')?.setValue('');
     } else if (tipo === 'actualizar') {
 
       const servicio = this.insignia_seleccionada?.servicio;
@@ -292,7 +282,6 @@ export class InsigniasComponent {
       const estado = this.insignia_seleccionada?.estado;
       const tipo = this.insignia_seleccionada?.tipo;
       const pedido = this.insignia_seleccionada?.pedidos;
-      const usuario = this.insignia_seleccionada?.tipo_usuario;
       this.existImageActualizar = false;
       this.editarInsignias.get('imagen')?.reset();
       nombre ? this.editarInsignias.get('nombre')?.setValue(nombre) : this.editarInsignias.get('nombre')?.reset();
@@ -319,14 +308,16 @@ export class InsigniasComponent {
     const nombre = this.crearInsignias.get('nombre')?.value;
     const descripcion = this.crearInsignias.get('descripcion')?.value;
     const tipo = this.crearInsignias.get('cat')?.value;
-    const usuario = this.crearInsignias.get('usuario')?.value;
     const foto = this.crearInsignias.get('imagen')?.value;
-    if (nombre && servicio && descripcion && tipo && pedidos && usuario) {
+    if (nombre && servicio && descripcion && tipo && pedidos) {
       Insignia.servicio = servicio;
       Insignia.nombre = nombre;
       Insignia.descripcion = descripcion;
       Insignia.tipo = tipo
-      Insignia.tipoUsuario = usuario
+      // Fijo: las insignias son solo del proveedor (el solicitante gana
+      // medallas). El backend filtra por este campo en
+      // `content.services.insignias_personales`.
+      Insignia.tipoUsuario = 'Proveedor'
       Insignia.pedidos = pedidos
       if (foto && this.existImageCrear) {
         Insignia.imagen = foto; // Si hay foto se le agrega al body.
@@ -340,13 +331,14 @@ export class InsigniasComponent {
   }
 
   onActualizar() {
+    // Sin `tipo_usuario`: el backend actualiza con un serializer parcial, así
+    // que omitirlo deja el valor que ya tenía la insignia.
     const insignia: BodyActualizarInsignia = {
       nombre: '',
       estado: false,
       descripcion: '',
       tipo: '',
       pedidos: '',
-      tipo_usuario: '',
       servicio: ''
     }
 
@@ -355,13 +347,10 @@ export class InsigniasComponent {
     const nombre = this.editarInsignias.get('nombre')?.value;
     const descripcion = this.editarInsignias.get('descripcion')?.value;
     const tipo = this.editarInsignias.get('cat')?.value;
-    const usuario = this.editarInsignias.get('usuario')?.value;
     const pedidos = this.editarInsignias.get('pedidos')?.value;
     const foto = this.editarInsignias.get('imagen')?.value;
-    console.log(nombre, servicio, descripcion, tipo, usuario && pedidos)
-    if (nombre && servicio && descripcion && tipo && usuario && pedidos) {
+    if (nombre && servicio && descripcion && tipo && pedidos) {
       insignia.tipo = tipo
-      insignia.tipo_usuario = usuario
       insignia.servicio = servicio;
       insignia.nombre = nombre;
       insignia.descripcion = descripcion;
