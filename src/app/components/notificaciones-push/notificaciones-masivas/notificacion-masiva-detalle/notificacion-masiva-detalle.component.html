@@ -1,0 +1,193 @@
+<!-- Titulo principal-->
+<div class="header-admi1">
+  <div class="header-text">
+    <div class="containerstart detalle-header">
+      <button type="button" class="btn-back" (click)="volver()" title="Volver" aria-label="Volver">
+        <i class="bi bi-arrow-left"></i>
+      </button>
+      <p>Notificación masiva</p>
+    </div>
+  </div>
+  <svg preserveAspectRatio="xMidYMid">
+    <path d="M0,60 L0,0 L1290,0 L1290,60" fill="#333539" />
+    <path d="M320,60 Q448,85 550,60" fill="#333539" />
+  </svg>
+</div>
+
+<div class="container-fluid" *ngIf="cargando">
+  <p class="p-4">Cargando...</p>
+</div>
+
+<div class="container-fluid" *ngIf="noEncontrado">
+  <p class="p-4">No se encontró la notificación.</p>
+</div>
+
+<div class="container-fluid" *ngIf="notificacion">
+  <div class="row justify-content-center p-0">
+    <div class="col-10 containeradmin p-4">
+
+      <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-2">
+        <div class="d-flex flex-wrap gap-4">
+          <div>
+            <p class="etiqueta-bloque">Estado</p>
+            <span class="badge-estado" [ngClass]="notificacion.estado ? 'badge-activo' : 'badge-inactivo'">
+              {{ notificacion.estado ? 'Habilitado' : 'Deshabilitado' }}
+            </span>
+            <button *ngIf="notificacion.estado" type="button" class="btn btn-sm btn-outline-secondary ms-2" (click)="cambiarEstado(false)">
+              <i class="bi bi-pause-circle"></i> Deshabilitar
+            </button>
+            <button *ngIf="!notificacion.estado" type="button" class="btn btn-sm btn-outline-success ms-2" (click)="cambiarEstado(true)">
+              <i class="bi bi-play-circle"></i> Habilitar
+            </button>
+          </div>
+          <div>
+            <p class="etiqueta-bloque">Envío</p>
+            <span class="badge-estado" [ngClass]="notificacion.enviada_en ? 'badge-activo' : 'badge-programado'">
+              {{ notificacion.enviada_en ? 'Enviada' : (notificacion.programada_para ? 'Programada' : 'Pendiente') }}
+            </span>
+            <span class="ms-2 text-muted small" *ngIf="notificacion.enviada_en">
+              {{ notificacion.enviada_en | date:'dd/MM/yyyy HH:mm' }}
+            </span>
+            <span class="ms-2 text-muted small" *ngIf="!notificacion.enviada_en && notificacion.programada_para">
+              programada para {{ notificacion.programada_para | date:'dd/MM/yyyy HH:mm' }}
+            </span>
+            <button *ngIf="!notificacion.enviada_en" type="button" class="btn btn-sm btn-outline-primary ms-2" (click)="enviarAhora()">
+              <i class="bi bi-send"></i> Enviar ahora
+            </button>
+          </div>
+        </div>
+        <div>
+          <button type="button" class="btn btn-sm btn-outline-primary me-2"
+                  (click)="editando = !editando; quitarFotoSeleccionada(); limpiarForm()">
+            <i class="bi bi-pencil"></i> {{ editando ? 'Cancelar edición' : 'Editar' }}
+          </button>
+          <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modalEliminarNotificacion">
+            <i class="bi bi-trash"></i> Eliminar
+          </button>
+        </div>
+      </div>
+
+      <img *ngIf="fotoPreview || notificacion.imagen" [src]="fotoPreview || notificacion.imagen" class="foto-notificacion mb-3" alt="Imagen de la notificación">
+
+      <!-- Vista de solo lectura -->
+      <div *ngIf="!editando">
+        <div class="row p-2"><div class="col-3"><h3 class="m-0 fw-bold">Nombre:</h3></div><div class="col-9">{{ notificacion.nombre }}</div></div>
+        <div class="row p-2"><div class="col-3"><h3 class="m-0 fw-bold">Título:</h3></div><div class="col-9">{{ notificacion.titulo }}</div></div>
+        <div class="row p-2"><div class="col-3"><h3 class="m-0 fw-bold">Descripción:</h3></div><div class="col-9">{{ notificacion.descripcion }}</div></div>
+        <div class="row p-2"><div class="col-3"><h3 class="m-0 fw-bold">Ruta:</h3></div><div class="col-9">{{ notificacion.ruta || '—' }}</div></div>
+        <div class="row p-2"><div class="col-3"><h3 class="m-0 fw-bold">Dirigida a:</h3></div><div class="col-9">{{ etiquetaDirigidaA(notificacion.dirigida_a) }}</div></div>
+        <div class="row p-2" *ngIf="notificacion.dirigida_a === 'proveedor'">
+          <div class="col-3"><h3 class="m-0 fw-bold">Profesiones:</h3></div>
+          <div class="col-9">{{ notificacion.profesiones_nombres?.join(', ') || 'Todas' }}</div>
+        </div>
+        <div class="row p-2"><div class="col-3"><h3 class="m-0 fw-bold">Creación:</h3></div><div class="col-9">{{ notificacion.fecha_creacion | date:'dd/MM/yyyy HH:mm' }}</div></div>
+      </div>
+
+      <!-- Formulario de edición -->
+      <form *ngIf="editando" [formGroup]="formEdit" (ngSubmit)="onActualizar()">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label" for="nombre">Nombre</label>
+            <input id="nombre" class="form-control" formControlName="nombre" [class.is-invalid]="isInvalidForm('nombre')">
+            <div class="invalid-feedback">El nombre es obligatorio.</div>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label" for="titulo">Título</label>
+            <input id="titulo" class="form-control" formControlName="titulo" [class.is-invalid]="isInvalidForm('titulo')">
+            <div class="invalid-feedback">El título es obligatorio.</div>
+          </div>
+          <div class="col-12">
+            <label class="form-label" for="descripcion">Descripción</label>
+            <textarea id="descripcion" rows="2" class="form-control" formControlName="descripcion" [class.is-invalid]="isInvalidForm('descripcion')"></textarea>
+            <div class="invalid-feedback">La descripción es obligatoria.</div>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label" for="ruta">Ruta</label>
+            <input id="ruta" class="form-control" formControlName="ruta">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label" for="dirigida_a">Dirigida a</label>
+            <select id="dirigida_a" class="form-select" formControlName="dirigida_a">
+              <option value="ambas">Ambas apps</option>
+              <option value="proveedor">Solo proveedores</option>
+              <option value="solicitante">Solo solicitantes</option>
+            </select>
+          </div>
+          <div class="col-12" *ngIf="formEdit.get('dirigida_a')?.value === 'proveedor'">
+            <label class="form-label">Profesiones</label>
+            <ng-select
+              [items]="profesiones"
+              bindLabel="nombre"
+              bindValue="id"
+              class="custom-ng-select form-select"
+              formControlName="profesiones"
+              [multiple]="true"
+              placeholder="Todas las profesiones">
+            </ng-select>
+            <small class="text-muted">Sin seleccionar ninguna, la ven todos los proveedores.</small>
+          </div>
+          <div class="col-12" *ngIf="!notificacion.enviada_en">
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" role="switch" id="programar" formControlName="programar">
+              <label class="form-check-label" for="programar">Programar envío (si no, se envía de inmediato al enviar ahora)</label>
+            </div>
+          </div>
+          <div class="col-md-6" *ngIf="formEdit.get('programar')?.value">
+            <label class="form-label" for="fecha_programada">Fecha</label>
+            <input id="fecha_programada" type="date" class="form-control" formControlName="fecha_programada"
+                   (change)="recalcularSlots()">
+          </div>
+          <div class="col-md-6" *ngIf="formEdit.get('programar')?.value">
+            <label class="form-label" for="hora_programada">Hora</label>
+            <select id="hora_programada" class="form-select" formControlName="hora_programada">
+              <option value="">Elige una hora</option>
+              <option *ngFor="let slot of slotsHora" [value]="slot">{{ slot }}</option>
+            </select>
+            <small class="text-muted">El envío se revisa cada media hora.</small>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label" for="foto">Imagen</label>
+            <input id="foto" type="file" accept="image/png, image/jpeg" class="form-control" (change)="onFotoSeleccionada($event)">
+          </div>
+        </div>
+
+        <div class="mt-3">
+          <button type="submit" class="btn btn-primary me-2">Guardar cambios</button>
+          <button type="button" class="btn btn-secondary" (click)="editando = false; quitarFotoSeleccionada(); limpiarForm()">Cancelar</button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</div>
+
+<!-- Modal confirmar eliminar -->
+<div class="modal fade" id="modalEliminarNotificacion" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Confirmar eliminación</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        <p>¿Eliminar la notificación "{{ notificacion?.titulo }}"? Esta acción no se puede deshacer.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" (click)="eliminar()">Eliminar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast de Información -->
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+  <div #liveToast id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header" [ngClass]="isErrorToast ? ' bg-danger' : ' bg-success'">
+      <strong class="me-auto text-light">{{ tituloToast }}</strong>
+      <small class="text-light">Ahora</small>
+      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body">{{ mensajeToast }}</div>
+  </div>
+</div>

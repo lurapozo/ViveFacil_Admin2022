@@ -1,0 +1,122 @@
+/* Mismo lenguaje visual que cupon-detalle. */
+.detalle-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.btn-back {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  border-radius: 50%;
+  border: none;
+  background-color: #3F3185;
+  color: white;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-back:hover {
+  background-color: #6b60a8;
+}
+
+h3 {
+  text-transform: uppercase;
+  color: rgba(33, 149, 181, 0.79);
+  font-weight: bold;
+  font-size: 0.95rem;
+}
+
+.badge-estado {
+  display: inline-block;
+  padding: 0.35em 0.65em;
+  border-radius: 0.375rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #fff;
+  white-space: nowrap;
+}
+
+.badge-activo { background-color: #198754; }
+.badge-inactivo { background-color: #6c757d; }
+.badge-programado { background-color: #0d6efd; }
+
+.etiqueta-bloque {
+  margin: 0 0 4px;
+  color: #8a8a99;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.foto-notificacion {
+  max-width: 200px;
+  max-height: 200px;
+  border-radius: 8px;
+}
+
+/* ng-select del filtro de profesiones. */
+.custom-ng-select {
+  background-color: #e4fcff;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 16px;
+  color: #333;
+  width: 100%;
+  transition: all 0.3s ease;
+}
+::ng-deep span.ng-value-icon.left {
+  color: red;
+  margin-right: 0.5rem;
+}
+::ng-deep div.ng-value-container {
+  flex-direction: column;
+}
+::ng-deep .custom-ng-select ng-dropdown-panel {
+  background-color: white;
+}
+::ng-deep .custom-ng-select ng-dropdown-panel div.ng-option {
+  padding: 5px 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.035);
+}
+::ng-deep .custom-ng-select ng-dropdown-panel div.ng-option-selected {
+  padding: 0 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.035);
+  color: #4422db;
+}
+::ng-deep .custom-ng-select ng-dropdown-panel div.ng-option:hover {
+  background-color: #f0f0f0;
+  color: #4422db;
+}
+::ng-deep .custom-ng-select ng-dropdown-panel .ng-option-label {
+  text-wrap: initial;
+}
+.custom-ng-select:hover {
+  border-color: #4422db;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.custom-ng-select:focus-within {
+  outline: none;
+  border-color: #4422db;
+  background-color: #fff;
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+}
+.custom-ng-select[multiple] {
+  background-color: #f9f9f9;
+}
+.custom-ng-select[multiple] .ng-option {
+  padding: 8px;
+  background-color: #fff;
+  border-bottom: 1px solid #e0e0e0;
+}
+.custom-ng-select[multiple] .ng-option:hover {
+  background-color: #f0f0f0;
+  color: #4422db;
+}

@@ -13,7 +13,7 @@ import { BodyEmail, BodyResponseEmail } from 'src/app/interfaces/email';
 import { BodyActualizarGroup, BodyCrearGroup, Group, Permission } from 'src/app/interfaces/group';
 import { BodyActualizarInsignia, BodyActualizarMedalla, BodyCrearInsignia, BodyCrearMedalla, BodyResponseCrearInsignia, Insignia, Medalla } from 'src/app/interfaces/insignia';
 import { BodyLogin, BodyLoginResponse } from 'src/app/interfaces/login';
-import { BodyActualizarNotificacionAnuncio, BodyActualizarNotificacionAutomatica, BodyCrearNotificacionAnuncio, BodyCrearNotificacionAutomatica, NotificacionAnuncio } from 'src/app/interfaces/notificacion';
+import { BodyActualizarNotificacionAnuncio, BodyActualizarNotificacionProgramada, BodyCrearNotificacionAnuncio, BodyCrearNotificacionProgramada, NotificacionAnuncio, NotificacionProgramada } from 'src/app/interfaces/notificacion';
 import { PaymentEfectivo, PaymentPaginacion, PaymentTarjeta } from 'src/app/interfaces/payment';
 import { BodyActualizarPlan, BodyActualizarPlanProveedor, BodyCrearPlan, BodyCrearPlanProveedor, BodyResponseCrearPlan, Plan, PlanProveedor } from 'src/app/interfaces/plan';
 import { BodyActualizarProfesion, BodyCrearProfesion, BodyResponseActualizarProfesion, BodyResponseCrearProfesion, Profesion } from 'src/app/interfaces/profesion';
@@ -1586,41 +1586,56 @@ export class PythonAnywhereService {
     return this.http.get(`${this.API_URL}/administrador/notifications/notificaciones/`) as Observable<NotificacionAnuncio>;
   }
 
+  /** Una sola programada por id, para la pantalla de detalle. */
+  obtener_notificacion_detalle(id: string): Observable<NotificacionProgramada> {
+    return this.http.get(`${this.API_URL}/administrador/notifications/notificaciones/${id}/`) as Observable<NotificacionProgramada>;
+  }
+
   delete_notificacion(id: any) {
     return this.http.delete(`${this.API_URL}/administrador/notifications/notificaciones/${id}/`);
   }
 
-  crear_notificacion(bodyCrear: BodyCrearNotificacionAutomatica): Observable<any> {
-    const dataCrear = new FormData();
-    dataCrear.append("nombre", bodyCrear.nombre);
-    dataCrear.append("titulo", bodyCrear.titulo);
-    dataCrear.append("descripcion", bodyCrear.descripcion);
-    dataCrear.append("tipo_proveedores", bodyCrear.tipo_proveedores);
-    dataCrear.append("frecuencia", bodyCrear.frecuencia);
-    dataCrear.append("fecha_inicio", bodyCrear.fecha_iniciacion);
-    dataCrear.append("fecha_expiracion", bodyCrear.fecha_expiracion);
-    dataCrear.append("hora", bodyCrear.hora);
-    dataCrear.append("ruta", bodyCrear.ruta);
-    bodyCrear.imagen ? dataCrear.append("imagen", bodyCrear.imagen) : null;
-    return this.http.post(`${this.API_URL}/administrador/notifications/notificaciones/`, dataCrear) as Observable<any>;
+  /** Campos comunes a masivas y programadas. */
+  private baseNotificacionFormData(body: any): FormData {
+    const data = new FormData();
+    data.append("nombre", body.nombre);
+    data.append("titulo", body.titulo);
+    data.append("descripcion", body.descripcion);
+    data.append("ruta", body.ruta || "");
+    data.append("dirigida_a", body.dirigida_a);
+    // Un append por id: el backend lo lee con QueryDict.getlist('profesiones').
+    (body.profesiones || []).forEach((id: number) => data.append("profesiones", String(id)));
+    if (body.imagen) {
+      data.append("imagen", body.imagen);
+    }
+    return data;
   }
 
-  put_notificacion_auto(bodyActualizar: BodyActualizarNotificacionAutomatica, id: any): Observable<NotificacionAnuncio> {
-    const dataActualizar = new FormData();
-    dataActualizar.append("nombre", bodyActualizar.nombre);
-    dataActualizar.append("titulo", bodyActualizar.titulo);
-    dataActualizar.append("descripcion", bodyActualizar.descripcion);
-    dataActualizar.append("tipo_proveedores", bodyActualizar.tipo_proveedores);
-    dataActualizar.append("frecuencia", bodyActualizar.frecuencia);
-    dataActualizar.append("fecha_inicio", bodyActualizar.fecha_iniciacion);
-    dataActualizar.append("fecha_expiracion", bodyActualizar.fecha_expiracion);
-    dataActualizar.append("hora", bodyActualizar.hora);
-    dataActualizar.append("ruta", bodyActualizar.ruta);
-    if (bodyActualizar.imagen) {
-      dataActualizar.append("imagen", bodyActualizar.imagen);
-    }
+  /** Recurrencia, solo de las programadas. */
+  private programadaFormData(body: BodyCrearNotificacionProgramada | BodyActualizarNotificacionProgramada): FormData {
+    const data = this.baseNotificacionFormData(body);
+    data.append("frecuencia", body.frecuencia);
+    data.append("dias_semana", body.dias_semana || "");
+    data.append("hora", body.hora);
+    // La clave era "fecha_inicio", que el backend nunca leyó: la fecha se
+    // descartaba en silencio. Ahora gobierna la vigencia de la recurrencia.
+    data.append("fecha_iniciacion", body.fecha_iniciacion || "");
+    data.append("fecha_expiracion", body.fecha_expiracion || "");
+    return data;
+  }
 
-    return this.http.put(`${this.API_URL}/administrador/notifications/notificaciones/${id}/`, dataActualizar) as Observable<NotificacionAnuncio>;
+  crear_notificacion(bodyCrear: BodyCrearNotificacionProgramada): Observable<any> {
+    return this.http.post(
+      `${this.API_URL}/administrador/notifications/notificaciones/`,
+      this.programadaFormData(bodyCrear)) as Observable<any>;
+  }
+
+  put_notificacion_auto(bodyActualizar: BodyActualizarNotificacionProgramada, id: any): Observable<NotificacionAnuncio> {
+    const data = this.programadaFormData(bodyActualizar);
+    data.append("estado", String(bodyActualizar.estado));
+    return this.http.put(
+      `${this.API_URL}/administrador/notifications/notificaciones/${id}/`,
+      data) as Observable<NotificacionAnuncio>;
   }
 
   cambio_notificacion_estado(id: string, estado: boolean): Observable<any> {
@@ -1645,22 +1660,20 @@ export class PythonAnywhereService {
     return this.http.get(`${this.API_URL}/administrador/notifications/notificacion-anuncio/`) as Observable<NotificacionAnuncio>;
   }
 
-  put_notificacion_masiva(bodyActualizar: BodyActualizarNotificacionAnuncio, id: any): Observable<NotificacionAnuncio> {
-    const dataActualizar = new FormData();
-    dataActualizar.append("nombre", bodyActualizar.nombre);
-    dataActualizar.append("titulo", bodyActualizar.titulo);
-    dataActualizar.append("descripcion", bodyActualizar.descripcion);
-    dataActualizar.append("tipo_proveedores", bodyActualizar.tipo_proveedores);
-    dataActualizar.append("frecuencia", bodyActualizar.frecuencia);
-    dataActualizar.append("fecha_inicio", bodyActualizar.fecha_iniciacion);
-    dataActualizar.append("fecha_expiracion", bodyActualizar.fecha_expiracion);
-    dataActualizar.append("hora", bodyActualizar.hora);
-    dataActualizar.append("ruta", bodyActualizar.ruta);
-    if (bodyActualizar.imagen) {
-      dataActualizar.append("imagen", bodyActualizar.imagen);
-    }
+  /** Una sola masiva por id, para la pantalla de detalle. */
+  obtener_notificacion_masiva_detalle(id: string): Observable<NotificacionAnuncio> {
+    return this.http.get(`${this.API_URL}/administrador/notifications/notificacion-anuncio/${id}/`) as Observable<NotificacionAnuncio>;
+  }
 
-    return this.http.put(`${this.API_URL}/administrador/notifications/notificacion-anuncio/${id}/`, dataActualizar) as Observable<NotificacionAnuncio>;
+  put_notificacion_masiva(bodyActualizar: BodyActualizarNotificacionAnuncio, id: any): Observable<NotificacionAnuncio> {
+    const data = this.baseNotificacionFormData(bodyActualizar);
+    data.append("estado", String(bodyActualizar.estado));
+    if (bodyActualizar.programada_para) {
+      data.append("programada_para", bodyActualizar.programada_para);
+    }
+    return this.http.put(
+      `${this.API_URL}/administrador/notifications/notificacion-anuncio/${id}/`,
+      data) as Observable<NotificacionAnuncio>;
   }
 
   cambio_notificacion_masiva_estado(id: string, estado: boolean): Observable<any> {
@@ -1687,18 +1700,14 @@ export class PythonAnywhereService {
    * @returns Retorna un obejto con un estado OK 200 {"sucess": true}
    */
   send_notificacion(bodyCrear: BodyCrearNotificacionAnuncio): Observable<any> {
-    const dataCrear = new FormData();
-    dataCrear.append("nombre", bodyCrear.nombre);
-    dataCrear.append("titulo", bodyCrear.titulo);
-    dataCrear.append("descripcion", bodyCrear.descripcion);
-    dataCrear.append("tipo_proveedores", bodyCrear.tipo_proveedores);
-    dataCrear.append("frecuencia", bodyCrear.frecuencia);
-    dataCrear.append("fecha_iniciacion", bodyCrear.fecha_iniciacion);
-    dataCrear.append("fecha_expiracion", bodyCrear.fecha_expiracion);
-    dataCrear.append("hora", bodyCrear.hora);
-    dataCrear.append("ruta", bodyCrear.ruta);
-    bodyCrear.imagen ? dataCrear.append("imagen", bodyCrear.imagen) : null;
-    return this.http.post(`${this.API_URL}/administrador/notifications/notificacion-anuncio/`, dataCrear) as Observable<any>;
+    const data = this.baseNotificacionFormData(bodyCrear);
+    // Sin `programada_para` el backend la envía en el acto.
+    if (bodyCrear.programada_para) {
+      data.append("programada_para", bodyCrear.programada_para);
+    }
+    return this.http.post(
+      `${this.API_URL}/administrador/notifications/notificacion-anuncio/`,
+      data) as Observable<any>;
   }
 
   //REPETIDO, LO MISMO QUE  obtener_planes()

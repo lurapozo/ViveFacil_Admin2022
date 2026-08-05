@@ -19,8 +19,10 @@ import { SolicitudesComponent } from './components/solicitudes/solicitudes.compo
 import { SolicitudDetalleComponent } from './components/solicitudes/solicitud-detalle/solicitud-detalle.component';
 import { SugerenciasLeidasComponent } from './components/sugerencias/sugerencias-leidas/sugerencias-leidas.component';
 import { SugerenciasNoLeidasComponent } from './components/sugerencias/sugerencias-no-leidas/sugerencias-no-leidas.component';
-import { NotificacionesAutomaticasComponent } from './components/notificaciones-push/notificaciones-automaticas/notificaciones-automaticas.component';
+import { NotificacionesProgramadasComponent } from './components/notificaciones-push/notificaciones-programadas/notificaciones-programadas.component';
+import { NotificacionProgramadaDetalleComponent } from './components/notificaciones-push/notificaciones-programadas/notificacion-programada-detalle/notificacion-programada-detalle.component';
 import { NotificacionesMasivasComponent } from './components/notificaciones-push/notificaciones-masivas/notificaciones-masivas.component';
+import { NotificacionMasivaDetalleComponent } from './components/notificaciones-push/notificaciones-masivas/notificacion-masiva-detalle/notificacion-masiva-detalle.component';
 import { InsigniasComponent } from './components/insignias/insignias.component';
 import { MedallaComponent } from './components/medalla/medalla.component';
 import { PoliticasComponent } from './components/politicas/politicas.component';
@@ -80,9 +82,14 @@ const routes: Routes = [
       {
         path: 'notificaciones',
         children: [
-          { path: '', redirectTo: 'automaticas', pathMatch: 'full' },
-          { path: 'automaticas', component: NotificacionesAutomaticasComponent },
+          { path: '', redirectTo: 'programadas', pathMatch: 'full' },
+          { path: 'programadas', component: NotificacionesProgramadasComponent },
+          { path: 'programadas/:pk', component: NotificacionProgramadaDetalleComponent },
+          // La sección se llamaba "automáticas"; se deja el redirect para los
+          // enlaces guardados.
+          { path: 'automaticas', redirectTo: 'programadas' },
           { path: 'masivas', component: NotificacionesMasivasComponent },
+          { path: 'masivas/:pk', component: NotificacionMasivaDetalleComponent },
         ],
       },
       { path: 'medallas', component: MedallaComponent },

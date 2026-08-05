@@ -18,7 +18,6 @@ import { PublicidadComponent } from './components/publicidad/publicidad.componen
 import { PlanesComponent } from './components/planes/planes.component';
 import { InsigniasComponent } from './components/insignias/insignias.component';
 import { CuponesComponent } from './components/cupones/cupones.component';
-import { NotificacionesPushComponent } from './components/notificaciones-push/notificaciones-push.component';
 import { SolicitudesProfesionesComponent } from './components/solicitudes-profesiones/solicitudes-profesiones.component';
 import { PoliticasComponent } from './components/politicas/politicas.component';
 import { CategoriasComponent } from './components/servicios/categorias/categorias.component';
@@ -36,8 +35,10 @@ import { SolicitantesComponent } from './components/cuentas/solicitantes/solicit
 import { AdministradoresComponent } from './components/cuentas/administradores/administradores.component';
 import { SugerenciasLeidasComponent } from './components/sugerencias/sugerencias-leidas/sugerencias-leidas.component';
 import { SugerenciasNoLeidasComponent } from './components/sugerencias/sugerencias-no-leidas/sugerencias-no-leidas.component';
-import { NotificacionesAutomaticasComponent } from './components/notificaciones-push/notificaciones-automaticas/notificaciones-automaticas.component';
+import { NotificacionesProgramadasComponent } from './components/notificaciones-push/notificaciones-programadas/notificaciones-programadas.component';
+import { NotificacionProgramadaDetalleComponent } from './components/notificaciones-push/notificaciones-programadas/notificacion-programada-detalle/notificacion-programada-detalle.component';
 import { NotificacionesMasivasComponent } from './components/notificaciones-push/notificaciones-masivas/notificaciones-masivas.component';
+import { NotificacionMasivaDetalleComponent } from './components/notificaciones-push/notificaciones-masivas/notificacion-masiva-detalle/notificacion-masiva-detalle.component';
 import { LoginComponent } from './pages/login/login.component';
 import { HomeComponent } from './pages/home/home.component';
 import { SpinnerComponent } from './components/spinner/spinner/spinner.component';
@@ -78,7 +79,6 @@ import { firebaseConfig } from 'src/app/services/Firebase/firebase.config';
     PlanesComponent,
     InsigniasComponent,
     CuponesComponent,
-    NotificacionesPushComponent,
     SolicitudesProfesionesComponent,
     CategoriasComponent,
     SubCategoriasComponent,
@@ -95,8 +95,10 @@ import { firebaseConfig } from 'src/app/services/Firebase/firebase.config';
     AdministradoresComponent,
     SugerenciasLeidasComponent,
     SugerenciasNoLeidasComponent,
-    NotificacionesAutomaticasComponent,
+    NotificacionesProgramadasComponent,
+    NotificacionProgramadaDetalleComponent,
     NotificacionesMasivasComponent,
+    NotificacionMasivaDetalleComponent,
     LoginComponent,
     HomeComponent,
     SpinnerComponent,

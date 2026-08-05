@@ -1,9 +1,9 @@
- <!-- Titulo principal-->
- <div class="header-admi1">
+<!-- Titulo principal-->
+<div class="header-admi1">
     <div class="header-text">
       <div class="containerstart" >
-        <p *ngIf="showHeader"> Notificaciones Masivas</p>
-        <p *ngIf="showHeaderC"> Crear Notificación  Masiva</p>
+        <p *ngIf="showHeader"> Notificaciones Programadas</p>
+        <p *ngIf="showHeaderC"> Crear notificación</p>
       </div>
     </div>
     <svg preserveAspectRatio="xMidYMid">
@@ -11,63 +11,59 @@
       <path d="M320,60 Q448,85 550,60" fill="#333539" />
     </svg>
 </div>
-
-<!-- FILTROS-->
+  
+  <!-- FILTROS-->
 <div class="container-fluid" *ngIf="showHeader">
-  <div class="d-flex flex-wrap header-solicitud align-items-center gap-3">   
-    <div class="containerstart1" >
-      <label class="calendar-label">Desde:</label>
-      <div class="date-container" >
-        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-        <mat-datepicker #picker1></mat-datepicker>
-        <input matInput [matDatepicker]="picker1" placeholder="SELECCIONA DIA" 
-        [(ngModel)]="fechaInicio" (dateChange)="filtrarPorFechas()"
-        >
-        
+    <div class="d-flex flex-wrap header-solicitud align-items-center gap-3">   
+      <div class="containerstart1" >
+        <label class="calendar-label">Desde:</label>
+        <div class="date-container" >
+          <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+          <mat-datepicker #picker1></mat-datepicker>
+          <input matInput [matDatepicker]="picker1" placeholder="SELECCIONA DIA" 
+          [(ngModel)]="fechaInicio" (dateChange)="filtrarPorFechas()"
+          >
+          
+        </div>
+      </div>
+      
+      <div class="containerstart2" >
+        <label class="calendar-label">Hasta:</label>
+        <div class="date-container" >
+          <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+          <mat-datepicker #picker2></mat-datepicker>
+          <input matInput [matDatepicker]="picker2" placeholder="SELECCIONA DIA"
+          [(ngModel)]="fechaFin" (dateChange)="filtrarPorFechas()"
+          >
+          
+        </div>
+      </div>
+  
+      <div class="containerstart3">
+        <button class="search-button" id="basic-addon1">
+          <i class="bi bi-search"></i>
+        </button>
+        <div class="date-container">
+          <div class="input-group search-group">
+            <input 
+              type="text" 
+              class="form-control search-input" 
+              placeholder="BUSCAR"
+              aria-label="Buscar" 
+              aria-describedby="basic-addon1" 
+              (input)="search($event)"
+             >
+          </div> 
+        </div>       
       </div>
     </div>
-    
-    <div class="containerstart2" >
-      <label class="calendar-label">Hasta:</label>
-      <div class="date-container" >
-        <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-        <mat-datepicker #picker2></mat-datepicker>
-        <input matInput [matDatepicker]="picker2" placeholder="SELECCIONA DIA"
-        [(ngModel)]="fechaFin" (dateChange)="filtrarPorFechas()"
-        >
-        
-      </div>
-    </div>
 
-    <div class="containerstart3">
-      <button class="search-button" id="basic-addon1">
-        <i class="bi bi-search"></i>
-      </button>
-      <div class="date-container">
-        <div class="input-group search-group">
-          <input 
-            type="text" 
-            class="form-control search-input" 
-            placeholder="BUSCAR"
-            aria-label="Buscar" 
-            aria-describedby="basic-addon1" 
-            (input)="search($event)"
-           >
-        </div> 
-      </div>       
-    </div>
-
-  </div>
-
-  <div class="d-flex flex-wrap header-solicitud align-items-center gap-3">         
-      <button class="admin-button"
-          type="button"
-          (click)="crear_noti();"
-      >
-        <span class="material-icons">add_circle</span>
-        AGREGAR NOTIFICACION MASIVA
-      </button>
-      <div class="filtro-container">
+    <div class="d-flex flex-wrap header-solicitud align-items-center gap-3">         
+        <button class="admin-button" type="button" (click)="crear_noti();" >
+          <span class="material-icons">add_circle</span>
+          AGREGAR NOTIFICACION
+        </button>
+        <div class="filtro-container">
             <button class="admin-button1"
                 type="button"
                 (click)="toggleFiltro()"
@@ -89,11 +85,11 @@
                 {{ filtro | titlecase }} 
               </div>
             </div>
-      </div>
-  </div>       
+        </div>
+    </div>       
 </div>
 
-<!-- MOSTRAR NOTIFICACIONES MASIVAS -->
+<!-- MOSTRAR NOTIFICACION -->
 <!-- Misma tabla que cuentas/proveedores: thead en su propia <table> para que
      quede fijo mientras .table-body hace el scroll. -->
 <div class="row justify-content-center align-items-center p-0" *ngIf="showHeader">
@@ -108,9 +104,11 @@
             <th scope="col">Descripción</th>
             <th scope="col">Dirigida a</th>
             <th scope="col">Profesiones</th>
-            <th scope="col">Creación</th>
-            <th scope="col">Programada para</th>
-            <th scope="col">Enviada</th>
+            <th scope="col">Frecuencia</th>
+            <th scope="col">Días</th>
+            <th scope="col">Hora</th>
+            <th scope="col">Veces enviada</th>
+            <th scope="col">Último envío</th>
             <th scope="col">Estado</th>
             <th scope="col">Acciones</th>
           </tr>
@@ -120,7 +118,7 @@
         <table class="table table-striped custom-table">
           <tbody>
             <tr
-              [routerLink]="['/notificaciones/masivas', notificacion.id]"
+              [routerLink]="['/notificaciones/programadas', notificacion.id]"
               *ngFor="let notificacion of arr_filtered_notificacion"
               role="button"
             >
@@ -134,12 +132,12 @@
               <td class="celda-dato">
                 <strong>{{ notificacion.profesiones_nombres?.join(', ') || 'Todas' }}</strong>
               </td>
-              <td class="celda-dato"><strong>{{ notificacion.fecha_creacion | date : "d/M/Y" }}</strong></td>
+              <td class="celda-dato"><strong>{{ etiquetaFrecuencia(notificacion.frecuencia) }}</strong></td>
+              <td class="celda-dato"><strong>{{ etiquetaDias(notificacion.dias_semana) }}</strong></td>
+              <td class="celda-dato"><strong>{{ notificacion.hora }}</strong></td>
+              <td class="celda-dato"><strong>{{ notificacion.veces_enviada || 0 }}</strong></td>
               <td class="celda-dato">
-                <strong>{{ notificacion.programada_para ? (notificacion.programada_para | date : "d/M/Y HH:mm") : 'Inmediata' }}</strong>
-              </td>
-              <td class="celda-dato">
-                <strong>{{ notificacion.enviada_en ? (notificacion.enviada_en | date : "d/M/Y HH:mm") : 'Pendiente' }}</strong>
+                <strong>{{ notificacion.ultimo_envio ? (notificacion.ultimo_envio | date : "d/M/Y HH:mm") : 'Nunca' }}</strong>
               </td>
               <td>
                 <span
@@ -157,7 +155,7 @@
                     type="button"
                     class="btn btn-sm btn-outline-primary"
                     title="Enviar ahora"
-                    (click)="enviarNotificacionmasiva(notificacion)"
+                    (click)="enviarNotificacionProgramada(notificacion)"
                   >
                     <i class="bi bi-send"></i>
                   </button>
@@ -179,12 +177,12 @@
   </div>
 </div>
 
-<!-- FORM CREAR NOTIFICACION MASIVA CONTENIDO -->
+<!-- CREAR NOTIFICACION CONTENIDO -->
 <div *ngIf="showHeaderC">
   <div class="row justify-content-center align-items-center p-0">
     <div class="col-10 text-center containerCrearCate">
       <div class="form-container">
-        <h2>Crear Notificaciones Masivas</h2>
+        <h2>Crear Notificación</h2>
         <form [formGroup]="crearNotificacionForm" id="formCrearCate">
 
           <!-- Sección de imagen -->
@@ -339,7 +337,64 @@
                           [multiple]="true"
                           placeholder="Todas las profesiones">
                         </ng-select>
-                        <small class="text-muted">Sin seleccionar ninguna, la ven todos los proveedores.</small>
+                        <small class="text-muted">Sin seleccionar ninguna, le llega a todos los proveedores.</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cont-ped">
+                <div class="form-field">
+                    <div class="col-5">
+                        <label class="form-label"><h3 class="m-0 p-0 fw-bold">Frecuencia: </h3></label>
+                    </div>
+                    <div class="col-7">
+                        <select
+                          class="form-select"
+                          [ngClass]="isInvalidForm('frecuencia') ? 'is-invalid' : ''"
+                          formControlName="frecuencia">
+                          <option value="unica">Una sola vez</option>
+                          <option value="diaria">Todos los días</option>
+                          <option value="semanal">Días específicos de la semana</option>
+                        </select>
+                        <div class="invalid-feedback">
+                          {{ getErrorMessage(crearNotificacionForm, "frecuencia") }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-field" *ngIf="crearNotificacionForm.get('frecuencia')?.value === 'semanal'">
+                    <div class="col-5">
+                        <label class="form-label"><h3 class="m-0 p-0 fw-bold">Días: </h3></label>
+                    </div>
+                    <div class="col-7">
+                        <ng-select
+                          [items]="diasSemana"
+                          bindLabel="etiqueta"
+                          bindValue="valor"
+                          class="custom-ng-select form-select"
+                          formControlName="dias_semana"
+                          [multiple]="true"
+                          placeholder="Elige los días">
+                        </ng-select>
+                    </div>
+                </div>
+
+                <div class="form-field">
+                    <div class="col-5">
+                        <label class="form-label"><h3 class="m-0 p-0 fw-bold">Hora: </h3></label>
+                    </div>
+                    <div class="col-7">
+                        <!-- Solo :00 y :30 porque el job corre en esas marcas. -->
+                        <select
+                          class="form-select"
+                          [ngClass]="isInvalidForm('hora') ? 'is-invalid' : ''"
+                          formControlName="hora">
+                          <option value="">Elige una hora</option>
+                          <option *ngFor="let slot of slotsHora" [value]="slot">{{ slot }}</option>
+                        </select>
+                        <div class="invalid-feedback">
+                          {{ getErrorMessage(crearNotificacionForm, "hora") }}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -347,44 +402,21 @@
             <div class="cont-ped">
                 <div class="form-field">
                   <div class="col-5">
-                    <label class="form-label"><h3 class="m-0 p-0 fw-bold">Programar envío:</h3></label>
+                    <label class="form-label"><h3 class="m-0 p-0 fw-bold">Vigente desde:</h3></label>
                   </div>
-                  <div class="col-7 text-start">
-                    <div class="form-check form-switch">
-                      <input class="form-check-input" type="checkbox" role="switch"
-                             id="programar-crearNotificacionForm" formControlName="programar">
-                      <label class="form-check-label" for="programar-crearNotificacionForm">
-                        Si no lo activas, se envía de inmediato.
-                      </label>
-                    </div>
+                  <div class="col-7">
+                    <input type="date" class="form-control" formControlName="fecha_iniciacion" />
+                    <small class="text-muted">Opcional. Antes de esta fecha no se envía.</small>
                   </div>
                 </div>
 
-                <div class="form-field" *ngIf="crearNotificacionForm.get('programar')?.value">
+                <div class="form-field">
                   <div class="col-5">
-                    <label class="form-label"><h3 class="m-0 p-0 fw-bold">Fecha:</h3></label>
+                    <label class="form-label"><h3 class="m-0 p-0 fw-bold">Vigente hasta:</h3></label>
                   </div>
                   <div class="col-7">
-                    <input
-                      type="date"
-                      class="form-control"
-                      formControlName="fecha_programada"
-                      min="{{ getCurrentDate() }}"
-                      (change)="recalcularSlots(crearNotificacionForm)" />
-                  </div>
-                </div>
-
-                <div class="form-field" *ngIf="crearNotificacionForm.get('programar')?.value">
-                  <div class="col-5">
-                    <label class="form-label"><h3 class="m-0 p-0 fw-bold">Hora:</h3></label>
-                  </div>
-                  <div class="col-7">
-                    <!-- Solo :00 y :30 porque el job corre en esas marcas. -->
-                    <select class="form-select" formControlName="hora_programada">
-                      <option value="">Elige una hora</option>
-                      <option *ngFor="let slot of slotsHora" [value]="slot">{{ slot }}</option>
-                    </select>
-                    <small class="text-muted">El envío se revisa cada media hora.</small>
+                    <input type="date" class="form-control" formControlName="fecha_expiracion" />
+                    <small class="text-muted">Opcional. Después de esta fecha deja de repetirse.</small>
                   </div>
                 </div>
             </div>
@@ -415,47 +447,47 @@
 
 <!-- Modal de confirmacion (Alerta) -->
 <div class="modal fade" id="modalConfirmacion" tabindex="-1" aria-labelledby="modalConfirmacionLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <!-- Titulo del modal confirmacion -->
-        <div class="modal-header">
-          <h1 class="modal-title fs-5 m-0 p-0" id="modalConfirmacionLabel">Confirmar selección</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-  
-        <!-- Cuerpo del modal confirmacion -->
-        <div class="modal-body">
-          {{mensajeAlerta}}
-        </div>
-  
-        <!-- Footer del modal confirmacion -->
-        <div class="modal-footer">
-          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
-          <button type="button"
-                  class="btn btn-success"
-                  (click)="onCrearNotificacion();
-                    showHeader = true;
-                    showHeaderC = false;"
-                  data-bs-dismiss="modal">
-                Confirmar
-          </button>
-        </div>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <!-- Titulo del modal confirmacion -->
+      <div class="modal-header">
+        <h1 class="modal-title fs-5 m-0 p-0" id="modalConfirmacionLabel">Confirmar selección</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <!-- Cuerpo del modal confirmacion -->
+      <div class="modal-body">
+        {{mensajeAlerta}}
+      </div>
+
+      <!-- Footer del modal confirmacion -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button"
+                class="btn btn-success"
+                (click)="onCrearNotificacion();
+                  showHeader = true;
+                  showHeaderC = false;"
+                data-bs-dismiss="modal">
+              Confirmar
+        </button>
       </div>
     </div>
+  </div>
 </div>
 
-  <!-- Toast de Información -->
+<!-- Toast de Información -->
 <div class="toast-container position-fixed bottom-0 end-0 p-3">
-    <div #liveToast id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-      <div class="toast-header" [ngClass]="isErrorToast? ' bg-danger' : ' bg-success'">
-        <strong class="me-auto text-light">{{tituloToast}}</strong>
-        <small class="text-light">Ahora</small>
-        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-      </div>
-      <div class="toast-body bg-opacity-25" [ngClass]="isErrorToast? ' bg-danger' : ' bg-success'">
-        {{mensajeToast}}
-      </div>
+  <div #liveToast id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header" [ngClass]="isErrorToast? ' bg-danger' : ' bg-success'">
+      <strong class="me-auto text-light">{{tituloToast}}</strong>
+      <small class="text-light">Ahora</small>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
     </div>
+    <div class="toast-body bg-opacity-25" [ngClass]="isErrorToast? ' bg-danger' : ' bg-success'">
+      {{mensajeToast}}
+    </div>
+  </div>
 </div>
-  
+
 
