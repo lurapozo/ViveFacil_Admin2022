@@ -1132,9 +1132,8 @@ export class PythonAnywhereService {
  * @author Margarita Mawyin
  * @returns Devuelve un Observable con un objeto Cupones
    */
-  obtener_cupones() {
-    //return this.http.get(this.API_URL + '/all_cupcategorias/');
-    return this.http.get(this.API_URL + '/administrador/promotions/cupones/');
+  obtener_cupones(page = 1) {
+    return this.http.get(this.API_URL + `/administrador/promotions/cupones/?page=${page}`);
   }
 
   /**

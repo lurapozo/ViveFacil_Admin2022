@@ -37,7 +37,7 @@
           <td>{{ m.motivo_display }}</td>
           <td [ngClass]="claseMonto(m.monto)">{{ m.monto > 0 ? '+' : '' }}{{ m.monto }}</td>
           <td>{{ m.saldo_resultante }}</td>
-          <td>{{ m.referencia || '-' }}</td>
+          <td>{{ m.referencia_display || m.referencia || '-' }}</td>
           <td>{{ m.fecha | date:'dd/MM/yyyy HH:mm' }}</td>
         </tr>
         <tr *ngIf="movimientos.length === 0">

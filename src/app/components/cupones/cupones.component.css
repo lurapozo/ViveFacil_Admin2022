@@ -626,3 +626,25 @@ form button {
 .accion-eliminar:hover {
     background: #fdeaec;
 }
+
+.pagination {
+  justify-content: flex-end;
+}
+
+.page-link {
+  color: #620880;
+  font-weight: bold;
+}
+
+.page-link.dots {
+  cursor: default;
+  background: none;
+  border: none;
+}
+
+.pagination .active {
+  background-color: #620880;
+  border: none;
+  color: white;
+  border-radius: 50%;
+}

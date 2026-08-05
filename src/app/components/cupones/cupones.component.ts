@@ -23,6 +23,7 @@ export class CuponesComponent {
   condicionNext = false
   currentPage = 1
   pageNumber: number[] = [];
+  total = 0
   cupon_seleccionada: any | undefined;
   isErrorToast = false;
   mensajeToast = "";
@@ -68,14 +69,51 @@ export class CuponesComponent {
     return this.info(cupon).texto_clase;
   }
 
-  constructor(private pythonAnywhereService: PythonAnywhereService, private sanitizer: DomSanitizer) {
-    this.pythonAnywhereService.obtener_cupones().subscribe(resp => {
-      this.arr_cupon = Object(resp)
-      this.arr_filtered_cupon = this.arr_cupon
-      console.log("Lista Cupones")
-      console.log(this.arr_filtered_cupon)
-      console.log(resp)
+  cargar_cupones(page = 1) {
+    this.pythonAnywhereService.obtener_cupones(page).subscribe(resp => {
+      this.total = Object(resp).total_objects;
+      this.arr_cupon = Object(resp).results;
+      this.arr_filtered_cupon = this.arr_cupon;
+      this.currentPage = Object(resp).current_page_number || page;
+      this.condicionNext = Object(resp).next != null;
+      this.pageNumber = [];
+      for (let index = 1; index <= Object(resp).total_pages; index++) {
+        this.pageNumber.push(index);
+      }
     });
+  }
+
+  // ponytail: window de +-2 páginas alrededor de la actual + primera/última,
+  // mismo patrón que proveedores.component.ts.
+  get paginasVisibles(): (number | string)[] {
+    const total = this.pageNumber.length;
+    const actual = this.currentPage;
+    const delta = 2;
+    const paginas: (number | string)[] = [];
+    for (let i = 1; i <= total; i++) {
+      if (i === 1 || i === total || (i >= actual - delta && i <= actual + delta)) {
+        paginas.push(i);
+      } else if (paginas[paginas.length - 1] !== '...') {
+        paginas.push('...');
+      }
+    }
+    return paginas;
+  }
+
+  next(event: any) {
+    this.cargar_cupones(this.currentPage + 1);
+  }
+
+  previous(event: any) {
+    this.cargar_cupones(this.currentPage - 1);
+  }
+
+  iteracion(event: any) {
+    this.cargar_cupones(Number(event.target.value));
+  }
+
+  constructor(private pythonAnywhereService: PythonAnywhereService, private sanitizer: DomSanitizer) {
+    this.cargar_cupones();
 
     /*this.pythonAnywhereService.obtener_servicios().subscribe((resp: any[]) => {
       this.categoria = resp
@@ -122,10 +160,7 @@ export class CuponesComponent {
   });
 
   actualizarCup() {
-    this.pythonAnywhereService.obtener_cupones().subscribe(resp => {
-      this.arr_cupon = Object(resp)
-      this.arr_filtered_cupon = this.arr_cupon
-    });
+    this.cargar_cupones(this.currentPage);
   }
 
   abrirSelectorArchivo(event: Event, fileInput: HTMLInputElement): void {
@@ -385,12 +420,7 @@ export class CuponesComponent {
         console.log("Cupon", cupon)
         //this.limpiarForm('crear');
         this.mostrarToastInfo('Estado del Cupon ', 'Cupon Creado correctamente', false);
-        this.pythonAnywhereService.obtener_cupones().subscribe(resp => {
-          this.arr_cupon = Object(resp)
-          this.arr_filtered_cupon = this.arr_cupon
-          console.log(this.arr_filtered_cupon)
-
-        });
+        this.cargar_cupones(1);
       })
 
 
