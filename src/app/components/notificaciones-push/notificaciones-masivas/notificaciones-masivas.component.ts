@@ -6,6 +6,10 @@ import { BodyCrearNotificacionAnuncio, DirigidaA, NotificacionAnuncio } from 'sr
 import { Profesion } from 'src/app/interfaces/profesion';
 import * as moment from 'moment';
 
+// ponytail: bootstrap.bundle.min.js se carga como script global (angular.json),
+// no como módulo — así se referencia sin reimportarlo.
+declare const bootstrap: any;
+
 @Component({
   selector: 'app-notificaciones-masivas',
   templateUrl: './notificaciones-masivas.component.html',
@@ -16,6 +20,8 @@ export class NotificacionesMasivasComponent {
   imagenNotificacion: string | undefined;
   existImageNotificacion = false;
   mensajeAlerta: string = '';
+  /** Notificación pendiente de confirmar en #modalEliminarNotificacion. */
+  notificacionAEliminar: NotificacionAnuncio | null = null;
   tituloToast = '';
   mensajeToast = '';
   isErrorToast = false;
@@ -127,6 +133,19 @@ export class NotificacionesMasivasComponent {
     this.pythonAnywhereService.delete_notificacion_masiva(id).subscribe(() => {
       this.get_notificaciones();
     });
+  }
+
+  // La fila entera es clickable (routerLink al detalle) y su stopPropagation
+  // impide que el data-bs-toggle delegado por Bootstrap (escucha en
+  // document) reciba el click, así que el modal se abre a mano — mismo
+  // patrón que proveedores.component.ts::prepararEliminarProveedor.
+  prepararEliminarNotificacion(notificacion: NotificacionAnuncio, event: Event) {
+    event.stopPropagation();
+    this.notificacionAEliminar = notificacion;
+    const modalEl = document.getElementById('modalEliminarNotificacion');
+    if (modalEl) {
+      bootstrap.Modal.getOrCreateInstance(modalEl).show();
+    }
   }
 
   enviarNotificacionmasiva(notificacion: NotificacionAnuncio) {

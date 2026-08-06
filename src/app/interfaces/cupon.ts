@@ -27,7 +27,9 @@ export interface Cupon {
   participantes: string;
   puntos: number;
   foto?: File
-  tipo_categoria: string;
+  /** FK a Categoria; null = "Todas" (sin restricción). */
+  categoria: number | null;
+  categoria_nombre?: string | null;
   cantidad: number;
   /** Interruptor manual del admin. */
   estado:boolean;
@@ -63,7 +65,7 @@ export interface CuponCrear {
   estado: boolean;
   puntos: number;
   foto?:File
-  tipo_categoria: string;
+  categoria: number | null;
   cantidad: number;
 }
 export interface BodyCuponActualizar {
@@ -76,7 +78,7 @@ export interface BodyCuponActualizar {
   cantidad: number;
   puntos: number;
   foto?: File ;
-  tipo_categoria: string;
+  categoria: number | null;
   participantes?: string;
 }
 

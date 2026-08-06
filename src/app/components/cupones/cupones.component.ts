@@ -16,7 +16,6 @@ export class CuponesComponent {
   fechaInicio: Date | null = null;
   fechaFin: Date | null = null;
   fechasFiltradas: any[] = [];
-  participante = ['Solicitante', 'Proveedor']
   codigo = Math.random().toString(36).substr(2, 6);
   arr_cupon!: Cupon[] | [];
   arr_filtered_cupon!: Cupon[] | [];
@@ -34,7 +33,7 @@ export class CuponesComponent {
   mensajeAlerta: string = '';
   isCrear = false; isEliminar = false;
   dropdownOpen: boolean = false;
-  categoria?: SubCategoria[];
+  categoria?: Categoria[];
   listCategorias?: Categoria[];
   primeraCat?: string;
 
@@ -153,10 +152,8 @@ export class CuponesComponent {
     punto: new FormControl('10', [Validators.required, Validators.minLength(1),
     Validators.maxLength(2), Validators.pattern(/^[0-9]+$/)]),
     imagen: new FormControl(this.fileImagenCrear),
-    categoria: new FormControl('', [Validators.required]),
-    participantes: new FormControl('', [Validators.required]),
-
-
+    // Vacío = "Todas": el cupón no se restringe a ninguna categoría de servicio.
+    categoria: new FormControl(''),
   });
 
   actualizarCup() {
@@ -205,12 +202,6 @@ export class CuponesComponent {
         }
         return '';
 
-      case 'participantes':
-        if (itemControl.hasError('required')) {
-          return 'El campo participantes es requerido';
-        }
-        return '';
-
       case 'descripcion':
         if (itemControl.hasError('required')) {
           return 'El campo descripcion es requerido';
@@ -226,15 +217,15 @@ export class CuponesComponent {
           return ' Solo se permiten números.';
         }
         return '';
-      /*case 'punto':
+      case 'punto':
         if (itemControl.hasError('required')) {
-          return 'El campo punto es requerido';
+          return 'El campo puntos necesarios es requerido';
         } else if (itemControl.hasError('maxlength')) {
           return ' El número máximo  permitido es 99';
         } else if (itemControl.hasError('pattern')) {
           return ' Solo se permiten números.';
         }
-        return '';*/
+        return '';
       case 'categoria':
         if (itemControl.hasError('required')) {
           return 'El campo categoria es requerido';
@@ -378,7 +369,7 @@ export class CuponesComponent {
       fecha_expiracion: '',
       participantes: '',
       puntos: 10,
-      tipo_categoria: '',
+      categoria: null,
       cantidad: 0,
       estado: false
     }
@@ -387,16 +378,17 @@ export class CuponesComponent {
     const descripcion = this.cuponCrear.get('descripcion')?.value;
     const inicio = this.cuponCrear.get('inicio')?.value;
     const fin = this.cuponCrear.get('fin')?.value;
-    const participantes = this.cuponCrear.get('participantes')?.value;
+    // Los cupones son solo para solicitantes: ya no hay selector, va fijo.
+    const participantes = 'Solicitante';
     const cantidad = this.cuponCrear.get('cantidad')?.value;
-    const puntos = 10;
+    const puntos = this.cuponCrear.get('punto')?.value;
     const categoria = this.cuponCrear.get('categoria')?.value;
     const descuento = this.cuponCrear.get('descuento')?.value;
     const foto = this.cuponCrear.get('imagen')?.value as File;
 
 
 
-    if (titulo && descripcion && inicio && fin && cantidad && puntos && categoria && descuento && participantes) {
+    if (titulo && descripcion && inicio && fin && cantidad && puntos && descuento) {
       cupon.codigo = codigo
       cupon.titulo = titulo
       cupon.descripcion = descripcion
@@ -405,7 +397,7 @@ export class CuponesComponent {
       cupon.porcentaje = descuento
       cupon.cantidad = cantidad
       cupon.puntos = puntos
-      cupon.tipo_categoria = categoria
+      cupon.categoria = categoria ? Number(categoria) : null
       cupon.participantes = participantes
       cupon.estado = true;
 
@@ -511,10 +503,6 @@ export class CuponesComponent {
         return true;
       });
     }
-  }
-
-  toggleDropdown() {
-    this.dropdownOpen = !this.dropdownOpen;
   }
 
   seleccionarOpcion(opcion: string) {

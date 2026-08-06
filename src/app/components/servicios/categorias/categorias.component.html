@@ -151,16 +151,18 @@
           </button>
         </div>
 
-        <div class="row p-2">
-          <img
-            [src]="categoria_seleccionada?.foto2 ? categoria_seleccionada?.foto2 : 'assets/imagenes/ProfesionDefault.png'"
-            class="rounded mx-auto d-block img-fluid w-50 image_modal"
-            alt="..."
-          />
-        </div>
-
         <!-- Vista de solo lectura -->
         <div *ngIf="!editando">
+          <!-- En edición no se repite: el formulario ya tiene su propia
+               imagen con preview en vivo del archivo elegido; mostrar las
+               dos juntas era redundante y confuso. -->
+          <div class="row p-2">
+            <img
+              [src]="categoria_seleccionada?.foto ? categoria_seleccionada?.foto : 'assets/imagenes/ProfesionDefault.png'"
+              class="rounded mx-auto d-block img-fluid w-50 image_modal"
+              alt="..."
+            />
+          </div>
           <div class="row p-2 align-items-center">
             <div class="col-5"><h3 class="m-0 p-0 fw-bold">Nombre:</h3></div>
             <div class="col-7">{{ categoria_seleccionada?.nombre }}</div>
@@ -172,6 +174,38 @@
           <div class="row p-2 align-items-center">
             <div class="col-5"><h3 class="m-0 p-0 fw-bold">Estado:</h3></div>
             <div class="col-7">{{ categoria_seleccionada?.estado ? 'Activo' : 'Inactivo' }}</div>
+          </div>
+
+          <h3 class="m-0 p-0 fw-bold mt-4 text-start">Sub-categorías:</h3>
+          <div class="table-responsive mt-2">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th scope="col">Nombre</th>
+                  <th scope="col">Descripción</th>
+                  <th scope="col">Proveedores</th>
+                  <th scope="col">Estado</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  *ngFor="let sub of subCategoriasDeLaCategoria"
+                  role="button"
+                  (click)="verDetalleSubCategoria(sub)"
+                >
+                  <td><strong>{{ sub.nombre }}</strong></td>
+                  <td class="celda-descripcion" [title]="sub.descripcion">{{ sub.descripcion }}</td>
+                  <td>{{ sub.total_proveedores ?? 0 }}</td>
+                  <td>
+                    <span class="estado-indicador me-2" [ngClass]="sub.estado ? 'bg-success' : 'bg-secondary'"></span>
+                    <span [ngClass]="sub.estado ? 'text-success' : 'text-muted'">{{ sub.estado ? 'Activo' : 'Inactivo' }}</span>
+                  </td>
+                </tr>
+                <tr *ngIf="subCategoriasDeLaCategoria.length === 0">
+                  <td colspan="4" class="text-center text-muted">Esta categoría no tiene sub-categorías.</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
 

@@ -71,7 +71,7 @@ export class CuponDetalleComponent implements OnInit {
     cantidad: new FormControl(0, [Validators.required, Validators.min(0)]),
     fecha_iniciacion: new FormControl('', [Validators.required]),
     fecha_expiracion: new FormControl('', [Validators.required]),
-    tipo_categoria: new FormControl(''),
+    categoria: new FormControl<number | null>(null),
     participantes: new FormControl(''),
   });
 
@@ -124,7 +124,7 @@ export class CuponDetalleComponent implements OnInit {
       // El <input type="datetime-local"> no acepta el offset que manda el API.
       fecha_iniciacion: this.paraInput(this.cupon?.fecha_iniciacion),
       fecha_expiracion: this.paraInput(this.cupon?.fecha_expiracion),
-      tipo_categoria: this.cupon?.tipo_categoria || '',
+      categoria: this.cupon?.categoria ?? null,
       participantes: this.cupon?.participantes || '',
     });
   }
@@ -174,7 +174,7 @@ export class CuponDetalleComponent implements OnInit {
       cantidad: Number(v.cantidad ?? 0),
       fecha_iniciacion: v.fecha_iniciacion || null,
       fecha_expiracion: v.fecha_expiracion ?? '',
-      tipo_categoria: v.tipo_categoria ?? '',
+      categoria: v.categoria ?? null,
       participantes: v.participantes ?? '',
     };
     if (this.fotoFile) { body.foto = this.fotoFile; }

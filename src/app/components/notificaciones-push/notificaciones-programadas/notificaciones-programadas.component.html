@@ -163,7 +163,7 @@
                     type="button"
                     class="btn btn-sm btn-outline-danger"
                     title="Eliminar"
-                    (click)="borrar_notificacion(notificacion.id)"
+                    (click)="prepararEliminarNotificacion(notificacion, $event)"
                   >
                     <i class="bi bi-trash"></i>
                   </button>
@@ -440,6 +440,26 @@
 
            </form> 
         
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal confirmar eliminar -->
+<div class="modal fade" id="modalEliminarNotificacion" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Confirmar eliminación</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        <p class="mb-1" style="color: black;"><strong>{{ notificacionAEliminar?.titulo }}</strong></p>
+        <p style="color: black;">Esta notificación va a ser eliminada para siempre.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" (click)="borrar_notificacion(notificacionAEliminar?.id)">Eliminar</button>
       </div>
     </div>
   </div>

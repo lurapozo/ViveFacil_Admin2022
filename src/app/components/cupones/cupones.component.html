@@ -61,10 +61,6 @@
     AGREGAR CUPÓN
   </button>
   <div class="dropdown-container">
-    <button class="dropdown-button" (click)="toggleDropdown()">
-      <span class="material-icons">add_circle</span>
-      AGREGAR PROVEEDORES
-    </button>
   
     <div class="dropdown-options" *ngIf="dropdownOpen">
       <div *ngFor="let opcion of categoria " 
@@ -407,81 +403,56 @@ tabindex="-1"
                 {{ getErrorMessage(cuponCrear, "cantidad") }}
               </div>
             </div>
-          </div>  
-              
+          </div>
+
+          <div class="form-field">
+            <div class="col-5">
+              <label for="inputNombre" class="form-label"
+                ><h3 class="m-0 p-0 fw-bold">Puntos necesarios:</h3></label
+              >
+            </div>
+            <div class="col-7">
+              <input
+                type="text"
+                formControlName="punto"
+                class="form-control"
+                [ngClass]="
+                  isInvalidForm('punto', 'crear')
+                    ? 'is-invalid'
+                    : cuponCrear.get('punto')?.touched ||
+                      (cuponCrear.get('punto')?.dirty &&
+                        !cuponCrear.get('punto')?.invalid)
+                    ? 'is-valid'
+                    : ''
+                "
+                placeholder=""
+              />
+              <div class="invalid-feedback">
+                {{ getErrorMessage(cuponCrear, "punto") }}
+              </div>
+            </div>
+          </div>
+
         </div>
 
         <div class="cont-ped">
           <div class="form-field">
             <div class="col-5">
-              <label for="inputNombre" class="form-label"
-                ><h3 class="m-0 p-0 fw-bold">Participantes:</h3></label
-              >
-            </div>
-            <div class="col-7">
-              <select
-                class="form-select"
-                [ngClass]="
-                  isInvalidForm('participantes', 'crear') ? 'is-invalid' : ''
-                "
-                formControlName="participantes"
-                class="form-control"
-                [ngClass]="
-                  isInvalidForm('participantes', 'crear')
-                    ? 'is-invalid'
-                    : cuponCrear.get('participantes')?.touched ||
-                      (cuponCrear.get('participantes')?.dirty &&
-                        !cuponCrear.get('participantes')?.invalid)
-                    ? 'is-valid'
-                    : ''
-                "
-                aria-describedby="selectorServicioCrearFeedback"
-              >
-                <option selected disabled value="">
-                  Elija participante...
-                </option>
-                <option *ngFor="let c of participante" [id]="c" [value]="c">
-                  {{ c }}
-                </option>
-              </select>
-              <div class="invalid-feedback">
-                {{ getErrorMessage(cuponCrear, "participantes") }}
-              </div>
-            </div>
-          </div> 
-
-          <div class="form-field">
-            <div class="col-5">
               <label for="selectorServicioCrear" class="form-label"
-                ><h3 class="m-0 p-0 fw-bold">Categoria:</h3></label
+                ><h3 class="m-0 p-0 fw-bold">Categoria (opcional):</h3></label
               >
             </div>
             <div class="col-7">
               <select
                 class="form-select"
-                [ngClass]="
-                  isInvalidForm('categoria', 'crear') ? 'is-invalid' : ''
-                "
                 formControlName="categoria"
-                class="form-control"
-                [ngClass]="
-                  isInvalidForm('categoria', 'crear')
-                    ? 'is-invalid'
-                    : cuponCrear.get('categoria')?.touched ||
-                      (cuponCrear.get('categoria')?.dirty &&
-                        !cuponCrear.get('categoria')?.invalid)
-                    ? 'is-valid'
-                    : ''
-                "
                 aria-describedby="selectorServicioCrearFeedback"
               >
-                <option selected disabled value="">
-                  Elija una Categoria...
-                </option>
+                <option value="">Todas (sin restricción)</option>
                 <option
                   *ngFor="let c of categoria"
                   [id]="c.nombre"
-                  [value]="c.nombre"
+                  [value]="c.id"
                 >
                   {{ c.nombre }}
                 </option>

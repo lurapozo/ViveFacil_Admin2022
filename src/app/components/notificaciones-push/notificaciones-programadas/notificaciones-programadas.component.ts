@@ -6,6 +6,10 @@ import { Profesion } from 'src/app/interfaces/profesion';
 import { PythonAnywhereService } from 'src/app/services/PythonAnywhere/python-anywhere.service';
 import * as moment from 'moment';
 
+// ponytail: bootstrap.bundle.min.js se carga como script global (angular.json),
+// no como módulo — así se referencia sin reimportarlo.
+declare const bootstrap: any;
+
 @Component({
   selector: 'app-notificaciones-programadas',
   templateUrl: './notificaciones-programadas.component.html',
@@ -22,6 +26,8 @@ export class NotificacionesProgramadasComponent {
   filtrosDisponibles: string[] = [];
   mensajeAlerta: string = '';
   fileImagenNotificacion: File = {} as File;
+  /** Notificación pendiente de confirmar en #modalEliminarNotificacion. */
+  notificacionAEliminar: NotificacionProgramada | null = null;
 
   arr_noti?: NotificacionProgramada[] | undefined;
   arr_filtered_notificacion!: NotificacionProgramada[] | undefined;
@@ -123,6 +129,19 @@ export class NotificacionesProgramadasComponent {
     this.pythonAnywhereService.delete_notificacion(id).subscribe(() => {
       this.get_notificaciones();
     });
+  }
+
+  // La fila entera es clickable (routerLink al detalle) y su stopPropagation
+  // impide que el data-bs-toggle delegado por Bootstrap (escucha en
+  // document) reciba el click, así que el modal se abre a mano — mismo
+  // patrón que proveedores.component.ts::prepararEliminarProveedor.
+  prepararEliminarNotificacion(notificacion: NotificacionProgramada, event: Event) {
+    event.stopPropagation();
+    this.notificacionAEliminar = notificacion;
+    const modalEl = document.getElementById('modalEliminarNotificacion');
+    if (modalEl) {
+      bootstrap.Modal.getOrCreateInstance(modalEl).show();
+    }
   }
 
   enviarNotificacionProgramada(notificacion: NotificacionProgramada) {
@@ -292,6 +311,16 @@ export class NotificacionesProgramadasComponent {
     return moment().format('YYYY-MM-DD');
   }
 
+  // El input type="date" entrega "YYYY-MM-DD"; el backend espera un
+  // DateTimeField completo (formato ISO con hora), si no rechaza el request.
+  private aFechaIniciacionISO(fecha: string): string {
+    return fecha ? moment(fecha).startOf('day').format() : '';
+  }
+
+  private aFechaExpiracionISO(fecha: string): string {
+    return fecha ? moment(fecha).endOf('day').format() : '';
+  }
+
   onCrearNotificacion() {
     if (this.crearNotificacionForm.invalid) {
       this.mostrarToastInfo('Formulario incompleto', 'Revise los campos marcados en rojo.', true);
@@ -312,8 +341,8 @@ export class NotificacionesProgramadasComponent {
       // Los días solo cuentan en la frecuencia semanal.
       dias_semana: frecuencia === 'semanal' ? (this.crearNotificacionForm.get('dias_semana')?.value ?? []).join(',') : '',
       hora: this.crearNotificacionForm.get('hora')?.value ?? '',
-      fecha_iniciacion: this.crearNotificacionForm.get('fecha_iniciacion')?.value ?? '',
-      fecha_expiracion: this.crearNotificacionForm.get('fecha_expiracion')?.value ?? '',
+      fecha_iniciacion: this.aFechaIniciacionISO(this.crearNotificacionForm.get('fecha_iniciacion')?.value ?? ''),
+      fecha_expiracion: this.aFechaExpiracionISO(this.crearNotificacionForm.get('fecha_expiracion')?.value ?? ''),
       ...(imagen instanceof File ? { imagen } : {}),
     };
     this.pythonAnywhereService.crear_notificacion(body).subscribe({

@@ -103,7 +103,7 @@
         <div class="row p-2"><div class="col-3"><h3 class="m-0 fw-bold">Cantidad:</h3></div><div class="col-9">{{ cupon.cantidad }}</div></div>
         <div class="row p-2"><div class="col-3"><h3 class="m-0 fw-bold">Inicia:</h3></div><div class="col-9">{{ cupon.fecha_iniciacion | date:'dd/MM/yyyy HH:mm' }}</div></div>
         <div class="row p-2"><div class="col-3"><h3 class="m-0 fw-bold">Expira:</h3></div><div class="col-9">{{ cupon.fecha_expiracion | date:'dd/MM/yyyy HH:mm' }}</div></div>
-        <div class="row p-2"><div class="col-3"><h3 class="m-0 fw-bold">Categoría:</h3></div><div class="col-9">{{ cupon.tipo_categoria || '—' }}</div></div>
+        <div class="row p-2"><div class="col-3"><h3 class="m-0 fw-bold">Categoría:</h3></div><div class="col-9">{{ cupon.categoria_nombre || 'Todas' }}</div></div>
       </div>
 
       <!-- Formulario de edición -->
@@ -147,10 +147,10 @@
             <input id="fecha_expiracion" type="datetime-local" class="form-control" formControlName="fecha_expiracion" [class.is-invalid]="isInvalidForm('fecha_expiracion')">
           </div>
           <div class="col-md-6">
-            <label class="form-label" for="tipo_categoria">Categoría</label>
-            <select id="tipo_categoria" class="form-select" formControlName="tipo_categoria">
-              <option value="">Sin categoría</option>
-              <option *ngFor="let c of listCategorias" [value]="c.nombre">{{ c.nombre }}</option>
+            <label class="form-label" for="categoria">Categoría</label>
+            <select id="categoria" class="form-select" formControlName="categoria">
+              <option [ngValue]="null">Todas (sin restricción)</option>
+              <option *ngFor="let c of listCategorias" [ngValue]="c.id">{{ c.nombre }}</option>
             </select>
           </div>
           <div class="col-md-6">

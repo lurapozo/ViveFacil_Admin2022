@@ -336,7 +336,7 @@ export class PythonAnywhereService {
     dataUpdate.append("cantidad", bodyActualizar.cantidad.toString());
     dataUpdate.append("puntos", bodyActualizar.puntos.toString());
     bodyActualizar.foto ? dataUpdate.append("foto", bodyActualizar.foto) : null;
-    dataUpdate.append("tipo_categoria", bodyActualizar.tipo_categoria);
+    dataUpdate.append("categoria", bodyActualizar.categoria ? bodyActualizar.categoria.toString() : '');
 
     return this.http.put(`${this.API_URL}/administrador/promotions/cupones/${id}/`, dataUpdate) as Observable<BodyResponseCuponActualizar>;
   }
@@ -1173,7 +1173,7 @@ export class PythonAnywhereService {
     bodyCrear.foto ? dataCrear.append("foto", bodyCrear.foto) : null;
     dataCrear.append("titulo", bodyCrear.titulo);
     dataCrear.append("puntos", bodyCrear.puntos.toString());
-    dataCrear.append("tipo_categoria", bodyCrear.tipo_categoria);
+    dataCrear.append("categoria", bodyCrear.categoria ? bodyCrear.categoria.toString() : '');
     dataCrear.append("cantidad", bodyCrear.cantidad.toString());
     dataCrear.append("porcentaje", bodyCrear.porcentaje.toString());
     dataCrear.append("fecha_iniciacion", bodyCrear.fecha_iniciacion);

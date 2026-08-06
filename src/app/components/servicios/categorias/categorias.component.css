@@ -21,6 +21,19 @@
     overflow-y: auto;
 }
 
+.image_modal {
+    max-height: 30vh !important;
+    height: 100%;
+    object-fit: contain !important;
+}
+
+.celda-descripcion {
+    max-width: 320px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 .containerCrearCate {
     border-radius: 30px;
     box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);

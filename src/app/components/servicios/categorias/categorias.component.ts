@@ -4,6 +4,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PythonAnywhereService } from 'src/app/services/PythonAnywhere/python-anywhere.service';
 import { BodyActualizarCategoria, BodyCrearCategoria, Categoria } from '../../../interfaces/categoria';
+import { Servicio } from '../../../interfaces/servicio';
 
 @Component({
   selector: 'app-categorias',
@@ -29,6 +30,8 @@ export class CategoriasComponent {
   imagenCrear2: string | undefined;
   categoria?: Categoria[];
   categoria_seleccionada?: Categoria
+  /** Sub-categorías (servicios) que pertenecen a la categoría del detalle. */
+  subCategoriasDeLaCategoria: Servicio[] = [];
   isErrorToast = false;
   mensajeToast = "";
   tituloToast = "";
@@ -63,8 +66,13 @@ export class CategoriasComponent {
     descripcion: new FormControl('', [Validators.required]),
   }, []);
   formEdit = new FormGroup({
-    imagen: new FormControl(this.fileImagenActualizar, [Validators.required]),
-    imagen2: new FormControl(this.fileImagenActualizar2, [Validators.required]),
+    // Sin required: al editar no hay por qué resubir las imágenes — si no se
+    // elige un archivo nuevo, se conserva el existente (ver onActualizar()).
+    // Con required acá, limpiarForm('actualizar') las deja en null (Angular
+    // resetea a null, no al valor inicial del FormControl) y el formulario
+    // quedaba inválido para siempre: "Guardar cambios" no hacía nada.
+    imagen: new FormControl(this.fileImagenActualizar),
+    imagen2: new FormControl(this.fileImagenActualizar2),
     nombre: new FormControl('', [Validators.required]),
     descripcion: new FormControl('', [Validators.required]),
   }, []);
@@ -383,10 +391,10 @@ export class CategoriasComponent {
       categoria.nombre = nombre;
       categoria.descripcion = descripcion;
 
-      if (foto && this.existImageCrear) {
+      if (foto && this.existImageActualizar) {
         categoria.foto = foto;
       }
-      if (foto2 && this.existImageCrear2) {
+      if (foto2 && this.existImageActualizar2) {
         categoria.foto2 = foto2;
       }
       console.log(categoria)
@@ -474,6 +482,20 @@ export class CategoriasComponent {
     this.showHeaderC = false;
     this.showDetalle = true;
     this.editando = false;
+    this.cargarSubCategorias(item.id);
+  }
+
+  /** No hay endpoint que filtre por categoría, así que se trae todo el
+   * catálogo de sub-categorías y se filtra acá — mismo alcance que ya usa
+   * SubCategoriasComponent (sin paginación). */
+  cargarSubCategorias(categoriaId: number) {
+    this.pythonAnywhereService.obtener_servicios().subscribe((resp: Servicio[]) => {
+      this.subCategoriasDeLaCategoria = resp.filter(s => s.categoria === categoriaId);
+    });
+  }
+
+  verDetalleSubCategoria(subCategoria: Servicio) {
+    this.router.navigate(['/servicios/sub-categorias', subCategoria.id]);
   }
 
   volverALista() {

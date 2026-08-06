@@ -174,8 +174,10 @@ export class NotificacionProgramadaDetalleComponent implements OnInit {
       // Los días solo cuentan en la frecuencia semanal.
       dias_semana: frecuencia === 'semanal' ? (v.dias_semana ?? []).join(',') : '',
       hora: v.hora ?? '',
-      fecha_iniciacion: v.fecha_iniciacion ?? '',
-      fecha_expiracion: v.fecha_expiracion ?? '',
+      // El input type="date" entrega "YYYY-MM-DD"; el backend espera un
+      // DateTimeField completo (formato ISO con hora), si no rechaza el request.
+      fecha_iniciacion: v.fecha_iniciacion ? moment(v.fecha_iniciacion).startOf('day').format() : '',
+      fecha_expiracion: v.fecha_expiracion ? moment(v.fecha_expiracion).endOf('day').format() : '',
       estado: this.notificacion.estado,
     };
     if (this.fotoFile) { body.imagen = this.fotoFile; }
