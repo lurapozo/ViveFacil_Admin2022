@@ -4,7 +4,7 @@ export interface Profesion {
   nombre: string;
   descripcion: string;
   foto: string;
-  servicio: Array<Servicio>;
+  servicio: Servicio | null;
   estado: boolean;
 }
 
@@ -31,7 +31,7 @@ export interface BodyActualizarProfesion {
 }
 export interface BodyResponseActualizarProfesion {
   id: number,
-  servicio: Array<Servicio>;
+  servicio: Servicio | null;
   nombre: string;
   descripcion: string;
   foto: File;

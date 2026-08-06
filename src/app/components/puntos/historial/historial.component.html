@@ -15,14 +15,24 @@
   <div class="buscador">
     <input type="text" placeholder="Buscar por correo o nombre..." (input)="buscar($event)" />
     <span class="total">Total: {{ total }}</span>
+    <button
+      type="button"
+      class="admin-button"
+      data-bs-toggle="modal"
+      href="#modalAgregarPuntos"
+      (click)="limpiarFormAgregar()"
+    >
+      <span class="material-icons">add_circle</span>
+      AGREGAR/ QUITAR PUNTOS
+    </button>
   </div>
 
   <div class="table-responsive">
     <table class="custom-table">
       <thead>
         <tr>
-          <th>Usuario</th>
-          <th>Correo</th>
+          <th>Nombre</th>
+          <th>Usuario (correo)</th>
           <th>Motivo</th>
           <th>Monto</th>
           <th>Saldo</th>
@@ -55,4 +65,63 @@
       </li>
     </ul>
   </nav>
+</div>
+
+<!-- Modal Agregar puntos -->
+<div
+  class="modal fade"
+  id="modalAgregarPuntos"
+  aria-hidden="true"
+  aria-labelledby="modalAgregarPuntosLabel"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header align-items-center">
+        <h1 class="modal-title fs-5 m-0 p-0 fw-bold" id="modalAgregarPuntosLabel">
+          Agregar / quitar puntos
+        </h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label class="form-label">Correo del usuario</label>
+          <input type="email" class="form-control" [(ngModel)]="emailAgregar" placeholder="usuario@correo.com" />
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Monto (negativo para quitar)</label>
+          <input type="number" class="form-control" [(ngModel)]="montoAgregar" placeholder="10 o -10" />
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Referencia (opcional)</label>
+          <input type="text" class="form-control" [(ngModel)]="referenciaAgregar" placeholder="Motivo del ajuste" />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          [disabled]="!emailAgregar || !montoAgregar"
+          (click)="agregarPuntos()"
+        >
+          Guardar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast de Información -->
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+  <div #liveToast id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header" [ngClass]="isErrorToast ? ' bg-danger' : ' bg-success'">
+      <strong class="me-auto text-light">{{ tituloToast }}</strong>
+      <small class="text-light">Ahora</small>
+      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body">{{ mensajeToast }}</div>
+  </div>
 </div>

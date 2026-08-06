@@ -13,6 +13,14 @@ export class HistorialPuntosComponent {
   pageNumber: number[] = [];
   filtroUser = '';
 
+  emailAgregar = '';
+  montoAgregar: number | null = null;
+  referenciaAgregar = '';
+
+  isErrorToast = false;
+  mensajeToast = '';
+  tituloToast = '';
+
   constructor(private pythonAnywhereService: PythonAnywhereService) {
     this.cargar();
   }
@@ -59,5 +67,42 @@ export class HistorialPuntosComponent {
   // Color del monto: verde si gana, rojo si gasta.
   claseMonto(monto: number): string {
     return monto >= 0 ? 'monto-positivo' : 'monto-negativo';
+  }
+
+  limpiarFormAgregar() {
+    this.emailAgregar = '';
+    this.montoAgregar = null;
+    this.referenciaAgregar = '';
+  }
+
+  agregarPuntos() {
+    if (!this.emailAgregar || !this.montoAgregar) {
+      return;
+    }
+    this.pythonAnywhereService.otorgar_puntos_manual(this.emailAgregar, this.montoAgregar, this.referenciaAgregar).subscribe({
+      next: (resp: any) => {
+        if (!resp?.success) {
+          this.mostrarToastInfo('No se pudo aplicar', resp?.error || 'Revisa los datos.', true);
+          return;
+        }
+        this.mostrarToastInfo('Puntos actualizados', 'Se aplicó el ajuste correctamente', false);
+        this.limpiarFormAgregar();
+        this.cargar(this.currentPage);
+      },
+      error: (err) => {
+        this.mostrarToastInfo('No se pudo aplicar', err?.error?.error || 'Error de conexión.', true);
+      },
+    });
+  }
+
+  mostrarToastInfo(titulo: string, mensaje: string, isErrorToast: boolean) {
+    this.isErrorToast = isErrorToast;
+    this.tituloToast = titulo;
+    this.mensajeToast = mensaje;
+    const toast = document.getElementById('liveToast');
+    if (toast) {
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 7000);
+    }
   }
 }

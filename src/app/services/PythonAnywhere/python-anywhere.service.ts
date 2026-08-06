@@ -549,6 +549,10 @@ export class PythonAnywhereService {
     return this.http.get(`${this.API_URL}/administrador/accounts/movimientos-puntos/?page=${page}${q}`);
   }
 
+  otorgar_puntos_manual(email: string, monto: number, referencia: string): Observable<any> {
+    return this.http.post(`${this.API_URL}/administrador/accounts/movimientos-puntos/`, { email, monto, referencia });
+  }
+
   obtener_proveedores_proveedores(page = 1): Observable<ProveedorPaginacion> {
     return this.http.get(`${this.API_URL}/administrador/accounts/proveedores-proveedores/?page=${page}`) as Observable<ProveedorPaginacion>;
   }

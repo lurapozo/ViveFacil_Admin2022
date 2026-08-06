@@ -100,9 +100,7 @@ export class ProfesionesComponent {
       this.crearProfesionesForm.get('descripcion')?.reset();
       this.crearProfesionesForm.get('servicio')?.setValue('');
     } else if(tipo === 'actualizar') {
-      // console.log(this.profesion_seleccionada);
-      // console.log('Servicio de la profesion seleccionada: ', this.profesion_seleccionada?.servicio[0].nombre);
-      const servicio = this.profesion_seleccionada?.servicio[0].nombre;
+      const servicio = this.profesion_seleccionada?.servicio?.nombre;
       const nombre = this.profesion_seleccionada?.nombre;
       const descripcion = this.profesion_seleccionada?.descripcion;
       const estado = this.profesion_seleccionada?.estado;
@@ -328,8 +326,7 @@ export class ProfesionesComponent {
   }
 
   getNameServicio(profesion: Profesion): string{
-    // console.log('Nombre de servicio retornado: ', profesion.servicio[0].nombre);
-    return profesion.servicio[0].nombre;
+    return profesion.servicio?.nombre ?? '';
   }
 
   
