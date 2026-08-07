@@ -20,6 +20,22 @@
         }
       }
     },
+    "resumen_solicitante": {
+      "$solicitanteID": {
+        ".read": "auth != null && root.child('id_solicitante').child($solicitanteID).child('uid').val() == auth.uid",
+        "$proveedorID": {
+          ".write": "auth != null && (root.child('id_solicitante').child($solicitanteID).child('uid').val() == auth.uid || root.child('id_solicitante').child($solicitanteID).child('chats').child($proveedorID).child('proveedorUid').val() == auth.uid)"
+        }
+      }
+    },
+    "resumen_proveedor": {
+      "$proveedorID": {
+        ".read": "auth != null && root.child('id_proveedor').child($proveedorID).child('uid').val() == auth.uid",
+        "$solicitanteID": {
+          ".write": "auth != null && (root.child('id_proveedor').child($proveedorID).child('uid').val() == auth.uid || root.child('id_solicitante').child($solicitanteID).child('uid').val() == auth.uid)"
+        }
+      }
+    },
     "id_proveedor": {
       "$proveedorID": {
         ".read": "auth != null && (!data.child('uid').exists() || data.child('uid').val() == auth.uid)",
